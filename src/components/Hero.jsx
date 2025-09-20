@@ -8,13 +8,13 @@ export default function Hero() {
       <div className="w-full max-w-7xl mx-auto px-8 flex items-center justify-between">
         {/* Left Column - Text Content */}
         <div className="flex flex-col items-start text-left w-1/2 pl-4">
-          <h2 className="font-inter-light text-white text-[64px] leading-[72px] tracking-[2px] mb-6 blur-[0.5px]">
+          <h2 className="font-inter-light text-white text-[64px] leading-[72px] tracking-[2px] mb-6" style={{ textRendering: 'optimizeLegibility', WebkitFontSmoothing: 'antialiased' }}>
             <span className="block">Make complex</span>
             <span className="block">products easy to</span>
             <span className="block"><span className="text-[#E3E3FD]">understand.</span></span>
           </h2>
           
-          <p className="font-inter text-white text-[16px] tracking-[0.5px] opacity-75 mb-8 max-w-[400px] blur-[0.3px]">
+          <p className="font-inter text-white text-[16px] tracking-[0.5px] opacity-75 mb-8 max-w-[400px]" style={{ textRendering: 'optimizeLegibility', WebkitFontSmoothing: 'antialiased' }}>
             We are a studio that turns hardware and technology into clear, product-led visuals and identities.
           </p>
           
@@ -42,7 +42,7 @@ export default function Hero() {
           <motion.img
             src={upComp}
             alt="Floating component"
-            className="w-[279px] h-[148px] absolute z-10 -top-32 -right-24 object-contain"
+            className="w-[279px] h-[148px] absolute z-10 -top-32 -right-48 object-contain"
             animate={{ y: [0, -8, 0] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           />
