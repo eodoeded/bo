@@ -7,10 +7,11 @@ export default function Hero() {
     <section className="w-full min-h-screen flex items-center justify-center bg-gradient-to-b from-[#0E0E0A] to-[#1C1A14]">
       <div className="w-full max-w-7xl mx-auto px-8 flex items-center justify-between">
         {/* Left Column - Text Content */}
-        <div className="flex flex-col items-start text-left w-1/2 pl-8">
-          <h2 className="font-inter-light text-white text-[64px] leading-[72px] tracking-[-1.49px] mb-6 whitespace-nowrap">
-            <span className="block">Make complex products</span>
-            <span className="block">easy to <span className="text-[#E3E3FD]">understand.</span></span>
+        <div className="flex flex-col items-start text-left w-1/2 pl-4">
+          <h2 className="font-inter-light text-white text-[64px] leading-[72px] tracking-[2px] mb-6">
+            <span className="block">Make complex</span>
+            <span className="block">products easy to</span>
+            <span className="block"><span className="text-[#E3E3FD]">understand.</span></span>
           </h2>
           
           <p className="font-inter text-white text-[16px] tracking-[0.5px] opacity-75 mb-8 max-w-[400px]">
