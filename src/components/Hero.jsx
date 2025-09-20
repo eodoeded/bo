@@ -42,14 +42,14 @@ export default function Hero() {
           <motion.img
             src={upComp}
             alt="Floating component"
-            className="w-[200px] h-[120px] absolute z-10 -mb-5"
+            className="w-[279px] h-[148px] absolute z-10 -mb-5 object-contain"
             animate={{ y: [0, -8, 0] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           />
           <motion.img
             src={bottomComp}
             alt="Main robot"
-            className="w-[500px] h-[400px] relative z-0 mt-4"
+            className="w-[500.5px] h-[415.8px] relative z-0 mt-4 object-contain"
             animate={{ y: [0, -8, 0] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
           />
