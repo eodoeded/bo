@@ -29,31 +29,27 @@ export default function Hero() {
             transition={{ duration: 0.2, ease: "easeOut" }}
           >
             Let's talk
-            <motion.span
-              className="ml-2"
-              whileHover={{ x: 5, color: "#FFFFFF" }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-            >
+            <span className="ml-2">
               →
-            </motion.span>
+            </span>
           </motion.button>
         </div>
 
         {/* Right Column - Robot Images */}
         <div className="relative w-1/2 flex justify-center">
           <motion.img
-            src={bottomComp}
-            alt="Main robot"
-            className="w-[500px] h-[400px] relative z-0"
-            animate={{ y: [0, -8, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
-          />
-          <motion.img
             src={upComp}
             alt="Floating component"
-            className="w-[200px] h-[120px] absolute z-10 -top-8 -right-12"
+            className="w-[200px] h-[120px] absolute z-10 -mb-5"
             animate={{ y: [0, -8, 0] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.img
+            src={bottomComp}
+            alt="Main robot"
+            className="w-[500px] h-[400px] relative z-0 mt-4"
+            animate={{ y: [0, -8, 0] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
           />
         </div>
       </div>
