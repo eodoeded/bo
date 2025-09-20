@@ -42,7 +42,7 @@ export default function Hero() {
           <motion.img
             src={upComp}
             alt="Floating component"
-            className="w-[279px] h-[148px] absolute z-10 -mb-5 object-contain"
+            className="w-[200px] h-[100px] absolute z-10 -top-12 -right-8 object-contain"
             animate={{ y: [0, -8, 0] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           />
