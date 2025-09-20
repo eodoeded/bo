@@ -1,0 +1,7 @@
+@config "../tailwind.config.js";
+@import "tailwindcss";
+
+body {
+  @apply bg-body-gradient font-inter;
+  min-height: 100vh;
+}
