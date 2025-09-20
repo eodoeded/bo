@@ -4,6 +4,7 @@ export default {
         extend: {
             fontFamily: {
                 inter: ['Inter', 'sans-serif'],
+                'inter-light': ['Inter Light', 'Inter', 'sans-serif'],
                 geist: ["Geist Sans", "sans-serif"],
             },
             backgroundImage: {

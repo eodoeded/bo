@@ -8,17 +8,17 @@ export default function Hero() {
       <div className="w-full max-w-7xl mx-auto px-16 flex items-center justify-between">
         {/* Left Column - Text Content */}
         <div className="flex flex-col items-start text-left w-1/2">
-          <h2 className="font-inter font-light text-white text-[64px] leading-[72px] tracking-[-2px] mb-6">
+          <h2 className="font-inter-light text-white text-[64px] leading-[72px] tracking-[-2px] mb-6">
             Make complex products <br /> easy to understand.
           </h2>
           
-          <p className="font-inter font-normal text-white text-[16px] opacity-75 mb-8 max-w-[400px]">
+          <p className="font-inter text-white text-[16px] opacity-75 mb-8 max-w-[400px]">
             We are a studio that turns hardware and technology into clear, product-led visuals and identities.
           </p>
           
           <motion.button
             className="
-            font-inter font-light text-[#E3E3FD]
+            font-inter-light text-[#E3E3FD]
             bg-[#3B3B3B] cursor-pointer
              border-[1px] border-[#FFFFFF4D]
             backdrop-blur-[6.5px]
