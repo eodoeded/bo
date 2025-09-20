@@ -1,5 +1,4 @@
 import './App.css'
-import Divider from './components/Devider'
 import GridSection from './components/GridSection'
 import Header from './components/Header'
 import Hero from './components/Hero'
@@ -12,7 +11,6 @@ function App() {
     <> 
          <Header />
          <Hero/>
-         <Divider/>
          <GridSection/>
          <Proceses/>
     </>
