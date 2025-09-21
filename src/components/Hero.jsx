@@ -62,7 +62,7 @@ export default function Hero() {
               transition: { duration: 0.55, delay: 1.0, ease: [0.2, 0.8, 0.2, 1] }
             }
           }}
-          className="font-inter-light text-white text-[48px] leading-[56px] tracking-[0.2px] mb-6"
+          className="font-inter-light text-white text-[36px] leading-[42px] md:text-[48px] md:leading-[56px] tracking-[0.2px] mb-6"
           style={{ textRendering: 'optimizeLegibility', WebkitFontSmoothing: 'antialiased' }}
         >
           <motion.span className="block" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.05, duration: 0.4, ease: [0.2, 0.8, 0.2, 1] }}>Make complex products simple</motion.span>
