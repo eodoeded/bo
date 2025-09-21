@@ -45,14 +45,14 @@ export default function Hero() {
               opacity: 1,
               filter: 'blur(0px)',
               y: 0,
-              transition: { duration: 1.0, ease: [0.16, 1, 0.3, 1] }
+              transition: { duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }
             }
           }}
           className="font-inter-light text-white text-[48px] leading-[56px] tracking-[0.2px] mb-6"
           style={{ textRendering: 'optimizeLegibility', WebkitFontSmoothing: 'antialiased' }}
         >
-          <motion.span className="block" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}>Make complex products simple</motion.span>
-          <motion.span className="block" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}>to <span className="text-[#E3E3FD]">understand.</span></motion.span>
+          <motion.span className="block" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.00, duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}>Make complex products simple</motion.span>
+          <motion.span className="block" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.10, duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}>to <span className="text-[#E3E3FD]">understand.</span></motion.span>
         </motion.h2>
         
         <motion.a
@@ -66,7 +66,9 @@ export default function Hero() {
             flex items-center
           "
           whileHover={{ color: "#FFFFFF" }}
-          transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
         >
           Let's talk
           <span
