@@ -11,7 +11,7 @@ export default function Header() {
         <nav>
           <a
             href="#services"
-            className="font-inter text-[16px] text-white tracking-[0.2px] transition-opacity hover:opacity-75"
+            className="font-inter text-[14px] text-white tracking-[0.2px] transition-opacity hover:opacity-75"
           >
             Services
           </a>
