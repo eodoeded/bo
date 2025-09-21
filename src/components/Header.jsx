@@ -10,7 +10,7 @@ export default function Header() {
         {/* Right side: Work */}
         <nav>
           <a
-            href="#services"
+            href="/services"
             className="font-inter text-[14px] text-white tracking-[0.2px] transition-opacity hover:opacity-75"
           >
             Services
