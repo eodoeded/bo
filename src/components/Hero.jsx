@@ -19,24 +19,26 @@ export default function Hero() {
         <motion.img
           src={bottomComp}
           alt="Main robot"
-          className="w-[560px] relative z-0 object-contain select-none pointer-events-none"
-          style={{ userSelect: 'none', WebkitUserSelect: 'none', WebkitTouchCallout: 'none' }}
-          initial={{ opacity: 0 }}
+          className="relative z-0 object-contain"
+          style={{ width: '560px', aspectRatio: '1001 / 546' }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: [0, -8, 0] }}
-          transition={{ opacity: { delay: 0.0, duration: 0.6, ease: [0.2,0.8,0.2,1] }, duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
-          draggable={false}
-          onContextMenu={(e) => e.preventDefault()}
+          transition={{
+            opacity: { duration: 0.6, delay: 0.6, ease: [0.2, 0.8, 0.2, 1] },
+            y: { duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 1.0 }
+          }}
         />
         <motion.img
           src={upComp}
           alt="Floating component"
-          className="w-[220px] absolute z-10 -top-20 left-1/2 -translate-x-1/2 object-contain select-none pointer-events-none"
-          style={{ userSelect: 'none', WebkitUserSelect: 'none', WebkitTouchCallout: 'none' }}
-          initial={{ opacity: 0 }}
+          className="absolute z-10 -top-20 left-1/2 -translate-x-1/2 object-contain"
+          style={{ width: '220px', aspectRatio: '1001 / 546' }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: [0, -8, 0] }}
-          transition={{ opacity: { delay: 0.15, duration: 0.6, ease: [0.2,0.8,0.2,1] }, duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-          draggable={false}
-          onContextMenu={(e) => e.preventDefault()}
+          transition={{
+            opacity: { duration: 0.6, delay: 0.6, ease: [0.2, 0.8, 0.2, 1] },
+            y: { duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 1.0 }
+          }}
         />
       </div>
 
@@ -45,21 +47,20 @@ export default function Hero() {
         <motion.h2
           initial="hidden"
           animate="show"
-          onViewportEnter={() => {}}
           variants={{
-            hidden: { opacity: 0, filter: 'blur(10px)', y: 14 },
+            hidden: { opacity: 0, filter: 'blur(12px)', y: 18 },
             show: {
               opacity: 1,
               filter: 'blur(0px)',
               y: 0,
-              transition: { delay: 0.65, duration: 0.55, ease: [0.2, 0.8, 0.2, 1] }
+              transition: { duration: 0.55, delay: 1.0, ease: [0.2, 0.8, 0.2, 1] }
             }
           }}
           className="font-inter-light text-white text-[48px] leading-[56px] tracking-[0.2px] mb-6"
           style={{ textRendering: 'optimizeLegibility', WebkitFontSmoothing: 'antialiased' }}
         >
-          <motion.span className="block" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.00, duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}>Make complex products simple</motion.span>
-          <motion.span className="block" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.10, duration: 0.45, ease: [0.2, 0.8, 0.2, 1] }}>to <span className="text-[#E3E3FD]">understand.</span></motion.span>
+          <motion.span className="block" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.05, duration: 0.4, ease: [0.2, 0.8, 0.2, 1] }}>Make complex products simple</motion.span>
+          <motion.span className="block" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2, duration: 0.4, ease: [0.2, 0.8, 0.2, 1] }}>to <span className="text-[#E3E3FD]">understand.</span></motion.span>
         </motion.h2>
         
         <motion.a
@@ -72,10 +73,10 @@ export default function Hero() {
             px-[16px] py-[8px]
             flex items-center
           "
-          whileHover={{ color: "#FFFFFF" }}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.65, ease: [0.2, 0.8, 0.2, 1] }}
+          transition={{ duration: 0.45, delay: 1.45, ease: [0.2, 0.8, 0.2, 1] }}
+          whileHover={{ color: '#FFFFFF' }}
         >
           Let's talk
           <span
