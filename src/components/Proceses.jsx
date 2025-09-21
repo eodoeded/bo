@@ -7,10 +7,10 @@ export default function Proceses() {
             <div className="mx-auto max-w-[1100px] px-4">
                 <h3 className="text-white/90 font-inter text-[14px] tracking-[0.3px] mb-4">Services</h3>
             </div>
-            <div className="mx-auto max-w-[1100px] flex items-center justify-between">
+            <div className="mx-auto max-w-[1100px] flex flex-col md:flex-row items-stretch md:items-center justify-between gap-6 md:gap-0 px-4 md:px-0">
 
                 {/* Card 1 */}
-                <div className="relative h-[577.09px] w-[371.2px] p-5 bg-gradient-to-b from-[#12110D] to-[#1C1A14]">
+                <div className="relative h-[420px] md:h-[577.09px] w-full md:w-[371.2px] p-5 bg-gradient-to-b from-[#12110D] to-[#1C1A14]">
                     {/* Text at the top */}
                     <span className="absolute top-5 left-5 text-white font-geist text-[14.1px] leading-[16.9px] tracking-[-0.28px]">
                         Images
@@ -29,7 +29,7 @@ export default function Proceses() {
                 </div>
 
                 {/* Card 2 */}
-                <div className="relative h-[577.09px] w-[371.2px] p-5 bg-gradient-to-b from-[#12110D] to-[#1C1A14]">
+                <div className="relative h-[420px] md:h-[577.09px] w-full md:w-[371.2px] p-5 bg-gradient-to-b from-[#12110D] to-[#1C1A14]">
                     {/* Text at the top */}
                     <span className="absolute top-5 left-5 text-white font-geist text-[14.1px] leading-[16.9px] tracking-[-0.28px]">
                         Ads
@@ -48,7 +48,7 @@ export default function Proceses() {
                 </div>
 
                 {/* Card 3 */}
-                <div className="relative h-[577.09px] w-[371.2px] p-5 bg-gradient-to-b from-[#12110D] to-[#1C1A14]">
+                <div className="relative h-[420px] md:h-[577.09px] w-full md:w-[371.2px] p-5 bg-gradient-to-b from-[#12110D] to-[#1C1A14]">
                     {/* Text at the top */}
                     <span className="absolute top-5 left-5 text-white font-geist text-[14.1px] leading-[16.9px] tracking-[-0.28px]">
                         Brand

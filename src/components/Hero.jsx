@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 export default function Hero() {
   return (
-    <section className="w-full min-h-[calc(100vh-120px)] flex flex-col items-center justify-start relative pt-24 overflow-hidden">
+    <section className="w-full min-h-[calc(100vh-120px)] flex flex-col items-center justify-start relative pt-20 md:pt-24 overflow-hidden">
       {/* Subtle breathing overlay to enrich the base gradient */}
       <motion.div
         className="pointer-events-none absolute inset-0 z-0"
@@ -15,31 +15,37 @@ export default function Hero() {
       />
 
       {/* Robot Visual - Centered in upper half */}
-      <div className="relative z-10 flex justify-center items-center mb-10">
-        <motion.img
-          src={bottomComp}
-          alt="Main robot"
-          className="relative z-0 object-contain"
-          style={{ width: '560px', aspectRatio: '1001 / 546' }}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: [0, -8, 0] }}
-          transition={{
-            opacity: { duration: 0.6, delay: 0.6, ease: [0.2, 0.8, 0.2, 1] },
-            y: { duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 1.0 }
-          }}
-        />
-        <motion.img
-          src={upComp}
-          alt="Floating component"
-          className="absolute z-10 -top-20 left-1/2 -translate-x-1/2 object-contain"
-          style={{ width: '220px', aspectRatio: '1001 / 546' }}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: [0, -8, 0] }}
-          transition={{
-            opacity: { duration: 0.6, delay: 0.6, ease: [0.2, 0.8, 0.2, 1] },
-            y: { duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 1.0 }
-          }}
-        />
+      <div className="relative z-10 flex justify-center items-center mb-8 w-full">
+        <motion.div
+          className="relative"
+          animate={{ y: [0, -8, 0] }}
+          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 1.0 }}
+        >
+          <motion.img
+            src={bottomComp}
+            alt="Main robot"
+            className="relative z-0 object-contain w-[320px] md:w-[560px]"
+            style={{ aspectRatio: '1001 / 546' }}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
+          />
+        </motion.div>
+        <motion.div
+          className="absolute -top-16 md:-top-20 left-1/2 -translate-x-1/2"
+          animate={{ y: [0, -8, 0] }}
+          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 1.0 }}
+        >
+          <motion.img
+            src={upComp}
+            alt="Floating component"
+            className="object-contain w-[150px] md:w-[220px]"
+            style={{ aspectRatio: '1001 / 546' }}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
+          />
+        </motion.div>
       </div>
 
       {/* Main Content - Centered below robot */}
