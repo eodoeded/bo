@@ -4,27 +4,37 @@ import { motion } from 'framer-motion';
 
 export default function Hero() {
   return (
-    <section className="w-full min-h-[calc(100vh-120px)] flex flex-col items-center justify-start relative pt-24">
+    <section className="w-full min-h-[calc(100vh-120px)] flex flex-col items-center justify-start relative pt-24 overflow-hidden">
+      {/* Sliding gradient overlay: bottom tint that slides down off screen */}
+      <motion.div
+        className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-transparent via-transparent to-[#2F2B21]"
+        initial={{ y: 0 }}
+        animate={{ y: '100%' }}
+        transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+      />
+
       {/* Robot Visual - Centered in upper half */}
-      <div className="relative flex justify-center items-center mb-10">
+      <div className="relative z-10 flex justify-center items-center mb-10">
         <motion.img
           src={bottomComp}
           alt="Main robot"
-          className="w-[440px] h-[340px] relative z-0 object-contain"
+          className="relative z-0 object-contain"
+          style={{ width: '560px', aspectRatio: '1001 / 546' }}
           animate={{ y: [0, -8, 0] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
         />
         <motion.img
           src={upComp}
           alt="Floating component"
-          className="w-[190px] h-[95px] absolute z-10 -top-14 -left-10 object-contain"
+          className="absolute z-10 -top-20 left-1/2 -translate-x-1/2 object-contain"
+          style={{ width: '220px', aspectRatio: '1001 / 546' }}
           animate={{ y: [0, -8, 0] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
 
       {/* Main Content - Centered below robot */}
-      <div className="flex flex-col items-center text-center">
+      <div className="relative z-10 flex flex-col items-center text-center">
         <motion.h2
           initial={{ opacity: 0, filter: 'blur(8px)', y: 8 }}
           animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
@@ -37,8 +47,9 @@ export default function Hero() {
         </motion.h2>
         
         <motion.a
+          href="mailto:brandedobjects@gmail.com"
           className="
-            font-inter-light text-[#E3E3FD] text-[14px]
+            group font-inter-light text-[#E3E3FD] text-[14px]
             bg-[#3B3B3B] cursor-pointer
             border-[1px] border-[#FFFFFF4D]
             backdrop-blur-[6.5px]
@@ -47,10 +58,13 @@ export default function Hero() {
           "
           whileHover={{ color: "#FFFFFF" }}
           transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-          href="mailto:brandedobjects@gmail.com"
         >
           Let's talk
-          <motion.span className="ml-2 inline-block" whileHover={{ x: 6 }} transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}>→</motion.span>
+          <span
+            className="ml-2 inline-block transform transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-[4px]"
+          >
+            →
+          </span>
         </motion.a>
       </div>
     </section>
