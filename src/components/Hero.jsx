@@ -25,12 +25,18 @@ export default function Hero() {
 
       {/* Main Content - Centered below robot */}
       <div className="flex flex-col items-center text-center">
-        <h2 className="font-inter-light text-white text-[48px] leading-[56px] tracking-[0.2px] mb-6" style={{ textRendering: 'optimizeLegibility', WebkitFontSmoothing: 'antialiased' }}>
+        <motion.h2
+          initial={{ opacity: 0, filter: 'blur(8px)', y: 8 }}
+          animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="font-inter-light text-white text-[48px] leading-[56px] tracking-[0.2px] mb-6"
+          style={{ textRendering: 'optimizeLegibility', WebkitFontSmoothing: 'antialiased' }}
+        >
           <span className="block">Make complex products simple</span>
           <span className="block">to <span className="text-[#E3E3FD]">understand.</span></span>
-        </h2>
+        </motion.h2>
         
-        <motion.button
+        <motion.a
           className="
             font-inter-light text-[#E3E3FD] text-[14px]
             bg-[#3B3B3B] cursor-pointer
@@ -40,11 +46,12 @@ export default function Hero() {
             flex items-center
           "
           whileHover={{ color: "#FFFFFF" }}
-          transition={{ duration: 0.2, ease: "easeOut" }}
+          transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          href="mailto:brandedobjects@gmail.com"
         >
           Let's talk
-          <span className="ml-2">→</span>
-        </motion.button>
+          <motion.span className="ml-2 inline-block" whileHover={{ x: 6 }} transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}>→</motion.span>
+        </motion.a>
       </div>
     </section>
   );

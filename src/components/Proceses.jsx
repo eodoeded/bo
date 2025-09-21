@@ -10,7 +10,7 @@ export default function Proceses() {
                 <div className="relative h-[577.09px] w-[371.2px] p-5 bg-gradient-to-b from-[#12110D] to-[#1C1A14]">
                     {/* Text at the top */}
                     <span className="absolute top-5 left-5 text-white font-geist text-[14.1px] leading-[16.9px] tracking-[-0.28px]">
-                        Kick Off
+                        Images
                     </span>
 
                     {/* Image centered */}
@@ -21,8 +21,7 @@ export default function Proceses() {
                     />
 
                     <span className="absolute  text-[#5C5D5E] bottom-5 left-5  font-geist text-[14.1px] leading-[16.9px] tracking-[-0.28px]">
-                        We get aligned fast to start the project with full <br />
-                        momentum. Few clear direction, no wasted time.
+                        Photographs, renders, and diagrams of your product.
                     </span>
                 </div>
 
@@ -30,7 +29,7 @@ export default function Proceses() {
                 <div className="relative h-[577.09px] w-[371.2px] p-5 bg-gradient-to-b from-[#12110D] to-[#1C1A14]">
                     {/* Text at the top */}
                     <span className="absolute top-5 left-5 text-white font-geist text-[14.1px] leading-[16.9px] tracking-[-0.28px]">
-                        Refine
+                        Ads
                     </span>
 
                     {/* Image centered */}
@@ -41,9 +40,7 @@ export default function Proceses() {
                     />
 
                     <span className="absolute  text-[#5C5D5E] bottom-5 left-5  font-geist text-[14.1px] leading-[16.9px] tracking-[-0.28px]">
-                        This is where clarity takes shape. We refine the <br />
-                        essentials into a brand that feels obvious — and <br />
-                        undeniable.
+                        Those same visuals in motion: films, loops, and campaigns that show the product in use.
                     </span>
                 </div>
 
@@ -51,7 +48,7 @@ export default function Proceses() {
                 <div className="relative h-[577.09px] w-[371.2px] p-5 bg-gradient-to-b from-[#12110D] to-[#1C1A14]">
                     {/* Text at the top */}
                     <span className="absolute top-5 left-5 text-white font-geist text-[14.1px] leading-[16.9px] tracking-[-0.28px]">
-                        Deliver
+                        Brand
                     </span>
 
                     {/* Image centered */}
@@ -62,8 +59,7 @@ export default function Proceses() {
                     />
 
                     <span className="absolute  text-[#5C5D5E] bottom-5 left-5  font-geist text-[14.1px] leading-[16.9px] tracking-[-0.28px]">
-                       Everything’s in your hands: a sharp brand, clear tools, <br />
-and the confidence to launch fast.
+                       A consistent product-led look carried across your website, social, and paid ads. The product itself becomes the identity.
                     </span>
                 </div>
 
