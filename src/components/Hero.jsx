@@ -5,12 +5,13 @@ import { motion } from 'framer-motion';
 export default function Hero() {
   return (
     <section className="w-full min-h-[calc(100vh-120px)] flex flex-col items-center justify-start relative pt-24 overflow-hidden">
-      {/* Sliding gradient overlay: bottom tint that slides down off screen */}
+      {/* Subtle breathing overlay to enrich the base gradient */}
       <motion.div
-        className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-[#2F2B21] via-[#2F2B21] to-transparent"
-        initial={{ y: -200, opacity: 0.9 }}
-        animate={{ y: '100%', opacity: 0 }}
-        transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{ background: 'linear-gradient(180deg, rgba(18,17,13,0) 0%, rgba(28,26,20,0.18) 100%)' }}
+        initial={{ opacity: 0.0, y: 0 }}
+        animate={{ opacity: [0.0, 0.12, 0.0], y: [0, 6, 0] }}
+        transition={{ duration: 6, repeat: Infinity, ease: [0.42, 0, 0.58, 1] }}
       />
 
       {/* Robot Visual - Centered in upper half */}
