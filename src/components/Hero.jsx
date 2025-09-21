@@ -15,12 +15,12 @@ export default function Hero() {
       />
 
       {/* Robot Visual - Centered in upper half */}
-      <div className="relative z-10 mb-10" style={{ width: 'min(90vw, 560px)' }}>
+      <div className="relative z-10 flex justify-center items-center mb-10">
         <motion.img
           src={bottomComp}
           alt="Main robot"
-          className="block w-full select-none pointer-events-none"
-          style={{ aspectRatio: '1001 / 546', userSelect: 'none', WebkitUserSelect: 'none', WebkitTouchCallout: 'none' }}
+          className="w-[560px] relative z-0 object-contain select-none pointer-events-none"
+          style={{ userSelect: 'none', WebkitUserSelect: 'none', WebkitTouchCallout: 'none' }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, y: [0, -8, 0] }}
           transition={{ opacity: { delay: 0.0, duration: 0.6, ease: [0.2,0.8,0.2,1] }, duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
@@ -30,8 +30,8 @@ export default function Hero() {
         <motion.img
           src={upComp}
           alt="Floating component"
-          className="absolute left-1/2 -translate-x-1/2 select-none pointer-events-none"
-          style={{ width: '39%', aspectRatio: '1001 / 546', top: '-12%', userSelect: 'none', WebkitUserSelect: 'none', WebkitTouchCallout: 'none' }}
+          className="w-[220px] absolute z-10 -top-20 left-1/2 -translate-x-1/2 object-contain select-none pointer-events-none"
+          style={{ userSelect: 'none', WebkitUserSelect: 'none', WebkitTouchCallout: 'none' }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, y: [0, -8, 0] }}
           transition={{ opacity: { delay: 0.15, duration: 0.6, ease: [0.2,0.8,0.2,1] }, duration: 3, repeat: Infinity, ease: 'easeInOut' }}
