@@ -3,7 +3,7 @@ import refine from "../assets/refine.png";
 import deliver from "../assets/deliver.png";
 export default function Proceses() {
     return (
-        <section className="w-full py-16">
+        <section className="w-full pt-6 pb-0">
             <div className="mx-auto max-w-[1100px] flex items-center justify-between">
 
                 {/* Card 1 */}
