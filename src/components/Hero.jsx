@@ -36,14 +36,22 @@ export default function Hero() {
       {/* Main Content - Centered below robot */}
       <div className="relative z-10 flex flex-col items-center text-center">
         <motion.h2
-          initial={{ opacity: 0, filter: 'blur(8px)', y: 8 }}
-          animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          initial="hidden"
+          animate="show"
+          variants={{
+            hidden: { opacity: 0, filter: 'blur(10px)', y: 14 },
+            show: {
+              opacity: 1,
+              filter: 'blur(0px)',
+              y: 0,
+              transition: { duration: 1.0, ease: [0.16, 1, 0.3, 1] }
+            }
+          }}
           className="font-inter-light text-white text-[48px] leading-[56px] tracking-[0.2px] mb-6"
           style={{ textRendering: 'optimizeLegibility', WebkitFontSmoothing: 'antialiased' }}
         >
-          <span className="block">Make complex products simple</span>
-          <span className="block">to <span className="text-[#E3E3FD]">understand.</span></span>
+          <motion.span className="block" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}>Make complex products simple</motion.span>
+          <motion.span className="block" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}>to <span className="text-[#E3E3FD]">understand.</span></motion.span>
         </motion.h2>
         
         <motion.a
