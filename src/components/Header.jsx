@@ -8,14 +8,7 @@ export default function Header() {
         </h1>
 
         {/* Right side: Work */}
-        <nav>
-          <a
-            href="/services"
-            className="font-inter text-[14px] text-white tracking-[0.2px] transition-opacity hover:opacity-75"
-          >
-            Services
-          </a>
-        </nav>
+        
       </div>
     </header>
   );
