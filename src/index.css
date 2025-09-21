@@ -11,4 +11,6 @@
 body {
   @apply bg-body-gradient font-inter;
   min-height: 100vh;
+  margin: 0;
+  padding: 0;
 }
