@@ -69,7 +69,7 @@ export default function Hero() {
           <motion.span className="block" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2, duration: 0.4, ease: [0.2, 0.8, 0.2, 1] }}>to <span className="text-[#E3E3FD]">understand.</span></motion.span>
         </motion.h2>
         
-        <motion.a
+        <motion.a whileHover="hover" variants={{ hover: { color: "#FFFFFF", transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } } }}
           href="mailto:brandedobjects@gmail.com"
           className="
             group font-inter-light text-[#E3E3FD] text-[14px]
@@ -78,18 +78,14 @@ export default function Hero() {
             backdrop-blur-[6.5px]
             px-[16px] py-[8px]
             flex items-center
-            transition-colors duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:text-white
+            
           "
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, delay: 1.45, ease: [0.2, 0.8, 0.2, 1] }}
         >
           Let's talk
-          <span
-            className="ml-2 inline-block transform transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-[4px]"
-          >
-            →
-          </span>
+          <motion.span variants={{ hover: { x: 4, transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] } } }} className="ml-2 inline-block">→</motion.span>
         </motion.a>
       </div>
     </section>
