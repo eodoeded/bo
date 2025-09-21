@@ -15,22 +15,26 @@ export default function Hero() {
       />
 
       {/* Robot Visual - Centered in upper half */}
-      <div className="relative z-10 flex justify-center items-center mb-10">
+      <div className="relative z-10 mb-10" style={{ width: 'min(90vw, 560px)' }}>
         <motion.img
           src={bottomComp}
           alt="Main robot"
-          className="relative z-0 object-contain"
-          style={{ width: '560px', aspectRatio: '1001 / 546' }}
+          className="block w-full select-none pointer-events-none"
+          style={{ aspectRatio: '1001 / 546', userSelect: 'none', WebkitUserSelect: 'none', WebkitTouchCallout: 'none' }}
           animate={{ y: [0, -8, 0] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
+          draggable={false}
+          onContextMenu={(e) => e.preventDefault()}
         />
         <motion.img
           src={upComp}
           alt="Floating component"
-          className="absolute z-10 -top-20 left-1/2 -translate-x-1/2 object-contain"
-          style={{ width: '220px', aspectRatio: '1001 / 546' }}
+          className="absolute left-1/2 -translate-x-1/2 select-none pointer-events-none"
+          style={{ width: '39%', aspectRatio: '1001 / 546', top: '-12%', userSelect: 'none', WebkitUserSelect: 'none', WebkitTouchCallout: 'none' }}
           animate={{ y: [0, -8, 0] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          draggable={false}
+          onContextMenu={(e) => e.preventDefault()}
         />
       </div>
 
