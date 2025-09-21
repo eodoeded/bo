@@ -18,3 +18,14 @@ body {
 html {
   scroll-behavior: smooth;
 }
+
+.hero-media img {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  user-drag: none;
+  pointer-events: none;
+}

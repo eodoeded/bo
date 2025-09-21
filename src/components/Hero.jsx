@@ -21,8 +21,9 @@ export default function Hero() {
           alt="Main robot"
           className="block w-full select-none pointer-events-none"
           style={{ aspectRatio: '1001 / 546', userSelect: 'none', WebkitUserSelect: 'none', WebkitTouchCallout: 'none' }}
-          animate={{ y: [0, -8, 0] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, y: [0, -8, 0] }}
+          transition={{ opacity: { delay: 0.0, duration: 0.6, ease: [0.2,0.8,0.2,1] }, duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
           draggable={false}
           onContextMenu={(e) => e.preventDefault()}
         />
@@ -31,8 +32,9 @@ export default function Hero() {
           alt="Floating component"
           className="absolute left-1/2 -translate-x-1/2 select-none pointer-events-none"
           style={{ width: '39%', aspectRatio: '1001 / 546', top: '-12%', userSelect: 'none', WebkitUserSelect: 'none', WebkitTouchCallout: 'none' }}
-          animate={{ y: [0, -8, 0] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, y: [0, -8, 0] }}
+          transition={{ opacity: { delay: 0.15, duration: 0.6, ease: [0.2,0.8,0.2,1] }, duration: 3, repeat: Infinity, ease: 'easeInOut' }}
           draggable={false}
           onContextMenu={(e) => e.preventDefault()}
         />
@@ -43,13 +45,14 @@ export default function Hero() {
         <motion.h2
           initial="hidden"
           animate="show"
+          onViewportEnter={() => {}}
           variants={{
             hidden: { opacity: 0, filter: 'blur(10px)', y: 14 },
             show: {
               opacity: 1,
               filter: 'blur(0px)',
               y: 0,
-              transition: { duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }
+              transition: { delay: 0.65, duration: 0.55, ease: [0.2, 0.8, 0.2, 1] }
             }
           }}
           className="font-inter-light text-white text-[48px] leading-[56px] tracking-[0.2px] mb-6"
@@ -72,7 +75,7 @@ export default function Hero() {
           whileHover={{ color: "#FFFFFF" }}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.35, ease: [0.2, 0.8, 0.2, 1] }}
+          transition={{ duration: 0.45, delay: 0.65, ease: [0.2, 0.8, 0.2, 1] }}
         >
           Let's talk
           <span
