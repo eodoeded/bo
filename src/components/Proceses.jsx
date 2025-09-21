@@ -3,7 +3,7 @@ import refine from "../assets/refine.png";
 import deliver from "../assets/deliver.png";
 export default function Proceses() {
     return (
-        <section id="services" className="w-full pt-16 pb-0">
+        <section id="services" className="w-full pt-24 pb-0">
             <div className="mx-auto max-w-[1100px] px-4">
                 <h3 className="text-white/90 font-inter text-[14px] tracking-[0.3px] mb-4">Services</h3>
             </div>

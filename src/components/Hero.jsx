@@ -7,10 +7,10 @@ export default function Hero() {
     <section className="w-full min-h-[calc(100vh-120px)] flex flex-col items-center justify-start relative pt-24 overflow-hidden">
       {/* Sliding gradient overlay: bottom tint that slides down off screen */}
       <motion.div
-        className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-transparent via-transparent to-[#2F2B21]"
-        initial={{ y: 0 }}
-        animate={{ y: '100%' }}
-        transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+        className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-[#2F2B21] via-[#2F2B21] to-transparent"
+        initial={{ y: -200, opacity: 0.9 }}
+        animate={{ y: '100%', opacity: 0 }}
+        transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
       />
 
       {/* Robot Visual - Centered in upper half */}
