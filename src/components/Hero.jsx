@@ -19,7 +19,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="w-full min-h-[calc(100vh-120px)] flex flex-col items-center justify-start relative pt-20 md:pt-24 overflow-hidden">
+    <section className="w-full min-h-[calc(100vh-120px)] flex flex-col items-center justify-start relative pt-20 md:pt-24 px-6 md:px-0 overflow-hidden">
       {/* Subtle breathing overlay to enrich the base gradient */}
       <motion.div
         className="pointer-events-none absolute inset-0 z-0"
@@ -39,7 +39,7 @@ export default function Hero() {
           <motion.img
             src={bottomComp}
             alt="Main robot"
-            className="relative z-0 object-contain w-[320px] md:w-[560px]"
+            className="relative z-0 object-contain w-[300px] md:w-[560px]"
             style={{ aspectRatio: '1001 / 546' }}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -54,7 +54,7 @@ export default function Hero() {
           <motion.img
             src={upComp}
             alt="Floating component"
-            className="object-contain w-[150px] md:w-[220px]"
+            className="object-contain w-[140px] md:w-[220px]"
             style={{ aspectRatio: '1001 / 546' }}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -77,7 +77,7 @@ export default function Hero() {
               transition: { duration: 0.55, delay: 1.0, ease: [0.2, 0.8, 0.2, 1] }
             }
           }}
-          className="font-inter-light text-white text-[36px] leading-[42px] md:text-[48px] md:leading-[56px] tracking-[0.2px] mb-6"
+          className="font-inter-light text-white text-[32px] leading-[38px] md:text-[48px] md:leading-[56px] max-w-[22ch] tracking-[0.2px] mb-6"
           style={{ textRendering: 'optimizeLegibility', WebkitFontSmoothing: 'antialiased' }}
         >
           <motion.span className="block" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.05, duration: 0.4, ease: [0.2, 0.8, 0.2, 1] }}>Make complex products simple</motion.span>
