@@ -19,7 +19,7 @@ export default function Hero() {
         <motion.div
           className="relative"
           animate={{ y: [0, -8, 0] }}
-          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 1.0 }}
+          transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.0 }}
         >
           <motion.img
             src={bottomComp}
@@ -33,8 +33,8 @@ export default function Hero() {
         </motion.div>
         <motion.div
           className="absolute -top-16 md:-top-20 left-1/2 -translate-x-1/2"
-          animate={{ y: [0, -8, 0] }}
-          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 1.0 }}
+          animate={{ y: [0, -10, 0] }}
+          transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
         >
           <motion.img
             src={upComp}
