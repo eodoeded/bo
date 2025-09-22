@@ -32,12 +32,12 @@ export default function Hero() {
       {/* Robot Visual - Centered in upper half */}
       <div className="relative z-10 flex justify-center items-center mb-8 w-full">
         <motion.div
-          className="relative"
+          className="relative" style={{ willChange: "transform" }}
           animate={{ y: [0, -8, 0] }}
           transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.0 }}
         >
           <motion.img
-            src={bottomComp}
+            src={bottomComp} loading="eager" decoding="async" fetchpriority="high"
             alt="Main robot"
             className="relative z-0 object-contain w-[300px] md:w-[560px]"
             style={{ aspectRatio: '1001 / 546' }}
@@ -47,12 +47,12 @@ export default function Hero() {
           />
         </motion.div>
         <motion.div
-          className="absolute -top-16 md:-top-20 left-1/2 -translate-x-1/2"
+          className="absolute -top-16 md:-top-20 left-1/2 -translate-x-1/2" style={{ willChange: "transform" }}
           animate={{ y: [0, -10, 0] }}
           transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
         >
           <motion.img
-            src={upComp}
+            src={upComp} loading="eager" decoding="async" fetchpriority="high"
             alt="Floating component"
             className="object-contain w-[140px] md:w-[220px]"
             style={{ aspectRatio: '1001 / 546' }}
@@ -86,8 +86,9 @@ export default function Hero() {
         
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 1.45, ease: [0.2, 0.8, 0.2, 1] }}>
 
-        <motion.a whileTap="hover" 
+        <motion.a initial="rest" animate="rest" whileHover="hover" whileTap="hover" 
           href="mailto:brandedobjects@gmail.com"
+          variants={{ rest: { color: "#E3E3FD", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }, hover: { color: "#FFFFFF", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } } }}
           className="
             group font-inter-light text-[#E3E3FD] text-[14px]
             bg-[#3B3B3B] cursor-pointer
@@ -102,7 +103,7 @@ export default function Hero() {
           transition={{ duration: 0.45, delay: 1.45, ease: [0.2, 0.8, 0.2, 1] }}
         >
           Let's talk
-          <span className="ml-2 inline-block transform transition-transform duration-150 ease-out group-hover:translate-x-[4px]">→</span>
+          <motion.span variants={{ rest: { x: 0, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }, hover: { x: 4, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } } }} className="ml-2 inline-block">→</motion.span>
         </motion.a>
         </motion.div>
       </div>
