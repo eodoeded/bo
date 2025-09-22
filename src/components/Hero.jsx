@@ -86,7 +86,7 @@ export default function Hero() {
         
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 1.45, ease: [0.2, 0.8, 0.2, 1] }}>
 
-        <motion.a initial="rest" animate="rest" whileHover="hover" whileTap="hover" whileTap="hover" variants={{ rest: { color: "#E3E3FD", transition: { duration: 0.05 } }, hover: { color: "#FFFFFF", transition: { duration: 0.15, ease: [0.16, 1, 0.3, 1] } } }}
+        <motion.a whileTap="hover" 
           href="mailto:brandedobjects@gmail.com"
           className="
             group font-inter-light text-[#E3E3FD] text-[14px]
@@ -102,7 +102,7 @@ export default function Hero() {
           transition={{ duration: 0.45, delay: 1.45, ease: [0.2, 0.8, 0.2, 1] }}
         >
           Let's talk
-          <motion.span variants={{ rest: { x: 0, transition: { duration: 0.05 } }, hover: { x: 4, transition: { duration: 0.15, ease: [0.16, 1, 0.3, 1] } } }} className="ml-2 inline-block">→</motion.span>
+          <span className="ml-2 inline-block transform transition-transform duration-150 ease-out group-hover:translate-x-[4px]">→</span>
         </motion.a>
         </motion.div>
       </div>
