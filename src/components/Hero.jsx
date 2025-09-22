@@ -84,7 +84,7 @@ export default function Hero() {
           <motion.span className="block" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2, duration: 0.4, ease: [0.2, 0.8, 0.2, 1] }}>to <span className="text-[#E3E3FD]">understand.</span></motion.span>
         </motion.h2>
         
-        <motion.a initial="rest" animate="rest" whileHover="hover" variants={{ rest: { color: "#E3E3FD", transition: { duration: 0 } }, hover: { color: "#FFFFFF", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } } }}
+        <motion.a initial="rest" animate="rest" whileHover="hover" whileTap="hover" variants={{ rest: { color: "#E3E3FD", transition: { duration: 0.05 } }, hover: { color: "#FFFFFF", transition: { duration: 0.15, ease: [0.16, 1, 0.3, 1] } } }}
           href="mailto:brandedobjects@gmail.com"
           className="
             group font-inter-light text-[#E3E3FD] text-[14px]
@@ -100,7 +100,7 @@ export default function Hero() {
           transition={{ duration: 0.45, delay: 1.45, ease: [0.2, 0.8, 0.2, 1] }}
         >
           Let's talk
-          <motion.span variants={{ rest: { x: 0 }, hover: { x: 4, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } } }} className="ml-2 inline-block">→</motion.span>
+          <motion.span variants={{ rest: { x: 0, transition: { duration: 0.05 } }, hover: { x: 4, transition: { duration: 0.15, ease: [0.16, 1, 0.3, 1] } } }} className="ml-2 inline-block">→</motion.span>
         </motion.a>
       </div>
     </section>
