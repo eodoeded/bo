@@ -8,7 +8,7 @@ export default {
                 geist: ["Geist Sans", "sans-serif"],
             },
             backgroundImage: {
-                'body-gradient': 'linear-gradient(180deg, #12110D 0%, #1C1A14 100%)',
+                'body-gradient': 'linear-gradient(180deg, #12110D 0%, #22201A 100%)',
             },
         },
     },
