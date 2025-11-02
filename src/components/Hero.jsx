@@ -1,10 +1,9 @@
 import upComp from "../assets/up-comp.png";
 import bottomComp from "../assets/bottom-comp.png";
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export default function Hero() {
-  const [showCalEmbed, setShowCalEmbed] = useState(false);
   useEffect(() => {
     const prevOverflow = document.body.style.overflow;
     const prevBodyHeight = document.body.style.height;
@@ -18,28 +17,6 @@ export default function Hero() {
       document.documentElement.style.height = prevHtmlHeight;
     };
   }, []);
-
-  useEffect(() => {
-    if (!showCalEmbed) return;
-    let attempts = 0;
-    const maxAttempts = 40; // ~4s
-    const interval = setInterval(() => {
-      attempts += 1;
-      if (window.Cal && typeof window.Cal === 'function') {
-        try {
-          window.Cal('inline', {
-            elementOrSelector: '#cal-hero-embed',
-            calLink: 'branded-objects-nro6hy',
-            config: { theme: 'dark', layout: 'month_view' }
-          });
-        } catch (_) { /* no-op */ }
-        clearInterval(interval);
-      } else if (attempts >= maxAttempts) {
-        clearInterval(interval);
-      }
-    }, 100);
-    return () => clearInterval(interval);
-  }, [showCalEmbed]);
 
   return (
     <section className="w-full min-h-[calc(100vh-120px)] flex flex-col items-center justify-start relative pt-20 md:pt-24 px-6 md:px-0 overflow-hidden">
@@ -108,39 +85,28 @@ export default function Hero() {
         </motion.h2>
         
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 1.45, ease: [0.2, 0.8, 0.2, 1] }}>
-          {!showCalEmbed ? (
-            <motion.button
-              type="button"
-              initial="rest"
-              animate="rest"
-              whileHover="hover"
-              whileTap="hover"
-              onClick={(e) => { e.preventDefault(); setShowCalEmbed(true); }}
-              variants={{ rest: { color: "#E3E3FD", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }, hover: { color: "#FFFFFF", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } } }}
-              className="
-                group font-inter-light text-[#E3E3FD] text-[14px]
-                bg-[#3B3B3B] cursor-pointer
-                border-[1px] border-[#FFFFFF4D]
-                backdrop-blur-[6.5px]
-                px-[16px] py-[8px]
-                flex items-center
-              "
-            >
-              Let's talk
-              <motion.span variants={{ rest: { x: 0, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }, hover: { x: 4, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } } }} className="ml-2 inline-block">→</motion.span>
-            </motion.button>
-          ) : (
-            <div
-              id="cal-hero-embed"
-              className="w-[320px] md:w-[680px] max-w-full mx-auto border border-[#FFFFFF4D] rounded-md backdrop-blur-[6.5px]"
-              style={{
-                // Best-effort CSS variables if Cal reads them
-                '--cal-brand-color': '#E3E3FD',
-                '--cal-text-color': '#E3E3FD',
-                '--cal-border-color': '#FFFFFF26',
-              }}
-            />
-          )}
+          <motion.button
+            type="button"
+            initial="rest"
+            animate="rest"
+            whileHover="hover"
+            whileTap="hover"
+            data-cal-link="branded-objects-nro6hy/15min"
+            data-cal-namespace="15min"
+            data-cal-config='{"layout":"month_view"}'
+            variants={{ rest: { color: "#E3E3FD", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }, hover: { color: "#FFFFFF", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } } }}
+            className="
+              group font-inter-light text-[#E3E3FD] text-[14px]
+              bg-[#3B3B3B] cursor-pointer
+              border-[1px] border-[#FFFFFF4D]
+              backdrop-blur-[6.5px]
+              px-[16px] py-[8px]
+              flex items-center
+            "
+          >
+            Let's talk
+            <motion.span variants={{ rest: { x: 0, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }, hover: { x: 4, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } } }} className="ml-2 inline-block">→</motion.span>
+          </motion.button>
         </motion.div>
       </div>
     </section>
