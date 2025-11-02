@@ -15,6 +15,14 @@
   <!-- Geist Sans via CDN -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@latest/dist/geist-sans.min.css" />
 
+  <style>
+    :root {
+      --cal-brand-color: #E3E3FD; /* Accent to match site */
+      --cal-text-color: #E3E3FD;
+      --cal-border-color: #FFFFFF26;
+      --cal-bg-color: #141311;
+    }
+  </style>
 
   <!-- Cal element-click embed code begins -->
   <script type="text/javascript">
@@ -46,8 +54,18 @@
     })(window, "https://app.cal.com/embed/embed.js", "init");
 
     Cal("init", "15min", { origin: "https://app.cal.com" });
-    // Popup UI config
-    Cal.ns["15min"]("ui", { hideEventTypeDetails: false, layout: "month_view", theme: "dark" });
+    // Popup UI config with site-matched colors
+    Cal.ns["15min"]("ui", {
+      hideEventTypeDetails: false,
+      layout: "month_view",
+      theme: "dark",
+      styles: {
+        branding: { brandColor: "#E3E3FD" },
+        textColor: "#E3E3FD",
+        backgroundColor: "#141311",
+        borderColor: "#FFFFFF26"
+      }
+    });
   </script>
   <!-- Cal element-click embed code ends -->
 
