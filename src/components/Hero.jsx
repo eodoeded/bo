@@ -93,7 +93,7 @@ export default function Hero() {
             whileTap="hover"
             data-cal-link="branded-objects-nro6hy/15min"
             data-cal-namespace="15min"
-            data-cal-config='{"layout":"month_view"}'
+            data-cal-config='{"layout":"month_view","theme":"dark"}'
             variants={{ rest: { color: "#E3E3FD", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }, hover: { color: "#FFFFFF", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } } }}
             className="
               group font-inter-light text-[#E3E3FD] text-[14px]
