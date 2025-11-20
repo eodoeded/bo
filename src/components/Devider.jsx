@@ -14,7 +14,7 @@ export default function Divider() {
     const transition = { duration: 0.8, ease: [0.2, 0.8, 0.2, 1] };
 
     return (
-        <section className="w-full py-32 pb-40 flex flex-col items-center justify-center gap-10 relative overflow-hidden">
+        <section className="w-full py-24 flex flex-col items-center justify-center gap-10 relative overflow-hidden">
             {/* Subtle Ambient background */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#1F1D18_0%,transparent_70%)] pointer-events-none" />
 
@@ -24,7 +24,7 @@ export default function Divider() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={transition}
-                    className="font-inter-light text-[32px] md:text-[48px] text-white tracking-[-0.02em] text-center"
+                    className="font-inter-light text-white text-[32px] leading-[38px] md:text-[48px] md:leading-[56px] tracking-[0.2px] text-center"
                 >
                     Ready to start?
                 </motion.h2>
@@ -38,7 +38,7 @@ export default function Divider() {
                 >
                      <div className="flex items-center gap-3 mb-2">
                         <span className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_8px_rgba(227,227,253,0.6)]"></span>
-                        <span className="text-[#E3E3FD]/60 font-inter-light text-[11px] tracking-[0.2em] uppercase">3/4 spots available for March</span>
+                        <span className="text-[#E3E3FD]/60 font-inter-light text-[11px] tracking-[0.2em] uppercase">3/4 spots available for Q4</span>
                     </div>
 
                     <motion.button

@@ -127,7 +127,7 @@ export default function Proceses() {
     );
 
     return (
-        <section id="services" className="w-full pt-32 pb-40 relative z-10">
+        <section id="services" className="w-full py-24 relative z-10">
              {/* Subtle grid background for tech feel */}
              <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none"></div>
 
