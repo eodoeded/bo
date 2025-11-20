@@ -9,16 +9,19 @@ const Animation = () => {
   // Sequence: 
   // 0: "Your technology is complex."
   // 1: [Robot Visual] + "Your story shouldn't be."
-  // 2: Branded Objects + CTA
+  // 2: Offering List
+  // 3: Branded Objects + CTA
   const [scene, setScene] = useState(0);
 
   useEffect(() => {
     const timer1 = setTimeout(() => setScene(1), 2500); // Hook duration
     const timer2 = setTimeout(() => setScene(2), 7000); // Example duration
+    const timer3 = setTimeout(() => setScene(3), 11000); // Offerings duration
     
     return () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
+      clearTimeout(timer3);
     };
   }, []);
 
@@ -104,10 +107,51 @@ const Animation = () => {
             </motion.div>
           )}
 
-          {/* SCENE 3: THE BRAND / CTA */}
+          {/* SCENE 3: THE OFFERINGS */}
           {scene === 2 && (
             <motion.div
               key="scene3"
+              className="absolute inset-0 flex flex-col items-start justify-center px-12"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={transition}
+            >
+                <motion.p 
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 0.5, x: 0 }}
+                    className="font-mono text-xs text-[#E3E3FD] uppercase tracking-widest mb-12"
+                >
+                    Services
+                </motion.p>
+
+                <div className="space-y-8">
+                    {[
+                        "Product Visuals",
+                        "Web Design",
+                        "Design Systems"
+                    ].map((item, i) => (
+                        <motion.div
+                            key={i}
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: i * 0.3, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                            className="flex items-center gap-4"
+                        >
+                            <span className="text-[#5C5D5E] font-mono text-sm">0{i + 1}</span>
+                            <h2 className="font-inter text-white text-3xl md:text-4xl font-medium tracking-tight">
+                                {item}
+                            </h2>
+                        </motion.div>
+                    ))}
+                </div>
+            </motion.div>
+          )}
+
+          {/* SCENE 4: THE BRAND / CTA */}
+          {scene === 3 && (
+            <motion.div
+              key="scene4"
               className="absolute inset-0 flex flex-col items-center justify-between py-24 px-12 text-center"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -148,8 +192,6 @@ const Animation = () => {
           )}
 
         </AnimatePresence>
-
-        {/* Recording Frame UI (Optional 'REC' overlay to make it look like a viewfinder, giving it a 'work in progress' or 'behind the scenes' tech feel, or just keeping it clean) -> Keeping it clean for actual export */}
         
       </div>
       
