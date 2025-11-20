@@ -19,46 +19,55 @@ export default function Proceses() {
     const iconStyle = "w-[160px] h-[160px] opacity-90 pointer-events-none absolute left-1/2 top-[42%] -translate-x-1/2 -translate-y-1/2 text-[#E3E3FD]";
     const strokeWidth = "0.6";
 
-    // Card 1: Product Visuals - Abstract Focal Point / Shutter (Kept as is)
+    // Card 1: Product Visuals - Isometric Spatial Scan
     const CameraIcon = () => (
         <motion.svg
             viewBox="0 0 100 100"
             className={iconStyle}
         >
-             <motion.g 
-                style={{ transformOrigin: "50px 50px" }}
-                animate={{ rotate: 360 }}
-                transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-             >
-                {/* Outer Ring */}
-                <circle cx="50" cy="50" r="30" fill="none" stroke="currentColor" strokeWidth={strokeWidth} opacity="0.3" strokeDasharray="4 4" />
-                
-                {/* Shutter Blades Abstract */}
-                {[0, 60, 120, 180, 240, 300].map((angle, i) => (
-                    <motion.line
-                        key={i}
-                        x1="50" y1="25" x2="50" y2="10"
-                        stroke="currentColor" strokeWidth={strokeWidth}
-                        transform={`rotate(${angle} 50 50)`}
-                    />
-                ))}
-
-                {/* Inner Focus */}
-                <motion.rect 
-                    x="35" y="35" width="30" height="30" 
+             <g style={{ transform: "translate(50px, 50px)" }}>
+                {/* Target Object (Cube) */}
+                <motion.path 
+                    d="M-10 -5 L10 -5 L10 15 L-10 15 Z" 
                     fill="none" stroke="currentColor" strokeWidth={strokeWidth}
-                    animate={{ scale: [1, 0.8, 1], rotate: [0, 90, 0] }}
-                    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                    style={{ transformOrigin: "50px 50px" }}
+                    animate={{ y: [-2, 2, -2] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                 />
-                
-                {/* Center Point */}
-                <circle cx="50" cy="50" r="1.5" fill="currentColor" />
-             </motion.g>
+                <motion.path 
+                    d="M-10 -5 L0 -10 L20 -10 L10 -5" 
+                    fill="none" stroke="currentColor" strokeWidth={strokeWidth}
+                    animate={{ y: [-2, 2, -2] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                />
+                 <motion.path 
+                    d="M10 -5 L20 -10 L20 10 L10 15" 
+                    fill="none" stroke="currentColor" strokeWidth={strokeWidth}
+                    animate={{ y: [-2, 2, -2] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                />
+
+                {/* Scanning Plane (Horizontal) */}
+                <motion.path
+                    d="M-30 0 L0 -15 L30 0 L0 15 Z"
+                    fill="currentColor" fillOpacity="0.1" stroke="currentColor" strokeWidth={strokeWidth}
+                    animate={{ y: [-20, 25, -20], opacity: [0, 0.8, 0] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                />
+
+                {/* Focus Corners/Brackets */}
+                <motion.path d="M-25 -25 L-15 -25 M-25 -25 L-25 -15" fill="none" stroke="currentColor" strokeWidth={strokeWidth} 
+                    animate={{ x: [0, -5, 0], y: [0, -5, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} />
+                <motion.path d="M25 -25 L15 -25 M25 -25 L25 -15" fill="none" stroke="currentColor" strokeWidth={strokeWidth} 
+                     animate={{ x: [0, 5, 0], y: [0, -5, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} />
+                <motion.path d="M-25 25 L-15 25 M-25 25 L-25 15" fill="none" stroke="currentColor" strokeWidth={strokeWidth} 
+                     animate={{ x: [0, -5, 0], y: [0, 5, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} />
+                <motion.path d="M25 25 L15 25 M25 25 L25 15" fill="none" stroke="currentColor" strokeWidth={strokeWidth} 
+                     animate={{ x: [0, 5, 0], y: [0, 5, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }} />
+             </g>
         </motion.svg>
     );
 
-    // Card 2: Product + Website - 3D Layer Stacking / Digital Assembly
+    // Card 2: Product + Website - 3D Layer Stacking / Digital Assembly (Kept as is)
     const InterfaceIcon = () => (
         <motion.svg
             viewBox="0 0 100 100"
@@ -119,54 +128,48 @@ export default function Proceses() {
         </motion.svg>
     );
 
-    // Card 3: Full Digital System - Neural Network / Constellation
+    // Card 3: Full Digital System - Isometric Ecosystem / Orbiting Platforms
     const SystemIcon = () => (
          <motion.svg
             viewBox="0 0 100 100"
             className={iconStyle}
         >
-             <motion.g style={{ transformOrigin: "50px 50px" }} animate={{ rotate: 360 }} transition={{ duration: 60, repeat: Infinity, ease: "linear" }}>
+             <g style={{ transform: "translate(50px, 50px)" }}>
                 
-                {/* Central Hub */}
-                <circle cx="50" cy="50" r="4" fill="currentColor" opacity="0.8" />
-                <circle cx="50" cy="50" r="8" fill="none" stroke="currentColor" strokeWidth={strokeWidth} opacity="0.3" />
+                {/* Central Core Platform */}
+                <motion.path 
+                    d="M-15 5 L0 12 L15 5 L0 -2 Z" 
+                    fill="currentColor" stroke="currentColor" strokeWidth={strokeWidth}
+                    animate={{ y: [-2, 2, -2] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                />
+                <motion.line x1="0" y1="-2" x2="0" y2="-20" stroke="currentColor" strokeWidth={strokeWidth} opacity="0.5" />
 
-                {/* Connected Nodes */}
-                {[0, 72, 144, 216, 288].map((angle, i) => {
-                    const rad = (angle * Math.PI) / 180;
-                    const x = 50 + 30 * Math.cos(rad);
-                    const y = 50 + 30 * Math.sin(rad);
-                    
-                    return (
-                        <g key={i}>
-                            {/* Connection Line with Pulse */}
-                            <line x1="50" y1="50" x2={x} y2={y} stroke="currentColor" strokeWidth={strokeWidth} opacity="0.2" />
-                            <motion.circle 
-                                cx={50} cy={50} r="1" fill="currentColor"
-                                animate={{ cx: [50, x], cy: [50, y], opacity: [0, 1, 0] }}
-                                transition={{ duration: 2, delay: i * 0.4, repeat: Infinity, ease: "linear" }}
-                            />
-                            
-                            {/* Node */}
-                            <motion.circle 
-                                cx={x} cy={y} r="2" fill="none" stroke="currentColor" strokeWidth={strokeWidth}
-                                animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
-                                transition={{ duration: 2, delay: i * 0.2, repeat: Infinity, ease: "easeInOut" }}
-                            />
-                        </g>
-                    );
-                })}
+                {/* Orbiting Satellite 1 */}
+                <motion.g animate={{ rotate: 360 }} transition={{ duration: 15, repeat: Infinity, ease: "linear" }}>
+                    <g transform="translate(0, -35)">
+                        <motion.rect x="-5" y="-5" width="10" height="10" fill="none" stroke="currentColor" strokeWidth={strokeWidth} 
+                            animate={{ rotate: -360 }} transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                        />
+                    </g>
+                </motion.g>
 
-                {/* Outer Data Ring */}
-                 <motion.circle 
-                    cx="50" cy="50" r="42" 
-                    fill="none" stroke="currentColor" strokeWidth={strokeWidth} 
-                    strokeDasharray="2 4"
-                    opacity="0.2"
-                    animate={{ rotate: -360 }}
-                    transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+                 {/* Orbiting Satellite 2 */}
+                <motion.g animate={{ rotate: -360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }}>
+                     <g transform="translate(0, -25)">
+                        <motion.circle r="3" fill="none" stroke="currentColor" strokeWidth={strokeWidth} />
+                    </g>
+                </motion.g>
+
+                 {/* Orbit Rings */}
+                 <ellipse cx="0" cy="0" rx="35" ry="35" fill="none" stroke="currentColor" strokeWidth={strokeWidth} opacity="0.1" strokeDasharray="4 4" />
+                 <ellipse cx="0" cy="0" rx="25" ry="25" fill="none" stroke="currentColor" strokeWidth={strokeWidth} opacity="0.1" />
+
+                 {/* Data Connection Beams */}
+                 <motion.line x1="0" y1="0" x2="0" y2="-35" stroke="currentColor" strokeWidth={strokeWidth} opacity="0.1"
+                    animate={{ rotate: 360 }} transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
                  />
-             </motion.g>
+             </g>
         </motion.svg>
     );
 
