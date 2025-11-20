@@ -8,7 +8,7 @@ export default function Hero() {
   const [isUpLoaded, setIsUpLoaded] = useState(false);
 
   return (
-    <section className="w-full min-h-[calc(100vh-120px)] flex flex-col items-center justify-start relative pt-20 md:pt-24 px-6 md:px-0 overflow-hidden">
+    <section className="w-full min-h-[calc(100vh-120px)] flex flex-col items-center justify-start relative pt-12 md:pt-24 px-6 md:px-0 overflow-hidden">
       {/* Subtle breathing overlay to enrich the base gradient */}
       <motion.div
         className="pointer-events-none absolute inset-0 z-0"

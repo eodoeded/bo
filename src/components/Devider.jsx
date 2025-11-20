@@ -14,7 +14,7 @@ export default function Divider() {
     const transition = { duration: 0.8, ease: [0.2, 0.8, 0.2, 1] };
 
     return (
-        <section className="w-full py-24 flex flex-col items-center justify-center gap-10 relative overflow-hidden">
+        <section className="w-full py-12 md:py-24 flex flex-col items-center justify-center gap-8 md:gap-10 relative overflow-hidden">
             {/* Subtle Ambient background */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#1F1D18_0%,transparent_70%)] pointer-events-none" />
 
