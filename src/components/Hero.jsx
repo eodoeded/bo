@@ -6,7 +6,6 @@ export default function Hero() {
   
   return (
     <section className="w-full min-h-[calc(100vh-120px)] flex flex-col items-center justify-start relative pt-20 md:pt-24 px-6 md:px-0 overflow-hidden">
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none"></div>
       {/* Subtle breathing overlay to enrich the base gradient */}
       <motion.div
         className="pointer-events-none absolute inset-0 z-0"
