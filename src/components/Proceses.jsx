@@ -14,93 +14,90 @@ export default function Proceses() {
         })
     };
 
-    // Shared style for all icons to ensure consistency
+    // Shared style for all icons
     const iconStyle = "w-[140px] h-[140px] opacity-80 pointer-events-none absolute left-1/2 top-[40%] -translate-x-1/2 -translate-y-1/2 text-[#E3E3FD]";
-    const strokeWidth = "0.8";
+    const strokeWidth = "1";
 
-    // Card 1: Rotating Wireframe Cube
+    // Card 1: Product Visuals - Clean Geometric Composition
     const CubeIcon = () => (
         <motion.svg
             viewBox="0 0 100 100"
             className={iconStyle}
-            animate={{ rotateY: 360, rotateX: 360 }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
             style={{ transformStyle: "preserve-3d" }}
         >
-            <motion.g
-                animate={{ rotate: 360 }}
-                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                style={{ transformOrigin: "center" }}
-            >
-                 {/* Back Face */}
-                <rect x="25" y="25" width="50" height="50" fill="none" stroke="currentColor" strokeWidth={strokeWidth} opacity="0.3" />
-                {/* Front Face */}
-                <rect x="35" y="35" width="50" height="50" fill="none" stroke="currentColor" strokeWidth={strokeWidth} />
-                {/* Connecting Lines */}
-                <line x1="25" y1="25" x2="35" y2="35" stroke="currentColor" strokeWidth={strokeWidth} opacity="0.5" />
-                <line x1="75" y1="25" x2="85" y2="35" stroke="currentColor" strokeWidth={strokeWidth} opacity="0.5" />
-                <line x1="25" y1="75" x2="35" y2="85" stroke="currentColor" strokeWidth={strokeWidth} opacity="0.5" />
-                <line x1="75" y1="75" x2="85" y2="85" stroke="currentColor" strokeWidth={strokeWidth} opacity="0.5" />
-            </motion.g>
+             {/* Static Frame */}
+             <rect x="20" y="20" width="60" height="60" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.2" />
+             
+             {/* Moving Elements */}
+             <motion.rect 
+                x="30" y="30" width="40" height="40" 
+                fill="none" stroke="currentColor" strokeWidth={strokeWidth} 
+                animate={{ rotate: 90 }}
+                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", repeatDelay: 1 }}
+                style={{ transformOrigin: "50px 50px" }}
+             />
+             
+             <motion.circle 
+                cx="50" cy="50" r="5" 
+                fill="currentColor" 
+                animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+             />
         </motion.svg>
     );
 
-    // Card 2: Floating Planes (Website/Layers)
+    // Card 2: Product + Website - Abstract Interface Layout
     const LayersIcon = () => (
-        <motion.div className={iconStyle + " flex items-center justify-center perspective-1000"}>
-             <motion.div
-                className="absolute w-16 h-16 border border-[#E3E3FD]/80"
-                animate={{ 
-                    rotateX: [60, 50, 60], 
-                    rotateZ: [0, 360],
-                    y: [0, -10, 0]
-                }}
-                transition={{ 
-                    rotateX: { duration: 4, repeat: Infinity, ease: "easeInOut" },
-                    rotateZ: { duration: 25, repeat: Infinity, ease: "linear" },
-                    y: { duration: 4, repeat: Infinity, ease: "easeInOut" }
-                }}
+        <motion.svg
+            viewBox="0 0 100 100"
+            className={iconStyle}
+        >
+             {/* Base Grid */}
+             <line x1="20" y1="50" x2="80" y2="50" stroke="currentColor" strokeWidth="0.5" opacity="0.2" />
+             <line x1="50" y1="20" x2="50" y2="80" stroke="currentColor" strokeWidth="0.5" opacity="0.2" />
+
+             {/* Floating Panels */}
+             <motion.rect
+                x="25" y="35" width="30" height="40"
+                fill="none" stroke="currentColor" strokeWidth={strokeWidth}
+                animate={{ y: [-2, 2, -2] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
              />
-             <motion.div
-                className="absolute w-20 h-20 border border-[#E3E3FD]/40"
-                animate={{ 
-                    rotateX: [60, 70, 60], 
-                    rotateZ: [360, 0],
-                    y: [20, 30, 20]
-                }}
-                transition={{ 
-                    rotateX: { duration: 5, repeat: Infinity, ease: "easeInOut" },
-                    rotateZ: { duration: 30, repeat: Infinity, ease: "linear" },
-                    y: { duration: 5, repeat: Infinity, ease: "easeInOut" }
-                }}
+             <motion.rect
+                x="45" y="25" width="30" height="40"
+                fill="none" stroke="currentColor" strokeWidth={strokeWidth}
+                animate={{ y: [2, -2, 2] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
              />
-        </motion.div>
+             
+             {/* Connector */}
+             <motion.line
+                x1="40" y1="55" x2="60" y2="45"
+                stroke="currentColor" strokeWidth="0.5"
+                animate={{ opacity: [0.2, 0.6, 0.2] }}
+                transition={{ duration: 2, repeat: Infinity }}
+             />
+        </motion.svg>
     );
 
-    // Card 3: Digital System (Connecting Nodes Sphere)
+    // Card 3: Full Digital System - Connected Nodes / System
     const NetworkIcon = () => (
          <motion.svg
             viewBox="0 0 100 100"
             className={iconStyle}
-            animate={{ rotate: -360 }}
-            transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
         >
-             <motion.g style={{ transformOrigin: "center" }}>
-                {/* Orbital Rings */}
-                <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" strokeWidth={strokeWidth} opacity="0.2" />
-                <ellipse cx="50" cy="50" rx="15" ry="35" fill="none" stroke="currentColor" strokeWidth={strokeWidth} opacity="0.2" transform="rotate(45 50 50)" />
-                <ellipse cx="50" cy="50" rx="15" ry="35" fill="none" stroke="currentColor" strokeWidth={strokeWidth} opacity="0.2" transform="rotate(-45 50 50)" />
+             <motion.g style={{ transformOrigin: "center" }} animate={{ rotate: 360 }} transition={{ duration: 60, repeat: Infinity, ease: "linear" }}>
+                {/* Central Hub */}
+                <circle cx="50" cy="50" r="12" fill="none" stroke="currentColor" strokeWidth={strokeWidth} />
+                <circle cx="50" cy="50" r="4" fill="currentColor" opacity="0.8" />
                 
-                {/* Central Core */}
-                <circle cx="50" cy="50" r="8" fill="currentColor" fillOpacity="0.1" stroke="currentColor" strokeWidth={strokeWidth} />
-                
-                {/* Satellites */}
-                <motion.circle cx="50" cy="15" r="2" fill="currentColor" 
-                    animate={{ r: [1, 2, 1], opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }} />
-                <motion.circle cx="85" cy="50" r="2" fill="currentColor"
-                    animate={{ r: [1, 2, 1], opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, delay: 0.5, repeat: Infinity }} />
-                 <motion.circle cx="15" cy="50" r="2" fill="currentColor"
-                    animate={{ r: [1, 2, 1], opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, delay: 1.0, repeat: Infinity }} />
+                {/* Nodes */}
+                {[0, 120, 240].map((angle, i) => (
+                    <motion.g key={i} transform={`rotate(${angle} 50 50)`}>
+                        <line x1="50" y1="38" x2="50" y2="20" stroke="currentColor" strokeWidth="0.5" />
+                        <circle cx="50" cy="16" r="3" fill="none" stroke="currentColor" strokeWidth={strokeWidth} />
+                    </motion.g>
+                ))}
              </motion.g>
         </motion.svg>
     );
@@ -134,14 +131,12 @@ export default function Proceses() {
                     whileHover={{ y: -8, backgroundColor: "#1A1915", transition: { duration: 0.3 } }}
                     className="relative h-[640px] w-full bg-[#141311] border border-[#FFFFFF0D] flex flex-col items-center text-center p-8 overflow-hidden group transition-colors duration-500"
                 >
-                    {/* Icon Container - Centered & Large */}
+                    {/* Icon Container */}
                     <div className="absolute inset-0 top-0 h-[60%] flex items-center justify-center pointer-events-none">
                         <CubeIcon />
-                         {/* Glow behind icon */}
-                         <div className="absolute w-[120px] h-[120px] bg-[#E3E3FD] opacity-[0.02] blur-[60px] rounded-full pointer-events-none group-hover:opacity-[0.05] transition-opacity duration-500" />
                     </div>
 
-                    {/* Content - Pushed to bottom */}
+                    {/* Content */}
                     <div className="mt-auto relative z-10 w-full">
                         <span className="block text-[#E3E3FD]/30 font-inter font-light text-[12px] tracking-widest mb-4">01</span>
                         <h4 className="text-[#E3E3FD] font-inter text-[24px] leading-[30px] mb-4 font-light">Product Visuals</h4>
@@ -177,7 +172,6 @@ export default function Proceses() {
                 >
                      <div className="absolute inset-0 top-0 h-[60%] flex items-center justify-center pointer-events-none">
                         <LayersIcon />
-                        <div className="absolute w-[120px] h-[120px] bg-[#E3E3FD] opacity-[0.02] blur-[60px] rounded-full pointer-events-none group-hover:opacity-[0.05] transition-opacity duration-500" />
                     </div>
 
                     <div className="mt-auto relative z-10 w-full">
@@ -215,7 +209,6 @@ export default function Proceses() {
                 >
                     <div className="absolute inset-0 top-0 h-[60%] flex items-center justify-center pointer-events-none">
                         <NetworkIcon />
-                        <div className="absolute w-[120px] h-[120px] bg-[#E3E3FD] opacity-[0.02] blur-[60px] rounded-full pointer-events-none group-hover:opacity-[0.05] transition-opacity duration-500" />
                     </div>
 
                     <div className="mt-auto relative z-10 w-full">

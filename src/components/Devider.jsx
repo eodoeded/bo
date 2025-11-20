@@ -13,11 +13,11 @@ export default function Divider() {
 
     return (
         <section className="w-full py-32 pb-40 flex flex-col items-center justify-center gap-12 relative overflow-hidden">
-             {/* Subtle Ambient background instead of harsh glow */}
-             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#1F1D18_0%,transparent_70%)] pointer-events-none" />
+            {/* Subtle Ambient background */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#1F1D18_0%,transparent_70%)] pointer-events-none" />
 
             <div className="flex flex-col items-center gap-8 relative z-10">
-                <motion.h2 
+                <motion.h2
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -25,30 +25,40 @@ export default function Divider() {
                 >
                     Ready to start?
                 </motion.h2>
-                
-                <motion.div 
+
+                <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.1 }}
                     className="flex flex-col items-center gap-6 w-full max-w-md"
                 >
-                    <div className="flex items-center gap-2 bg-[#141311] border border-[#FFFFFF1A] p-2 pl-6 pr-2 rounded-full w-full shadow-lg transition-all hover:border-[#FFFFFF33] hover:bg-[#1A1915]">
-                        <span className="flex-1 text-[#E3E3FD] font-geist text-[16px] tracking-wide opacity-90 truncate select-all">
-                            {email}
+                    <motion.button
+                        type="button"
+                        initial="rest"
+                        animate="rest"
+                        whileHover="hover"
+                        whileTap="hover"
+                        onClick={handleCopy}
+                        variants={{ rest: { color: "#E3E3FD", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }, hover: { color: "#FFFFFF", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } } }}
+                        className="
+                            group font-inter-light text-[#E3E3FD] text-[14px]
+                            bg-[#3B3B3B] cursor-pointer
+                            border-[1px] border-[#FFFFFF4D]
+                            backdrop-blur-[6.5px]
+                            px-[16px] py-[8px]
+                            flex items-center
+                        "
+                    >
+                        {copied ? "Email Copied" : "Copy Email"}
+                        <motion.span variants={{ rest: { x: 0, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }, hover: { x: 4, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } } }} className="ml-2 inline-block">→</motion.span>
+                    </motion.button>
+                    
+                    <div className="flex flex-col items-center gap-1">
+                        <span className="text-[#5C5D5E] text-[13px] font-inter">
+                           {email}
                         </span>
-                        <motion.button
-                            whileHover={{ scale: 1.02, backgroundColor: "#4A4A4A" }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={handleCopy}
-                            className="px-6 py-3 bg-[#3B3B3B] text-white font-inter text-[14px] font-medium rounded-full transition-colors"
-                        >
-                            {copied ? "Copied" : "Copy"}
-                        </motion.button>
                     </div>
-                    <a href={`mailto:${email}`} className="text-[#5C5D5E] text-[14px] font-inter hover:text-[#8A8B8C] transition-colors">
-                        or email us directly
-                    </a>
                 </motion.div>
             </div>
         </section>
