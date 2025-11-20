@@ -209,13 +209,13 @@ export default function Proceses() {
                         <span className="block text-[#E3E3FD]/40 font-inter-light text-[11px] tracking-[0.2em] mb-5">01</span>
                         <h4 className="text-[#E3E3FD] font-inter-light text-[24px] leading-[32px] mb-4">Product Visuals</h4>
                         <p className="text-[#8A8B8C] font-inter-light text-[15px] leading-[24px] mb-8 max-w-[280px] mx-auto tracking-wide">
-                            Hardware photography that feels effortless. Crisp shots, minimal edits, brand-aligned.
+                            Hardware rendering that feels effortless. Crisp visuals, minimal edits, brand-aligned.
                         </p>
                         
                         <div className="border-t border-[#FFFFFF0D] w-full pt-8">
                             <ul className="flex flex-col gap-3 text-left px-4">
                                 <li className="text-[#8A8B8C] font-inter-light text-[13px] flex items-center gap-3">
-                                    <span className="w-1 h-1 bg-[#E3E3FD] rounded-full opacity-50"></span> 8–12 product photos
+                                    <span className="w-1 h-1 bg-[#E3E3FD] rounded-full opacity-50"></span> 8–12 product renders
                                 </li>
                                 <li className="text-[#8A8B8C] font-inter-light text-[13px] flex items-center gap-3">
                                     <span className="w-1 h-1 bg-[#E3E3FD] rounded-full opacity-50"></span> Detail + hero angles
