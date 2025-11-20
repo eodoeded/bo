@@ -1,9 +1,12 @@
 import upComp from "../assets/up-comp.png";
 import bottomComp from "../assets/bottom-comp.png";
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 
 export default function Hero() {
-  
+  const [isBottomLoaded, setIsBottomLoaded] = useState(false);
+  const [isUpLoaded, setIsUpLoaded] = useState(false);
+
   return (
     <section className="w-full min-h-[calc(100vh-120px)] flex flex-col items-center justify-start relative pt-20 md:pt-24 px-6 md:px-0 overflow-hidden">
       {/* Subtle breathing overlay to enrich the base gradient */}
@@ -23,13 +26,17 @@ export default function Hero() {
           transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.0 }}
         >
           <motion.img
-            src={bottomComp} loading="eager" decoding="async" fetchpriority="high"
+            src={bottomComp} 
+            loading="eager" 
+            decoding="async" 
+            fetchpriority="high"
             alt="Main robot"
             className="relative z-0 object-contain w-[300px] md:w-[560px]"
             style={{ aspectRatio: '1001 / 546' }}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isBottomLoaded ? 1 : 0, y: isBottomLoaded ? 0 : 12 }}
+            transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
+            onLoad={() => setIsBottomLoaded(true)}
           />
         </motion.div>
         <motion.div
@@ -38,13 +45,17 @@ export default function Hero() {
           transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
         >
           <motion.img
-            src={upComp} loading="eager" decoding="async" fetchpriority="high"
+            src={upComp} 
+            loading="eager" 
+            decoding="async" 
+            fetchpriority="high"
             alt="Floating component"
             className="object-contain w-[140px] md:w-[220px]"
             style={{ aspectRatio: '1001 / 546' }}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isUpLoaded ? 1 : 0, y: isUpLoaded ? 0 : 12 }}
+            transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
+            onLoad={() => setIsUpLoaded(true)}
           />
         </motion.div>
       </div>
