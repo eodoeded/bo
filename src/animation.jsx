@@ -9,7 +9,7 @@ const Animation = () => {
   // Sequence: 
   // 0: "Your technology is complex."
   // 1: [Robot Visual] + "Your story shouldn't be."
-  // 2: Offering List
+  // 2: Offering List (Staggered grid)
   // 3: Branded Objects + CTA
   const [scene, setScene] = useState(0);
 
@@ -27,13 +27,28 @@ const Animation = () => {
 
   const transition = { duration: 0.8, ease: [0.16, 1, 0.3, 1] };
 
+  // Hudson-Powell esque Kinetic Text variant
+  const splitText = (text) => {
+      return text.split(" ").map((word, i) => (
+          <motion.span 
+            key={i} 
+            className="inline-block mr-2"
+            initial={{ y: 40, opacity: 0, rotateX: 45 }}
+            animate={{ y: 0, opacity: 1, rotateX: 0 }}
+            transition={{ delay: i * 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+              {word}
+          </motion.span>
+      ));
+  };
+
   return (
     <div className="w-full h-screen bg-[#000000] flex items-center justify-center p-4">
       
-      {/* Frame for recording (4:5 Aspect Ratio - Standard Vertical Video/LinkedIn) */}
+      {/* Frame for recording (4:5 Aspect Ratio) */}
       <div className="relative w-full max-w-[540px] aspect-[4/5] bg-[#12110D] overflow-hidden shadow-2xl border border-white/5 ring-1 ring-white/10">
         
-        {/* Grid Background */}
+        {/* Grid Background (Consistent with landing) */}
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.04] pointer-events-none" />
         <div className="absolute inset-0 opacity-[0.1]" 
              style={{ backgroundImage: 'radial-gradient(#E3E3FD 1px, transparent 1px)', backgroundSize: '32px 32px' }}>
@@ -41,153 +56,150 @@ const Animation = () => {
 
         <AnimatePresence mode="wait">
           
-          {/* SCENE 1: THE PROBLEM */}
+          {/* SCENE 1: THE PROBLEM - Kinetic Typography */}
           {scene === 0 && (
             <motion.div
               key="scene1"
               className="absolute inset-0 flex flex-col items-center justify-center p-12 text-center"
-              exit={{ opacity: 0, y: -20 }}
+              exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
               transition={transition}
             >
-              <motion.h1 
-                initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                className="font-inter text-white text-5xl md:text-6xl font-medium tracking-tighter leading-[1.1]"
-              >
-                Your technology is <span className="text-[#5C5D5E]">complex.</span>
-              </motion.h1>
+              <h1 className="font-inter text-white text-5xl md:text-6xl font-medium tracking-tighter leading-[1.1]">
+                {splitText("Your technology is")} <span className="text-[#5C5D5E] inline-block">{splitText("complex.")}</span>
+              </h1>
             </motion.div>
           )}
 
-          {/* SCENE 2: THE SOLUTION */}
+          {/* SCENE 2: THE SOLUTION - Heroic Robot Parallax */}
           {scene === 1 && (
             <motion.div
               key="scene2"
               className="absolute inset-0 flex flex-col items-center justify-center"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
+              exit={{ opacity: 0, scale: 1.05 }}
               transition={transition}
             >
               {/* Visual */}
-              <div className="relative w-full h-1/2 flex items-center justify-center mb-12">
+              <div className="absolute inset-0 flex items-center justify-center opacity-40 blur-[100px] bg-gradient-to-b from-[#E3E3FD]/10 to-transparent pointer-events-none"></div>
+              
+              <div className="relative w-full h-full flex flex-col items-center justify-center">
                  <motion.div
-                    className="relative"
-                    initial={{ y: 50, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 1, ease: "easeOut" }}
+                    className="relative mb-16"
+                    initial={{ y: 100, opacity: 0, scale: 0.8 }}
+                    animate={{ y: 0, opacity: 1, scale: 1 }}
+                    transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
                  >
                     <motion.img
                         src={bottomComp}
-                        className="w-[280px] object-contain relative z-0"
-                        animate={{ y: [0, -8, 0] }}
-                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                        className="w-[320px] object-contain relative z-0"
+                        animate={{ y: [0, -15, 0] }}
+                        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                     />
                     <motion.img
                         src={upComp}
-                        className="w-[120px] object-contain absolute -top-12 left-1/2 -translate-x-1/2 z-10"
+                        className="w-[140px] object-contain absolute -top-16 left-1/2 -translate-x-1/2 z-10"
                         initial={{ y: 20, opacity: 0 }}
-                        animate={{ y: [0, -10, 0], opacity: 1 }}
+                        animate={{ y: [0, -20, 0], opacity: 1 }}
                         transition={{ 
-                            y: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.2 },
+                            y: { duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.2 },
                             opacity: { duration: 0.5 }
                         }}
                     />
                  </motion.div>
-              </div>
 
-              <motion.h1 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, ...transition }}
-                className="font-inter text-white text-4xl md:text-5xl font-medium tracking-tighter leading-tight text-center px-8"
-              >
-                Your story shouldn't be.
-              </motion.h1>
+                 <motion.h1 
+                    className="font-inter text-white text-4xl md:text-5xl font-medium tracking-tighter leading-tight text-center px-8 relative z-20"
+                 >
+                    {splitText("Your story shouldn't be.")}
+                 </motion.h1>
+              </div>
             </motion.div>
           )}
 
-          {/* SCENE 3: THE OFFERINGS */}
+          {/* SCENE 3: THE OFFERINGS - Kinetic Grid */}
           {scene === 2 && (
             <motion.div
               key="scene3"
-              className="absolute inset-0 flex flex-col items-start justify-center px-12"
+              className="absolute inset-0 flex flex-col items-center justify-center px-8"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              exit={{ opacity: 0, x: -20 }}
+              exit={{ opacity: 0, y: -50 }}
               transition={transition}
             >
-                <motion.p 
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 0.5, x: 0 }}
-                    className="font-mono text-xs text-[#E3E3FD] uppercase tracking-widest mb-12"
-                >
-                    Services
-                </motion.p>
-
-                <div className="space-y-8">
+                <div className="grid gap-6 w-full">
                     {[
-                        "Product Visuals",
-                        "Web Design",
-                        "Design Systems"
+                        { id: "01", text: "Product Visuals" },
+                        { id: "02", text: "Web Design" },
+                        { id: "03", text: "Design Systems" }
                     ].map((item, i) => (
                         <motion.div
                             key={i}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: i * 0.3, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                            className="flex items-center gap-4"
+                            initial={{ x: -50, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            transition={{ delay: i * 0.15, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                            className="flex items-baseline justify-between border-b border-white/10 pb-4"
                         >
-                            <span className="text-[#5C5D5E] font-mono text-sm">0{i + 1}</span>
                             <h2 className="font-inter text-white text-3xl md:text-4xl font-medium tracking-tight">
-                                {item}
+                                {item.text}
                             </h2>
+                            <span className="text-[#5C5D5E] font-mono text-xs">{item.id}</span>
                         </motion.div>
                     ))}
                 </div>
             </motion.div>
           )}
 
-          {/* SCENE 4: THE BRAND / CTA */}
+          {/* SCENE 4: THE BRAND / CTA - Clean Minimalist */}
           {scene === 3 && (
             <motion.div
               key="scene4"
-              className="absolute inset-0 flex flex-col items-center justify-between py-24 px-12 text-center"
+              className="absolute inset-0 flex flex-col items-center justify-center text-center bg-[#12110D]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={transition}
             >
-               <div className="flex-1 flex flex-col justify-center">
+               <div className="flex flex-col items-center justify-center h-full w-full relative z-10">
                     <motion.div
-                        initial={{ scale: 0.9, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                        className="mb-8"
+                        initial={{ scale: 0.8, opacity: 0, rotate: -10 }}
+                        animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                        className="mb-12"
                     >
-                         {/* Abstract Logo Mark placeholder if no logo file */}
-                         <div className="w-20 h-20 bg-white mx-auto mb-6 rotate-45 mix-blend-exclusion"></div>
-                         <h2 className="font-inter text-3xl tracking-[0.2em] uppercase text-white mb-2">Branded Objects</h2>
-                         <p className="font-inter-light text-[#E3E3FD] opacity-60 text-sm tracking-widest uppercase">Design for Deep Tech</p>
+                         {/* Geometric Logo Representation */}
+                         <div className="relative w-24 h-24 mx-auto mb-8">
+                             <motion.div 
+                                className="absolute inset-0 border border-white/20" 
+                                animate={{ rotate: 360 }} 
+                                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                             />
+                             <motion.div 
+                                className="absolute inset-4 border border-[#E3E3FD]" 
+                                animate={{ rotate: -360 }} 
+                                transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+                             />
+                             <div className="absolute inset-0 flex items-center justify-center">
+                                 <div className="w-2 h-2 bg-white rounded-full"></div>
+                             </div>
+                         </div>
+                         
+                         <h2 className="font-inter text-4xl tracking-tight font-medium text-white mb-3">Branded Objects</h2>
+                         <p className="font-inter-light text-[#E3E3FD] opacity-60 text-sm tracking-[0.3em] uppercase">Design for Deep Tech</p>
                     </motion.div>
 
                     <motion.div 
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
-                        transition={{ delay: 0.5, ...transition }}
-                        className="space-y-2"
+                        transition={{ delay: 0.6, ...transition }}
+                        className="space-y-8"
                     >
                         <p className="font-inter text-white text-xl">Now accepting clients for Q4.</p>
+                        
+                        <div className="inline-block border border-white/20 px-6 py-3 rounded-full">
+                             <p className="font-mono text-xs text-white uppercase tracking-widest">brandedobjects.com</p>
+                        </div>
                     </motion.div>
                </div>
-
-               <motion.div 
-                 initial={{ opacity: 0 }}
-                 animate={{ opacity: 1 }}
-                 transition={{ delay: 1 }}
-                 className="w-full border-t border-white/20 pt-6"
-               >
-                   <p className="font-mono text-xs text-[#5C5D5E] uppercase tracking-widest">brandedobjects.com</p>
-               </motion.div>
             </motion.div>
           )}
 
