@@ -58,60 +58,64 @@ export default function Proceses() {
         </motion.svg>
     );
 
-    // Card 2: Product + Website - Schematic Interface / Blueprint Construction
+    // Card 2: Product + Website - 3D Layer Stacking / Digital Assembly
     const InterfaceIcon = () => (
         <motion.svg
             viewBox="0 0 100 100"
             className={iconStyle}
         >
-            {/* Blueprint Grid Background */}
-             <defs>
-                <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
-                    <path d="M 10 0 L 0 0 0 10" fill="none" stroke="currentColor" strokeWidth="0.1" opacity="0.2"/>
-                </pattern>
-            </defs>
-            <rect x="20" y="20" width="60" height="60" fill="url(#grid)" opacity="0.3" />
+            {/* Perspective group */}
+            <g style={{ transform: "translate(50px, 50px)" }}>
+                
+                {/* Bottom Layer - Base/Infrastructure */}
+                <motion.path
+                    d="M-30 10 L0 25 L30 10 L0 -5 Z"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={strokeWidth}
+                    opacity="0.3"
+                    animate={{ y: [0, 5, 0] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                />
+                
+                {/* Middle Layer - Content/Structure */}
+                <motion.path
+                    d="M-30 -5 L0 10 L30 -5 L0 -20 Z"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={strokeWidth}
+                    opacity="0.6"
+                    animate={{ y: [0, -5, 0] }}
+                    transition={{ duration: 4, delay: 0.2, repeat: Infinity, ease: "easeInOut" }}
+                />
 
-             {/* Main Frame */}
-             <rect x="25" y="25" width="50" height="50" rx="1" fill="none" stroke="currentColor" strokeWidth={strokeWidth} opacity="0.6" />
-             
-             {/* Header Line */}
-             <line x1="25" y1="35" x2="75" y2="35" stroke="currentColor" strokeWidth={strokeWidth} opacity="0.4" />
+                {/* Top Layer - UI/Interface */}
+                <motion.path
+                    d="M-30 -20 L0 -5 L30 -20 L0 -35 Z"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={strokeWidth}
+                    animate={{ y: [0, -15, 0] }}
+                    transition={{ duration: 4, delay: 0.4, repeat: Infinity, ease: "easeInOut" }}
+                />
 
-             {/* Content Blocks Construction */}
-             {/* Hero Image Block */}
-             <motion.rect
-                x="30" y="40" width="40" height="15"
-                fill="none" stroke="currentColor" strokeWidth={strokeWidth}
-                initial={{ pathLength: 0, opacity: 0 }}
-                animate={{ pathLength: 1, opacity: 1 }}
-                transition={{ duration: 2, repeat: Infinity, repeatDelay: 3, ease: "easeInOut" }}
-             />
-             
-             {/* Text Lines */}
-             {[0, 1, 2].map((i) => (
-                 <motion.line
-                    key={i}
-                    x1="30" y1={60 + (i * 5)} x2={60 - (i * 5)} y2={60 + (i * 5)}
-                    stroke="currentColor" strokeWidth={strokeWidth}
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    style={{ originX: 0 }}
-                    transition={{ duration: 1, delay: 0.5 + (i * 0.2), repeat: Infinity, repeatDelay: 3.5, ease: "circOut" }}
+                {/* Connecting vertical lines (dynamic) */}
+                <motion.line x1="0" y1="25" x2="0" y2="-35" stroke="currentColor" strokeWidth={strokeWidth} opacity="0.2" 
+                    animate={{ opacity: [0.1, 0.4, 0.1] }} transition={{ duration: 2, repeat: Infinity }}
+                />
+                <motion.line x1="-30" y1="10" x2="-30" y2="-20" stroke="currentColor" strokeWidth={strokeWidth} opacity="0.2" 
+                     animate={{ opacity: [0.1, 0.4, 0.1] }} transition={{ duration: 2, delay: 0.5, repeat: Infinity }}
+                />
+                <motion.line x1="30" y1="10" x2="30" y2="-20" stroke="currentColor" strokeWidth={strokeWidth} opacity="0.2"
+                     animate={{ opacity: [0.1, 0.4, 0.1] }} transition={{ duration: 2, delay: 1.0, repeat: Infinity }}
+                />
+
+                {/* Floating Particles representing data flow */}
+                 <motion.circle cx="0" cy="-45" r="1.5" fill="currentColor" 
+                    animate={{ y: [0, -10, 0], opacity: [0, 1, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
                  />
-             ))}
-
-             {/* Dynamic "Cursor" or Scanning Element */}
-             <motion.circle
-                cx="50" cy="50" r="2"
-                fill="currentColor"
-                animate={{ 
-                    x: [20, -20, 20],
-                    y: [20, -20, 20],
-                    opacity: [0, 1, 0]
-                }}
-                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-             />
+            </g>
         </motion.svg>
     );
 
