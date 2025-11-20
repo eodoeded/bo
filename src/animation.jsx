@@ -14,6 +14,9 @@ const Animation = () => {
   const [scene, setScene] = useState(0);
 
   useEffect(() => {
+    // Force a hard refresh of state on mount to ensure no caching issues in React state
+    setScene(0);
+    
     const timer1 = setTimeout(() => setScene(1), 2500); // Hook duration
     const timer2 = setTimeout(() => setScene(2), 7000); // Example duration
     const timer3 = setTimeout(() => setScene(3), 11000); // Offerings duration
