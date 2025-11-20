@@ -15,6 +15,7 @@ export default function Divider() {
         <section className="w-full py-32 pb-40 flex flex-col items-center justify-center gap-12 relative overflow-hidden">
             {/* Subtle Ambient background */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#1F1D18_0%,transparent_70%)] pointer-events-none" />
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none"></div>
 
             <div className="flex flex-col items-center gap-8 relative z-10">
                 <motion.h2
@@ -33,6 +34,11 @@ export default function Divider() {
                     transition={{ delay: 0.1 }}
                     className="flex flex-col items-center gap-6 w-full max-w-md"
                 >
+                     <div className="flex items-center gap-3 mb-2">
+                        <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.5)]"></span>
+                        <span className="text-[#E3E3FD]/60 font-inter text-[12px] tracking-widest uppercase">3/4 spots available for March</span>
+                    </div>
+
                     <motion.button
                         type="button"
                         initial="rest"
@@ -55,7 +61,7 @@ export default function Divider() {
                     </motion.button>
                     
                     <div className="flex flex-col items-center gap-1">
-                        <span className="text-[#5C5D5E] text-[13px] font-inter">
+                        <span className="text-[#5C5D5E] text-[13px] font-inter selection:bg-white/20 selection:text-white">
                            {email}
                         </span>
                     </div>
