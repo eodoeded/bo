@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import Header from './components/Header'
 import Proceses from './components/Proceses'
+import Divider from './components/Devider'
 
 function ServicesPage() {
   return (
@@ -11,6 +12,7 @@ function ServicesPage() {
       <Header />
       <div className="h-12" />
       <Proceses />
+      <Divider />
     </>
   )
 }

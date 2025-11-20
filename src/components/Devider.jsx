@@ -14,19 +14,20 @@ export default function Divider() {
             </h2>
 
             {/* Button */}
-            <button
+            <a
+                href="mailto:brandedobjects@gmail.com"
                 className="
           font-inter text-[#E3E3FD]
           bg-[#3B3B3B] cursor-pointer
            border-[0.8px] border-[#FFFFFF4D]
           backdrop-blur-[6.5px]
-          px-[29px] py-[15px]
+          px-[29px] py-[15px] no-underline
           
         "
             >
             Let’s talk →
 
-            </button>
+            </a>
         </section>
     );
 }
