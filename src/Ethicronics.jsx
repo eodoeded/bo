@@ -1,198 +1,200 @@
 import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
 
-// Colors
+// Constants & Styles
+const BLUE = '#1C3F94'; // Cambridge Blue-ish / Deep Lab Blue
 const RED = '#C8372D';
-const BLACK = '#000000';
-const WHITE = '#FFFFFF';
-const GRAY = '#F2F2F2';
+const CREAM = '#F4F4F0';
+const DARK_TEXT = '#1A1A1A';
+
+// Icons
+const ArrowRight = () => (
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M1 8H15M15 8L8 1M15 8L8 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+// Layout Components
+const GridLines = () => (
+    <div className="absolute inset-0 pointer-events-none z-50 overflow-hidden">
+        {/* Vertical Guides */}
+        <div className="absolute left-[6%] top-0 bottom-0 w-px border-l border-dashed border-[#1C3F94]/30 md:left-[12%]" />
+        <div className="absolute right-[6%] top-0 bottom-0 w-px border-r border-dashed border-[#1C3F94]/30 md:right-[12%]" />
+        
+        {/* Horizontal Guide - Hero Bottom */}
+        <div className="absolute top-[85vh] left-0 right-0 h-px border-b border-dashed border-[#C8372D]/40" />
+    </div>
+);
 
 const Nav = () => (
-  <nav className="w-full py-6 px-6 md:px-12 flex justify-between items-end border-b border-black/10 bg-white z-50 relative">
-    <div className="flex flex-col leading-none">
-       <span className="text-[10px] font-mono uppercase tracking-widest text-[#C8372D] mb-1">Security Protocol</span>
-       <span className="font-sans text-2xl font-bold tracking-tighter">Ethicronics</span>
+  <nav className="w-full py-6 px-6 md:px-[12%] flex justify-between items-center bg-[#F4F4F0] relative z-50">
+    <div className="flex items-center gap-3">
+       <div className="w-8 h-8 bg-[#C8372D] rounded-full flex items-center justify-center text-white font-serif italic font-bold text-xl">
+         E
+       </div>
+       <span className="font-serif text-2xl text-[#1A1A1A] tracking-tight font-semibold">Ethicronics</span>
     </div>
-    <div className="hidden md:flex gap-8 font-mono text-xs uppercase tracking-widest">
-      <a href="#" className="hover:text-[#C8372D] transition-colors">Technology</a>
-      <a href="#" className="hover:text-[#C8372D] transition-colors">Platform</a>
-      <a href="#" className="hover:text-[#C8372D] transition-colors">Company</a>
+    
+    <div className="hidden md:flex gap-8 font-mono text-xs font-medium tracking-wide text-[#1A1A1A]/80 uppercase">
+      <a href="#" className="hover:text-[#1C3F94] transition-colors">Home</a>
+      <a href="#" className="hover:text-[#1C3F94] transition-colors">Technology</a>
+      <a href="#" className="hover:text-[#1C3F94] transition-colors">About</a>
+      <a href="#" className="hover:text-[#1C3F94] transition-colors">Blog</a>
     </div>
-    <button className="px-5 py-2 bg-black text-white font-mono text-xs uppercase tracking-widest hover:bg-[#C8372D] transition-colors">
-      Get Access
+
+    <button className="bg-[#1C3F94] text-white px-6 py-2 font-mono text-xs uppercase tracking-wider hover:bg-[#1A1A1A] transition-colors">
+      Contact Us
     </button>
   </nav>
 );
 
-const Hero = () => {
-  return (
-    <section className="w-full min-h-[80vh] flex flex-col md:flex-row border-b border-black/10">
-      <div className="w-full md:w-2/3 p-6 md:p-12 flex flex-col justify-center border-r border-black/10 bg-white relative overflow-hidden">
-        
-        {/* Abstract Background Element */}
-        <motion.div 
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute -right-20 -top-20 w-[400px] h-[400px] rounded-full border-[1px] border-[#C8372D]/20 pointer-events-none"
-        />
-         <motion.div 
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 1.5, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute -right-10 -top-10 w-[200px] h-[200px] rounded-full border-[1px] border-[#C8372D]/20 pointer-events-none"
-        />
+const Hero = () => (
+    <section className="relative w-full h-[85vh] overflow-hidden">
+        {/* Background Image/Texture */}
+        <div className="absolute inset-0 bg-[#E3E8F0]">
+            <div className="absolute inset-0 opacity-10" 
+                 style={{ backgroundImage: `repeating-linear-gradient(45deg, ${BLUE} 0, ${BLUE} 1px, transparent 0, transparent 50%)`, backgroundSize: '10px 10px' }} />
+            {/* Lab overlay gradient */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#E3E8F0] via-transparent to-[#1C3F94]/10" />
+            
+            {/* Abstract Graphic */}
+            <div className="absolute right-0 top-0 w-2/3 h-full">
+                 <img 
+                    src="https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?auto=format&fit=crop&q=80&w=2070" 
+                    alt="Lab Environment" 
+                    className="w-full h-full object-cover opacity-80 mix-blend-multiply grayscale contrast-125"
+                 />
+            </div>
+        </div>
 
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        >
-             <span className="inline-block px-2 py-1 mb-8 border border-black/10 bg-gray-50 font-mono text-[10px] uppercase tracking-widest text-gray-500">
-                Cambridge, UK
-             </span>
-            <h1 className="font-sans text-6xl md:text-8xl font-bold tracking-tighter leading-[0.9] mb-8">
-                Hardware Integrity<br/>
-                <span className="text-[#C8372D]">Verified.</span>
+        {/* Floating Content Box */}
+        <div className="absolute top-1/2 -translate-y-1/2 left-6 md:left-[12%] z-10 max-w-xl bg-white p-12 shadow-2xl border border-[#1C3F94]/10">
+            <h1 className="font-serif text-5xl md:text-6xl text-[#1A1A1A] leading-[1.1] mb-6">
+                Hardware Security<br/>Starts in Design
             </h1>
-            <p className="font-sans text-xl md:text-2xl text-black/60 max-w-xl leading-relaxed">
-                The digital certificate for every PCB, chiplet, and embedded system. 
-                Counterfeiting ends where <span className="text-black font-medium">Ethicronics begins</span>.
+            <p className="font-sans text-lg text-[#1A1A1A]/80 leading-relaxed mb-8">
+                Ethicronics builds verifiable, tamper-proof hardware systems that secure the world's devices from the inside out.
             </p>
-        </motion.div>
-      </div>
-
-      <div className="w-full md:w-1/3 bg-gray-50 relative overflow-hidden flex items-center justify-center min-h-[400px] md:min-h-auto">
-          {/* Abstract Visualization of Verification */}
-          <div className="relative w-64 h-64">
-              <div className="absolute inset-0 grid grid-cols-8 grid-rows-8 gap-1">
-                  {[...Array(64)].map((_, i) => (
-                      <motion.div 
-                        key={i}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: [0, 1, 0] }}
-                        transition={{ 
-                            duration: 3, 
-                            repeat: Infinity, 
-                            delay: Math.random() * 2,
-                            ease: "linear" 
-                        }}
-                        className="bg-[#C8372D] w-full h-full rounded-sm"
-                      />
-                  ))}
-              </div>
-               <div className="absolute inset-0 border-2 border-black mix-blend-multiply"></div>
-          </div>
-      </div>
+            <div className="flex gap-4">
+                <button className="bg-[#1C3F94] text-white px-6 py-3 font-mono text-xs uppercase tracking-wider hover:bg-[#1A1A1A] transition-colors">
+                    Contact Us
+                </button>
+                <button className="border border-[#1C3F94] text-[#1C3F94] px-6 py-3 font-mono text-xs uppercase tracking-wider hover:bg-[#F4F4F0] transition-colors">
+                    Learn More
+                </button>
+            </div>
+        </div>
     </section>
-  );
-};
-
-const Feature = ({ number, title, description }) => (
-    <div className="group border-r border-black/10 last:border-r-0 p-8 md:p-12 hover:bg-gray-50 transition-colors duration-500">
-        <span className="font-mono text-xs text-[#C8372D] mb-4 block">0{number}</span>
-        <h3 className="font-sans text-3xl font-bold mb-6 tracking-tight group-hover:translate-x-2 transition-transform duration-300">{title}</h3>
-        <p className="font-sans text-black/60 leading-relaxed max-w-sm">
-            {description}
-        </p>
-    </div>
-)
-
-const FeatureGrid = () => (
-  <section className="w-full border-b border-black/10">
-      <div className="grid md:grid-cols-3">
-          <Feature 
-            number="1" 
-            title="Design Stage" 
-            description="Embed security markers directly into the layout design before a single wafer is printed." 
-          />
-          <Feature 
-            number="2" 
-            title="Fabrication" 
-            description="Verify physical integrity during the manufacturing process to detect tampering or defects." 
-          />
-          <Feature 
-            number="3" 
-            title="Deployment" 
-            description="Continuous, real-time monitoring of hardware health in the field via our API." 
-          />
-      </div>
-  </section>
 );
 
-const DataSection = () => (
-    <section className="w-full flex flex-col md:flex-row">
-        <div className="w-full md:w-1/2 p-12 md:p-24 border-r border-black/10 bg-[#C8372D] text-white flex flex-col justify-between">
-            <div>
-                <h2 className="font-sans text-4xl md:text-5xl font-bold tracking-tight mb-6">The Scale of the Problem</h2>
-                <p className="font-sans text-lg opacity-80 max-w-md leading-relaxed">
-                    Counterfeit electronics infiltrate critical supply chains, compromising safety and security globally.
-                </p>
-            </div>
-            <div className="mt-24 font-mono text-sm opacity-60">
-                SOURCE: SEMICONDUCTOR INDUSTRY ASSOCIATION
-            </div>
-        </div>
-        <div className="w-full md:w-1/2 bg-white">
-            <div className="grid grid-cols-2 h-full">
-                <div className="border-r border-b border-black/10 p-12 flex flex-col justify-end">
-                    <span className="font-sans text-5xl md:text-6xl font-bold text-black mb-2">$7.5B</span>
-                    <span className="font-mono text-xs uppercase tracking-widest text-gray-500">Annual Loss</span>
-                </div>
-                <div className="border-b border-black/10 p-12 flex flex-col justify-end">
-                    <span className="font-sans text-5xl md:text-6xl font-bold text-black mb-2">15%</span>
-                    <span className="font-mono text-xs uppercase tracking-widest text-gray-500">Supply Compromised</span>
-                </div>
-                <div className="border-r border-black/10 p-12 flex flex-col justify-end">
-                     <span className="font-sans text-5xl md:text-6xl font-bold text-black mb-2">0%</span>
-                    <span className="font-mono text-xs uppercase tracking-widest text-gray-500">Trust without Verification</span>
-                </div>
-                 <div className="p-12 flex flex-col justify-end bg-gray-50">
-                     <span className="font-sans text-lg font-bold text-black mb-2">Secure your supply chain today.</span>
-                     <a href="#" className="font-mono text-xs uppercase tracking-widest text-[#C8372D] border-b border-[#C8372D] self-start pb-1">Contact Sales</a>
-                </div>
-            </div>
+const Partners = () => (
+    <section className="py-24 px-6 md:px-[12%] bg-[#F4F4F0] text-center border-b border-dashed border-[#1C3F94]/20">
+        <h3 className="font-serif text-3xl italic text-[#1A1A1A] mb-16 underline decoration-[#C8372D] decoration-2 underline-offset-8">Our Partners</h3>
+        <div className="flex flex-wrap justify-center gap-12 md:gap-24 opacity-60 grayscale mix-blend-multiply">
+            {['Gravity', 'Pax', 'Clover', 'Quantic', 'Smile'].map((logo, i) => (
+                <span key={i} className="font-sans text-2xl font-bold text-[#1A1A1A] tracking-tighter">{logo}</span>
+            ))}
         </div>
     </section>
-)
+);
+
+const BlogCard = ({ title, desc, tag }) => (
+    <div className="bg-white border border-[#1A1A1A]/10 hover:border-[#1C3F94] transition-colors group cursor-pointer">
+        <div className="aspect-[4/3] bg-[#E3E8F0] overflow-hidden relative">
+             <div className="absolute inset-0 bg-[#1C3F94]/5 mix-blend-multiply" />
+             <img 
+                src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&q=80&w=800" 
+                alt="Lab" 
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 grayscale-[50%]" 
+             />
+        </div>
+        <div className="p-8">
+            <div className="mb-4">
+                <span className="inline-block px-2 py-1 border border-[#C8372D]/30 text-[#C8372D] font-mono text-[10px] uppercase tracking-widest">
+                    {tag}
+                </span>
+            </div>
+            <h4 className="font-serif text-2xl text-[#1A1A1A] leading-tight mb-4 group-hover:text-[#1C3F94] transition-colors">
+                {title}
+            </h4>
+            <p className="font-sans text-sm text-[#1A1A1A]/60 leading-relaxed mb-6">
+                {desc}
+            </p>
+            <span className="text-[#1C3F94] font-mono text-xs uppercase tracking-wider flex items-center gap-2 group-hover:gap-3 transition-all">
+                Read Post ->
+            </span>
+        </div>
+    </div>
+);
+
+const Blog = () => (
+    <section className="py-24 px-6 md:px-[12%] bg-[#F4F4F0] relative">
+        <div className="absolute inset-0 opacity-[0.02]" 
+             style={{ backgroundImage: `linear-gradient(#1A1A1A 1px, transparent 1px), linear-gradient(90deg, #1A1A1A 1px, transparent 1px)`, backgroundSize: '40px 40px' }} />
+        
+        <div className="flex justify-between items-end mb-16 relative z-10">
+            <h2 className="font-serif text-4xl md:text-5xl text-[#1A1A1A]">Latest Insights</h2>
+            <a href="#" className="hidden md:flex items-center justify-center w-12 h-12 bg-[#1C3F94] text-white hover:bg-[#1A1A1A] transition-colors">
+                <ArrowRight />
+            </a>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-8 relative z-10">
+            <BlogCard 
+                title="AI Phone Answering for Restaurants: 7 Proven Use Cases for 2025"
+                desc="These days, it's hard to find a person who doesn't use AI. Given its ubiquity, what is Ethicronics' stance on automated integrity?"
+                tag="Artificial Intelligence"
+            />
+            <BlogCard 
+                title="Securing the Supply Chain: A New Protocol for Global Trade"
+                desc="It's been a busy year at Ethicronics. So, we decided to take a moment to reflect. A university spin-out transforming hardware trust."
+                tag="Supply Chain"
+            />
+        </div>
+    </section>
+);
 
 const Footer = () => (
-  <footer className="bg-black text-white pt-24 pb-12 px-6 md:px-12">
-    <div className="flex flex-col md:flex-row justify-between items-start mb-24">
-        <div>
-            <h2 className="font-sans text-3xl font-bold tracking-tight mb-8">Ethicronics</h2>
-            <div className="flex flex-col gap-2 font-mono text-xs text-gray-500 uppercase tracking-widest">
-                <span>Cambridge, UK</span>
-                <span>Est. 2022</span>
+    <footer className="bg-[#1A1A1A] text-[#F4F4F0] py-20 px-6 md:px-[12%] border-t-4 border-[#C8372D]">
+        <div className="grid md:grid-cols-4 gap-12">
+            <div className="col-span-2">
+                <h2 className="font-serif text-3xl mb-6">Ethicronics</h2>
+                <p className="font-mono text-sm opacity-60 max-w-xs leading-relaxed">
+                    Cambridge-based hardware security. <br/>
+                    Verifiable trust for the silicon age.
+                </p>
+            </div>
+            <div>
+                <h4 className="font-mono text-xs uppercase text-[#C8372D] tracking-widest mb-6">Platform</h4>
+                <ul className="space-y-3 font-serif text-lg opacity-80">
+                    <li><a href="#" className="hover:text-white transition-colors">Design</a></li>
+                    <li><a href="#" className="hover:text-white transition-colors">Fabrication</a></li>
+                    <li><a href="#" className="hover:text-white transition-colors">Monitoring</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 className="font-mono text-xs uppercase text-[#C8372D] tracking-widest mb-6">Connect</h4>
+                <ul className="space-y-3 font-serif text-lg opacity-80">
+                    <li><a href="#" className="hover:text-white transition-colors">LinkedIn</a></li>
+                    <li><a href="#" className="hover:text-white transition-colors">Twitter</a></li>
+                    <li><a href="#" className="hover:text-white transition-colors">Email</a></li>
+                </ul>
             </div>
         </div>
-        <div className="flex gap-12 mt-12 md:mt-0">
-            <ul className="space-y-4">
-                <li><a href="#" className="font-sans text-sm hover:text-[#C8372D] transition-colors">Technology</a></li>
-                <li><a href="#" className="font-sans text-sm hover:text-[#C8372D] transition-colors">Solutions</a></li>
-                <li><a href="#" className="font-sans text-sm hover:text-[#C8372D] transition-colors">Insights</a></li>
-            </ul>
-             <ul className="space-y-4">
-                <li><a href="#" className="font-sans text-sm hover:text-[#C8372D] transition-colors">LinkedIn</a></li>
-                <li><a href="#" className="font-sans text-sm hover:text-[#C8372D] transition-colors">Twitter</a></li>
-                <li><a href="#" className="font-sans text-sm hover:text-[#C8372D] transition-colors">Contact</a></li>
-            </ul>
+        <div className="mt-20 pt-8 border-t border-[#F4F4F0]/10 flex justify-between items-center font-mono text-xs opacity-40 uppercase tracking-widest">
+            <span>© 2025 Ethicronics Ltd.</span>
+            <span>Cambridge, UK</span>
         </div>
-    </div>
-    <div className="border-t border-white/20 pt-8 flex justify-between items-center font-mono text-[10px] text-gray-600 uppercase tracking-widest">
-        <span>© 2025 Ethicronics Ltd.</span>
-        <span>Designed with Pentagram</span>
-    </div>
-  </footer>
+    </footer>
 );
 
 export default function Ethicronics() {
   return (
-    <div className="w-full min-h-screen bg-white text-black selection:bg-[#C8372D] selection:text-white font-sans">
+    <div className="w-full min-h-screen bg-[#F4F4F0] text-[#1A1A1A] selection:bg-[#C8372D] selection:text-white font-sans relative">
+      <GridLines />
       <Nav />
       <Hero />
-      <FeatureGrid />
-      <DataSection />
+      <Partners />
+      <Blog />
       <Footer />
     </div>
   );
