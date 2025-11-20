@@ -6,15 +6,15 @@ import bottomComp from "./assets/bottom-comp.png";
 import './index.css';
 
 const Animation = () => {
-  // Sequence state: 0 = Hook, 1 = Example (Tech), 2 = CTA
+  // Sequence: 
+  // 0: "Your technology is complex."
+  // 1: [Robot Visual] + "Your story shouldn't be."
+  // 2: Branded Objects + CTA
   const [scene, setScene] = useState(0);
 
-  // Auto-advance scenes
   useEffect(() => {
-    // Hook -> Example after 3s
-    const timer1 = setTimeout(() => setScene(1), 3000);
-    // Example -> CTA after 7s (3s + 4s duration for example)
-    const timer2 = setTimeout(() => setScene(2), 7000);
+    const timer1 = setTimeout(() => setScene(1), 2500); // Hook duration
+    const timer2 = setTimeout(() => setScene(2), 7000); // Example duration
     
     return () => {
       clearTimeout(timer1);
@@ -25,150 +25,137 @@ const Animation = () => {
   const transition = { duration: 0.8, ease: [0.16, 1, 0.3, 1] };
 
   return (
-    <div className="w-full h-screen bg-[#12110D] flex items-center justify-center overflow-hidden relative">
-      {/* Ambient Background Noise/Gradient */}
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
-      <motion.div
-        className="pointer-events-none absolute inset-0 z-0"
-        style={{ background: 'linear-gradient(180deg, rgba(18,17,13,0) 0%, rgba(28,26,20,0.2) 100%)' }}
-      />
-
-      <AnimatePresence mode="wait">
+    <div className="w-full h-screen bg-[#000000] flex items-center justify-center p-4">
+      
+      {/* Frame for recording (4:5 Aspect Ratio - Standard Vertical Video/LinkedIn) */}
+      <div className="relative w-full max-w-[540px] aspect-[4/5] bg-[#12110D] overflow-hidden shadow-2xl border border-white/5 ring-1 ring-white/10">
         
-        {/* SCENE 1: HOOK */}
-        {scene === 0 && (
-          <motion.div
-            key="hook"
-            initial={{ opacity: 0, filter: 'blur(10px)' }}
-            animate={{ opacity: 1, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, filter: 'blur(10px)', scale: 0.95 }}
-            transition={transition}
-            className="flex flex-col items-center text-center z-10 px-6"
-          >
-             <motion.h1 
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.2, ...transition }}
-                className="font-inter-light text-white text-[42px] md:text-[64px] tracking-tight leading-tight"
-             >
-                Make it feel <span className="text-[#E3E3FD] italic">personal.</span>
-             </motion.h1>
-          </motion.div>
-        )}
+        {/* Grid Background */}
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.04] pointer-events-none" />
+        <div className="absolute inset-0 opacity-[0.1]" 
+             style={{ backgroundImage: 'radial-gradient(#E3E3FD 1px, transparent 1px)', backgroundSize: '32px 32px' }}>
+        </div>
 
-        {/* SCENE 2: EXAMPLE (Floating Tech) */}
-        {scene === 1 && (
-          <motion.div
-            key="example"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, filter: 'blur(10px)' }}
-            transition={transition}
-            className="flex flex-col items-center justify-center z-10 w-full h-full relative"
-          >
-             <div className="relative flex justify-center items-center w-full scale-90 md:scale-100">
-                <motion.div
-                    className="relative"
-                    initial={{ y: 100, opacity: 0 }}
-                    animate={{ y: [0, -8, 0], opacity: 1 }}
-                    transition={{ 
-                        y: { duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 0 },
-                        opacity: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
-                    }}
-                >
-                    <img
-                        src={bottomComp}
-                        alt="Main robot"
-                        className="relative z-0 object-contain w-[300px] md:w-[500px]"
-                        style={{ aspectRatio: '1001 / 546' }}
-                    />
-                </motion.div>
-
-                <motion.div
-                    className="absolute -top-16 md:-top-20 left-1/2 -translate-x-1/2"
-                    initial={{ y: -50, opacity: 0 }}
-                    animate={{ y: [0, -10, 0], opacity: 1 }}
-                    transition={{ 
-                        y: { duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 0.2 },
-                        opacity: { duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }
-                    }}
-                >
-                    <img
-                        src={upComp}
-                        alt="Floating component"
-                        className="object-contain w-[140px] md:w-[200px]"
-                        style={{ aspectRatio: '1001 / 546' }}
-                    />
-                </motion.div>
-             </div>
-             
-             <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 0.6, y: 0 }}
-                transition={{ delay: 0.5, ...transition }}
-                className="absolute bottom-24 font-inter-light text-[#E3E3FD] text-sm uppercase tracking-[0.2em]"
-             >
-                System Integration
-             </motion.p>
-          </motion.div>
-        )}
-
-        {/* SCENE 3: CTA */}
-        {scene === 2 && (
-          <motion.div
-            key="cta"
-            initial={{ opacity: 0, scale: 1.05 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={transition}
-            className="flex flex-col items-center text-center z-10 px-6"
-          >
-             <motion.h2 
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.2, ...transition }}
-                className="font-inter-light text-white text-[32px] md:text-[48px] tracking-tight leading-tight mb-8"
-             >
-                Ready to start?
-             </motion.h2>
-
-             <motion.div
-                initial={{ y: 10, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.4, ...transition }}
-             >
-                <a 
-                    href="mailto:brandedobjects@gmail.com"
-                    className="font-inter text-[#E3E3FD] text-lg border-b border-[#E3E3FD]/30 pb-1 hover:text-white hover:border-white transition-colors"
-                >
-                    brandedobjects@gmail.com
-                </a>
-             </motion.div>
-          </motion.div>
-        )}
-
-      </AnimatePresence>
-
-      {/* Timeline Progress Bar (Optional visual cue) */}
-      <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex gap-2">
-          {[0, 1, 2].map((i) => (
-              <motion.div
-                key={i}
-                className="h-1 rounded-full bg-white/20 overflow-hidden"
-                style={{ width: i === 1 ? '60px' : '40px' }} // Example is longer
+        <AnimatePresence mode="wait">
+          
+          {/* SCENE 1: THE PROBLEM */}
+          {scene === 0 && (
+            <motion.div
+              key="scene1"
+              className="absolute inset-0 flex flex-col items-center justify-center p-12 text-center"
+              exit={{ opacity: 0, y: -20 }}
+              transition={transition}
+            >
+              <motion.h1 
+                initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
+                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                className="font-inter text-white text-5xl md:text-6xl font-medium tracking-tighter leading-[1.1]"
               >
-                  {scene === i && (
-                      <motion.div 
-                        className="h-full bg-[#E3E3FD]"
-                        initial={{ width: "0%" }}
-                        animate={{ width: "100%" }}
-                        transition={{ duration: i === 1 ? 4 : 3, ease: "linear" }}
-                      />
-                  )}
-                  {scene > i && <div className="h-full w-full bg-[#E3E3FD]" />}
-              </motion.div>
-          ))}
-      </div>
+                Your technology is <span className="text-[#5C5D5E]">complex.</span>
+              </motion.h1>
+            </motion.div>
+          )}
 
+          {/* SCENE 2: THE SOLUTION */}
+          {scene === 1 && (
+            <motion.div
+              key="scene2"
+              className="absolute inset-0 flex flex-col items-center justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={transition}
+            >
+              {/* Visual */}
+              <div className="relative w-full h-1/2 flex items-center justify-center mb-12">
+                 <motion.div
+                    className="relative"
+                    initial={{ y: 50, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 1, ease: "easeOut" }}
+                 >
+                    <motion.img
+                        src={bottomComp}
+                        className="w-[280px] object-contain relative z-0"
+                        animate={{ y: [0, -8, 0] }}
+                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                    <motion.img
+                        src={upComp}
+                        className="w-[120px] object-contain absolute -top-12 left-1/2 -translate-x-1/2 z-10"
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: [0, -10, 0], opacity: 1 }}
+                        transition={{ 
+                            y: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.2 },
+                            opacity: { duration: 0.5 }
+                        }}
+                    />
+                 </motion.div>
+              </div>
+
+              <motion.h1 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, ...transition }}
+                className="font-inter text-white text-4xl md:text-5xl font-medium tracking-tighter leading-tight text-center px-8"
+              >
+                Your story shouldn't be.
+              </motion.h1>
+            </motion.div>
+          )}
+
+          {/* SCENE 3: THE BRAND / CTA */}
+          {scene === 2 && (
+            <motion.div
+              key="scene3"
+              className="absolute inset-0 flex flex-col items-center justify-between py-24 px-12 text-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={transition}
+            >
+               <div className="flex-1 flex flex-col justify-center">
+                    <motion.div
+                        initial={{ scale: 0.9, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                        className="mb-8"
+                    >
+                         {/* Abstract Logo Mark placeholder if no logo file */}
+                         <div className="w-20 h-20 bg-white mx-auto mb-6 rotate-45 mix-blend-exclusion"></div>
+                         <h2 className="font-inter text-3xl tracking-[0.2em] uppercase text-white mb-2">Branded Objects</h2>
+                         <p className="font-inter-light text-[#E3E3FD] opacity-60 text-sm tracking-widest uppercase">Design for Deep Tech</p>
+                    </motion.div>
+
+                    <motion.div 
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.5, ...transition }}
+                        className="space-y-2"
+                    >
+                        <p className="font-inter text-white text-xl">Now accepting clients for Q4.</p>
+                    </motion.div>
+               </div>
+
+               <motion.div 
+                 initial={{ opacity: 0 }}
+                 animate={{ opacity: 1 }}
+                 transition={{ delay: 1 }}
+                 className="w-full border-t border-white/20 pt-6"
+               >
+                   <p className="font-mono text-xs text-[#5C5D5E] uppercase tracking-widest">brandedobjects.com</p>
+               </motion.div>
+            </motion.div>
+          )}
+
+        </AnimatePresence>
+
+        {/* Recording Frame UI (Optional 'REC' overlay to make it look like a viewfinder, giving it a 'work in progress' or 'behind the scenes' tech feel, or just keeping it clean) -> Keeping it clean for actual export */}
+        
+      </div>
+      
+      <p className="fixed bottom-8 text-[#5C5D5E] font-mono text-xs uppercase tracking-widest">
+        4:5 Aspect Ratio • 1080x1350 • Ready to Record
+      </p>
     </div>
   );
 };
@@ -179,4 +166,3 @@ root.render(
     <Animation />
   </React.StrictMode>
 );
-
