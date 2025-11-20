@@ -1,6 +1,3 @@
-import cube from "../assets/cube.png";
-import refine from "../assets/refine.png";
-import deliver from "../assets/deliver.png";
 import { motion } from 'framer-motion';
 
 export default function Proceses() {
@@ -17,24 +14,84 @@ export default function Proceses() {
         })
     };
 
-    const imageVariants = {
-        hover: {
-            y: -10,
-            rotate: 5,
-            transition: {
-                duration: 0.4,
-                ease: "easeOut"
-            }
-        },
-        float: {
-            y: [0, -10, 0],
-            transition: {
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut"
-            }
-        }
-    };
+    // Animation for the wireframe cube (Card 1)
+    const CubeIcon = () => (
+        <motion.svg
+            viewBox="0 0 100 100"
+            className="absolute top-1/2 right-4 -translate-y-1/2 w-[120px] opacity-30 pointer-events-none"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+        >
+            <motion.path
+                d="M50 15 L85 35 L85 75 L50 95 L15 75 L15 35 Z"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="0.5"
+                className="text-white"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: 3, ease: "easeInOut" }}
+            />
+             <motion.path
+                d="M50 15 L50 55 L85 75 M50 55 L15 75"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="0.5"
+                className="text-white"
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: 3, delay: 1, ease: "easeInOut" }}
+            />
+        </motion.svg>
+    );
+
+    // Animation for the layers (Card 2)
+    const LayersIcon = () => (
+        <motion.div className="absolute top-1/2 right-8 -translate-y-1/2 w-[100px] h-[100px] opacity-30 pointer-events-none perspective-1000">
+             <motion.div
+                className="absolute inset-0 border border-white/50 bg-white/5"
+                animate={{ y: [0, -10, 0], rotateX: [60, 50, 60], rotateZ: [45, 45, 45] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                style={{ transformOrigin: "center" }}
+             />
+             <motion.div
+                className="absolute inset-0 border border-white/30 bg-white/5"
+                animate={{ y: [20, 10, 20], rotateX: [60, 50, 60], rotateZ: [45, 45, 45] }}
+                transition={{ duration: 5, delay: 0.5, repeat: Infinity, ease: "easeInOut" }}
+                style={{ transformOrigin: "center" }}
+             />
+        </motion.div>
+    );
+
+    // Animation for the network (Card 3)
+    const NetworkIcon = () => (
+        <motion.svg
+            viewBox="0 0 100 100"
+            className="absolute top-1/2 right-4 -translate-y-1/2 w-[120px] opacity-30 pointer-events-none"
+        >
+            {[...Array(5)].map((_, i) => (
+                <motion.circle
+                    key={i}
+                    cx={50 + Math.cos(i * 1.2) * 30}
+                    cy={50 + Math.sin(i * 1.2) * 30}
+                    r="2"
+                    fill="white"
+                    animate={{ 
+                        opacity: [0.2, 1, 0.2],
+                        scale: [1, 1.5, 1]
+                    }}
+                    transition={{ 
+                        duration: 3, 
+                        delay: i * 0.5, 
+                        repeat: Infinity, 
+                        ease: "easeInOut" 
+                    }}
+                />
+            ))}
+             <motion.circle cx="50" cy="50" r="3" fill="white" animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 2, repeat: Infinity }} />
+             <path d="M50 50 L70 30 M50 50 L80 60 M50 50 L30 70 M50 50 L20 40 M50 50 L50 20" stroke="white" strokeWidth="0.5" opacity="0.5" />
+        </motion.svg>
+    );
 
     return (
         <section id="services" className="w-full pt-32 pb-20">
@@ -58,45 +115,36 @@ export default function Proceses() {
                     whileInView="visible"
                     viewport={{ once: true, margin: "-50px" }}
                     variants={cardVariants}
-                    whileHover="hover"
-                    className="relative h-[600px] md:h-[620px] w-full p-8 bg-gradient-to-b from-[#12110D] to-[#1C1A14] flex flex-col justify-between border border-[#FFFFFF0D] group"
+                    whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                    className="relative h-[520px] w-full p-8 bg-[#141311] flex flex-col justify-between border border-[#FFFFFF1A] overflow-hidden"
                 >
-                    <div>
-                        <span className="block text-white font-geist text-[14px] leading-[17px] tracking-[-0.28px] mb-4 opacity-60">
-                            01 — Product Visuals
+                    <div className="relative z-10">
+                        <span className="block text-white/40 font-inter text-[12px] tracking-wider mb-6">
+                            01
                         </span>
-                        <h4 className="text-[#E3E3FD] font-inter text-[20px] leading-[28px] mb-4">
-                            Their hardware, photographed cleanly.
+                        <h4 className="text-white font-inter text-[24px] leading-[32px] mb-4 font-light">
+                            Product Visuals
                         </h4>
-                        <p className="text-[#8A8B8C] font-geist text-[14px] leading-[22px] tracking-[-0.2px]">
-                            Crisp shots → minimal edits → brand-aligned lighting.
+                        <p className="text-[#8A8B8C] font-inter text-[15px] leading-[24px] tracking-tight max-w-[90%]">
+                            Hardware photography that feels effortless. Crisp shots, minimal edits, and lighting that fits the brand.
                         </p>
                     </div>
 
                     <div className="mt-auto relative z-10">
-                        <span className="block text-white/60 font-inter text-[11px] uppercase tracking-wider mb-4">
-                            you get:
-                        </span>
-                        <ul className="space-y-3">
-                            <li className="text-[#8A8B8C] font-geist text-[13px] leading-[18px] border-b border-white/5 pb-3 flex items-center gap-2">
-                                <span className="w-1 h-1 rounded-full bg-white/20"></span> 8–12 product photos
+                        <ul className="space-y-4 border-t border-white/10 pt-6">
+                            <li className="text-[#8A8B8C] font-inter text-[13px] flex items-center gap-3">
+                                <span className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"></span> 8–12 product photos
                             </li>
-                            <li className="text-[#8A8B8C] font-geist text-[13px] leading-[18px] border-b border-white/5 pb-3 flex items-center gap-2">
-                                <span className="w-1 h-1 rounded-full bg-white/20"></span> detail + hero angles
+                            <li className="text-[#8A8B8C] font-inter text-[13px] flex items-center gap-3">
+                                <span className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"></span> Detail + hero angles
                             </li>
-                            <li className="text-[#8A8B8C] font-geist text-[13px] leading-[18px] border-b border-white/5 pb-3 flex items-center gap-2">
-                                <span className="w-1 h-1 rounded-full bg-white/20"></span> export-ready for site & ads
+                            <li className="text-[#8A8B8C] font-inter text-[13px] flex items-center gap-3">
+                                <span className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"></span> Export-ready assets
                             </li>
                         </ul>
                     </div>
                     
-                     <motion.img
-                        src={cube}
-                        alt=""
-                        variants={imageVariants}
-                        animate="float"
-                        className="absolute top-1/2 right-4 -translate-y-1/2 w-[100px] opacity-15 pointer-events-none grayscale group-hover:grayscale-0 group-hover:opacity-30 transition-all duration-500"
-                    />
+                    <CubeIcon />
                 </motion.div>
 
                 {/* Card 2 */}
@@ -106,45 +154,36 @@ export default function Proceses() {
                     whileInView="visible"
                     viewport={{ once: true, margin: "-50px" }}
                     variants={cardVariants}
-                    whileHover="hover"
-                    className="relative h-[600px] md:h-[620px] w-full p-8 bg-gradient-to-b from-[#12110D] to-[#1C1A14] flex flex-col justify-between border border-[#FFFFFF0D] group"
+                    whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                    className="relative h-[520px] w-full p-8 bg-[#141311] flex flex-col justify-between border border-[#FFFFFF1A] overflow-hidden"
                 >
-                    <div>
-                        <span className="block text-white font-geist text-[14px] leading-[17px] tracking-[-0.28px] mb-4 opacity-60">
-                            02 — Product + Website
+                     <div className="relative z-10">
+                        <span className="block text-white/40 font-inter text-[12px] tracking-wider mb-6">
+                            02
                         </span>
-                        <h4 className="text-[#E3E3FD] font-inter text-[20px] leading-[28px] mb-4">
-                            Their product, turned into a sharp digital presence.
+                        <h4 className="text-white font-inter text-[24px] leading-[32px] mb-4 font-light">
+                            Product + Website
                         </h4>
-                        <p className="text-[#8A8B8C] font-geist text-[14px] leading-[22px] tracking-[-0.2px]">
-                            Visuals + a landing page that actually converts.
+                        <p className="text-[#8A8B8C] font-inter text-[15px] leading-[24px] tracking-tight max-w-[90%]">
+                           Turn the product into a digital presence. Visuals plus a high-converting landing page design.
                         </p>
                     </div>
 
                     <div className="mt-auto relative z-10">
-                        <span className="block text-white/60 font-inter text-[11px] uppercase tracking-wider mb-4">
-                            you get:
-                        </span>
-                        <ul className="space-y-3">
-                            <li className="text-[#8A8B8C] font-geist text-[13px] leading-[18px] border-b border-white/5 pb-3 flex items-center gap-2">
-                                <span className="w-1 h-1 rounded-full bg-white/20"></span> everything in Product Visuals
+                        <ul className="space-y-4 border-t border-white/10 pt-6">
+                            <li className="text-[#8A8B8C] font-inter text-[13px] flex items-center gap-3">
+                                <span className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"></span> Everything in Visuals
                             </li>
-                            <li className="text-[#8A8B8C] font-geist text-[13px] leading-[18px] border-b border-white/5 pb-3 flex items-center gap-2">
-                                <span className="w-1 h-1 rounded-full bg-white/20"></span> landing page design
+                            <li className="text-[#8A8B8C] font-inter text-[13px] flex items-center gap-3">
+                                <span className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"></span> Landing page design
                             </li>
-                            <li className="text-[#8A8B8C] font-geist text-[13px] leading-[18px] border-b border-white/5 pb-3 flex items-center gap-2">
-                                <span className="w-1 h-1 rounded-full bg-white/20"></span> 6–10 supporting graphics
+                            <li className="text-[#8A8B8C] font-inter text-[13px] flex items-center gap-3">
+                                <span className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"></span> 6–10 supporting graphics
                             </li>
                         </ul>
                     </div>
 
-                     <motion.img
-                        src={refine}
-                        alt=""
-                        variants={imageVariants}
-                        animate="float"
-                        className="absolute top-1/2 right-4 -translate-y-1/2 w-[100px] opacity-15 pointer-events-none grayscale group-hover:grayscale-0 group-hover:opacity-30 transition-all duration-500"
-                    />
+                    <LayersIcon />
                 </motion.div>
 
                 {/* Card 3 */}
@@ -154,51 +193,36 @@ export default function Proceses() {
                     whileInView="visible"
                     viewport={{ once: true, margin: "-50px" }}
                     variants={cardVariants}
-                    whileHover="hover"
-                    className="relative h-[600px] md:h-[620px] w-full p-8 bg-gradient-to-b from-[#12110D] to-[#1C1A14] flex flex-col justify-between border border-[#FFFFFF0D] group"
+                    whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                    className="relative h-[520px] w-full p-8 bg-[#141311] flex flex-col justify-between border border-[#FFFFFF1A] overflow-hidden"
                 >
-                    <div>
-                        <span className="block text-white font-geist text-[14px] leading-[17px] tracking-[-0.28px] mb-4 opacity-60">
-                            03 — Full Digital System
+                    <div className="relative z-10">
+                        <span className="block text-white/40 font-inter text-[12px] tracking-wider mb-6">
+                            03
                         </span>
-                        <h4 className="text-[#E3E3FD] font-inter text-[20px] leading-[28px] mb-4">
-                            Their brand, built into a complete digital engine.
+                        <h4 className="text-white font-inter text-[24px] leading-[32px] mb-4 font-light">
+                            Full Digital System
                         </h4>
-                        <p className="text-[#8A8B8C] font-geist text-[14px] leading-[22px] tracking-[-0.2px]">
-                            For teams that need the whole pipeline, not a one-off.
+                        <p className="text-[#8A8B8C] font-inter text-[15px] leading-[24px] tracking-tight max-w-[90%]">
+                            The complete engine. A full website, visual library, and design system for teams scaling up.
                         </p>
                     </div>
 
                     <div className="mt-auto relative z-10">
-                        <span className="block text-white/60 font-inter text-[11px] uppercase tracking-wider mb-4">
-                            you get:
-                        </span>
-                        <ul className="space-y-3">
-                            <li className="text-[#8A8B8C] font-geist text-[13px] leading-[18px] border-b border-white/5 pb-3 flex items-center gap-2">
-                                <span className="w-1 h-1 rounded-full bg-white/20"></span> full website
+                        <ul className="space-y-4 border-t border-white/10 pt-6">
+                            <li className="text-[#8A8B8C] font-inter text-[13px] flex items-center gap-3">
+                                <span className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"></span> Full website
                             </li>
-                            <li className="text-[#8A8B8C] font-geist text-[13px] leading-[18px] border-b border-white/5 pb-3 flex items-center gap-2">
-                                <span className="w-1 h-1 rounded-full bg-white/20"></span> product visuals (15–20)
+                            <li className="text-[#8A8B8C] font-inter text-[13px] flex items-center gap-3">
+                                <span className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"></span> 15–20 product visuals
                             </li>
-                            <li className="text-[#8A8B8C] font-geist text-[13px] leading-[18px] border-b border-white/5 pb-3 flex items-center gap-2">
-                                <span className="w-1 h-1 rounded-full bg-white/20"></span> ad kit (3–5 variations)
-                            </li>
-                            <li className="text-[#8A8B8C] font-geist text-[13px] leading-[18px] border-b border-white/5 pb-3 flex items-center gap-2">
-                                <span className="w-1 h-1 rounded-full bg-white/20"></span> social kit
-                            </li>
-                            <li className="text-[#8A8B8C] font-geist text-[13px] leading-[18px] border-b border-white/5 pb-3 flex items-center gap-2">
-                                <span className="w-1 h-1 rounded-full bg-white/20"></span> light design system
+                            <li className="text-[#8A8B8C] font-inter text-[13px] flex items-center gap-3">
+                                <span className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"></span> Ad & Social kits
                             </li>
                         </ul>
                     </div>
 
-                     <motion.img
-                        src={deliver}
-                        alt=""
-                        variants={imageVariants}
-                        animate="float"
-                        className="absolute top-1/2 right-4 -translate-y-1/2 w-[100px] opacity-15 pointer-events-none grayscale group-hover:grayscale-0 group-hover:opacity-30 transition-all duration-500"
-                    />
+                    <NetworkIcon />
                 </motion.div>
 
             </div>
