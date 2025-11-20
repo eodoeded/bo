@@ -18,13 +18,13 @@ export default function Divider() {
             {/* Subtle Ambient background */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#1F1D18_0%,transparent_70%)] pointer-events-none" />
 
-            <div className="flex flex-col items-center gap-8 relative z-10">
+            <div className="flex flex-col items-center relative z-10">
                 <motion.h2
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={transition}
-                    className="font-inter-light text-white text-[32px] leading-[38px] md:text-[48px] md:leading-[56px] tracking-[0.2px] text-center"
+                    className="font-inter-light text-white text-[32px] leading-[38px] md:text-[48px] md:leading-[56px] max-w-[22ch] md:max-w-none tracking-[0.2px] mb-6 text-center"
                 >
                     Ready to start?
                 </motion.h2>

@@ -9,9 +9,6 @@ export default function Header() {
 
         {/* Right side: Navigation */}
         <nav className="flex gap-6">
-           <a href="/ethicronics.html" className="font-inter text-[14px] text-[#E3E3FD]/70 hover:text-[#E3E3FD] tracking-[0.2px] transition-colors">
-             Ethicronics
-           </a>
         </nav>
       </div>
     </header>

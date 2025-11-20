@@ -1,253 +1,198 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 
-// Icons
-const ArrowRight = () => (
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M1 8H15M15 8L8 1M15 8L8 15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
-
-const ShieldCheck = () => (
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
-
 // Colors
 const RED = '#C8372D';
-const BLUE = '#1C3F94'; // Deep Cambridge Blue
-const CREAM = '#F4F4F0';
-const TEXT = '#1A1A1A';
-
-// Components
-
-const TweedPattern = () => (
-  <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-    {/* Base Grid - Vertical */}
-    <div className="absolute inset-0 flex justify-between px-4 md:px-12 opacity-10">
-       {[...Array(12)].map((_, i) => (
-          <div key={`v-${i}`} className="w-px h-full border-r border-dashed" style={{ borderColor: i % 2 === 0 ? RED : BLUE }}></div>
-       ))}
-    </div>
-    
-    {/* Base Grid - Horizontal */}
-    <div className="absolute inset-0 flex flex-col justify-between py-12 opacity-10">
-       {[...Array(12)].map((_, i) => (
-          <div key={`h-${i}`} className="w-full h-px border-b border-dashed" style={{ borderColor: i % 2 === 0 ? BLUE : RED }}></div>
-       ))}
-    </div>
-
-    {/* "Stitching" Overlay - creating the fabric feel */}
-    <div className="absolute inset-0 opacity-[0.03]" 
-         style={{ 
-             backgroundImage: `repeating-linear-gradient(45deg, ${RED} 0, ${RED} 1px, transparent 0, transparent 50%), repeating-linear-gradient(-45deg, ${BLUE} 0, ${BLUE} 1px, transparent 0, transparent 50%)`, 
-             backgroundSize: '16px 16px' 
-         }}>
-    </div>
-  </div>
-);
+const BLACK = '#000000';
+const WHITE = '#FFFFFF';
+const GRAY = '#F2F2F2';
 
 const Nav = () => (
-  <nav className="w-full py-6 px-6 md:px-12 flex justify-between items-center border-b-2 border-dashed border-[#1C3F94]/20 relative z-10 bg-[#F4F4F0]/90 backdrop-blur-sm">
-    <div className="flex items-center gap-4">
-      <div className="w-10 h-10 bg-[#1C3F94] relative flex items-center justify-center text-white font-serif italic font-bold text-2xl shadow-[4px_4px_0px_0px_#C8372D]">
-         <span className="z-10">E</span>
-         <div className="absolute inset-0 border-2 border-dashed border-white/30 m-0.5"></div>
-      </div>
-      <span className="font-serif text-2xl text-[#1A1A1A] tracking-tight font-bold">Ethicronics</span>
+  <nav className="w-full py-6 px-6 md:px-12 flex justify-between items-end border-b border-black/10 bg-white z-50 relative">
+    <div className="flex flex-col leading-none">
+       <span className="text-[10px] font-mono uppercase tracking-widest text-[#C8372D] mb-1">Security Protocol</span>
+       <span className="font-sans text-2xl font-bold tracking-tighter">Ethicronics</span>
     </div>
-    <div className="hidden md:flex gap-8 font-mono text-sm font-medium tracking-wide text-[#1A1A1A]/80 uppercase">
-      <a href="#" className="hover:text-[#C8372D] transition-colors hover:underline decoration-dashed underline-offset-4">Technology</a>
-      <a href="#" className="hover:text-[#C8372D] transition-colors hover:underline decoration-dashed underline-offset-4">About</a>
-      <a href="#" className="hover:text-[#C8372D] transition-colors hover:underline decoration-dashed underline-offset-4">Blog</a>
+    <div className="hidden md:flex gap-8 font-mono text-xs uppercase tracking-widest">
+      <a href="#" className="hover:text-[#C8372D] transition-colors">Technology</a>
+      <a href="#" className="hover:text-[#C8372D] transition-colors">Platform</a>
+      <a href="#" className="hover:text-[#C8372D] transition-colors">Company</a>
     </div>
-    <button className="group relative px-6 py-2 font-mono text-sm font-bold uppercase tracking-wider text-[#1C3F94] overflow-hidden">
-      <span className="absolute inset-0 border-2 border-[#1C3F94] skew-x-12"></span>
-      <span className="absolute inset-0 border-2 border-dashed border-[#C8372D] -skew-x-12 opacity-0 group-hover:opacity-100 transition-opacity"></span>
-      <span className="relative z-10 group-hover:text-[#C8372D] transition-colors">Contact us</span>
+    <button className="px-5 py-2 bg-black text-white font-mono text-xs uppercase tracking-widest hover:bg-[#C8372D] transition-colors">
+      Get Access
     </button>
   </nav>
 );
 
 const Hero = () => {
   return (
-    <section className="relative w-full min-h-[90vh] flex items-center px-6 md:px-12 py-20 overflow-hidden">
-      
-      <div className="max-w-5xl z-10 relative">
-        {/* Decorative "Tag" */}
+    <section className="w-full min-h-[80vh] flex flex-col md:flex-row border-b border-black/10">
+      <div className="w-full md:w-2/3 p-6 md:p-12 flex flex-col justify-center border-r border-black/10 bg-white relative overflow-hidden">
+        
+        {/* Abstract Background Element */}
         <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.1 }}
-            className="inline-flex items-center gap-2 mb-8 px-3 py-1 bg-[#C8372D]/10 border border-dashed border-[#C8372D] text-[#C8372D] font-mono text-xs uppercase tracking-widest"
-        >
-            <ShieldCheck />
-            <span>Cambridge, UK</span>
-        </motion.div>
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute -right-20 -top-20 w-[400px] h-[400px] rounded-full border-[1px] border-[#C8372D]/20 pointer-events-none"
+        />
+         <motion.div 
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1.5, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute -right-10 -top-10 w-[200px] h-[200px] rounded-full border-[1px] border-[#C8372D]/20 pointer-events-none"
+        />
 
-        <motion.h1 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="font-serif text-5xl md:text-7xl lg:text-8xl text-[#1A1A1A] leading-[0.95] mb-12 tracking-tight"
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
-          Hardware Integrity <br/>
-          <span className="relative inline-block">
-             <span className="relative z-10 text-[#1C3F94] italic font-light">Weaved into Silicon</span>
-             <svg className="absolute w-full h-4 bottom-2 left-0 z-0" viewBox="0 0 100 10" preserveAspectRatio="none">
-               <path d="M0 5 Q 50 10 100 5" stroke="#C8372D" strokeWidth="2" strokeDasharray="4 4" fill="none" />
-             </svg>
-          </span>
-        </motion.h1>
-
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col md:flex-row gap-12 items-start max-w-4xl"
-        >
-             <p className="font-sans text-xl md:text-2xl text-[#1A1A1A] leading-relaxed flex-1">
-               Ethicronics is a Cambridge-based deep-tech startup building software to verify <span className="font-serif italic text-[#C8372D]">hardware integrity at scale</span>.
-             </p>
-             <div className="flex-1 border-l-2 border-dashed border-[#1C3F94]/30 pl-8 relative">
-                <div className="absolute -left-[5px] top-0 w-2 h-2 bg-[#C8372D] rounded-full"></div>
-                <p className="font-mono text-sm text-[#1A1A1A]/70 leading-relaxed mb-6">
-                  Think “digital certificate for every PCB, chiplet or embedded system” to counter counterfeits and tampering.
-                </p>
-                <button className="text-[#1C3F94] font-bold border-b-2 border-[#C8372D] hover:text-[#C8372D] transition-colors pb-1 font-mono text-sm uppercase tracking-wider">
-                  Discover the Platform ->
-                </button>
-             </div>
+             <span className="inline-block px-2 py-1 mb-8 border border-black/10 bg-gray-50 font-mono text-[10px] uppercase tracking-widest text-gray-500">
+                Cambridge, UK
+             </span>
+            <h1 className="font-sans text-6xl md:text-8xl font-bold tracking-tighter leading-[0.9] mb-8">
+                Hardware Integrity<br/>
+                <span className="text-[#C8372D]">Verified.</span>
+            </h1>
+            <p className="font-sans text-xl md:text-2xl text-black/60 max-w-xl leading-relaxed">
+                The digital certificate for every PCB, chiplet, and embedded system. 
+                Counterfeiting ends where <span className="text-black font-medium">Ethicronics begins</span>.
+            </p>
         </motion.div>
       </div>
-      
-      {/* Abstract Visual - "Plaid PCB" */}
-      <div className="absolute right-0 top-0 h-full w-full md:w-5/12 pointer-events-none opacity-20 md:opacity-100">
-         <div className="w-full h-full bg-[#1C3F94]/5 border-l border-dashed border-[#1C3F94] relative overflow-hidden">
-            {/* Grid lines */}
-            {[...Array(20)].map((_, i) => (
-               <div key={i} className="absolute w-full h-px bg-[#1C3F94]/10" style={{ top: `${i * 5}%` }}></div>
-            ))}
-            {[...Array(20)].map((_, i) => (
-               <div key={i} className="absolute h-full w-px bg-[#C8372D]/10" style={{ left: `${i * 5}%` }}></div>
-            ))}
-            
-            {/* Animated Chip */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <div className="relative w-64 h-64">
-                    <motion.div 
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-                        className="absolute inset-0 border border-dashed border-[#1C3F94] rounded-full"
-                    ></motion.div>
-                    <motion.div 
-                        animate={{ rotate: -360 }}
-                        transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-                        className="absolute inset-8 border border-dashed border-[#C8372D] rounded-full"
-                    ></motion.div>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-32 h-32 bg-white shadow-[8px_8px_0px_0px_#1C3F94] border border-[#1A1A1A] flex items-center justify-center p-4">
-                            <div className="w-full h-full grid grid-cols-4 grid-rows-4 gap-1">
-                                {[...Array(16)].map((_, i) => (
-                                    <div key={i} className={`bg-${i % 2 === 0 ? '[#C8372D]' : '[#1C3F94]'} opacity-${i % 3 === 0 ? '100' : '20'}`}></div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-         </div>
+
+      <div className="w-full md:w-1/3 bg-gray-50 relative overflow-hidden flex items-center justify-center min-h-[400px] md:min-h-auto">
+          {/* Abstract Visualization of Verification */}
+          <div className="relative w-64 h-64">
+              <div className="absolute inset-0 grid grid-cols-8 grid-rows-8 gap-1">
+                  {[...Array(64)].map((_, i) => (
+                      <motion.div 
+                        key={i}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: [0, 1, 0] }}
+                        transition={{ 
+                            duration: 3, 
+                            repeat: Infinity, 
+                            delay: Math.random() * 2,
+                            ease: "linear" 
+                        }}
+                        className="bg-[#C8372D] w-full h-full rounded-sm"
+                      />
+                  ))}
+              </div>
+               <div className="absolute inset-0 border-2 border-black mix-blend-multiply"></div>
+          </div>
       </div>
     </section>
   );
 };
 
+const Feature = ({ number, title, description }) => (
+    <div className="group border-r border-black/10 last:border-r-0 p-8 md:p-12 hover:bg-gray-50 transition-colors duration-500">
+        <span className="font-mono text-xs text-[#C8372D] mb-4 block">0{number}</span>
+        <h3 className="font-sans text-3xl font-bold mb-6 tracking-tight group-hover:translate-x-2 transition-transform duration-300">{title}</h3>
+        <p className="font-sans text-black/60 leading-relaxed max-w-sm">
+            {description}
+        </p>
+    </div>
+)
+
 const FeatureGrid = () => (
-  <section className="py-24 px-6 md:px-12 bg-white border-y-2 border-dashed border-[#1C3F94]/10 relative">
-      <div className="grid md:grid-cols-3 gap-px bg-[#1C3F94]/10 border border-[#1C3F94]/10">
-          {[
-              { title: "Design Stage", desc: "Embed security markers directly into the layout design.", color: RED },
-              { title: "Fabrication", desc: "Verify integrity during the manufacturing process.", color: BLUE },
-              { title: "Deployment", desc: "Continuous monitoring of hardware health in the field.", color: TEXT }
-          ].map((item, i) => (
-              <div key={i} className="bg-[#F4F4F0] p-12 hover:bg-white transition-colors group">
-                  <div className="w-12 h-12 border-2 border-dashed mb-8 flex items-center justify-center font-mono text-lg font-bold" style={{ borderColor: item.color, color: item.color }}>
-                      0{i + 1}
-                  </div>
-                  <h3 className="font-serif text-3xl mb-4" style={{ color: item.color }}>{item.title}</h3>
-                  <p className="font-sans text-[#1A1A1A]/70 leading-relaxed">{item.desc}</p>
-                  
-                  <div className="mt-8 w-full h-1 bg-[#1A1A1A]/5 overflow-hidden">
-                      <div className="h-full w-full origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500" style={{ backgroundColor: item.color }}></div>
-                  </div>
-              </div>
-          ))}
+  <section className="w-full border-b border-black/10">
+      <div className="grid md:grid-cols-3">
+          <Feature 
+            number="1" 
+            title="Design Stage" 
+            description="Embed security markers directly into the layout design before a single wafer is printed." 
+          />
+          <Feature 
+            number="2" 
+            title="Fabrication" 
+            description="Verify physical integrity during the manufacturing process to detect tampering or defects." 
+          />
+          <Feature 
+            number="3" 
+            title="Deployment" 
+            description="Continuous, real-time monitoring of hardware health in the field via our API." 
+          />
       </div>
   </section>
 );
 
+const DataSection = () => (
+    <section className="w-full flex flex-col md:flex-row">
+        <div className="w-full md:w-1/2 p-12 md:p-24 border-r border-black/10 bg-[#C8372D] text-white flex flex-col justify-between">
+            <div>
+                <h2 className="font-sans text-4xl md:text-5xl font-bold tracking-tight mb-6">The Scale of the Problem</h2>
+                <p className="font-sans text-lg opacity-80 max-w-md leading-relaxed">
+                    Counterfeit electronics infiltrate critical supply chains, compromising safety and security globally.
+                </p>
+            </div>
+            <div className="mt-24 font-mono text-sm opacity-60">
+                SOURCE: SEMICONDUCTOR INDUSTRY ASSOCIATION
+            </div>
+        </div>
+        <div className="w-full md:w-1/2 bg-white">
+            <div className="grid grid-cols-2 h-full">
+                <div className="border-r border-b border-black/10 p-12 flex flex-col justify-end">
+                    <span className="font-sans text-5xl md:text-6xl font-bold text-black mb-2">$7.5B</span>
+                    <span className="font-mono text-xs uppercase tracking-widest text-gray-500">Annual Loss</span>
+                </div>
+                <div className="border-b border-black/10 p-12 flex flex-col justify-end">
+                    <span className="font-sans text-5xl md:text-6xl font-bold text-black mb-2">15%</span>
+                    <span className="font-mono text-xs uppercase tracking-widest text-gray-500">Supply Compromised</span>
+                </div>
+                <div className="border-r border-black/10 p-12 flex flex-col justify-end">
+                     <span className="font-sans text-5xl md:text-6xl font-bold text-black mb-2">0%</span>
+                    <span className="font-mono text-xs uppercase tracking-widest text-gray-500">Trust without Verification</span>
+                </div>
+                 <div className="p-12 flex flex-col justify-end bg-gray-50">
+                     <span className="font-sans text-lg font-bold text-black mb-2">Secure your supply chain today.</span>
+                     <a href="#" className="font-mono text-xs uppercase tracking-widest text-[#C8372D] border-b border-[#C8372D] self-start pb-1">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+)
+
 const Footer = () => (
-  <footer className="bg-[#1A1A1A] text-[#F4F4F0] py-20 px-6 md:px-12 relative overflow-hidden">
-    {/* Tweed pattern overlay for footer */}
-    <div className="absolute inset-0 opacity-[0.05]" 
-         style={{ 
-             backgroundImage: `repeating-linear-gradient(45deg, #FFF 0, #FFF 1px, transparent 0, transparent 50%)`, 
-             backgroundSize: '8px 8px' 
-         }}>
-    </div>
-
-    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 relative z-10">
-      <div className="col-span-2">
-        <div className="flex items-center gap-3 mb-8">
-           <div className="w-8 h-8 border border-dashed border-[#F4F4F0] flex items-center justify-center font-serif italic">E</div>
-           <h2 className="font-serif text-3xl">Ethicronics</h2>
+  <footer className="bg-black text-white pt-24 pb-12 px-6 md:px-12">
+    <div className="flex flex-col md:flex-row justify-between items-start mb-24">
+        <div>
+            <h2 className="font-sans text-3xl font-bold tracking-tight mb-8">Ethicronics</h2>
+            <div className="flex flex-col gap-2 font-mono text-xs text-gray-500 uppercase tracking-widest">
+                <span>Cambridge, UK</span>
+                <span>Est. 2022</span>
+            </div>
         </div>
-        <p className="font-mono text-sm opacity-70 max-w-md leading-relaxed mb-8">
-          COUNTERING COUNTERFEITS.<br/>
-          SECURING THE SUPPLY CHAIN.<br/>
-          CAMBRIDGE, UNITED KINGDOM.
-        </p>
-        <div className="flex gap-4">
-           <input type="email" placeholder="Enter your email" className="bg-transparent border-b border-dashed border-[#F4F4F0]/30 py-2 px-0 w-64 focus:outline-none focus:border-[#C8372D] font-mono text-sm text-[#F4F4F0]" />
-           <button className="text-[#C8372D] font-mono text-sm uppercase hover:text-white transition-colors">Subscribe</button>
+        <div className="flex gap-12 mt-12 md:mt-0">
+            <ul className="space-y-4">
+                <li><a href="#" className="font-sans text-sm hover:text-[#C8372D] transition-colors">Technology</a></li>
+                <li><a href="#" className="font-sans text-sm hover:text-[#C8372D] transition-colors">Solutions</a></li>
+                <li><a href="#" className="font-sans text-sm hover:text-[#C8372D] transition-colors">Insights</a></li>
+            </ul>
+             <ul className="space-y-4">
+                <li><a href="#" className="font-sans text-sm hover:text-[#C8372D] transition-colors">LinkedIn</a></li>
+                <li><a href="#" className="font-sans text-sm hover:text-[#C8372D] transition-colors">Twitter</a></li>
+                <li><a href="#" className="font-sans text-sm hover:text-[#C8372D] transition-colors">Contact</a></li>
+            </ul>
         </div>
-      </div>
-      
-      <div>
-         <h4 className="font-mono text-xs uppercase tracking-widest text-[#C8372D] mb-6">Sitemap</h4>
-         <ul className="space-y-4 font-serif text-lg opacity-80">
-            <li><a href="#" className="hover:text-[#C8372D] transition-colors decoration-dashed hover:underline">Technology</a></li>
-            <li><a href="#" className="hover:text-[#C8372D] transition-colors decoration-dashed hover:underline">Solutions</a></li>
-            <li><a href="#" className="hover:text-[#C8372D] transition-colors decoration-dashed hover:underline">Company</a></li>
-         </ul>
-      </div>
-
-      <div>
-         <h4 className="font-mono text-xs uppercase tracking-widest text-[#C8372D] mb-6">Connect</h4>
-         <ul className="space-y-4 font-serif text-lg opacity-80">
-            <li><a href="#" className="hover:text-[#C8372D] transition-colors decoration-dashed hover:underline">LinkedIn</a></li>
-            <li><a href="#" className="hover:text-[#C8372D] transition-colors decoration-dashed hover:underline">X / Twitter</a></li>
-            <li><a href="#" className="hover:text-[#C8372D] transition-colors decoration-dashed hover:underline">Contact</a></li>
-         </ul>
-      </div>
     </div>
-    
-    <div className="mt-20 pt-8 border-t border-dashed border-[#F4F4F0]/20 flex flex-col md:flex-row justify-between items-center font-mono text-xs opacity-50 uppercase tracking-widest">
-        <p>© 2025 ETHICRONICS LTD.</p>
-        <p>DESIGNED WITH PENTAGRAM</p>
+    <div className="border-t border-white/20 pt-8 flex justify-between items-center font-mono text-[10px] text-gray-600 uppercase tracking-widest">
+        <span>© 2025 Ethicronics Ltd.</span>
+        <span>Designed with Pentagram</span>
     </div>
   </footer>
 );
 
 export default function Ethicronics() {
   return (
-    <div className="w-full min-h-screen bg-[#F4F4F0] text-[#1A1A1A] selection:bg-[#C8372D] selection:text-white">
-      <TweedPattern />
+    <div className="w-full min-h-screen bg-white text-black selection:bg-[#C8372D] selection:text-white font-sans">
       <Nav />
       <Hero />
       <FeatureGrid />
+      <DataSection />
       <Footer />
     </div>
   );
