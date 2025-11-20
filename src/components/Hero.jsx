@@ -1,23 +1,9 @@
 import upComp from "../assets/up-comp.png";
 import bottomComp from "../assets/bottom-comp.png";
 import { motion } from 'framer-motion';
-import { useEffect } from 'react';
 
 export default function Hero() {
-  useEffect(() => {
-    const prevOverflow = document.body.style.overflow;
-    const prevBodyHeight = document.body.style.height;
-    const prevHtmlHeight = document.documentElement.style.height;
-    document.body.style.overflow = 'hidden';
-    document.body.style.height = '100vh';
-    document.documentElement.style.height = '100vh';
-    return () => {
-      document.body.style.overflow = prevOverflow;
-      document.body.style.height = prevBodyHeight;
-      document.documentElement.style.height = prevHtmlHeight;
-    };
-  }, []);
-
+  
   return (
     <section className="w-full min-h-[calc(100vh-120px)] flex flex-col items-center justify-start relative pt-20 md:pt-24 px-6 md:px-0 overflow-hidden">
       {/* Subtle breathing overlay to enrich the base gradient */}
