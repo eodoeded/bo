@@ -16,7 +16,7 @@ const slides = [
     upImg: upComp,
     // Increased Top part significantly to ensure it looks bigger
     bottomWidth: "w-[200px] md:w-[320px]",
-    upWidth: "w-[100px] md:w-[170px] max-w-none",
+    upWidth: "w-[200px] md:w-[320px] max-w-none",
     upOffset: "-top-10 md:-top-14",
     bottomAnimate: { y: [0, -8, 0] },
     upAnimate: { y: [0, -10, 0] }
