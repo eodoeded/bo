@@ -27,12 +27,15 @@ const slides = [
     bottomImg: legs1,
     upImg: core1,
     // Shrink BOTH by 30% (320 * 0.7 = 224, 400 * 0.7 = 280)
-    bottomWidth: "w-[140px] md:w-[220px]", 
-    upWidth: "w-[170px] md:w-[280px] max-w-none", 
+    // Update: Increase both by ~15% from previous (140->160, 220->250)
+    bottomWidth: "w-[160px] md:w-[250px]", 
+    upWidth: "w-[195px] md:w-[320px] max-w-none", 
     // Moved CLOSER (less negative offset) as requested "move it closer"
     // Nudged core 2px left (-ml-0.5) and UP (-top-36) -> increased left nudge to -ml-1
     // Nudge core LEFT 2px more (-ml-[2px]) -> left "a few pixels" (-ml-[6px])
-    upOffset: "-top-16 md:-top-36 -ml-[6px]", 
+    // Move DOWN a little bit (add translate-y)
+    bottomOffset: "translate-y-4 md:translate-y-8",
+    upOffset: "-top-16 md:-top-36 -ml-[6px] translate-y-4 md:translate-y-8", 
     bottomAnimate: { y: [0, -6, 0] },
     upAnimate: { y: [0, -12, 0] }
   },
@@ -43,10 +46,11 @@ const slides = [
     middleImg: middle1,
     upImg: top1,
     // Consistent width for all parts to create a unified "cylinder" stack
-    // BOTTOM piece same size (400px)
-    bottomWidth: "w-[240px] md:w-[400px]",
-    middleWidth: "w-[240px] md:w-[400px]",
-    upWidth: "w-[240px] md:w-[400px]",
+    // BOTTOM piece same size (400px) -> Update: 50% SMALLER (200px)
+    bottomWidth: "w-[120px] md:w-[200px]",
+    // Others 50% BIGGER (400 -> 600)
+    middleWidth: "w-[360px] md:w-[600px]",
+    upWidth: "w-[360px] md:w-[600px]",
     // Stacked vertically with consistent spacing
     // Move Bottom UP lots (-mt-24), Move others DOWN (top-24)
     bottomOffset: "-mt-12 md:-mt-24",
