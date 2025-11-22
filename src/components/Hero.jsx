@@ -16,7 +16,7 @@ const slides = [
     upImg: upComp,
     // Increased Top part significantly to ensure it looks bigger
     bottomWidth: "w-[200px] md:w-[320px]",
-    upWidth: "w-[360px] md:w-[625px]",
+    upWidth: "w-[460px] md:w-[810px] max-w-none",
     upOffset: "-top-8 md:-top-10",
     bottomAnimate: { y: [0, -8, 0] },
     upAnimate: { y: [0, -10, 0] }
@@ -30,7 +30,8 @@ const slides = [
     bottomWidth: "w-[140px] md:w-[220px]", 
     upWidth: "w-[170px] md:w-[280px] max-w-none", 
     // Moved CLOSER (less negative offset) as requested "move it closer"
-    upOffset: "-top-14 md:-top-32", 
+    // Nudged core 2px left (-ml-0.5)
+    upOffset: "-top-14 md:-top-32 -ml-0.5", 
     bottomAnimate: { y: [0, -6, 0] },
     upAnimate: { y: [0, -12, 0] }
   },
@@ -48,10 +49,10 @@ const slides = [
     // Middle moves up, Top moves up 2x
     middleOffset: "top-0", 
     upOffset: "top-0",
-    // Subtle floating - moving together/slightly apart but keeping alignment
-    bottomAnimate: { y: [0, -4, 0] },
+    // Subtle floating - UNIFIED so they stay stacked
+    bottomAnimate: { y: [0, -6, 0] },
     middleAnimate: { y: [0, -6, 0] },
-    upAnimate: { y: [0, -8, 0] }
+    upAnimate: { y: [0, -6, 0] }
   }
 ];
 
