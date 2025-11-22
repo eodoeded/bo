@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/jpeg" href="/brandedobjects_logo.jpeg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Branded Objects - Carousel</title>
+  <!-- Inter from Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+
+  <!-- Geist Sans via CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/geist@latest/dist/geist-sans.min.css" />
+
+  <style>
+    :root {
+      --cal-brand-color: #E3E3FD;
+      --cal-text-color: #E3E3FD;
+      --cal-border-color: #FFFFFF26;
+      --cal-bg-color: #141311;
+    }
+    /* Best-effort hide Cal branding/footer */
+    [id^="cal"], .cal, .calcom, .cal-embed {
+      /* container selectors in case Cal injects into body */
+    }
+    a[href*="cal.com"], [data-component="Branding"], .calcom-branding {
+      display: none !important;
+      visibility: hidden !important;
+    }
+  </style>
+
+  <!-- Cal element-click embed code begins -->
+  <script type="text/javascript">
+    (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+    Cal("init", "15min", {origin:"https://app.cal.com"});
+
+    // Important: Please add the following attributes to the element that should trigger the calendar to open upon clicking.
+    // `data-cal-link="branded-objects-nro6hy/15min"`
+    // data-cal-namespace="15min"
+    // `data-cal-config='{"layout":"month_view","theme":"dark"}'`
+
+    Cal.ns["15min"]("ui", {"theme":"dark","cssVarsPerTheme":{"light":{"cal-brand":"#000000"},"dark":{"cal-brand":"#E3E3FD"}},"hideEventTypeDetails":false,"layout":"month_view","hideBranding":true});
+  </script>
+  <!-- Cal element-click embed code ends -->
+
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/carousel_main.jsx"></script>
+</body>
+
+</html>

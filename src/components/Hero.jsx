@@ -1,86 +1,18 @@
 import upComp from "../assets/up-comp.png";
 import bottomComp from "../assets/bottom-comp.png";
-import core1 from "../assets/core1.png";
-import legs1 from "../assets/legs1.png";
-import top1 from "../assets/1top.png";
-import middle1 from "../assets/1middle.png";
-import bottom1 from "../assets/1bottom.png";
-import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+import { motion } from 'framer-motion';
 
-const slides = [
-  {
-    id: 0,
+export default function Hero() {
+  const slide = {
     label: "BOSTON DYNAMICS SPOT",
     bottomImg: bottomComp,
     upImg: upComp,
-    // Increased Top part significantly to ensure it looks bigger
     bottomWidth: "w-[200px] md:w-[320px]",
-    // Increased by ~15% from 200px -> 230px
-    upWidth: "w-[150px] md:w-[230px] max-w-none",
-    // Lifted UP slightly as requested (-top-10 -> -top-14)
+    upWidth: "w-[110px] md:w-[170px] max-w-none",
     upOffset: "-top-10 md:-top-14",
     bottomAnimate: { y: [0, -8, 0] },
     upAnimate: { y: [0, -10, 0] }
-  },
-  {
-    id: 1,
-    label: "KEN ISAACS 9x9 MICROHOUSE",
-    bottomImg: legs1,
-    upImg: core1,
-    // Shrink BOTH by 30% (320 * 0.7 = 224, 400 * 0.7 = 280)
-    // Update: Increase both by ~15% from previous (140->160, 220->250)
-    bottomWidth: "w-[160px] md:w-[250px]", 
-    upWidth: "w-[195px] md:w-[320px] max-w-none", 
-    // Moved CLOSER (less negative offset) as requested "move it closer"
-    // Nudged core 2px left (-ml-0.5) and UP (-top-36) -> increased left nudge to -ml-1
-    // Nudge core LEFT 2px more (-ml-[2px]) -> left "a few pixels" (-ml-[6px])
-    // Move DOWN a little bit (add translate-y)
-    bottomOffset: "translate-y-4 md:translate-y-8",
-    // Lift UP slightly (more negative offset: -top-36 -> -top-40)
-    upOffset: "-top-20 md:-top-40 -ml-[6px] translate-y-4 md:translate-y-8", 
-    bottomAnimate: { y: [0, -6, 0] },
-    upAnimate: { y: [0, -12, 0] }
-  },
-  {
-    id: 2,
-    label: "RIGETTI QUANTUM CHANDELIER",
-    bottomImg: bottom1,
-    middleImg: middle1,
-    upImg: top1,
-    // Consistent width for all parts to create a unified "cylinder" stack
-    // BOTTOM piece same size (400px) -> Update: 50% SMALLER (200px)
-    bottomWidth: "w-[120px] md:w-[200px]",
-    // Others 50% BIGGER (400 -> 600)
-    middleWidth: "w-[360px] md:w-[600px]",
-    upWidth: "w-[360px] md:w-[600px]",
-    // Stacked vertically with consistent spacing
-    // Move Bottom UP lots (-mt-24), Move others DOWN (top-24)
-    bottomOffset: "-mt-12 md:-mt-24",
-    middleOffset: "top-12 md:top-24", 
-    upOffset: "top-12 md:top-24",
-    // Subtle floating - UNIFIED so they stay stacked
-    bottomAnimate: { y: [0, -6, 0] },
-    middleAnimate: { y: [0, -6, 0] },
-    upAnimate: { y: [0, -6, 0] }
-  }
-];
-
-export default function Hero() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [direction, setDirection] = useState(0);
-
-  const nextSlide = () => {
-    setDirection(1);
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
   };
-
-  const prevSlide = () => {
-    setDirection(-1);
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-  };
-
-  const slide = slides[currentSlide];
 
   return (
     <section className="w-full min-h-[calc(100vh-120px)] flex flex-col items-center justify-start relative pt-12 md:pt-16 px-6 md:px-0 overflow-hidden">
@@ -93,120 +25,81 @@ export default function Hero() {
         transition={{ duration: 6, repeat: Infinity, ease: [0.42, 0, 0.58, 1] }}
       />
 
-      {/* Carousel Container - Reduced Fixed Height to bring text closer */}
+      {/* Image Container */}
       <div className="relative z-10 w-full max-w-5xl flex flex-col items-center justify-center mb-2 md:mb-6 h-[300px] md:h-[400px]">
         
-        {/* Navigation Arrows */}
-        <button 
-            onClick={prevSlide}
-            className="absolute left-0 md:left-12 z-20 p-4 text-white/20 hover:text-white transition-colors cursor-pointer hidden md:block top-1/2 -translate-y-1/2"
-        >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-                <path d="M15 18l-6-6 6-6" />
-            </svg>
-        </button>
-
-        <button 
-            onClick={nextSlide}
-            className="absolute right-0 md:right-12 z-20 p-4 text-white/20 hover:text-white transition-colors cursor-pointer hidden md:block top-1/2 -translate-y-1/2"
-        >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-                <path d="M9 18l6-6-6-6" />
-            </svg>
-        </button>
-
         {/* Image Slide Area (Centered Vertically) */}
         <div className="relative w-full h-full flex items-center justify-center">
-            <AnimatePresence mode="wait" custom={direction}>
-                <motion.div
-                    key={slide.id}
-                    custom={direction}
-                    initial={{ opacity: 0, x: direction * 50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: direction * -50 }}
-                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                    className="absolute inset-0 flex justify-center items-center"
-                >
-                    <div className="relative flex flex-col items-center justify-center h-full w-full">
-                        {/* Container for images - absolutely positioned center */}
-                        <div className="relative flex items-center justify-center">
-                            
-                            {/* Bottom Part */}
-                            <motion.div
-                                className={`relative z-0 ${slide.bottomOffset || ''}`} style={{ willChange: "transform" }}
-                                animate={slide.bottomAnimate}
-                                transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.0 }}
-                            >
-                                <img
-                                    src={slide.bottomImg} 
-                                    alt="Bottom component"
-                                    className={`relative object-contain ${slide.bottomWidth}`}
-                                    style={{ aspectRatio: 'auto' }}
-                                />
-                            </motion.div>
+            <div className="absolute inset-0 flex justify-center items-center">
+                {/* Decorative Corners */}
+                <div className="absolute w-[300px] h-[300px] md:w-[500px] md:h-[400px] pointer-events-none">
+                    {/* Top Left */}
+                    <svg className="absolute top-0 left-0 text-white/20" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1">
+                        <path d="M1 40V1H40" />
+                    </svg>
+                    {/* Top Right */}
+                    <svg className="absolute top-0 right-0 text-white/20" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1">
+                        <path d="M0 1H39V40" />
+                    </svg>
+                    {/* Bottom Left */}
+                    <svg className="absolute bottom-0 left-0 text-white/20" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1">
+                        <path d="M1 0V39H40" />
+                    </svg>
+                    {/* Bottom Right */}
+                    <svg className="absolute bottom-0 right-0 text-white/20" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1">
+                        <path d="M40 0V39H1" />
+                    </svg>
+                </div>
 
-                            {/* Middle Part (Optional) - Absolute over Bottom */}
-                            {slide.middleImg && (
-                               <motion.div
-                                    className={`absolute left-1/2 -translate-x-1/2 ${slide.middleOffset}`}
-                                    style={{ willChange: "transform", zIndex: 1 }}
-                                    animate={slide.middleAnimate}
-                                    transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.1 }}
-                               >
-                                   <img
-                                       src={slide.middleImg}
-                                       alt="Middle component"
-                                       className={`object-contain ${slide.middleWidth}`}
-                                       style={{ aspectRatio: 'auto' }}
-                                   />
-                               </motion.div>
-                            )}
+                <div className="relative flex flex-col items-center justify-center h-full w-full">
+                    <div className="relative flex items-center justify-center">
+                        {/* Bottom Part */}
+                        <motion.div
+                            className={`relative z-0`} style={{ willChange: "transform" }}
+                            animate={slide.bottomAnimate}
+                            transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.0 }}
+                        >
+                            <img
+                                src={slide.bottomImg} 
+                                alt="Bottom component"
+                                decoding="async"
+                                className={`relative object-contain ${slide.bottomWidth}`}
+                                style={{ aspectRatio: 'auto' }}
+                                onLoad={(e) => e.target.style.opacity = 1}
+                            />
+                        </motion.div>
 
-                            {/* Top Part - Absolute over Bottom/Middle */}
-                            <motion.div
-                                className={`absolute left-1/2 -translate-x-1/2 ${slide.upOffset}`} 
-                                style={{ willChange: "transform", zIndex: 2 }}
-                                animate={slide.upAnimate}
-                                transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
-                            >
-                                <img
-                                    src={slide.upImg} 
-                                    alt="Top component"
-                                    className={`object-contain ${slide.upWidth}`}
-                                    style={{ aspectRatio: 'auto' }}
-                                />
-                            </motion.div>
-                        </div>
+                        {/* Top Part */}
+                        <motion.div
+                            className={`absolute left-1/2 -translate-x-1/2 ${slide.upOffset}`} 
+                            style={{ willChange: "transform", zIndex: 2 }}
+                            animate={slide.upAnimate}
+                            transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
+                        >
+                            <img
+                                src={slide.upImg} 
+                                alt="Top component"
+                                decoding="async"
+                                className={`object-contain ${slide.upWidth}`}
+                                style={{ aspectRatio: 'auto' }}
+                                onLoad={(e) => e.target.style.opacity = 1}
+                            />
+                        </motion.div>
                     </div>
-                </motion.div>
-            </AnimatePresence>
+                </div>
+            </div>
         </div>
 
-        {/* Label - Positioned Absolute Bottom of Container */}
+        {/* Label */}
         <div className="absolute bottom-2 md:bottom-4 z-10 w-full text-center">
-             <AnimatePresence mode="wait">
-                <motion.p 
-                    key={slide.id}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="font-inter-light text-[10px] md:text-[11px] tracking-[0.25em] text-[#E3E3FD]/40 uppercase whitespace-nowrap"
-                >
-                    {slide.label}
-                </motion.p>
-             </AnimatePresence>
-        </div>
-
-        {/* Mobile Arrows (Bottom, below label) */}
-        <div className="absolute bottom-0 flex gap-8 md:hidden z-20">
-             <button onClick={prevSlide} className="p-2 text-white/20 hover:text-white"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1"><path d="M15 18l-6-6 6-6" /></svg></button>
-             <button onClick={nextSlide} className="p-2 text-white/20 hover:text-white"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1"><path d="M9 18l6-6-6-6" /></svg></button>
+            <p className="font-inter-light text-[10px] md:text-[11px] tracking-[0.25em] text-[#E3E3FD]/40 uppercase whitespace-nowrap">
+                {slide.label}
+            </p>
         </div>
 
       </div>
 
-      {/* Main Content - Centered below carousel */}
+      {/* Main Content */}
       <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto mt-0">
         <motion.h2
           initial="hidden"
