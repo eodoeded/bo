@@ -23,11 +23,11 @@ const slides = [
     label: "KEN ISAACS 9x9 MICROHOUSE",
     bottomImg: legs1,
     upImg: core1,
-    // Adjusted sizing for better visual weight match with the robot
-    bottomWidth: "w-[260px] md:w-[420px]", 
-    upWidth: "w-[240px] md:w-[400px]",
-    upOffset: "-top-20 md:-top-28", // Tightened overlapping
-    // Different float feel for the house
+    // Visually Balanced Sizing (Wider than robot due to negative space)
+    bottomWidth: "w-[340px] md:w-[640px]", 
+    upWidth: "w-[320px] md:w-[600px]",
+    upOffset: "-top-24 md:-top-36", // Adjusted overlap for larger size
+    // Float feel
     bottomAnimate: { y: [0, -6, 0] },
     upAnimate: { y: [0, -12, 0] }
   }
@@ -60,91 +60,100 @@ export default function Hero() {
         transition={{ duration: 6, repeat: Infinity, ease: [0.42, 0, 0.58, 1] }}
       />
 
-      {/* Carousel Container */}
-      <div className="relative z-10 w-full max-w-5xl flex items-center justify-center mb-12 md:mb-16 min-h-[400px]">
+      {/* Carousel Container - Fixed Height to prevent text jumps */}
+      <div className="relative z-10 w-full max-w-5xl flex flex-col items-center justify-center mb-12 md:mb-16 h-[500px] md:h-[600px]">
         
-        {/* Left Arrow */}
+        {/* Navigation Arrows */}
         <button 
             onClick={prevSlide}
-            className="absolute left-0 md:left-12 z-20 p-4 text-white/20 hover:text-white transition-colors cursor-pointer hidden md:block"
+            className="absolute left-0 md:left-12 z-20 p-4 text-white/20 hover:text-white transition-colors cursor-pointer hidden md:block top-1/2 -translate-y-1/2"
         >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
                 <path d="M15 18l-6-6 6-6" />
             </svg>
         </button>
 
-        {/* Right Arrow */}
         <button 
             onClick={nextSlide}
-            className="absolute right-0 md:right-12 z-20 p-4 text-white/20 hover:text-white transition-colors cursor-pointer hidden md:block"
+            className="absolute right-0 md:right-12 z-20 p-4 text-white/20 hover:text-white transition-colors cursor-pointer hidden md:block top-1/2 -translate-y-1/2"
         >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
                 <path d="M9 18l6-6-6-6" />
             </svg>
         </button>
 
-        {/* Mobile Arrows (Bottom) */}
-        <div className="absolute -bottom-12 flex gap-8 md:hidden z-20">
+        {/* Image Slide Area (Centered Vertically) */}
+        <div className="relative w-full h-full flex items-center justify-center">
+            <AnimatePresence mode="wait" custom={direction}>
+                <motion.div
+                    key={slide.id}
+                    custom={direction}
+                    initial={{ opacity: 0, x: direction * 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: direction * -50 }}
+                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    className="absolute inset-0 flex justify-center items-center"
+                >
+                    <div className="relative flex flex-col items-center">
+                        {/* Bottom Part (Legs/Base) */}
+                        <motion.div
+                            className="relative" style={{ willChange: "transform" }}
+                            animate={slide.bottomAnimate}
+                            transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.0 }}
+                        >
+                            <img
+                                src={slide.bottomImg} 
+                                alt="Base component"
+                                className={`relative z-0 object-contain ${slide.bottomWidth}`}
+                                style={{ aspectRatio: 'auto' }}
+                            />
+                        </motion.div>
+
+                        {/* Top Part (Core/Upper) */}
+                        <motion.div
+                            className={`absolute left-1/2 -translate-x-1/2 ${slide.upOffset}`} 
+                            style={{ willChange: "transform" }}
+                            animate={slide.upAnimate}
+                            transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
+                        >
+                            <img
+                                src={slide.upImg} 
+                                alt="Core component"
+                                className={`object-contain ${slide.upWidth}`}
+                                style={{ aspectRatio: 'auto' }}
+                            />
+                        </motion.div>
+                    </div>
+                </motion.div>
+            </AnimatePresence>
+        </div>
+
+        {/* Label - Positioned Absolute Bottom of Container (Outside Slide Transition) */}
+        <div className="absolute bottom-8 md:bottom-12 z-10 w-full text-center">
+             <AnimatePresence mode="wait">
+                <motion.p 
+                    key={slide.id}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="font-inter-light text-[10px] md:text-[11px] tracking-[0.25em] text-[#E3E3FD]/40 uppercase whitespace-nowrap"
+                >
+                    {slide.label}
+                </motion.p>
+             </AnimatePresence>
+        </div>
+
+        {/* Mobile Arrows (Bottom, below label) */}
+        <div className="absolute bottom-0 flex gap-8 md:hidden z-20">
              <button onClick={prevSlide} className="p-2 text-white/20 hover:text-white"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1"><path d="M15 18l-6-6 6-6" /></svg></button>
              <button onClick={nextSlide} className="p-2 text-white/20 hover:text-white"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1"><path d="M9 18l6-6-6-6" /></svg></button>
         </div>
 
-        <AnimatePresence mode="wait" custom={direction}>
-            <motion.div
-                key={slide.id}
-                custom={direction}
-                initial={{ opacity: 0, x: direction * 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: direction * -50 }}
-                transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                className="relative flex justify-center items-center w-full"
-            >
-                <div className="relative flex flex-col items-center mt-12 md:mt-0">
-                    {/* Bottom Part (Legs/Base) */}
-                    <motion.div
-                        className="relative" style={{ willChange: "transform" }}
-                        animate={slide.bottomAnimate}
-                        transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.0 }}
-                    >
-                        <img
-                            src={slide.bottomImg} 
-                            alt="Base component"
-                            className={`relative z-0 object-contain ${slide.bottomWidth}`}
-                            style={{ aspectRatio: 'auto' }}
-                        />
-                    </motion.div>
-
-                    {/* Top Part (Core/Upper) */}
-                    <motion.div
-                        className={`absolute left-1/2 -translate-x-1/2 ${slide.upOffset}`} 
-                        style={{ willChange: "transform" }}
-                        animate={slide.upAnimate}
-                        transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
-                    >
-                        <img
-                            src={slide.upImg} 
-                            alt="Core component"
-                            className={`object-contain ${slide.upWidth}`}
-                            style={{ aspectRatio: 'auto' }}
-                        />
-                    </motion.div>
-
-                    {/* Label */}
-                    <motion.p 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.5 }}
-                        className="absolute -bottom-12 md:-bottom-16 font-inter-light text-[10px] md:text-[11px] tracking-[0.25em] text-[#E3E3FD]/40 uppercase whitespace-nowrap"
-                    >
-                        {slide.label}
-                    </motion.p>
-                </div>
-            </motion.div>
-        </AnimatePresence>
       </div>
 
       {/* Main Content - Centered below carousel */}
-      <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto mt-4 md:mt-0">
+      <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto mt-0">
         <motion.h2
           initial="hidden"
           animate="show"
