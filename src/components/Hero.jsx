@@ -34,20 +34,20 @@ export default function Hero() {
                 {/* Decorative Corners */}
                 <div className="absolute w-[300px] h-[300px] md:w-[500px] md:h-[400px] pointer-events-none">
                     {/* Top Left */}
-                    <svg className="absolute top-0 left-0 text-white/20" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1">
-                        <path d="M1 40V1H40" />
+                    <svg className="absolute top-0 left-0 text-white/20" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1">
+                        <path d="M1 10V1H10" />
                     </svg>
                     {/* Top Right */}
-                    <svg className="absolute top-0 right-0 text-white/20" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1">
-                        <path d="M0 1H39V40" />
+                    <svg className="absolute top-0 right-0 text-white/20" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1">
+                        <path d="M0 1H9V10" />
                     </svg>
                     {/* Bottom Left */}
-                    <svg className="absolute bottom-0 left-0 text-white/20" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1">
-                        <path d="M1 0V39H40" />
+                    <svg className="absolute bottom-0 left-0 text-white/20" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1">
+                        <path d="M1 0V9H10" />
                     </svg>
                     {/* Bottom Right */}
-                    <svg className="absolute bottom-0 right-0 text-white/20" width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1">
-                        <path d="M40 0V39H1" />
+                    <svg className="absolute bottom-0 right-0 text-white/20" width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" strokeWidth="1">
+                        <path d="M10 0V9H1" />
                     </svg>
                 </div>
 
