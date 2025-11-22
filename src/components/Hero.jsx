@@ -28,8 +28,8 @@ const slides = [
     // Increased width of top image by ~3x (220px -> 660px / 420px -> 1200px is too big, scaling logically to be DOMINANT)
     // Let's make it significantly larger than the legs to match request "top pod part should be 3x bigger comparitively"
     bottomWidth: "w-[180px] md:w-[300px]", 
-    upWidth: "w-[540px] md:w-[900px]", // Top 3x bigger than bottom (300 * 3 = 900)
-    upOffset: "-top-24 md:-top-40", // Adjusted overlap for massive top
+    upWidth: "w-[800px] md:w-[1600px]", // Massive increase to overcome PNG padding
+    upOffset: "-top-24 md:-top-56", // Adjusted overlap for massive top
     // Float feel
     bottomAnimate: { y: [0, -6, 0] },
     upAnimate: { y: [0, -12, 0] }
@@ -64,7 +64,7 @@ export default function Hero() {
       />
 
       {/* Carousel Container - Reduced Fixed Height to bring text closer */}
-      <div className="relative z-10 w-full max-w-5xl flex flex-col items-center justify-center mb-8 md:mb-12 h-[300px] md:h-[400px]">
+      <div className="relative z-10 w-full max-w-5xl flex flex-col items-center justify-center mb-2 md:mb-6 h-[300px] md:h-[400px]">
         
         {/* Navigation Arrows */}
         <button 
@@ -132,7 +132,7 @@ export default function Hero() {
         </div>
 
         {/* Label - Positioned Absolute Bottom of Container */}
-        <div className="absolute bottom-2 md:bottom-4 z-10 w-full text-center">
+        <div className="absolute -bottom-2 md:-bottom-4 z-10 w-full text-center">
              <AnimatePresence mode="wait">
                 <motion.p 
                     key={slide.id}
