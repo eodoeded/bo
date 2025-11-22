@@ -11,9 +11,10 @@ const slides = [
     label: "BOSTON DYNAMICS SPOT",
     bottomImg: bottomComp,
     upImg: upComp,
-    bottomWidth: "w-[300px] md:w-[560px]",
-    upWidth: "w-[140px] md:w-[220px]",
-    upOffset: "-top-16 md:-top-20",
+    // Scaled down ~30%
+    bottomWidth: "w-[200px] md:w-[320px]",
+    upWidth: "w-[130px] md:w-[220px]",
+    upOffset: "-top-12 md:-top-16",
     // Animation variants for Spot
     bottomAnimate: { y: [0, -8, 0] },
     upAnimate: { y: [0, -10, 0] }
@@ -23,10 +24,10 @@ const slides = [
     label: "KEN ISAACS 9x9 MICROHOUSE",
     bottomImg: legs1,
     upImg: core1,
-    // Visually Balanced Sizing (Wider than robot due to negative space)
-    bottomWidth: "w-[340px] md:w-[640px]", 
-    upWidth: "w-[320px] md:w-[600px]",
-    upOffset: "-top-24 md:-top-36", // Adjusted overlap for larger size
+    // Scaled down ~30% relative to previous "balanced" size
+    bottomWidth: "w-[240px] md:w-[450px]", 
+    upWidth: "w-[220px] md:w-[420px]",
+    upOffset: "-top-16 md:-top-24", 
     // Float feel
     bottomAnimate: { y: [0, -6, 0] },
     upAnimate: { y: [0, -12, 0] }
@@ -50,7 +51,7 @@ export default function Hero() {
   const slide = slides[currentSlide];
 
   return (
-    <section className="w-full min-h-[calc(100vh-120px)] flex flex-col items-center justify-start relative pt-24 md:pt-28 px-6 md:px-0 overflow-hidden">
+    <section className="w-full min-h-[calc(100vh-120px)] flex flex-col items-center justify-start relative pt-16 md:pt-20 px-6 md:px-0 overflow-hidden">
       {/* Subtle breathing overlay to enrich the base gradient */}
       <motion.div
         className="pointer-events-none absolute inset-0 z-0"
@@ -60,8 +61,8 @@ export default function Hero() {
         transition={{ duration: 6, repeat: Infinity, ease: [0.42, 0, 0.58, 1] }}
       />
 
-      {/* Carousel Container - Fixed Height to prevent text jumps */}
-      <div className="relative z-10 w-full max-w-5xl flex flex-col items-center justify-center mb-12 md:mb-16 h-[500px] md:h-[600px]">
+      {/* Carousel Container - Reduced Fixed Height to bring text closer */}
+      <div className="relative z-10 w-full max-w-5xl flex flex-col items-center justify-center mb-8 md:mb-12 h-[400px] md:h-[500px]">
         
         {/* Navigation Arrows */}
         <button 
@@ -128,7 +129,7 @@ export default function Hero() {
             </AnimatePresence>
         </div>
 
-        {/* Label - Positioned Absolute Bottom of Container (Outside Slide Transition) */}
+        {/* Label - Positioned Absolute Bottom of Container */}
         <div className="absolute bottom-8 md:bottom-12 z-10 w-full text-center">
              <AnimatePresence mode="wait">
                 <motion.p 
