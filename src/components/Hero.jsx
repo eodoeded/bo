@@ -137,8 +137,10 @@ export default function Hero() {
                                 <img
                                     src={slide.bottomImg} 
                                     alt="Bottom component"
+                                    decoding="async"
                                     className={`relative object-contain ${slide.bottomWidth}`}
                                     style={{ aspectRatio: 'auto' }}
+                                    onLoad={(e) => e.target.style.opacity = 1}
                                 />
                             </motion.div>
 
@@ -153,8 +155,10 @@ export default function Hero() {
                                    <img
                                        src={slide.middleImg}
                                        alt="Middle component"
+                                       decoding="async"
                                        className={`object-contain ${slide.middleWidth}`}
                                        style={{ aspectRatio: 'auto' }}
+                                       onLoad={(e) => e.target.style.opacity = 1}
                                    />
                                </motion.div>
                             )}
@@ -169,8 +173,10 @@ export default function Hero() {
                                 <img
                                     src={slide.upImg} 
                                     alt="Top component"
+                                    decoding="async"
                                     className={`object-contain ${slide.upWidth}`}
                                     style={{ aspectRatio: 'auto' }}
+                                    onLoad={(e) => e.target.style.opacity = 1}
                                 />
                             </motion.div>
                         </div>
