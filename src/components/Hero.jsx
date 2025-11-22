@@ -23,10 +23,10 @@ const slides = [
     label: "KEN ISAACS 9x9 MICROHOUSE",
     bottomImg: legs1,
     upImg: core1,
-    // Adjust sizing/positioning for House to look good
-    bottomWidth: "w-[280px] md:w-[500px]", 
-    upWidth: "w-[260px] md:w-[480px]",
-    upOffset: "-top-24 md:-top-32", // Core sits on top of legs
+    // Adjusted sizing for better visual weight match with the robot
+    bottomWidth: "w-[260px] md:w-[420px]", 
+    upWidth: "w-[240px] md:w-[400px]",
+    upOffset: "-top-20 md:-top-28", // Tightened overlapping
     // Different float feel for the house
     bottomAnimate: { y: [0, -6, 0] },
     upAnimate: { y: [0, -12, 0] }
@@ -50,7 +50,7 @@ export default function Hero() {
   const slide = slides[currentSlide];
 
   return (
-    <section className="w-full min-h-[calc(100vh-120px)] flex flex-col items-center justify-start relative pt-32 md:pt-36 px-6 md:px-0 overflow-hidden">
+    <section className="w-full min-h-[calc(100vh-120px)] flex flex-col items-center justify-start relative pt-24 md:pt-28 px-6 md:px-0 overflow-hidden">
       {/* Subtle breathing overlay to enrich the base gradient */}
       <motion.div
         className="pointer-events-none absolute inset-0 z-0"
@@ -61,7 +61,7 @@ export default function Hero() {
       />
 
       {/* Carousel Container */}
-      <div className="relative z-10 w-full max-w-5xl flex items-center justify-center mb-16 md:mb-20 min-h-[400px]">
+      <div className="relative z-10 w-full max-w-5xl flex items-center justify-center mb-12 md:mb-16 min-h-[400px]">
         
         {/* Left Arrow */}
         <button 
@@ -99,7 +99,7 @@ export default function Hero() {
                 transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 className="relative flex justify-center items-center w-full"
             >
-                <div className="relative flex flex-col items-center">
+                <div className="relative flex flex-col items-center mt-12 md:mt-0">
                     {/* Bottom Part (Legs/Base) */}
                     <motion.div
                         className="relative" style={{ willChange: "transform" }}
@@ -144,7 +144,7 @@ export default function Hero() {
       </div>
 
       {/* Main Content - Centered below carousel */}
-      <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto mt-8 md:mt-0">
+      <div className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto mt-4 md:mt-0">
         <motion.h2
           initial="hidden"
           animate="show"
