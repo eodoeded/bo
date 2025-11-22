@@ -16,7 +16,7 @@ const slides = [
     upImg: upComp,
     // Increased Top part significantly to ensure it looks bigger
     bottomWidth: "w-[200px] md:w-[320px]",
-    upWidth: "w-[400px] md:w-[800px] max-w-none",
+    upWidth: "w-[360px] md:w-[625px]",
     upOffset: "-top-8 md:-top-10",
     bottomAnimate: { y: [0, -8, 0] },
     upAnimate: { y: [0, -10, 0] }
@@ -30,7 +30,7 @@ const slides = [
     bottomWidth: "w-[140px] md:w-[220px]", 
     upWidth: "w-[170px] md:w-[280px] max-w-none", 
     // Moved CLOSER (less negative offset) as requested "move it closer"
-    upOffset: "-top-10 md:-top-20", 
+    upOffset: "-top-14 md:-top-32", 
     bottomAnimate: { y: [0, -6, 0] },
     upAnimate: { y: [0, -12, 0] }
   },
@@ -41,13 +41,13 @@ const slides = [
     middleImg: middle1,
     upImg: top1,
     // Consistent width for all parts to create a unified "cylinder" stack
-    bottomWidth: "w-[200px] md:w-[380px]",
-    middleWidth: "w-[200px] md:w-[380px]",
-    upWidth: "w-[200px] md:w-[380px]",
+    bottomWidth: "w-[240px] md:w-[400px]",
+    middleWidth: "w-[240px] md:w-[400px]",
+    upWidth: "w-[240px] md:w-[400px]",
     // Stacked vertically with consistent spacing
     // Middle moves up, Top moves up 2x
-    middleOffset: "-top-20 md:-top-36", 
-    upOffset: "-top-40 md:-top-72",
+    middleOffset: "top-0", 
+    upOffset: "top-0",
     // Subtle floating - moving together/slightly apart but keeping alignment
     bottomAnimate: { y: [0, -4, 0] },
     middleAnimate: { y: [0, -6, 0] },
