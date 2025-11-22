@@ -27,9 +27,9 @@ const slides = [
     upImg: core1,
     // Increased width of top image by ~3x (220px -> 660px / 420px -> 1200px is too big, scaling logically to be DOMINANT)
     // Let's make it significantly larger than the legs to match request "top pod part should be 3x bigger comparitively"
-    bottomWidth: "w-[80px] md:w-[120px]", 
-    upWidth: "w-[500px] md:w-[1100px]", // Significantly larger top
-    upOffset: "-top-6 md:-top-10", // Adjusted overlap for massive top - brought much closer
+    bottomWidth: "w-[180px] md:w-[300px]", 
+    upWidth: "w-[360px] md:w-[600px]", // Top 2x bigger than bottom
+    upOffset: "-top-16 md:-top-24", // Adjusted overlap
     // Float feel
     bottomAnimate: { y: [0, -6, 0] },
     upAnimate: { y: [0, -12, 0] }
