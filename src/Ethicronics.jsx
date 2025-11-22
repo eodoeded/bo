@@ -48,16 +48,16 @@ const Nav = () => (
 );
 
 const Hero = () => (
-    <section className="relative w-full h-[85vh] overflow-hidden">
-        {/* Background Image/Texture */}
-        <div className="absolute inset-0 bg-[#E3E8F0]">
+    <section className="relative w-full min-h-[85vh] md:h-[85vh] overflow-hidden flex flex-col md:block">
+        {/* Background Image/Texture - Adjusted for mobile stacking vs desktop positioning */}
+        <div className="relative md:absolute inset-0 bg-[#E3E8F0] h-[50vh] md:h-full">
             <div className="absolute inset-0 opacity-10" 
                  style={{ backgroundImage: `repeating-linear-gradient(45deg, ${BLUE} 0, ${BLUE} 1px, transparent 0, transparent 50%)`, backgroundSize: '10px 10px' }} />
             {/* Lab overlay gradient */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#E3E8F0] via-transparent to-[#1C3F94]/10" />
+            <div className="absolute inset-0 bg-gradient-to-b md:bg-gradient-to-r from-[#E3E8F0] via-transparent to-[#1C3F94]/10" />
             
             {/* Abstract Graphic */}
-            <div className="absolute right-0 top-0 w-2/3 h-full">
+            <div className="absolute right-0 top-0 w-full md:w-2/3 h-full">
                  <img 
                     src="https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?auto=format&fit=crop&q=80&w=2070" 
                     alt="Lab Environment" 
@@ -66,12 +66,12 @@ const Hero = () => (
             </div>
         </div>
 
-        {/* Floating Content Box */}
-        <div className="absolute top-1/2 -translate-y-1/2 left-6 md:left-[12%] z-10 max-w-xl bg-white p-12 shadow-2xl border border-[#1C3F94]/10">
-            <h1 className="font-serif text-5xl md:text-6xl text-[#1A1A1A] leading-[1.1] mb-6">
+        {/* Content Box - Stacked on mobile, Floating absolute on desktop */}
+        <div className="relative md:absolute md:top-1/2 md:-translate-y-1/2 left-0 md:left-[12%] z-10 w-full md:max-w-xl bg-white p-8 md:p-12 shadow-none md:shadow-2xl border-t border-b md:border border-[#1C3F94]/10 -mt-12 md:mt-0">
+            <h1 className="font-serif text-4xl md:text-6xl text-[#1A1A1A] leading-[1.1] mb-6">
                 Hardware Security<br/>Starts in Design
             </h1>
-            <p className="font-sans text-lg text-[#1A1A1A]/80 leading-relaxed mb-8">
+            <p className="font-sans text-base md:text-lg text-[#1A1A1A]/80 leading-relaxed mb-8">
                 Ethicronics builds verifiable, tamper-proof hardware systems that secure the world's devices from the inside out.
             </p>
             <div className="flex gap-4">
@@ -87,11 +87,11 @@ const Hero = () => (
 );
 
 const Partners = () => (
-    <section className="py-24 px-6 md:px-[12%] bg-[#F4F4F0] text-center border-b border-dashed border-[#1C3F94]/20">
-        <h3 className="font-serif text-3xl italic text-[#1A1A1A] mb-16 underline decoration-[#C8372D] decoration-2 underline-offset-8">Our Partners</h3>
-        <div className="flex flex-wrap justify-center gap-12 md:gap-24 opacity-60 grayscale mix-blend-multiply">
+    <section className="py-16 md:py-24 px-6 md:px-[12%] bg-[#F4F4F0] text-center border-b border-dashed border-[#1C3F94]/20">
+        <h3 className="font-serif text-3xl italic text-[#1A1A1A] mb-12 md:mb-16 underline decoration-[#C8372D] decoration-2 underline-offset-8">Our Partners</h3>
+        <div className="flex flex-wrap justify-center gap-8 md:gap-24 opacity-60 grayscale mix-blend-multiply">
             {['Gravity', 'Pax', 'Clover', 'Quantic', 'Smile'].map((logo, i) => (
-                <span key={i} className="font-sans text-2xl font-bold text-[#1A1A1A] tracking-tighter">{logo}</span>
+                <span key={i} className="font-sans text-xl md:text-2xl font-bold text-[#1A1A1A] tracking-tighter">{logo}</span>
             ))}
         </div>
     </section>
@@ -107,13 +107,13 @@ const BlogCard = ({ title, desc, tag }) => (
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 grayscale-[50%]" 
              />
         </div>
-        <div className="p-8">
+        <div className="p-6 md:p-8">
             <div className="mb-4">
                 <span className="inline-block px-2 py-1 border border-[#C8372D]/30 text-[#C8372D] font-mono text-[10px] uppercase tracking-widest">
                     {tag}
                 </span>
             </div>
-            <h4 className="font-serif text-2xl text-[#1A1A1A] leading-tight mb-4 group-hover:text-[#1C3F94] transition-colors">
+            <h4 className="font-serif text-xl md:text-2xl text-[#1A1A1A] leading-tight mb-4 group-hover:text-[#1C3F94] transition-colors">
                 {title}
             </h4>
             <p className="font-sans text-sm text-[#1A1A1A]/60 leading-relaxed mb-6">
@@ -127,18 +127,18 @@ const BlogCard = ({ title, desc, tag }) => (
 );
 
 const Blog = () => (
-    <section className="py-24 px-6 md:px-[12%] bg-[#F4F4F0] relative">
+    <section className="py-16 md:py-24 px-6 md:px-[12%] bg-[#F4F4F0] relative">
         <div className="absolute inset-0 opacity-[0.02]" 
              style={{ backgroundImage: `linear-gradient(#1A1A1A 1px, transparent 1px), linear-gradient(90deg, #1A1A1A 1px, transparent 1px)`, backgroundSize: '40px 40px' }} />
         
-        <div className="flex justify-between items-end mb-16 relative z-10">
-            <h2 className="font-serif text-4xl md:text-5xl text-[#1A1A1A]">Latest Insights</h2>
+        <div className="flex justify-between items-end mb-12 md:mb-16 relative z-10">
+            <h2 className="font-serif text-3xl md:text-5xl text-[#1A1A1A]">Latest Insights</h2>
             <a href="#" className="hidden md:flex items-center justify-center w-12 h-12 bg-[#1C3F94] text-white hover:bg-[#1A1A1A] transition-colors">
                 <ArrowRight />
             </a>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
             <BlogCard 
                 title="AI Phone Answering for Restaurants: 7 Proven Use Cases for 2025"
                 desc="These days, it's hard to find a person who doesn't use AI. Given its ubiquity, what is Ethicronics' stance on automated integrity?"
@@ -154,9 +154,9 @@ const Blog = () => (
 );
 
 const Footer = () => (
-    <footer className="bg-[#1A1A1A] text-[#F4F4F0] py-20 px-6 md:px-[12%] border-t-4 border-[#C8372D]">
-        <div className="grid md:grid-cols-4 gap-12">
-            <div className="col-span-2">
+    <footer className="bg-[#1A1A1A] text-[#F4F4F0] py-16 md:py-20 px-6 md:px-[12%] border-t-4 border-[#C8372D]">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div className="col-span-1 md:col-span-2">
                 <h2 className="font-serif text-3xl mb-6">Ethicronics</h2>
                 <p className="font-mono text-sm opacity-60 max-w-xs leading-relaxed">
                     Cambridge-based hardware security. <br/>
@@ -180,7 +180,7 @@ const Footer = () => (
                 </ul>
             </div>
         </div>
-        <div className="mt-20 pt-8 border-t border-[#F4F4F0]/10 flex justify-between items-center font-mono text-xs opacity-40 uppercase tracking-widest">
+        <div className="mt-12 md:mt-20 pt-8 border-t border-[#F4F4F0]/10 flex flex-col md:flex-row justify-between items-center font-mono text-xs opacity-40 uppercase tracking-widest gap-4 md:gap-0">
             <span>© 2025 Ethicronics Ltd.</span>
             <span>Cambridge, UK</span>
         </div>
