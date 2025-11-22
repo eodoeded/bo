@@ -13,9 +13,9 @@ const slides = [
     upImg: upComp,
     // Increased width of top image by ~50% (130px -> 200px / 220px -> 330px)
     bottomWidth: "w-[200px] md:w-[320px]",
-    upWidth: "w-[200px] md:w-[330px]",
+    upWidth: "w-[280px] md:w-[460px]",
     // Adjusted offset for larger top
-    upOffset: "-top-16 md:-top-24",
+    upOffset: "-top-12 md:-top-16",
     // Animation variants for Spot
     bottomAnimate: { y: [0, -8, 0] },
     upAnimate: { y: [0, -10, 0] }
@@ -27,9 +27,9 @@ const slides = [
     upImg: core1,
     // Increased width of top image by ~3x (220px -> 660px / 420px -> 1200px is too big, scaling logically to be DOMINANT)
     // Let's make it significantly larger than the legs to match request "top pod part should be 3x bigger comparitively"
-    bottomWidth: "w-[240px] md:w-[450px]", 
-    upWidth: "w-[340px] md:w-[650px]", // Significantly larger top
-    upOffset: "-top-28 md:-top-44", // Adjusted overlap for massive top
+    bottomWidth: "w-[140px] md:w-[270px]", 
+    upWidth: "w-[500px] md:w-[900px]", // Significantly larger top
+    upOffset: "-top-20 md:-top-32", // Adjusted overlap for massive top
     // Float feel
     bottomAnimate: { y: [0, -6, 0] },
     upAnimate: { y: [0, -12, 0] }
