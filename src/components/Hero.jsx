@@ -29,7 +29,7 @@ const slides = [
     // Let's make it significantly larger than the legs to match request "top pod part should be 3x bigger comparitively"
     bottomWidth: "w-[280px] md:w-[320px]", 
     upWidth: "w-[1600px] md:w-[2000px]", // 2x larger than previous 1000px
-    upOffset: "-top-24 md:-top-40", // Adjusted slightly
+    upOffset: "-top-12 md:-top-24", // Move DOWN significantly to attach to legs
     // Float feel
     bottomAnimate: { y: [0, -6, 0] },
     upAnimate: { y: [0, -12, 0] }
@@ -132,7 +132,7 @@ export default function Hero() {
         </div>
 
         {/* Label - Positioned Absolute Bottom of Container */}
-        <div className="absolute bottom-2 md:bottom-6 z-10 w-full text-center">
+        <div className="absolute bottom-4 md:bottom-10 z-10 w-full text-center">
              <AnimatePresence mode="wait">
                 <motion.p 
                     key={slide.id}
