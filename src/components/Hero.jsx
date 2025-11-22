@@ -16,7 +16,7 @@ const slides = [
     upImg: upComp,
     // Increased Top part significantly to ensure it looks bigger
     bottomWidth: "w-[200px] md:w-[320px]",
-    upWidth: "w-[240px] md:w-[400px] max-w-none",
+    upWidth: "w-[120px] md:w-[200px] max-w-none",
     upOffset: "-top-8 md:-top-10",
     bottomAnimate: { y: [0, -8, 0] },
     upAnimate: { y: [0, -10, 0] }
@@ -31,7 +31,8 @@ const slides = [
     upWidth: "w-[170px] md:w-[280px] max-w-none", 
     // Moved CLOSER (less negative offset) as requested "move it closer"
     // Nudged core 2px left (-ml-0.5) and UP (-top-36) -> increased left nudge to -ml-1
-    upOffset: "-top-16 md:-top-36 -ml-1", 
+    // Nudge core LEFT 2px more (-ml-[2px])
+    upOffset: "-top-16 md:-top-36 -ml-[2px]", 
     bottomAnimate: { y: [0, -6, 0] },
     upAnimate: { y: [0, -12, 0] }
   },
@@ -42,6 +43,7 @@ const slides = [
     middleImg: middle1,
     upImg: top1,
     // Consistent width for all parts to create a unified "cylinder" stack
+    // BOTTOM piece same size (400px)
     bottomWidth: "w-[240px] md:w-[400px]",
     middleWidth: "w-[240px] md:w-[400px]",
     upWidth: "w-[240px] md:w-[400px]",
