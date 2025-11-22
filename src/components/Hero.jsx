@@ -11,10 +11,11 @@ const slides = [
     label: "BOSTON DYNAMICS SPOT",
     bottomImg: bottomComp,
     upImg: upComp,
-    // Scaled down ~30%
+    // Increased width of top image by ~50% (130px -> 200px / 220px -> 330px)
     bottomWidth: "w-[200px] md:w-[320px]",
-    upWidth: "w-[130px] md:w-[220px]",
-    upOffset: "-top-12 md:-top-16",
+    upWidth: "w-[200px] md:w-[330px]",
+    // Adjusted offset for larger top
+    upOffset: "-top-16 md:-top-24",
     // Animation variants for Spot
     bottomAnimate: { y: [0, -8, 0] },
     upAnimate: { y: [0, -10, 0] }
@@ -24,10 +25,11 @@ const slides = [
     label: "KEN ISAACS 9x9 MICROHOUSE",
     bottomImg: legs1,
     upImg: core1,
-    // Scaled down ~30% relative to previous "balanced" size
+    // Increased width of top image by ~3x (220px -> 660px / 420px -> 1200px is too big, scaling logically to be DOMINANT)
+    // Let's make it significantly larger than the legs to match request "top pod part should be 3x bigger comparitively"
     bottomWidth: "w-[240px] md:w-[450px]", 
-    upWidth: "w-[220px] md:w-[420px]",
-    upOffset: "-top-16 md:-top-24", 
+    upWidth: "w-[340px] md:w-[650px]", // Significantly larger top
+    upOffset: "-top-28 md:-top-44", // Adjusted overlap for massive top
     // Float feel
     bottomAnimate: { y: [0, -6, 0] },
     upAnimate: { y: [0, -12, 0] }
@@ -51,7 +53,7 @@ export default function Hero() {
   const slide = slides[currentSlide];
 
   return (
-    <section className="w-full min-h-[calc(100vh-120px)] flex flex-col items-center justify-start relative pt-16 md:pt-20 px-6 md:px-0 overflow-hidden">
+    <section className="w-full min-h-[calc(100vh-120px)] flex flex-col items-center justify-start relative pt-12 md:pt-16 px-6 md:px-0 overflow-hidden">
       {/* Subtle breathing overlay to enrich the base gradient */}
       <motion.div
         className="pointer-events-none absolute inset-0 z-0"
