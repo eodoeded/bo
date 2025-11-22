@@ -15,9 +15,9 @@ const slides = [
     label: "BOSTON DYNAMICS SPOT",
     bottomImg: bottomComp,
     upImg: upComp,
-    // Increased Top part by 30% from 170px base -> ~220px
+    // Increased Top part by 30% from 170px base -> ~220px -> Decreased slightly to 200px
     bottomWidth: "w-[200px] md:w-[320px]",
-    upWidth: "w-[140px] md:w-[220px] max-w-none",
+    upWidth: "w-[130px] md:w-[200px] max-w-none",
     upOffset: "-top-8 md:-top-10",
     bottomAnimate: { y: [0, -8, 0] },
     upAnimate: { y: [0, -10, 0] }
