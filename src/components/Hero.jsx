@@ -16,8 +16,8 @@ const slides = [
     upImg: upComp,
     // Increased Top part significantly to ensure it looks bigger
     bottomWidth: "w-[200px] md:w-[320px]",
-    upWidth: "w-[120px] md:w-[200px] max-w-none",
-    upOffset: "-top-8 md:-top-10",
+    upWidth: "w-[100px] md:w-[170px] max-w-none",
+    upOffset: "-top-10 md:-top-14",
     bottomAnimate: { y: [0, -8, 0] },
     upAnimate: { y: [0, -10, 0] }
   },
@@ -31,8 +31,8 @@ const slides = [
     upWidth: "w-[170px] md:w-[280px] max-w-none", 
     // Moved CLOSER (less negative offset) as requested "move it closer"
     // Nudged core 2px left (-ml-0.5) and UP (-top-36) -> increased left nudge to -ml-1
-    // Nudge core LEFT 2px more (-ml-[2px])
-    upOffset: "-top-16 md:-top-36 -ml-[2px]", 
+    // Nudge core LEFT 2px more (-ml-[2px]) -> left "a few pixels" (-ml-[6px])
+    upOffset: "-top-16 md:-top-36 -ml-[6px]", 
     bottomAnimate: { y: [0, -6, 0] },
     upAnimate: { y: [0, -12, 0] }
   },
@@ -48,9 +48,10 @@ const slides = [
     middleWidth: "w-[240px] md:w-[400px]",
     upWidth: "w-[240px] md:w-[400px]",
     // Stacked vertically with consistent spacing
-    // Perfect overlay: top-0
-    middleOffset: "top-0", 
-    upOffset: "top-0",
+    // Move Bottom UP lots (-mt-24), Move others DOWN (top-24)
+    bottomOffset: "-mt-12 md:-mt-24",
+    middleOffset: "top-12 md:top-24", 
+    upOffset: "top-12 md:top-24",
     // Subtle floating - UNIFIED so they stay stacked
     bottomAnimate: { y: [0, -6, 0] },
     middleAnimate: { y: [0, -6, 0] },
@@ -123,12 +124,12 @@ export default function Hero() {
                         {/* Container for images - absolutely positioned center */}
                         <div className="relative flex items-center justify-center">
                             
-                            {/* Bottom Part */}
-                            <motion.div
-                                className="relative z-0" style={{ willChange: "transform" }}
-                                animate={slide.bottomAnimate}
-                                transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.0 }}
-                            >
+                        {/* Bottom Part */}
+                        <motion.div
+                            className={`relative z-0 ${slide.bottomOffset || ''}`} style={{ willChange: "transform" }}
+                            animate={slide.bottomAnimate}
+                            transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.0 }}
+                        >
                                 <img
                                     src={slide.bottomImg} 
                                     alt="Bottom component"
