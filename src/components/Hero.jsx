@@ -25,11 +25,11 @@ const slides = [
     label: "KEN ISAACS 9x9 MICROHOUSE",
     bottomImg: legs1,
     upImg: core1,
-    // Sized to match Spot (legs 320px, top 480px)
+    // Reduced top size slightly to balance with Spot
     bottomWidth: "w-[200px] md:w-[320px]", 
-    upWidth: "w-[280px] md:w-[480px] max-w-none", 
-    // Adjusted offset: Moved down slightly (less negative) and removed left margin (nudge right)
-    upOffset: "-top-24 md:-top-44", 
+    upWidth: "w-[240px] md:w-[400px] max-w-none", 
+    // Moved UP (more negative offset)
+    upOffset: "-top-28 md:-top-52", 
     bottomAnimate: { y: [0, -6, 0] },
     upAnimate: { y: [0, -12, 0] }
   },
@@ -39,15 +39,14 @@ const slides = [
     bottomImg: bottom1,
     middleImg: middle1,
     upImg: top1,
-    // "Perfect size" - using same base width to ensure consistency if they are pre-scaled
-    // User said "perfect size" relative to each other. I'll apply a consistent container width.
-    bottomWidth: "w-[120px] md:w-[180px]", // Guessing scale, keeping small to fit 3 stacked
-    middleWidth: "w-[120px] md:w-[180px]",
-    upWidth: "w-[120px] md:w-[180px]",
-    // Offsets to stack them
-    middleOffset: "-top-4 md:-top-8",
-    upOffset: "-top-8 md:-top-16",
-    // Gentle float
+    // Scaled to match overall visual mass of Spot (~320px width range)
+    bottomWidth: "w-[200px] md:w-[300px]",
+    middleWidth: "w-[200px] md:w-[300px]",
+    upWidth: "w-[200px] md:w-[300px]",
+    // Perfect stacking - no positional offsets, just centered
+    middleOffset: "top-0", 
+    upOffset: "top-0",
+    // Subtle floating - moving together/slightly apart but keeping alignment
     bottomAnimate: { y: [0, -4, 0] },
     middleAnimate: { y: [0, -6, 0] },
     upAnimate: { y: [0, -8, 0] }
@@ -115,52 +114,56 @@ export default function Hero() {
                     transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                     className="absolute inset-0 flex justify-center items-center"
                 >
-                    <div className="relative flex flex-col items-center">
-                        {/* Bottom Part */}
-                        <motion.div
-                            className="relative" style={{ willChange: "transform" }}
-                            animate={slide.bottomAnimate}
-                            transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.0 }}
-                        >
-                            <img
-                                src={slide.bottomImg} 
-                                alt="Bottom component"
-                                className={`relative z-0 object-contain ${slide.bottomWidth}`}
-                                style={{ aspectRatio: 'auto' }}
-                            />
-                        </motion.div>
+                    <div className="relative flex flex-col items-center justify-center h-full w-full">
+                        {/* Container for images - absolutely positioned center */}
+                        <div className="relative flex items-center justify-center">
+                            
+                            {/* Bottom Part */}
+                            <motion.div
+                                className="relative z-0" style={{ willChange: "transform" }}
+                                animate={slide.bottomAnimate}
+                                transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.0 }}
+                            >
+                                <img
+                                    src={slide.bottomImg} 
+                                    alt="Bottom component"
+                                    className={`relative object-contain ${slide.bottomWidth}`}
+                                    style={{ aspectRatio: 'auto' }}
+                                />
+                            </motion.div>
 
-                        {/* Middle Part (Optional) */}
-                        {slide.middleImg && (
-                           <motion.div
-                                className={`absolute left-1/2 -translate-x-1/2 ${slide.middleOffset}`}
-                                style={{ willChange: "transform", zIndex: 1 }}
-                                animate={slide.middleAnimate}
-                                transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.1 }}
-                           >
-                               <img
-                                   src={slide.middleImg}
-                                   alt="Middle component"
-                                   className={`object-contain ${slide.middleWidth}`}
-                                   style={{ aspectRatio: 'auto' }}
-                               />
-                           </motion.div>
-                        )}
+                            {/* Middle Part (Optional) - Absolute over Bottom */}
+                            {slide.middleImg && (
+                               <motion.div
+                                    className={`absolute left-1/2 -translate-x-1/2 ${slide.middleOffset}`}
+                                    style={{ willChange: "transform", zIndex: 1 }}
+                                    animate={slide.middleAnimate}
+                                    transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.1 }}
+                               >
+                                   <img
+                                       src={slide.middleImg}
+                                       alt="Middle component"
+                                       className={`object-contain ${slide.middleWidth}`}
+                                       style={{ aspectRatio: 'auto' }}
+                                   />
+                               </motion.div>
+                            )}
 
-                        {/* Top Part */}
-                        <motion.div
-                            className={`absolute left-1/2 -translate-x-1/2 ${slide.upOffset}`} 
-                            style={{ willChange: "transform", zIndex: 2 }}
-                            animate={slide.upAnimate}
-                            transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
-                        >
-                            <img
-                                src={slide.upImg} 
-                                alt="Top component"
-                                className={`object-contain ${slide.upWidth}`}
-                                style={{ aspectRatio: 'auto' }}
-                            />
-                        </motion.div>
+                            {/* Top Part - Absolute over Bottom/Middle */}
+                            <motion.div
+                                className={`absolute left-1/2 -translate-x-1/2 ${slide.upOffset}`} 
+                                style={{ willChange: "transform", zIndex: 2 }}
+                                animate={slide.upAnimate}
+                                transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
+                            >
+                                <img
+                                    src={slide.upImg} 
+                                    alt="Top component"
+                                    className={`object-contain ${slide.upWidth}`}
+                                    style={{ aspectRatio: 'auto' }}
+                                />
+                            </motion.div>
+                        </div>
                     </div>
                 </motion.div>
             </AnimatePresence>
