@@ -28,8 +28,8 @@ const slides = [
     // Increased width of top image by ~3x (220px -> 660px / 420px -> 1200px is too big, scaling logically to be DOMINANT)
     // Let's make it significantly larger than the legs to match request "top pod part should be 3x bigger comparitively"
     bottomWidth: "w-[180px] md:w-[300px]", 
-    upWidth: "w-[360px] md:w-[600px]", // Top 2x bigger than bottom
-    upOffset: "-top-16 md:-top-24", // Adjusted overlap
+    upWidth: "w-[540px] md:w-[900px]", // Top 3x bigger than bottom (300 * 3 = 900)
+    upOffset: "-top-24 md:-top-40", // Adjusted overlap for massive top
     // Float feel
     bottomAnimate: { y: [0, -6, 0] },
     upAnimate: { y: [0, -12, 0] }
@@ -132,7 +132,7 @@ export default function Hero() {
         </div>
 
         {/* Label - Positioned Absolute Bottom of Container */}
-        <div className="absolute bottom-8 md:bottom-12 z-10 w-full text-center">
+        <div className="absolute bottom-2 md:bottom-4 z-10 w-full text-center">
              <AnimatePresence mode="wait">
                 <motion.p 
                     key={slide.id}
