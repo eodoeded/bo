@@ -13,9 +13,9 @@ const slides = [
     upImg: upComp,
     // Increased width of top image by ~50% (130px -> 200px / 220px -> 330px)
     bottomWidth: "w-[200px] md:w-[320px]",
-    upWidth: "w-[280px] md:w-[460px]",
-    // Adjusted offset for larger top
-    upOffset: "-top-12 md:-top-16",
+    upWidth: "w-[280px] md:w-[480px]",
+    // Adjusted offset for larger top - brought closer to body (reduced negative offset)
+    upOffset: "-top-8 md:-top-10",
     // Animation variants for Spot
     bottomAnimate: { y: [0, -8, 0] },
     upAnimate: { y: [0, -10, 0] }
@@ -27,9 +27,9 @@ const slides = [
     upImg: core1,
     // Increased width of top image by ~3x (220px -> 660px / 420px -> 1200px is too big, scaling logically to be DOMINANT)
     // Let's make it significantly larger than the legs to match request "top pod part should be 3x bigger comparitively"
-    bottomWidth: "w-[140px] md:w-[270px]", 
-    upWidth: "w-[500px] md:w-[900px]", // Significantly larger top
-    upOffset: "-top-20 md:-top-32", // Adjusted overlap for massive top
+    bottomWidth: "w-[100px] md:w-[180px]", 
+    upWidth: "w-[600px] md:w-[1200px]", // Significantly larger top
+    upOffset: "-top-12 md:-top-20", // Adjusted overlap for massive top - brought much closer
     // Float feel
     bottomAnimate: { y: [0, -6, 0] },
     upAnimate: { y: [0, -12, 0] }
@@ -64,7 +64,7 @@ export default function Hero() {
       />
 
       {/* Carousel Container - Reduced Fixed Height to bring text closer */}
-      <div className="relative z-10 w-full max-w-5xl flex flex-col items-center justify-center mb-8 md:mb-12 h-[400px] md:h-[500px]">
+      <div className="relative z-10 w-full max-w-5xl flex flex-col items-center justify-center mb-8 md:mb-12 h-[300px] md:h-[400px]">
         
         {/* Navigation Arrows */}
         <button 
