@@ -11,46 +11,54 @@ import { useState } from 'react';
 const slides = [
   {
     id: 0,
-    type: "overlay",
     label: "BOSTON DYNAMICS SPOT",
     bottomImg: bottomComp,
     upImg: upComp,
-    // Increased Top part by 30% from 170px base -> ~220px -> Decreased slightly to 200px
+    // Increased Top part significantly to ensure it looks bigger
     bottomWidth: "w-[200px] md:w-[320px]",
     upWidth: "w-[130px] md:w-[200px] max-w-none",
-    upOffset: "-top-8 md:-top-10",
+    // Lifted UP slightly as requested (-top-10 -> -top-14)
+    upOffset: "-top-10 md:-top-14",
     bottomAnimate: { y: [0, -8, 0] },
     upAnimate: { y: [0, -10, 0] }
   },
   {
     id: 1,
-    type: "overlay",
     label: "KEN ISAACS 9x9 MICROHOUSE",
     bottomImg: legs1,
     upImg: core1,
+    // Shrink BOTH by 30% (320 * 0.7 = 224, 400 * 0.7 = 280)
+    // Update: Increase both by ~15% from previous (140->160, 220->250)
     bottomWidth: "w-[160px] md:w-[250px]", 
     upWidth: "w-[195px] md:w-[320px] max-w-none", 
+    // Moved CLOSER (less negative offset) as requested "move it closer"
+    // Nudged core 2px left (-ml-0.5) and UP (-top-36) -> increased left nudge to -ml-1
+    // Nudge core LEFT 2px more (-ml-[2px]) -> left "a few pixels" (-ml-[6px])
+    // Move DOWN a little bit (add translate-y)
     bottomOffset: "translate-y-4 md:translate-y-8",
-    upOffset: "-top-16 md:-top-36 -ml-[6px] translate-y-4 md:translate-y-8", 
+    // Lift UP slightly (more negative offset: -top-36 -> -top-40)
+    upOffset: "-top-20 md:-top-40 -ml-[6px] translate-y-4 md:translate-y-8", 
     bottomAnimate: { y: [0, -6, 0] },
     upAnimate: { y: [0, -12, 0] }
   },
   {
     id: 2,
-    type: "stack", // New vertical stack layout
     label: "RIGETTI QUANTUM CHANDELIER",
     bottomImg: bottom1,
     middleImg: middle1,
     upImg: top1,
-    // Sizes as requested: Bottom 200px (50% smaller), Top/Mid 600px (50% bigger)
+    // Consistent width for all parts to create a unified "cylinder" stack
+    // BOTTOM piece same size (400px) -> Update: 50% SMALLER (200px)
     bottomWidth: "w-[120px] md:w-[200px]",
+    // Others 50% BIGGER (400 -> 600)
     middleWidth: "w-[360px] md:w-[600px]",
     upWidth: "w-[360px] md:w-[600px]",
-    // Overlap adjustments for stack
-    // Negative bottom margins to pull them together
-    upMargin: "-mb-12 md:-mb-24",
-    middleMargin: "-mb-8 md:-mb-16",
-    
+    // Stacked vertically with consistent spacing
+    // Move Bottom UP lots (-mt-24), Move others DOWN (top-24)
+    bottomOffset: "-mt-12 md:-mt-24",
+    middleOffset: "top-12 md:top-24", 
+    upOffset: "top-12 md:top-24",
+    // Subtle floating - UNIFIED so they stay stacked
     bottomAnimate: { y: [0, -6, 0] },
     middleAnimate: { y: [0, -6, 0] },
     upAnimate: { y: [0, -6, 0] }
@@ -119,96 +127,54 @@ export default function Hero() {
                     className="absolute inset-0 flex justify-center items-center"
                 >
                     <div className="relative flex flex-col items-center justify-center h-full w-full">
-                        {/* Container for images */}
-                        <div className={`relative flex items-center justify-center ${slide.type === 'stack' ? 'flex-col' : ''}`}>
+                        {/* Container for images - absolutely positioned center */}
+                        <div className="relative flex items-center justify-center">
                             
-                            {slide.type === 'overlay' ? (
-                                <>
-                                    {/* Bottom Part */}
-                                    <motion.div
-                                        className={`relative z-0 ${slide.bottomOffset || ''}`} style={{ willChange: "transform" }}
-                                        animate={slide.bottomAnimate}
-                                        transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.0 }}
-                                    >
-                                        <img
-                                            src={slide.bottomImg} 
-                                            alt="Bottom component"
-                                            decoding="async"
-                                            className={`relative object-contain ${slide.bottomWidth}`}
-                                            style={{ aspectRatio: 'auto' }}
-                                            onLoad={(e) => e.target.style.opacity = 1}
-                                        />
-                                    </motion.div>
+                            {/* Bottom Part */}
+                            <motion.div
+                                className={`relative z-0 ${slide.bottomOffset || ''}`} style={{ willChange: "transform" }}
+                                animate={slide.bottomAnimate}
+                                transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.0 }}
+                            >
+                                <img
+                                    src={slide.bottomImg} 
+                                    alt="Bottom component"
+                                    className={`relative object-contain ${slide.bottomWidth}`}
+                                    style={{ aspectRatio: 'auto' }}
+                                />
+                            </motion.div>
 
-                                    {/* Top Part - Absolute over Bottom */}
-                                    <motion.div
-                                        className={`absolute left-1/2 -translate-x-1/2 ${slide.upOffset}`} 
-                                        style={{ willChange: "transform", zIndex: 2 }}
-                                        animate={slide.upAnimate}
-                                        transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
-                                    >
-                                        <img
-                                            src={slide.upImg} 
-                                            alt="Top component"
-                                            decoding="async"
-                                            className={`object-contain ${slide.upWidth}`}
-                                            style={{ aspectRatio: 'auto' }}
-                                            onLoad={(e) => e.target.style.opacity = 1}
-                                        />
-                                    </motion.div>
-                                </>
-                            ) : (
-                                // Stack Layout (Rigetti) - Top, Middle, Bottom vertically
-                                <>
-                                    {/* Top Part */}
-                                    <motion.div
-                                        className={`relative z-20 ${slide.upMargin || ''}`} style={{ willChange: "transform" }}
-                                        animate={slide.upAnimate}
-                                        transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
-                                    >
-                                        <img
-                                            src={slide.upImg} 
-                                            alt="Top component"
-                                            decoding="async"
-                                            className={`object-contain ${slide.upWidth}`}
-                                            style={{ aspectRatio: 'auto' }}
-                                            onLoad={(e) => e.target.style.opacity = 1}
-                                        />
-                                    </motion.div>
-
-                                    {/* Middle Part */}
-                                    <motion.div
-                                        className={`relative z-10 ${slide.middleMargin || ''}`} style={{ willChange: "transform" }}
-                                        animate={slide.middleAnimate}
-                                        transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.1 }}
-                                    >
-                                        <img
-                                            src={slide.middleImg} 
-                                            alt="Middle component"
-                                            decoding="async"
-                                            className={`object-contain ${slide.middleWidth}`}
-                                            style={{ aspectRatio: 'auto' }}
-                                            onLoad={(e) => e.target.style.opacity = 1}
-                                        />
-                                    </motion.div>
-
-                                    {/* Bottom Part */}
-                                    <motion.div
-                                        className={`relative z-0`} style={{ willChange: "transform" }}
-                                        animate={slide.bottomAnimate}
-                                        transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.0 }}
-                                    >
-                                        <img
-                                            src={slide.bottomImg} 
-                                            alt="Bottom component"
-                                            decoding="async"
-                                            className={`object-contain ${slide.bottomWidth}`}
-                                            style={{ aspectRatio: 'auto' }}
-                                            onLoad={(e) => e.target.style.opacity = 1}
-                                        />
-                                    </motion.div>
-                                </>
+                            {/* Middle Part (Optional) - Absolute over Bottom */}
+                            {slide.middleImg && (
+                               <motion.div
+                                    className={`absolute left-1/2 -translate-x-1/2 ${slide.middleOffset}`}
+                                    style={{ willChange: "transform", zIndex: 1 }}
+                                    animate={slide.middleAnimate}
+                                    transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.1 }}
+                               >
+                                   <img
+                                       src={slide.middleImg}
+                                       alt="Middle component"
+                                       className={`object-contain ${slide.middleWidth}`}
+                                       style={{ aspectRatio: 'auto' }}
+                                   />
+                               </motion.div>
                             )}
+
+                            {/* Top Part - Absolute over Bottom/Middle */}
+                            <motion.div
+                                className={`absolute left-1/2 -translate-x-1/2 ${slide.upOffset}`} 
+                                style={{ willChange: "transform", zIndex: 2 }}
+                                animate={slide.upAnimate}
+                                transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
+                            >
+                                <img
+                                    src={slide.upImg} 
+                                    alt="Top component"
+                                    className={`object-contain ${slide.upWidth}`}
+                                    style={{ aspectRatio: 'auto' }}
+                                />
+                            </motion.div>
                         </div>
                     </div>
                 </motion.div>
