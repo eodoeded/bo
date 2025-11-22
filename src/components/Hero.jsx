@@ -29,7 +29,7 @@ const slides = [
     // Let's make it significantly larger than the legs to match request "top pod part should be 3x bigger comparitively"
     bottomWidth: "w-[280px] md:w-[320px]", 
     upWidth: "w-[1600px] md:w-[2000px]", // 2x larger than previous 1000px
-    upOffset: "-top-12 md:-top-24", // Move DOWN significantly to attach to legs
+    upOffset: "-top-4 md:-top-8", // Reduced negative offset even more to bring it DOWN
     // Float feel
     bottomAnimate: { y: [0, -6, 0] },
     upAnimate: { y: [0, -12, 0] }
