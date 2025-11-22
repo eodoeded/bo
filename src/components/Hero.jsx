@@ -30,8 +30,8 @@ const slides = [
     bottomWidth: "w-[140px] md:w-[220px]", 
     upWidth: "w-[170px] md:w-[280px] max-w-none", 
     // Moved CLOSER (less negative offset) as requested "move it closer"
-    // Nudged core 2px left (-ml-0.5) and UP (-top-36)
-    upOffset: "-top-16 md:-top-36 -ml-0.5", 
+    // Nudged core 2px left (-ml-0.5) and UP (-top-36) -> increased left nudge to -ml-1
+    upOffset: "-top-16 md:-top-36 -ml-1", 
     bottomAnimate: { y: [0, -6, 0] },
     upAnimate: { y: [0, -12, 0] }
   },
