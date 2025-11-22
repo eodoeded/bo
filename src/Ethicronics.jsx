@@ -61,7 +61,7 @@ const Hero = () => (
                  <img 
                     src="https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?auto=format&fit=crop&q=80&w=2070" 
                     alt="Lab Environment" 
-                    className="w-full h-full object-cover opacity-80 mix-blend-multiply grayscale contrast-125"
+                    className="w-full h-full object-cover object-top opacity-80 mix-blend-multiply grayscale contrast-125"
                  />
             </div>
         </div>
