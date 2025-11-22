@@ -14,9 +14,9 @@ const slides = [
     label: "BOSTON DYNAMICS SPOT",
     bottomImg: bottomComp,
     upImg: upComp,
-    // Increased Top part by 30% (480 * 1.3 = 624, 280 * 1.3 = 364)
+    // Increased Top part significantly to ensure it looks bigger
     bottomWidth: "w-[200px] md:w-[320px]",
-    upWidth: "w-[360px] md:w-[620px]",
+    upWidth: "w-[400px] md:w-[800px] max-w-none",
     upOffset: "-top-8 md:-top-10",
     bottomAnimate: { y: [0, -8, 0] },
     upAnimate: { y: [0, -10, 0] }
@@ -29,8 +29,8 @@ const slides = [
     // Shrink BOTH by 30% (320 * 0.7 = 224, 400 * 0.7 = 280)
     bottomWidth: "w-[140px] md:w-[220px]", 
     upWidth: "w-[170px] md:w-[280px] max-w-none", 
-    // Moved UP (more negative offset)
-    upOffset: "-top-28 md:-top-52", 
+    // Moved CLOSER (less negative offset) as requested "move it closer"
+    upOffset: "-top-10 md:-top-20", 
     bottomAnimate: { y: [0, -6, 0] },
     upAnimate: { y: [0, -12, 0] }
   },
@@ -40,14 +40,14 @@ const slides = [
     bottomImg: bottom1,
     middleImg: middle1,
     upImg: top1,
-    // Bottom Cube significantly larger (500px) to match screenshot look vs top parts
-    bottomWidth: "w-[300px] md:w-[500px]",
-    middleWidth: "w-[180px] md:w-[300px]",
-    upWidth: "w-[180px] md:w-[300px]",
-    // Create GAP: Move Top/Middle UP significantly (-top-32/-top-60) relative to Bottom
-    // Or move Bottom DOWN. Since bottom is relative, let's move top/middle UP.
-    middleOffset: "-top-16 md:-top-32", 
-    upOffset: "-top-16 md:-top-32",
+    // Consistent width for all parts to create a unified "cylinder" stack
+    bottomWidth: "w-[200px] md:w-[380px]",
+    middleWidth: "w-[200px] md:w-[380px]",
+    upWidth: "w-[200px] md:w-[380px]",
+    // Stacked vertically with consistent spacing
+    // Middle moves up, Top moves up 2x
+    middleOffset: "-top-20 md:-top-36", 
+    upOffset: "-top-40 md:-top-72",
     // Subtle floating - moving together/slightly apart but keeping alignment
     bottomAnimate: { y: [0, -4, 0] },
     middleAnimate: { y: [0, -6, 0] },
