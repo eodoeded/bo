@@ -30,7 +30,7 @@ const slides = [
     bottomWidth: "w-[280px] md:w-[320px]", 
     // Use max-w-none to break out of container constraints and ensure it's ACTUALLY 2x bigger
     upWidth: "w-[250px] md:w-[400px] max-w-none", 
-    upOffset: "-top-24 md:-top-40", // Move UP significantly from legs
+    upOffset: "-top-28 md:-top-48 -ml-2 md:-ml-5", // Move UP more and LEFT slightly
     // Float feel
     bottomAnimate: { y: [0, -6, 0] },
     upAnimate: { y: [0, -12, 0] }
