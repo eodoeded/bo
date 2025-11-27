@@ -121,15 +121,12 @@ export default function Hero() {
         </motion.h2>
         
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, delay: 1.45, ease: [0.2, 0.8, 0.2, 1] }}>
-          <motion.button
-            type="button"
+          <motion.a
+            href="/studio"
             initial="rest"
             animate="rest"
             whileHover="hover"
             whileTap="hover"
-            data-cal-link="branded-objects-nro6hy/15min"
-            data-cal-namespace="15min"
-            data-cal-config='{"layout":"month_view","theme":"dark"}'
             variants={{ rest: { color: "#E3E3FD", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }, hover: { color: "#FFFFFF", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } } }}
             className="
               group font-inter-light text-[#E3E3FD] text-[14px]
@@ -138,11 +135,12 @@ export default function Hero() {
               backdrop-blur-[6.5px]
               px-[16px] py-[8px]
               flex items-center
+              no-underline
             "
           >
-            Let's talk
+            Launch Studio
             <motion.span variants={{ rest: { x: 0, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }, hover: { x: 4, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } } }} className="ml-2 inline-block">→</motion.span>
-          </motion.button>
+          </motion.a>
         </motion.div>
       </div>
     </section>
