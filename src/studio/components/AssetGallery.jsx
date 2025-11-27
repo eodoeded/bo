@@ -1,13 +1,6 @@
 import React from 'react';
 import { Download, Share2, MoreHorizontal } from 'lucide-react';
-import { GeneratedAsset } from '../types';
-
-interface AssetGalleryProps {
-  assets: GeneratedAsset[];
-  onDownload: (asset: GeneratedAsset) => void;
-}
-
-export const AssetGallery: React.FC<AssetGalleryProps> = ({ assets, onDownload }) => {
+export const AssetGallery = ({ assets, onDownload }) => {
   if (assets.length === 0) {
     return (
       <div className="h-full flex flex-col items-center justify-center text-gray-400 p-8">

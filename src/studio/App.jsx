@@ -2,17 +2,15 @@ import React, { useState, useRef } from 'react';
 import { GoogleGenAI } from "@google/genai";
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
-import { ThreeViewport, ThreeViewportRef } from './components/ThreeViewport';
+import { ThreeViewport } from './components/ThreeViewport';
 import { AssetGallery } from './components/AssetGallery';
-import { FileData, GeneratedAsset, ViewPreset, RenderStyle, BackgroundConfig, LightingConfig } from './types';
-
 // Helper to convert blob/file to Base64
-const fileToBase64 = (file: File | Blob): Promise<string> => {
+const fileToBase64 = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
-        const result = reader.result as string;
+        const result = reader.result;
         // Remove data URL prefix
         const base64 = result.split(',')[1];
         resolve(base64);
@@ -23,19 +21,7 @@ const fileToBase64 = (file: File | Blob): Promise<string> => {
 
 // --- Auto-Registration Logic ---
 
-interface BBox {
-    minX: number;
-    minY: number;
-    maxX: number;
-    maxY: number;
-    width: number;
-    height: number;
-    centerX: number;
-    centerY: number;
-    valid: boolean;
-}
-
-const getContextBounds = (data: Uint8ClampedArray, width: number, height: number): BBox => {
+const getContextBounds = (data, width, height) => {
     let minX = width, minY = height, maxX = 0, maxY = 0;
     let found = false;
 
@@ -67,10 +53,10 @@ const getContextBounds = (data: Uint8ClampedArray, width: number, height: number
 
 // Helper: Auto-Aligned & Centered Compositing
 const compositeImageWithAlignment = async (
-  aiImageBlob: Blob,
-  maskImageSrc: string, 
-  background: BackgroundConfig, 
-): Promise<string> => {
+  aiImageBlob,
+  maskImageSrc, 
+  background, 
+) => {
     return new Promise((resolve) => {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
@@ -207,36 +193,36 @@ const compositeImageWithAlignment = async (
 };
 
 function App() {
-  const [cadFile, setCadFile] = useState<FileData | null>(null);
-  const [referenceFile, setReferenceFile] = useState<FileData | null>(null);
+  const [cadFile, setCadFile] = useState(null);
+  const [referenceFile, setReferenceFile] = useState(null);
   const [prompt, setPrompt] = useState('');
   
-  const [currentView, setCurrentView] = useState<ViewPreset>('isometric');
+  const [currentView, setCurrentView] = useState('isometric');
   
   // Default Background: Vertical Gradient, Dark Grey (#222) to Light Grey (#e5e5e5)
-  const [background, setBackground] = useState<BackgroundConfig>({ 
+  const [background, setBackground] = useState({ 
       mode: 'gradient', 
       color1: '#222222', 
       color2: '#e5e5e5' 
   });
 
-  const [lighting, setLighting] = useState<LightingConfig>({ rotation: 45, elevation: 45, intensity: 1.2 });
+  const [lighting, setLighting] = useState({ rotation: 45, elevation: 45, intensity: 1.2 });
   const [showShadows, setShowShadows] = useState(true);
-  const [viewMode, setViewMode] = useState<RenderStyle>('realistic'); 
+  const [viewMode, setViewMode] = useState('realistic'); 
   
   const [credits, setCredits] = useState(50);
   const [isGenerating, setIsGenerating] = useState(false);
   const [statusMessage, setStatusMessage] = useState('');
-  const [assets, setAssets] = useState<GeneratedAsset[]>([]);
+  const [assets, setAssets] = useState([]);
   
-  const viewportRef = useRef<ThreeViewportRef>(null);
+  const viewportRef = useRef(null);
 
-  const handleUploadCAD = (file: FileData) => {
+  const handleUploadCAD = (file) => {
     setCadFile(file);
     setViewMode('realistic');
   };
   
-  const handleUploadRef = (file: FileData) => {
+  const handleUploadRef = (file) => {
     setReferenceFile(file);
   };
 
@@ -251,7 +237,7 @@ function App() {
       setPrompt('Matte black industrial finish, gold connectors, cinematic lighting, macro photography 85mm');
   };
 
-  const handleDownload = (asset: GeneratedAsset) => {
+  const handleDownload = (asset) => {
     if (!asset.imageUrl) return;
     const link = document.createElement('a');
     link.href = asset.imageUrl;
@@ -275,7 +261,7 @@ function App() {
     const baseId = Math.random().toString(36).substr(2, 9);
     const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-    const newAsset: GeneratedAsset = {
+    const newAsset = {
         id: baseId,
         name: `${cadFile.name.split('.')[0]}_RENDER`,
         type: 'render',
@@ -344,7 +330,7 @@ CRITICAL INSTRUCTIONS:
 
         const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
         
-        const parts: any[] = [
+        const parts = [
             { text: systemPrompt },
             { text: `USER DESCRIPTION: ${userPrompt}` },
             { 
@@ -394,10 +380,9 @@ CRITICAL INSTRUCTIONS:
         setStatusMessage('Removing Background...');
 
         // --- CLIENT-SIDE BACKGROUND REMOVAL (imgly) ---
-        let transparentBlob: Blob;
+        let transparentBlob;
         
         try {
-            // @ts-ignore
             const imgly = window.imglyBackgroundRemoval;
             
             if (!imgly) {
@@ -410,7 +395,7 @@ CRITICAL INSTRUCTIONS:
 
                 transparentBlob = await imgly.removeBackground(imageBlob, {
                     publicPath: 'https://cdn.jsdelivr.net/npm/@imgly/background-removal-data@1.0.6/dist/',
-                    progress: (key: string, current: number, total: number) => {
+                    progress: (key, current, total) => {
                        // Optional: could update a progress bar here
                     }
                 });
@@ -436,7 +421,7 @@ CRITICAL INSTRUCTIONS:
             return a;
         }));
 
-    } catch (error: any) {
+    } catch (error) {
         console.error("Generation failed:", error);
         alert(`Generation Failed: ${error.message || "Unknown error"}`);
         setAssets(prev => prev.map(a => {

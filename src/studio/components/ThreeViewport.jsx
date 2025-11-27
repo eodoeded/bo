@@ -2,10 +2,9 @@ import React, { useRef, useEffect, forwardRef, useImperativeHandle, useState, Su
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Environment, ContactShadows, useGLTF, Text, Image as DreiImage, GizmoHelper, GizmoViewport } from '@react-three/drei';
 import * as THREE from 'three';
-import { ViewPreset, RenderStyle, BackgroundConfig, FileData, LightingConfig } from '../types';
 
 // --- Geometry Processing Utils ---
-const normalizeGeometry = (geometry: THREE.BufferGeometry) => {
+const normalizeGeometry = (geometry) => {
     geometry.computeBoundingBox();
     const box = geometry.boundingBox;
     if (box) {
@@ -27,7 +26,7 @@ const normalizeGeometry = (geometry: THREE.BufferGeometry) => {
 };
 
 // --- Parsers ---
-const parseOBJ = (text: string): THREE.BufferGeometry | null => {
+const parseOBJ = (text) => {
     const positions: number[] = [];
     const outputVertices: number[] = [];
     const lines = text.split(/\r\n|\n|\r/);
@@ -77,7 +76,7 @@ const parseOBJ = (text: string): THREE.BufferGeometry | null => {
     return normalizeGeometry(geometry);
 };
 
-const parseSTL = (buffer: ArrayBuffer): THREE.BufferGeometry | null => {
+const parseSTL = (buffer) => {
     const view = new DataView(buffer);
     const length = buffer.byteLength;
     if (length < 84) return null;
@@ -116,8 +115,8 @@ const parseSTL = (buffer: ArrayBuffer): THREE.BufferGeometry | null => {
 
 // --- Scene Components ---
 
-const CustomGeometry = ({ file }: { file: FileData }) => {
-    const [geometry, setGeometry] = useState<THREE.BufferGeometry | null>(null);
+const CustomGeometry = ({ file }) => {
+    const [geometry, setGeometry] = useState(null);
     const [error, setError] = useState(false);
     
     useEffect(() => {
@@ -127,7 +126,7 @@ const CustomGeometry = ({ file }: { file: FileData }) => {
             try {
                 const response = await fetch(file.previewUrl);
                 const buffer = await response.arrayBuffer();
-                let geom: THREE.BufferGeometry | null = null;
+                let geom = null;
                 if (file.name.toLowerCase().endsWith('.obj')) {
                     const text = new TextDecoder().decode(buffer);
                     geom = parseOBJ(text);
@@ -153,7 +152,7 @@ const CustomGeometry = ({ file }: { file: FileData }) => {
     );
 };
 
-const GltfModel = ({ url }: { url: string }) => {
+const GltfModel = ({ url }) => {
     const { scene } = useGLTF(url);
     const normalizedScene = useMemo(() => {
         const cloned = scene.clone();
@@ -179,7 +178,7 @@ const GltfModel = ({ url }: { url: string }) => {
     return <primitive object={normalizedScene} />;
 };
 
-const ModelLoader = ({ file }: { file: FileData | null }) => {
+const ModelLoader = ({ file }) => {
     useEffect(() => { return () => { if (file?.previewUrl) URL.revokeObjectURL(file.previewUrl); }; }, [file]);
     if (!file) return null;
     if (file.isExample) {
@@ -205,11 +204,11 @@ const ModelLoader = ({ file }: { file: FileData | null }) => {
 };
 
 // Replaced continous useFrame with a one-time useEffect animation
-const CameraController = ({ view }: { view: ViewPreset }) => {
+const CameraController = ({ view }) => {
   const { camera, controls } = useThree();
   
   useEffect(() => {
-    const positions: Record<ViewPreset, [number, number, number]> = {
+    const positions = {
       isometric: [5, 4, 5],
       front: [0, 0, 8],
       top: [0, 10, 0],
@@ -234,9 +233,7 @@ const CameraController = ({ view }: { view: ViewPreset }) => {
         camera.lookAt(0, 0, 0);
         
         if (controls) {
-            // @ts-ignore
             controls.target.set(0, 0, 0);
-            // @ts-ignore
             controls.update();
         }
 
@@ -252,7 +249,7 @@ const CameraController = ({ view }: { view: ViewPreset }) => {
   return null;
 };
 
-const SceneLights = ({ lighting, showShadows }: { lighting: LightingConfig, showShadows: boolean }) => {
+const SceneLights = ({ lighting, showShadows }) => {
     const rad = (lighting.rotation * Math.PI) / 180;
     const x = Math.sin(rad) * 8;
     const z = Math.cos(rad) * 8;
@@ -272,14 +269,14 @@ const SceneLights = ({ lighting, showShadows }: { lighting: LightingConfig, show
 
 // --- Capture Manager ---
 
-const CaptureManager = forwardRef(({ onCaptureFrame }: { onCaptureFrame: any }, ref) => {
+const CaptureManager = forwardRef(({ onCaptureFrame }, ref) => {
     const { gl, scene, camera } = useThree();
 
     // Hook into render loop to capture a frame if requested
     useImperativeHandle(ref, () => ({
         capture: async () => {
              // We rely on the parent component state to hide helpers, then we wait for a frame.
-             return new Promise<string>((resolve) => {
+             return new Promise((resolve) => {
                  // Force a render
                  gl.render(scene, camera);
                  requestAnimationFrame(() => {
@@ -296,7 +293,7 @@ const CaptureManager = forwardRef(({ onCaptureFrame }: { onCaptureFrame: any }, 
             const prevBg = scene.background;
             scene.background = null;
 
-            return new Promise<string>((resolve) => {
+            return new Promise((resolve) => {
                 gl.render(scene, camera);
                  requestAnimationFrame(() => {
                       gl.render(scene, camera);
@@ -314,24 +311,7 @@ const CaptureManager = forwardRef(({ onCaptureFrame }: { onCaptureFrame: any }, 
     return null;
 });
 
-export interface ThreeViewportRef {
-    capture: () => Promise<string>;
-    captureMask: () => Promise<string>;
-    setCapturing: (capturing: boolean) => void;
-}
-
-interface ThreeViewportProps {
-  view: ViewPreset;
-  mode: RenderStyle;
-  background: BackgroundConfig;
-  lighting: LightingConfig;
-  fileLoaded: boolean;
-  isExample: boolean;
-  showShadows: boolean;
-  file?: FileData | null;
-}
-
-export const ThreeViewport = forwardRef<ThreeViewportRef, ThreeViewportProps>(({ view, mode, background, lighting, fileLoaded, isExample, showShadows, file }, ref) => {
+export const ThreeViewport = forwardRef(({ view, mode, background, lighting, fileLoaded, isExample, showShadows, file }, ref) => {
   const managerRef = useRef<any>(null);
   const [capturing, setCapturing] = useState(false);
 

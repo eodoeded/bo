@@ -2,11 +2,7 @@ import React from 'react';
 import { Box, Settings, User, CreditCard, Plus } from 'lucide-react';
 import { Button } from './Button';
 
-interface HeaderProps {
-  credits: number;
-}
-
-export const Header: React.FC<HeaderProps> = ({ credits }) => {
+export const Header = ({ credits }) => {
   return (
     <header className="h-16 border-b border-gray-200 bg-white flex items-center justify-between px-6 shrink-0 z-30 relative">
       <div className="flex items-center gap-3">

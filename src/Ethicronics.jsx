@@ -120,7 +120,7 @@ const BlogCard = ({ title, desc, tag }) => (
                 {desc}
             </p>
             <span className="text-[#1C3F94] font-mono text-xs uppercase tracking-wider flex items-center gap-2 group-hover:gap-3 transition-all">
-                Read Post ->
+                Read Post →
             </span>
         </div>
     </div>

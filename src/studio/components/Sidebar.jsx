@@ -1,38 +1,7 @@
 import React from 'react';
 import { Upload, Monitor, Box, Layers, Maximize, Zap, Cpu, Image as ImageIcon, X, Palette, Grid as GridIcon, Sun, FileImage, RotateCw, ArrowUpCircle } from 'lucide-react';
 import { Button } from './Button';
-import { FileData, ViewPreset, BackgroundConfig, BackgroundMode, LightingConfig } from '../types';
-
-interface SidebarProps {
-  onUploadCAD: (file: FileData) => void;
-  onUploadReference: (file: FileData) => void;
-  onRemoveReference: () => void;
-  onLoadExample: () => void;
-  
-  cadFile: FileData | null;
-  referenceFile: FileData | null;
-  
-  currentView: ViewPreset;
-  onViewChange: (view: ViewPreset) => void;
-  
-  background: BackgroundConfig;
-  onBackgroundChange: (bg: BackgroundConfig) => void;
-  
-  lighting: LightingConfig;
-  onLightingChange: (light: LightingConfig) => void;
-
-  showShadows: boolean;
-  onToggleShadows: (show: boolean) => void;
-  
-  prompt: string;
-  onPromptChange: (text: string) => void;
-  
-  onGenerate: () => void;
-  isGenerating: boolean;
-  credits: number;
-}
-
-export const Sidebar: React.FC<SidebarProps> = ({ 
+export const Sidebar = ({ 
   onUploadCAD,
   onUploadReference,
   onRemoveReference,
@@ -54,7 +23,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   credits
 }) => {
   
-  const handleCadChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCadChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const f = e.target.files[0];
       const url = URL.createObjectURL(f);
@@ -71,7 +40,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     }
   };
 
-  const handleRefChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleRefChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const f = e.target.files[0];
       const url = URL.createObjectURL(f);
@@ -187,7 +156,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="mb-6">
             <label className="block text-xs font-medium text-gray-700 mb-2">Camera Angle</label>
             <div className="grid grid-cols-2 gap-2">
-            {(['isometric', 'front', 'top', 'side'] as ViewPreset[]).map((view) => (
+            {(['isometric', 'front', 'top', 'side']).map((view) => (
                 <button
                 key={view}
                 onClick={() => onViewChange(view)}
@@ -250,7 +219,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div className="mb-4">
              <label className="block text-xs font-medium text-gray-700 mb-2">Background</label>
              <div className="flex bg-gray-100 p-1 rounded-md mb-3">
-                {(['transparent', 'flat', 'gradient'] as BackgroundMode[]).map((mode) => (
+                {(['transparent', 'flat', 'gradient']).map((mode) => (
                     <button
                         key={mode}
                         onClick={() => onBackgroundChange({ ...background, mode })}
