@@ -9,6 +9,12 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  resolve: {
+    dedupe: ['react', 'react-dom'],
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom'],
+  },
   build: {
     rollupOptions: {
       input: {
@@ -19,6 +25,10 @@ export default defineConfig({
         carousel: resolve(__dirname, 'carousel.html'),
         studio: resolve(__dirname, 'studio.html'),
       },
+    },
+    commonjsOptions: {
+      include: [/node_modules/],
+      transformMixedEsModules: true,
     },
   },
 })
