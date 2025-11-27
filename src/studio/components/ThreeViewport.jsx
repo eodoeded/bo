@@ -209,9 +209,20 @@ const ModelLoader = ({ file }) => {
 
 // Replaced continous useFrame with a one-time useEffect animation
 const CameraController = ({ view }) => {
-  const { camera, controls } = useThree();
+  const { camera } = useThree();
+  const controlsRef = React.useRef(null);
   
   useEffect(() => {
+    // Get controls from the scene
+    const scene = camera.parent;
+    if (scene) {
+      scene.traverse((child) => {
+        if (child.type === 'OrbitControls' || child.isOrbitControls) {
+          controlsRef.current = child;
+        }
+      });
+    }
+    
     const positions = {
       isometric: [5, 4, 5],
       front: [0, 0, 8],
@@ -236,9 +247,12 @@ const CameraController = ({ view }) => {
         camera.position.lerpVectors(startPos, targetPos, ease);
         camera.lookAt(0, 0, 0);
         
-        if (controls) {
+        const controls = controlsRef.current;
+        if (controls && controls.target) {
             controls.target.set(0, 0, 0);
-            controls.update();
+            if (controls.update) {
+              controls.update();
+            }
         }
 
         if (t < 1) {
@@ -248,7 +262,7 @@ const CameraController = ({ view }) => {
     
     requestAnimationFrame(animate);
     
-  }, [view, camera, controls]); 
+  }, [view, camera]); 
 
   return null;
 };
@@ -316,7 +330,7 @@ const CaptureManager = forwardRef(({ onCaptureFrame }, ref) => {
 });
 
 export const ThreeViewport = forwardRef(({ view, mode, background, lighting, fileLoaded, isExample, showShadows, file }, ref) => {
-  const managerRef = useRef<any>(null);
+  const managerRef = useRef(null);
   const [capturing, setCapturing] = useState(false);
 
   useImperativeHandle(ref, () => ({
