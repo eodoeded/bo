@@ -11,9 +11,14 @@ export default defineConfig({
   ],
   resolve: {
     dedupe: ['react', 'react-dom'],
+    alias: {
+      'react': resolve(__dirname, 'node_modules/react'),
+      'react-dom': resolve(__dirname, 'node_modules/react-dom'),
+    },
   },
   optimizeDeps: {
-    include: ['react', 'react-dom'],
+    include: ['react', 'react-dom', 'react/jsx-runtime'],
+    force: true,
   },
   build: {
     rollupOptions: {
@@ -24,6 +29,16 @@ export default defineConfig({
         cards_animation: resolve(__dirname, 'cards_animation.html'),
         carousel: resolve(__dirname, 'carousel.html'),
         studio: resolve(__dirname, 'studio.html'),
+      },
+      output: {
+        manualChunks: (id) => {
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
+            return 'react-vendor';
+          }
+          if (id.includes('node_modules/@react-three')) {
+            return 'react-three-vendor';
+          }
+        },
       },
     },
     commonjsOptions: {
