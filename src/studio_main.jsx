@@ -14,8 +14,23 @@ function StudioApp() {
   )
 }
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <StudioApp />
-  </StrictMode>,
-)
+try {
+  const rootElement = document.getElementById('root');
+  if (!rootElement) {
+    throw new Error('Root element not found');
+  }
+  createRoot(rootElement).render(
+    <StrictMode>
+      <StudioApp />
+    </StrictMode>,
+  );
+} catch (error) {
+  console.error('Failed to render Studio app:', error);
+  document.body.innerHTML = `
+    <div style="padding: 20px; font-family: monospace;">
+      <h1>Error loading Studio</h1>
+      <p>${error.message}</p>
+      <pre>${error.stack}</pre>
+    </div>
+  `;
+}
