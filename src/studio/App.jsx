@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { ThreeViewport } from './components/ThreeViewport';
@@ -328,7 +328,7 @@ CRITICAL INSTRUCTIONS:
 
         const userPrompt = prompt || "High fidelity product render, industrial design style.";
 
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        const ai = new GoogleGenerativeAI(process.env.API_KEY || '');
         
         const parts = [
             { text: systemPrompt },
@@ -350,12 +350,13 @@ CRITICAL INSTRUCTIONS:
             });
         }
 
-        const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash-image',
-            contents: {
+        const model = ai.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
+        const result = await model.generateContent({
+            contents: [{
                 parts: parts
-            }
+            }]
         });
+        const response = await result.response;
 
         let generatedImageUrl = '';
         let errorText = '';
