@@ -17,6 +17,7 @@ export default defineConfig({
         animation: resolve(__dirname, 'animation.html'),
         cards_animation: resolve(__dirname, 'cards_animation.html'),
         carousel: resolve(__dirname, 'carousel.html'),
+        studio: resolve(__dirname, 'studio.html'),
       },
     },
   },
