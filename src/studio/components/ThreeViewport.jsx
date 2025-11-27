@@ -27,8 +27,8 @@ const normalizeGeometry = (geometry) => {
 
 // --- Parsers ---
 const parseOBJ = (text) => {
-    const positions: number[] = [];
-    const outputVertices: number[] = [];
+    const positions = [];
+    const outputVertices = [];
     const lines = text.split(/\r\n|\n|\r/);
     for (let i = 0; i < lines.length; i++) {
         let line = lines[i].trim();
@@ -43,7 +43,7 @@ const parseOBJ = (text) => {
             const z = parseFloat(parts[3]);
             if (!isNaN(x) && !isNaN(y) && !isNaN(z)) positions.push(x, y, z);
         } else if (type === 'f') {
-            const faceIndices: number[] = [];
+            const faceIndices = [];
             for (let j = 1; j < parts.length; j++) {
                 const part = parts[j];
                 if (!part) continue;
@@ -83,7 +83,7 @@ const parseSTL = (buffer) => {
     const triangleCount = view.getUint32(80, true);
     const expectedSize = 80 + 4 + (triangleCount * 50);
     const geometry = new THREE.BufferGeometry();
-    const vertices: number[] = [];
+    const vertices = [];
     if (Math.abs(expectedSize - length) < 100) {
         let offset = 84;
         for (let i = 0; i < triangleCount; i++) {
@@ -164,7 +164,7 @@ const GltfModel = ({ url }) => {
         box.getSize(size);
         const maxDim = Math.max(size.x, size.y, size.z);
         if (maxDim > 0) cloned.scale.multiplyScalar(4 / maxDim);
-        cloned.traverse((child: any) => {
+        cloned.traverse((child) => {
             if (child.isMesh) {
                 child.castShadow = true;
                 child.receiveShadow = true;
@@ -222,7 +222,7 @@ const CameraController = ({ view }) => {
     const startTime = performance.now();
     const duration = 800; // ms
 
-    const animate = (time: number) => {
+    const animate = (time) => {
         const elapsed = time - startTime;
         const t = Math.min(elapsed / duration, 1);
         
