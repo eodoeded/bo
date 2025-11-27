@@ -328,7 +328,7 @@ CRITICAL INSTRUCTIONS:
 
         const userPrompt = prompt || "High fidelity product render, industrial design style.";
 
-        const ai = new GoogleGenerativeAI(process.env.API_KEY || '');
+        const ai = new GoogleGenerativeAI(import.meta.env.VITE_API_KEY || '');
         
         const parts = [
             { text: systemPrompt },
