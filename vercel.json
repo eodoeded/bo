@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    {
+      "source": "/studio",
+      "destination": "/studio.html"
+    }
+  ]
+}
+
