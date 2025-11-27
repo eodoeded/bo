@@ -79,28 +79,48 @@ function StudioApp() {
   );
 }
 
+// Add a test element first to verify React is working
+console.log('Studio main script loaded');
+
 try {
   const rootElement = document.getElementById('root');
   if (!rootElement) {
     throw new Error('Root element not found');
   }
-  createRoot(rootElement).render(
+  
+  console.log('Root element found, rendering...');
+  
+  // Test render first
+  const testRoot = createRoot(rootElement);
+  console.log('React root created');
+  
+  testRoot.render(
     <StrictMode>
       <ErrorBoundary>
         <StudioApp />
       </ErrorBoundary>
     </StrictMode>,
   );
+  
+  console.log('React render called');
 } catch (error) {
   console.error('Failed to render Studio app:', error);
   const rootElement = document.getElementById('root');
   if (rootElement) {
     rootElement.innerHTML = `
-      <div style="padding: 20px; font-family: monospace; color: red; background: white; min-height: 100vh;">
+      <div style="padding: 20px; font-family: monospace; color: red; background: white; min-height: 100vh; z-index: 9999; position: relative;">
         <h1>Error loading Studio</h1>
         <p><strong>Error:</strong> ${error.message}</p>
         <pre style="background: #f0f0f0; padding: 10px; overflow: auto;">${error.stack}</pre>
-        <p>Check browser console for more details.</p>
+        <p>Check browser console (F12) for more details.</p>
+        <p>If you see this message, React is not working. Check the browser console for JavaScript errors.</p>
+      </div>
+    `;
+  } else {
+    document.body.innerHTML = `
+      <div style="padding: 20px; font-family: monospace; color: red; background: white; min-height: 100vh;">
+        <h1>Critical Error: Root element not found</h1>
+        <p>The &lt;div id="root"&gt; element is missing from the page.</p>
       </div>
     `;
   }
