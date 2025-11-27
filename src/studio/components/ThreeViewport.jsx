@@ -196,9 +196,13 @@ const ModelLoader = ({ file }) => {
         );
     }
     if (file.type.includes('IMAGE') || (file.data && file.data.type.startsWith('image/'))) {
-         return <DreiImage url={file.previewUrl!} transparent scale={[5, 5]} />;
+         if (!file.previewUrl) return null;
+         return <DreiImage url={file.previewUrl} transparent scale={[5, 5]} />;
     }
-    if (file.name.match(/\.(glb|gltf)$/i)) return <GltfModel url={file.previewUrl!} />;
+    if (file.name.match(/\.(glb|gltf)$/i)) {
+        if (!file.previewUrl) return null;
+        return <GltfModel url={file.previewUrl} />;
+    }
     if (file.name.match(/\.(obj|stl)$/i)) return <CustomGeometry file={file} />;
     return null;
 };
