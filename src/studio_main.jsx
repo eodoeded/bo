@@ -1,7 +1,6 @@
 import React, { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import App from './studio/App.jsx'
 
 if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
 window.scrollTo(0, 0);
@@ -10,7 +9,7 @@ window.scrollTo(0, 0);
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { hasError: false, error: null };
+    this.state = { hasError: false, error: null, errorInfo: null };
   }
 
   static getDerivedStateFromError(error) {
@@ -19,15 +18,19 @@ class ErrorBoundary extends React.Component {
 
   componentDidCatch(error, errorInfo) {
     console.error('Studio app error:', error, errorInfo);
+    this.setState({ errorInfo });
   }
 
   render() {
     if (this.state.hasError) {
       return (
-        <div style={{ padding: '20px', fontFamily: 'monospace', color: 'red' }}>
+        <div style={{ padding: '20px', fontFamily: 'monospace', color: 'red', background: 'white', minHeight: '100vh' }}>
           <h1>Error loading Studio</h1>
-          <p>{this.state.error?.message}</p>
-          <pre>{this.state.error?.stack}</pre>
+          <p><strong>Error:</strong> {this.state.error?.message}</p>
+          <pre style={{ background: '#f0f0f0', padding: '10px', overflow: 'auto' }}>{this.state.error?.stack}</pre>
+          {this.state.errorInfo && (
+            <pre style={{ background: '#f0f0f0', padding: '10px', overflow: 'auto' }}>{this.state.errorInfo.componentStack}</pre>
+          )}
         </div>
       );
     }
@@ -37,6 +40,38 @@ class ErrorBoundary extends React.Component {
 }
 
 function StudioApp() {
+  const [App, setApp] = React.useState(null);
+  const [loadingError, setLoadingError] = React.useState(null);
+
+  React.useEffect(() => {
+    import('./studio/App.jsx')
+      .then((module) => {
+        setApp(() => module.default);
+      })
+      .catch((error) => {
+        console.error('Failed to load App:', error);
+        setLoadingError(error);
+      });
+  }, []);
+
+  if (loadingError) {
+    return (
+      <div style={{ padding: '20px', fontFamily: 'monospace', color: 'red', background: 'white', minHeight: '100vh' }}>
+        <h1>Failed to load Studio App</h1>
+        <p><strong>Error:</strong> {loadingError.message}</p>
+        <pre style={{ background: '#f0f0f0', padding: '10px', overflow: 'auto' }}>{loadingError.stack}</pre>
+      </div>
+    );
+  }
+
+  if (!App) {
+    return (
+      <div style={{ padding: '20px', fontFamily: 'monospace', background: 'white', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div>Loading Studio...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-[#FAFAFA] min-h-screen w-full overflow-x-hidden">
       <App />
@@ -61,10 +96,10 @@ try {
   const rootElement = document.getElementById('root');
   if (rootElement) {
     rootElement.innerHTML = `
-      <div style="padding: 20px; font-family: monospace; color: red;">
+      <div style="padding: 20px; font-family: monospace; color: red; background: white; min-height: 100vh;">
         <h1>Error loading Studio</h1>
-        <p>${error.message}</p>
-        <pre>${error.stack}</pre>
+        <p><strong>Error:</strong> ${error.message}</p>
+        <pre style="background: #f0f0f0; padding: 10px; overflow: auto;">${error.stack}</pre>
         <p>Check browser console for more details.</p>
       </div>
     `;
