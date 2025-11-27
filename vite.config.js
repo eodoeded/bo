@@ -30,16 +30,6 @@ export default defineConfig({
         carousel: resolve(__dirname, 'carousel.html'),
         studio: resolve(__dirname, 'studio.html'),
       },
-      output: {
-        manualChunks: (id) => {
-          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
-            return 'react-vendor';
-          }
-          if (id.includes('node_modules/@react-three')) {
-            return 'react-three-vendor';
-          }
-        },
-      },
     },
     commonjsOptions: {
       include: [/node_modules/],
