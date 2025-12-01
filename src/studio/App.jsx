@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { ThreeViewport } from './components/ThreeViewport';
@@ -201,6 +202,7 @@ function App() {
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
   const [cadFile, setCadFile] = useState(null);
   const [referenceFile, setReferenceFile] = useState(null);
@@ -219,24 +221,47 @@ function App() {
   const [showShadows, setShowShadows] = useState(true);
   const [viewMode, setViewMode] = useState('realistic'); 
   
-  const [credits, setCredits] = useState(50);
+  const [credits, setCredits] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
   const [statusMessage, setStatusMessage] = useState('');
   const [assets, setAssets] = useState([]);
   
   const viewportRef = useRef(null);
 
+  // Simulate a database of users in localStorage
+  const getUserDB = () => {
+      const db = localStorage.getItem('bo_users_db');
+      return db ? JSON.parse(db) : {};
+  };
+
+  const saveUserDB = (db) => {
+      localStorage.setItem('bo_users_db', JSON.stringify(db));
+  };
+
   // Check auth on mount
   useEffect(() => {
       const auth = localStorage.getItem('bo_studio_auth');
       if (auth === 'true') {
-          setIsAuthenticated(true);
-          const user = localStorage.getItem('bo_studio_user');
-          if (user) {
+          const userStr = localStorage.getItem('bo_studio_user');
+          if (userStr) {
               try {
-                  const parsed = JSON.parse(user);
-                  if (parsed.credits !== undefined) {
-                      setCredits(parsed.credits);
+                  const user = JSON.parse(userStr);
+                  
+                  // Sync with DB
+                  const db = getUserDB();
+                  if (user.googleId && db[user.googleId]) {
+                      setCredits(db[user.googleId].credits);
+                      setCurrentUser(user);
+                      setIsAuthenticated(true);
+                  } else if (user.googleId) {
+                      // Recover if DB was wiped but local session exists
+                      // Initialize as new user logic
+                       const newUserEntry = { ...user, credits: 5 };
+                       db[user.googleId] = newUserEntry;
+                       saveUserDB(db);
+                       setCredits(5);
+                       setCurrentUser(user);
+                       setIsAuthenticated(true);
                   }
               } catch (e) {
                   console.error("Failed to parse user data", e);
@@ -246,19 +271,37 @@ function App() {
       setIsCheckingAuth(false);
   }, []);
 
-  // Persist credits when they change
+  // Persist credits to DB when they change
   useEffect(() => {
-      if (isAuthenticated) {
-          const user = localStorage.getItem('bo_studio_user');
-          if (user) {
-              try {
-                  const parsed = JSON.parse(user);
-                  parsed.credits = credits;
-                  localStorage.setItem('bo_studio_user', JSON.stringify(parsed));
-              } catch (e) { /* ignore */ }
+      if (isAuthenticated && currentUser && currentUser.googleId) {
+          const db = getUserDB();
+          if (db[currentUser.googleId]) {
+              db[currentUser.googleId].credits = credits;
+              saveUserDB(db);
           }
       }
-  }, [credits, isAuthenticated]);
+  }, [credits, isAuthenticated, currentUser]);
+
+  const handleLogin = (userData) => {
+      const db = getUserDB();
+      let userEntry = db[userData.googleId];
+
+      if (!userEntry) {
+          // NEW USER: Grant 5 free credits
+          userEntry = { ...userData, credits: 5, joinedAt: Date.now() };
+          db[userData.googleId] = userEntry;
+          saveUserDB(db);
+      }
+
+      // Set state from DB
+      setCurrentUser(userData);
+      setCredits(userEntry.credits);
+      
+      // Persist session
+      localStorage.setItem('bo_studio_user', JSON.stringify(userData));
+      localStorage.setItem('bo_studio_auth', 'true');
+      setIsAuthenticated(true);
+  };
 
   const handleUploadCAD = (file) => {
     setCadFile(file);
@@ -485,18 +528,11 @@ CRITICAL INSTRUCTIONS:
   if (isCheckingAuth) return null;
 
   if (!isAuthenticated) {
+       const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "1234567890-placeholder.apps.googleusercontent.com";
       return (
-        <LoginOverlay onLogin={(userData) => {
-            // Store basic user data if available
-            if (userData) {
-                localStorage.setItem('bo_studio_user', JSON.stringify(userData));
-                if (userData.credits !== undefined) {
-                    setCredits(userData.credits);
-                }
-            }
-            setIsAuthenticated(true);
-            localStorage.setItem('bo_studio_auth', 'true');
-        }} />
+        <GoogleOAuthProvider clientId={CLIENT_ID}>
+            <LoginOverlay onLogin={handleLogin} />
+        </GoogleOAuthProvider>
       );
   }
 
