@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Upload, Monitor, Box, Layers, Maximize, Zap, Cpu, Image as ImageIcon, X, Sun, RotateCw } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useGoogleLogin } from '@react-oauth/google';
 
 export const Sidebar = ({ 
   onUploadCAD,
@@ -21,9 +22,46 @@ export const Sidebar = ({
   onPromptChange,
   onGenerate,
   isGenerating,
-  credits
+  credits,
+  isAuthenticated,
+  onLogin
 }) => {
   
+  const [isLoginLoading, setIsLoginLoading] = useState(false);
+
+  const login = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      setIsLoginLoading(true);
+      try {
+        const userInfoResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        });
+        
+        if (!userInfoResponse.ok) {
+            throw new Error('Failed to fetch user info');
+        }
+
+        const userInfo = await userInfoResponse.json();
+        
+        onLogin({
+            name: userInfo.name,
+            email: userInfo.email,
+            avatar: userInfo.picture,
+            googleId: userInfo.sub
+        });
+      } catch (err) {
+        console.error("Login details fetch failed", err);
+        alert("Failed to log in");
+      } finally {
+        setIsLoginLoading(false);
+      }
+    },
+    onError: (errorResponse) => {
+        console.error("Google Login Failed", errorResponse);
+        setIsLoginLoading(false);
+    }
+  });
+
   const handleCadChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       const f = e.target.files[0];
@@ -220,39 +258,68 @@ export const Sidebar = ({
         </div>
       </div>
 
-      {/* Generate Action */}
+      {/* Action Area (Login or Generate) */}
       <div className="p-6 border-t border-white/5 bg-[#12110d]">
-        <motion.button
-            type="button"
-            initial="rest"
-            animate="rest"
-            whileHover={(!isReady || isGenerating || !hasEnoughCredits) ? "rest" : "hover"}
-            whileTap={(!isReady || isGenerating || !hasEnoughCredits) ? "rest" : "hover"}
-            onClick={onGenerate}
-            disabled={!isReady || isGenerating || !hasEnoughCredits}
-            variants={{ rest: { color: "#E3E3FD", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }, hover: { color: "#FFFFFF", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } } }}
-            className={`
-              group w-full font-inter-light text-[#E3E3FD] text-[14px]
-              bg-[#3B3B3B] cursor-pointer
-              border-[1px] border-[#FFFFFF4D]
-              backdrop-blur-[6.5px]
-              px-[16px] py-[10px]
-              flex items-center justify-center
-              disabled:opacity-50 disabled:cursor-not-allowed
-            `}
-          >
-            {isGenerating 
-                ? 'Generating...' 
-                : !hasEnoughCredits 
-                    ? `Insufficient Credits (${credits}/${COST_PER_GENERATION})` 
-                    : !isReady 
-                        ? 'Setup Required' 
-                        : `Generate (-${COST_PER_GENERATION} Credits)`}
-            
-            {!isGenerating && isReady && hasEnoughCredits && (
-                <motion.span variants={{ rest: { x: 0, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }, hover: { x: 4, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } } }} className="ml-2 inline-block">→</motion.span>
-            )}
-          </motion.button>
+        {!isAuthenticated ? (
+            <motion.button
+                type="button"
+                initial="rest"
+                animate="rest"
+                whileHover="hover"
+                whileTap="hover"
+                onClick={() => login()}
+                disabled={isLoginLoading}
+                variants={{ rest: { color: "#E3E3FD", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }, hover: { color: "#FFFFFF", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } } }}
+                className={`
+                  group w-full font-inter-light text-[#E3E3FD] text-[14px]
+                  bg-[#3B3B3B] cursor-pointer
+                  border-[1px] border-[#FFFFFF4D]
+                  backdrop-blur-[6.5px]
+                  px-[16px] py-[10px]
+                  flex items-center justify-center gap-3
+                  disabled:opacity-50 disabled:cursor-wait
+                `}
+            >
+                {isLoginLoading ? (
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                ) : (
+                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-4 h-4 grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all" alt="Google" />
+                )}
+                <span>{isLoginLoading ? 'Connecting...' : 'Sign in to Generate'}</span>
+            </motion.button>
+        ) : (
+            <motion.button
+                type="button"
+                initial="rest"
+                animate="rest"
+                whileHover={(!isReady || isGenerating || !hasEnoughCredits) ? "rest" : "hover"}
+                whileTap={(!isReady || isGenerating || !hasEnoughCredits) ? "rest" : "hover"}
+                onClick={onGenerate}
+                disabled={!isReady || isGenerating || !hasEnoughCredits}
+                variants={{ rest: { color: "#E3E3FD", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }, hover: { color: "#FFFFFF", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } } }}
+                className={`
+                  group w-full font-inter-light text-[#E3E3FD] text-[14px]
+                  bg-[#3B3B3B] cursor-pointer
+                  border-[1px] border-[#FFFFFF4D]
+                  backdrop-blur-[6.5px]
+                  px-[16px] py-[10px]
+                  flex items-center justify-center
+                  disabled:opacity-50 disabled:cursor-not-allowed
+                `}
+              >
+                {isGenerating 
+                    ? 'Generating...' 
+                    : !hasEnoughCredits 
+                        ? `Insufficient Credits (${credits}/${COST_PER_GENERATION})` 
+                        : !isReady 
+                            ? 'Setup Required' 
+                            : `Generate (-${COST_PER_GENERATION} Credits)`}
+                
+                {!isGenerating && isReady && hasEnoughCredits && (
+                    <motion.span variants={{ rest: { x: 0, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }, hover: { x: 4, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } } }} className="ml-2 inline-block">→</motion.span>
+                )}
+              </motion.button>
+        )}
       </div>
     </aside>
   );

@@ -5,7 +5,6 @@ import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { ThreeViewport } from './components/ThreeViewport';
 import { AssetGallery } from './components/AssetGallery';
-import { LoginOverlay } from './components/LoginOverlay';
 import { SettingsModal } from './components/SettingsModal';
 import { PaymentModal } from './components/PaymentModal';
 import { AlertTriangle } from 'lucide-react';
@@ -526,120 +525,119 @@ CRITICAL INSTRUCTIONS:
     }
   };
 
+  const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
   if (isCheckingAuth) return null;
 
-  if (!isAuthenticated) {
-       const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-       
-       if (!CLIENT_ID || CLIENT_ID.includes("placeholder")) {
-           return (
-               <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#12110d] overflow-hidden font-inter-light p-6">
-                   <div className="max-w-md w-full bg-[#1C1A14] border border-red-500/30 p-8 rounded-sm text-center flex flex-col items-center">
-                       <div className="w-12 h-12 bg-red-500/10 text-red-400 rounded-full flex items-center justify-center mb-6">
-                           <AlertTriangle size={24} />
-                       </div>
-                       <h2 className="text-xl text-[#E3E3FD] mb-2 font-medium">Configuration Required</h2>
-                       <p className="text-[#E3E3FD]/60 text-sm mb-6 leading-relaxed">
-                           Google OAuth is enabled but no valid Client ID was found.
-                       </p>
-                       <div className="bg-black/30 border border-white/10 rounded p-4 w-full text-left mb-6">
-                           <p className="text-xs text-[#E3E3FD]/40 font-mono mb-2 uppercase tracking-wider">Action Required</p>
-                           <p className="text-xs text-[#E3E3FD]/80 mb-2">Add this to your Vercel Environment Variables:</p>
-                           <code className="block bg-black p-2 rounded border border-white/5 text-[#E3E3FD] font-mono text-xs break-all">
-                               VITE_GOOGLE_CLIENT_ID=your_client_id_here
-                           </code>
-                       </div>
-                       <button 
-                           onClick={() => window.location.reload()}
-                           className="px-6 py-2 bg-[#3B3B3B] text-[#E3E3FD] text-sm rounded-sm hover:bg-white/10 transition-colors"
-                       >
-                           Reload Page
-                       </button>
+  // Render config error if missing client ID
+  if (!CLIENT_ID || CLIENT_ID.includes("placeholder")) {
+       return (
+           <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#12110d] overflow-hidden font-inter-light p-6">
+               <div className="max-w-md w-full bg-[#1C1A14] border border-red-500/30 p-8 rounded-sm text-center flex flex-col items-center">
+                   <div className="w-12 h-12 bg-red-500/10 text-red-400 rounded-full flex items-center justify-center mb-6">
+                       <AlertTriangle size={24} />
                    </div>
+                   <h2 className="text-xl text-[#E3E3FD] mb-2 font-medium">Configuration Required</h2>
+                   <p className="text-[#E3E3FD]/60 text-sm mb-6 leading-relaxed">
+                       Google OAuth is enabled but no valid Client ID was found.
+                   </p>
+                   <div className="bg-black/30 border border-white/10 rounded p-4 w-full text-left mb-6">
+                       <p className="text-xs text-[#E3E3FD]/40 font-mono mb-2 uppercase tracking-wider">Action Required</p>
+                       <p className="text-xs text-[#E3E3FD]/80 mb-2">Add this to your Vercel Environment Variables:</p>
+                       <code className="block bg-black p-2 rounded border border-white/5 text-[#E3E3FD] font-mono text-xs break-all">
+                           VITE_GOOGLE_CLIENT_ID=your_client_id_here
+                       </code>
+                   </div>
+                   <button 
+                       onClick={() => window.location.reload()}
+                       className="px-6 py-2 bg-[#3B3B3B] text-[#E3E3FD] text-sm rounded-sm hover:bg-white/10 transition-colors"
+                   >
+                       Reload Page
+                   </button>
                </div>
-           );
-       }
-
-      return (
-        <GoogleOAuthProvider clientId={CLIENT_ID}>
-            <LoginOverlay onLogin={handleLogin} />
-        </GoogleOAuthProvider>
-      );
+           </div>
+       );
   }
 
+  // Always render the full studio UI, wrapped in GoogleOAuthProvider
   return (
-    <div className="flex flex-col h-screen bg-[#12110d] text-white overflow-hidden font-inter-light">
-      <Header 
-        credits={credits} 
-        onOpenSettings={() => setIsSettingsOpen(true)}
-        onTopUp={() => setIsPaymentOpen(true)}
-      />
-      
-      <SettingsModal 
-        isOpen={isSettingsOpen} 
-        onClose={() => setIsSettingsOpen(false)} 
-      />
+    <GoogleOAuthProvider clientId={CLIENT_ID}>
+        <div className="flex flex-col h-screen bg-[#12110d] text-white overflow-hidden font-inter-light">
+          <Header 
+            credits={credits} 
+            isAuthenticated={isAuthenticated}
+            onOpenSettings={() => setIsSettingsOpen(true)}
+            onTopUp={() => setIsPaymentOpen(true)}
+          />
+          
+          <SettingsModal 
+            isOpen={isSettingsOpen} 
+            onClose={() => setIsSettingsOpen(false)} 
+          />
 
-      <PaymentModal
-        isOpen={isPaymentOpen}
-        onClose={() => setIsPaymentOpen(false)}
-        onComplete={(amount) => {
-            setCredits(prev => prev + amount);
-            // Keep modal open for a moment to show success state handled within modal
-            setTimeout(() => setIsPaymentOpen(false), 2000);
-        }}
-      />
-      
-      <main className="flex flex-1 overflow-hidden">
-        <div className="flex-none z-20 shadow-[4px_0_24px_rgba(0,0,0,0.3)]">
-            <Sidebar 
-                onUploadCAD={handleUploadCAD} 
-                onUploadReference={handleUploadRef}
-                onRemoveReference={() => setReferenceFile(null)}
-                onLoadExample={handleLoadExample}
-                cadFile={cadFile}
-                referenceFile={referenceFile}
-                currentView={currentView}
-                onViewChange={setCurrentView}
-                background={background}
-                onBackgroundChange={setBackground}
-                showShadows={showShadows}
-                onToggleShadows={setShowShadows}
-                lighting={lighting}
-                onLightingChange={setLighting}
-                prompt={prompt}
-                onPromptChange={setPrompt}
-                onGenerate={handleGenerate}
-                isGenerating={isGenerating}
-                credits={credits}
-            />
-        </div>
+          <PaymentModal
+            isOpen={isPaymentOpen}
+            onClose={() => setIsPaymentOpen(false)}
+            onComplete={(amount) => {
+                setCredits(prev => prev + amount);
+                // Keep modal open for a moment to show success state handled within modal
+                setTimeout(() => setIsPaymentOpen(false), 2000);
+            }}
+          />
+          
+          <main className="flex flex-1 overflow-hidden">
+            <div className="flex-none z-20 shadow-[4px_0_24px_rgba(0,0,0,0.3)]">
+                <Sidebar 
+                    onUploadCAD={handleUploadCAD} 
+                    onUploadReference={handleUploadRef}
+                    onRemoveReference={() => setReferenceFile(null)}
+                    onLoadExample={handleLoadExample}
+                    cadFile={cadFile}
+                    referenceFile={referenceFile}
+                    currentView={currentView}
+                    onViewChange={setCurrentView}
+                    background={background}
+                    onBackgroundChange={setBackground}
+                    showShadows={showShadows}
+                    onToggleShadows={setShowShadows}
+                    lighting={lighting}
+                    onLightingChange={setLighting}
+                    prompt={prompt}
+                    onPromptChange={setPrompt}
+                    onGenerate={handleGenerate}
+                    isGenerating={isGenerating}
+                    credits={credits}
+                    isAuthenticated={isAuthenticated}
+                    onLogin={handleLogin}
+                />
+            </div>
 
-        <div className="flex-1 relative z-10 bg-[#1C1A14]">
-            <ThreeViewport 
-                ref={viewportRef}
-                view={currentView} 
-                mode={viewMode}
-                background={background}
-                showShadows={showShadows}
-                lighting={lighting}
-                fileLoaded={!!cadFile}
-                isExample={!!cadFile?.isExample}
-                file={cadFile}
-            />
-            {isGenerating && statusMessage && (
-                <div className="absolute top-6 left-1/2 transform -translate-x-1/2 bg-[#1C1A14]/90 backdrop-blur border border-white/10 px-4 py-2 rounded-full shadow-lg z-50 flex items-center gap-3">
-                    <div className="w-3 h-3 rounded-full border-2 border-[#E3E3FD] border-t-transparent animate-spin"></div>
-                    <span className="text-[10px] font-mono font-medium text-[#E3E3FD] uppercase tracking-wider">{statusMessage}</span>
-                </div>
-            )}
-        </div>
+            <div className="flex-1 relative z-10 bg-[#1C1A14]">
+                <ThreeViewport 
+                    ref={viewportRef}
+                    view={currentView} 
+                    mode={viewMode}
+                    background={background}
+                    showShadows={showShadows}
+                    lighting={lighting}
+                    fileLoaded={!!cadFile}
+                    isExample={!!cadFile?.isExample}
+                    file={cadFile}
+                />
+                {isGenerating && statusMessage && (
+                    <div className="absolute top-6 left-1/2 transform -translate-x-1/2 bg-[#1C1A14]/90 backdrop-blur border border-white/10 px-4 py-2 rounded-full shadow-lg z-50 flex items-center gap-3">
+                        <div className="w-3 h-3 rounded-full border-2 border-[#E3E3FD] border-t-transparent animate-spin"></div>
+                        <span className="text-[10px] font-mono font-medium text-[#E3E3FD] uppercase tracking-wider">{statusMessage}</span>
+                    </div>
+                )}
+            </div>
 
-        <div className="w-96 border-l border-white/10 bg-[#12110d] flex-none z-20 overflow-hidden">
-            <AssetGallery assets={assets} onDownload={handleDownload} />
+            <div className="w-96 border-l border-white/10 bg-[#12110d] flex-none z-20 overflow-hidden">
+                <AssetGallery assets={assets} onDownload={handleDownload} />
+            </div>
+          </main>
         </div>
-      </main>
-    </div>
+    </GoogleOAuthProvider>
   );
 }
 
