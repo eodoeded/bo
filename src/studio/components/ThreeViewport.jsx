@@ -355,9 +355,10 @@ export const ThreeViewport = forwardRef(({ view, mode, background, lighting, fil
   const getContainerStyle = () => {
       if (background.mode === 'transparent') {
            return { 
-               backgroundImage: 'linear-gradient(45deg, #f0f0f0 25%, transparent 25%, transparent 75%, #f0f0f0 75%, #f0f0f0), linear-gradient(45deg, #f0f0f0 25%, transparent 25%, transparent 75%, #f0f0f0 75%, #f0f0f0)', 
+               backgroundImage: 'linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.05) 75%, rgba(255,255,255,0.05)), linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.05) 75%, rgba(255,255,255,0.05))', 
                backgroundSize: '20px 20px', 
-               backgroundPosition: '0 0, 10px 10px' 
+               backgroundPosition: '0 0, 10px 10px',
+               backgroundColor: '#12110d'
            };
       }
       if (background.mode === 'flat') return { backgroundColor: background.color1 };
@@ -367,10 +368,10 @@ export const ThreeViewport = forwardRef(({ view, mode, background, lighting, fil
 
   if (!fileLoaded) {
     return (
-      <div className="w-full h-full flex items-center justify-center bg-gray-50 text-gray-400 font-mono text-sm border-2 border-dashed border-gray-200 m-4 rounded-lg select-none">
+      <div className="w-full h-full flex items-center justify-center bg-[#1C1A14] text-[#E3E3FD]/40 font-mono text-xs border border-white/5 m-0 select-none">
         <div className="flex flex-col items-center gap-2">
-            <span className="font-bold text-gray-300 text-xl">EMPTY VIEWPORT</span>
-            <span className="text-xs text-gray-400">Upload geometry to begin</span>
+            <span className="font-inter-light text-[#E3E3FD]/60 tracking-widest uppercase text-sm">Viewport Empty</span>
+            <span className="text-[10px] font-mono text-[#E3E3FD]/30">Drag & drop geometry to begin</span>
         </div>
       </div>
     );
@@ -391,9 +392,13 @@ export const ThreeViewport = forwardRef(({ view, mode, background, lighting, fil
         {/* CONDITIONALLY RENDER HELPERS BASED ON CAPTURING STATE */}
         {!capturing && (
             <group>
-                <gridHelper args={[20, 20, 0xe5e5e5, 0xf0f0f0]} position={[0, -2.1, 0]} />
+                <gridHelper args={[20, 20, 0x404040, 0x202020]} position={[0, -2.1, 0]} />
                 <GizmoHelper alignment="bottom-right" margin={[80, 80]}>
-                    <GizmoViewport axisColors={['#9d4b4b', '#2f7f4f', '#3b5b9d']} labelColor="black" />
+                    <GizmoViewport 
+                        axisColors={['#3B3B3B', '#3B3B3B', '#3B3B3B']} 
+                        labelColor="#E3E3FD"
+                        hideNegativeAxes={true}
+                    />
                 </GizmoHelper>
             </group>
         )}
@@ -407,9 +412,9 @@ export const ThreeViewport = forwardRef(({ view, mode, background, lighting, fil
         <OrbitControls makeDefault />
       </Canvas>
       
-      <div className={`absolute bottom-6 left-6 z-20 font-mono text-xs select-none text-gray-400`}>
-         <p className="opacity-50 uppercase">VIEW: {view}</p>
-         <p className="opacity-50 uppercase mt-1">BG: {background.mode}</p>
+      <div className={`absolute bottom-6 left-6 z-20 font-mono text-[10px] select-none text-[#E3E3FD]/40`}>
+         <p className="opacity-50 uppercase tracking-wider">VIEW: {view}</p>
+         <p className="opacity-50 uppercase mt-1 tracking-wider">BG: {background.mode}</p>
       </div>
     </div>
   );
