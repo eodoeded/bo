@@ -202,11 +202,14 @@ function App() {
   
   const [currentView, setCurrentView] = useState('isometric');
   
-  // Default Background: Vertical Gradient, Darker Theme
+  // Default Background: Vertical Gradient, Matching Landing Page
+  // Landing page uses: linear-gradient(180deg, #12110D 0%, #22201A 100%)
+  // Three.js gradient logic here is Bottom -> Top
+  // So color1 (bottom) should be #22201A, color2 (top) should be #12110D
   const [background, setBackground] = useState({ 
       mode: 'gradient', 
-      color1: '#12110d', 
-      color2: '#2c2a24' 
+      color1: '#22201A', 
+      color2: '#12110D' 
   });
 
   const [lighting, setLighting] = useState({ rotation: 45, elevation: 45, intensity: 1.2 });
