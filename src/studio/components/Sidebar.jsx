@@ -57,6 +57,8 @@ export const Sidebar = ({
   };
 
   const isReady = cadFile && (!!referenceFile || prompt.length > 2);
+  const COST_PER_GENERATION = 5;
+  const hasEnoughCredits = credits >= COST_PER_GENERATION;
 
   return (
     <aside className="w-80 bg-[#12110d] border-r border-white/5 flex flex-col h-[calc(100vh-64px)] overflow-y-auto font-inter-light text-[#E3E3FD]">
@@ -224,10 +226,10 @@ export const Sidebar = ({
             type="button"
             initial="rest"
             animate="rest"
-            whileHover={(!isReady || isGenerating || credits < 1) ? "rest" : "hover"}
-            whileTap={(!isReady || isGenerating || credits < 1) ? "rest" : "hover"}
+            whileHover={(!isReady || isGenerating || !hasEnoughCredits) ? "rest" : "hover"}
+            whileTap={(!isReady || isGenerating || !hasEnoughCredits) ? "rest" : "hover"}
             onClick={onGenerate}
-            disabled={!isReady || isGenerating || credits < 1}
+            disabled={!isReady || isGenerating || !hasEnoughCredits}
             variants={{ rest: { color: "#E3E3FD", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }, hover: { color: "#FFFFFF", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } } }}
             className={`
               group w-full font-inter-light text-[#E3E3FD] text-[14px]
@@ -239,8 +241,15 @@ export const Sidebar = ({
               disabled:opacity-50 disabled:cursor-not-allowed
             `}
           >
-            {isGenerating ? 'Generating...' : !isReady ? 'Setup Required' : `Generate`}
-            {!isGenerating && isReady && (
+            {isGenerating 
+                ? 'Generating...' 
+                : !hasEnoughCredits 
+                    ? `Insufficient Credits (${credits}/${COST_PER_GENERATION})` 
+                    : !isReady 
+                        ? 'Setup Required' 
+                        : `Generate (-${COST_PER_GENERATION} Credits)`}
+            
+            {!isGenerating && isReady && hasEnoughCredits && (
                 <motion.span variants={{ rest: { x: 0, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }, hover: { x: 4, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } } }} className="ml-2 inline-block">→</motion.span>
             )}
           </motion.button>

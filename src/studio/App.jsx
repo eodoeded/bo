@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { ThreeViewport } from './components/ThreeViewport';
 import { AssetGallery } from './components/AssetGallery';
 import { LoginOverlay } from './components/LoginOverlay';
 import { SettingsModal } from './components/SettingsModal';
+import { PaymentModal } from './components/PaymentModal';
 
 // Helper to convert blob/file to Base64
 const fileToBase64 = (file) => {
@@ -200,6 +200,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false);
 
   const [cadFile, setCadFile] = useState(null);
   const [referenceFile, setReferenceFile] = useState(null);
@@ -230,9 +231,34 @@ function App() {
       const auth = localStorage.getItem('bo_studio_auth');
       if (auth === 'true') {
           setIsAuthenticated(true);
+          const user = localStorage.getItem('bo_studio_user');
+          if (user) {
+              try {
+                  const parsed = JSON.parse(user);
+                  if (parsed.credits !== undefined) {
+                      setCredits(parsed.credits);
+                  }
+              } catch (e) {
+                  console.error("Failed to parse user data", e);
+              }
+          }
       }
       setIsCheckingAuth(false);
   }, []);
+
+  // Persist credits when they change
+  useEffect(() => {
+      if (isAuthenticated) {
+          const user = localStorage.getItem('bo_studio_user');
+          if (user) {
+              try {
+                  const parsed = JSON.parse(user);
+                  parsed.credits = credits;
+                  localStorage.setItem('bo_studio_user', JSON.stringify(parsed));
+              } catch (e) { /* ignore */ }
+          }
+      }
+  }, [credits, isAuthenticated]);
 
   const handleUploadCAD = (file) => {
     setCadFile(file);
@@ -265,13 +291,14 @@ function App() {
   };
 
   const handleGenerate = async () => {
+    const COST = 5;
     if (!cadFile || (!referenceFile && prompt.length < 2)) return;
-    if (credits < 1) {
-        alert("Insufficient credits. Please top up.");
+    if (credits < COST) {
+        setIsPaymentOpen(true);
         return;
     }
 
-    setCredits(prev => prev - 1);
+    setCredits(prev => prev - COST);
     setIsGenerating(true);
     setStatusMessage('Capturing geometry...');
 
@@ -448,7 +475,7 @@ CRITICAL INSTRUCTIONS:
             }
             return a;
         }));
-        setCredits(prev => prev + 1);
+        setCredits(prev => prev + 5); // Refund
     } finally {
         setIsGenerating(false);
         setStatusMessage('');
@@ -458,21 +485,18 @@ CRITICAL INSTRUCTIONS:
   if (isCheckingAuth) return null;
 
   if (!isAuthenticated) {
-      // Provide a valid-looking but potentially dummy Client ID if the env var is missing
-      // This allows the UI to render even if the auth flow fails
-      const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "1234567890-placeholder.apps.googleusercontent.com";
-      
       return (
-        <GoogleOAuthProvider clientId={CLIENT_ID}>
-            <LoginOverlay onLogin={(userData) => {
-                // Store basic user data if available
-                if (userData) {
-                    localStorage.setItem('bo_studio_user', JSON.stringify(userData));
+        <LoginOverlay onLogin={(userData) => {
+            // Store basic user data if available
+            if (userData) {
+                localStorage.setItem('bo_studio_user', JSON.stringify(userData));
+                if (userData.credits !== undefined) {
+                    setCredits(userData.credits);
                 }
-                setIsAuthenticated(true);
-                localStorage.setItem('bo_studio_auth', 'true');
-            }} />
-        </GoogleOAuthProvider>
+            }
+            setIsAuthenticated(true);
+            localStorage.setItem('bo_studio_auth', 'true');
+        }} />
       );
   }
 
@@ -481,11 +505,22 @@ CRITICAL INSTRUCTIONS:
       <Header 
         credits={credits} 
         onOpenSettings={() => setIsSettingsOpen(true)}
+        onTopUp={() => setIsPaymentOpen(true)}
       />
       
       <SettingsModal 
         isOpen={isSettingsOpen} 
         onClose={() => setIsSettingsOpen(false)} 
+      />
+
+      <PaymentModal
+        isOpen={isPaymentOpen}
+        onClose={() => setIsPaymentOpen(false)}
+        onComplete={(amount) => {
+            setCredits(prev => prev + amount);
+            // Keep modal open for a moment to show success state handled within modal
+            setTimeout(() => setIsPaymentOpen(false), 2000);
+        }}
       />
       
       <main className="flex flex-1 overflow-hidden">

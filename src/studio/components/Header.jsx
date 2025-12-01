@@ -2,7 +2,7 @@ import React from 'react';
 import { Settings, Plus } from 'lucide-react';
 import { Button } from './Button';
 
-export const Header = ({ credits, onOpenSettings }) => {
+export const Header = ({ credits, onOpenSettings, onTopUp }) => {
   return (
     <header className="h-16 border-b border-white/5 bg-[#12110d] flex items-center justify-between px-6 shrink-0 z-30 relative">
       <div className="flex items-center gap-3">
@@ -17,7 +17,10 @@ export const Header = ({ credits, onOpenSettings }) => {
            <span className="text-[10px] text-[#E3E3FD]/40 font-mono uppercase tracking-widest">Credits</span>
            <div className="flex items-center gap-2 px-2 py-1 rounded-sm bg-white/5 border border-white/10">
              <span className="text-xs font-mono text-[#E3E3FD]">{credits}</span>
-             <button className="text-[#E3E3FD]/40 hover:text-[#E3E3FD] transition-colors">
+             <button 
+                onClick={onTopUp}
+                className="text-[#E3E3FD]/40 hover:text-[#E3E3FD] transition-colors cursor-pointer"
+             >
                 <Plus size={10} />
              </button>
            </div>
