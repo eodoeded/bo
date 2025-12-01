@@ -1,34 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Upload, Monitor, Box, Layers, Maximize, Zap, Cpu, Image as ImageIcon, X, Sun, RotateCw } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useGoogleLogin } from '@react-oauth/google';
 
-export const Sidebar = ({ 
-  onUploadCAD,
-  onUploadReference,
-  onRemoveReference,
-  onLoadExample,
-  cadFile, 
-  referenceFile,
-  currentView, 
-  onViewChange,
-  background,
-  onBackgroundChange,
-  lighting,
-  onLightingChange,
-  showShadows,
-  onToggleShadows,
-  prompt,
-  onPromptChange,
-  onGenerate,
-  isGenerating,
-  credits,
-  isAuthenticated,
-  onLogin
-}) => {
-  
-  const [isLoginLoading, setIsLoginLoading] = useState(false);
-
+// Component for the Google Auth button logic
+const LoginButton = ({ onLogin, isLoginLoading, setIsLoginLoading }) => {
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       setIsLoginLoading(true);
@@ -61,6 +37,63 @@ export const Sidebar = ({
         setIsLoginLoading(false);
     }
   });
+
+  return (
+    <motion.button
+        type="button"
+        initial="rest"
+        animate="rest"
+        whileHover="hover"
+        whileTap="hover"
+        onClick={() => login()}
+        disabled={isLoginLoading}
+        variants={{ rest: { color: "#E3E3FD", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }, hover: { color: "#FFFFFF", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } } }}
+        className={`
+          group w-full font-inter-light text-[#E3E3FD] text-[14px]
+          bg-[#3B3B3B] cursor-pointer
+          border-[1px] border-[#FFFFFF4D]
+          backdrop-blur-[6.5px]
+          px-[16px] py-[10px]
+          flex items-center justify-center gap-3
+          disabled:opacity-50 disabled:cursor-wait
+        `}
+    >
+        {isLoginLoading ? (
+            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+        ) : (
+            <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-4 h-4 grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all" alt="Google" />
+        )}
+        <span>{isLoginLoading ? 'Connecting...' : 'Sign in to Generate'}</span>
+    </motion.button>
+  );
+};
+
+export const Sidebar = ({ 
+  onUploadCAD,
+  onUploadReference,
+  onRemoveReference,
+  onLoadExample,
+  cadFile, 
+  referenceFile,
+  currentView, 
+  onViewChange,
+  background,
+  onBackgroundChange,
+  lighting,
+  onLightingChange,
+  showShadows,
+  onToggleShadows,
+  prompt,
+  onPromptChange,
+  onGenerate,
+  isGenerating,
+  credits,
+  isAuthenticated,
+  onLogin,
+  authEnabled
+}) => {
+  
+  const [isLoginLoading, setIsLoginLoading] = useState(false);
 
   const handleCadChange = (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -261,32 +294,17 @@ export const Sidebar = ({
       {/* Action Area (Login or Generate) */}
       <div className="p-6 border-t border-white/5 bg-[#12110d]">
         {!isAuthenticated ? (
-            <motion.button
-                type="button"
-                initial="rest"
-                animate="rest"
-                whileHover="hover"
-                whileTap="hover"
-                onClick={() => login()}
-                disabled={isLoginLoading}
-                variants={{ rest: { color: "#E3E3FD", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }, hover: { color: "#FFFFFF", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } } }}
-                className={`
-                  group w-full font-inter-light text-[#E3E3FD] text-[14px]
-                  bg-[#3B3B3B] cursor-pointer
-                  border-[1px] border-[#FFFFFF4D]
-                  backdrop-blur-[6.5px]
-                  px-[16px] py-[10px]
-                  flex items-center justify-center gap-3
-                  disabled:opacity-50 disabled:cursor-wait
-                `}
-            >
-                {isLoginLoading ? (
-                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                ) : (
-                    <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-4 h-4 grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all" alt="Google" />
-                )}
-                <span>{isLoginLoading ? 'Connecting...' : 'Sign in to Generate'}</span>
-            </motion.button>
+            authEnabled ? (
+                <LoginButton onLogin={onLogin} isLoginLoading={isLoginLoading} setIsLoginLoading={setIsLoginLoading} />
+            ) : (
+                <button 
+                    className="w-full py-2 bg-[#3B3B3B]/50 text-[#E3E3FD]/40 text-xs font-medium rounded-sm border border-white/5 cursor-not-allowed flex flex-col items-center"
+                    disabled
+                >
+                    <span>Login Unavailable</span>
+                    <span className="text-[9px] font-mono mt-1">Config Missing</span>
+                </button>
+            )
         ) : (
             <motion.button
                 type="button"
