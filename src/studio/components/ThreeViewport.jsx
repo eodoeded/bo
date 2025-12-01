@@ -178,22 +178,68 @@ const GltfModel = ({ url }) => {
     return <primitive object={normalizedScene} />;
 };
 
+const HopperChip = () => {
+  return (
+    <group position={[0, 0, 0]} scale={[0.8, 0.8, 0.8]}>
+      {/* Main PCB Substrate */}
+      <mesh position={[0, -0.05, 0]} castShadow receiveShadow>
+        <boxGeometry args={[4, 0.1, 4]} />
+        <meshStandardMaterial color="#1a1a1a" roughness={0.7} metalness={0.1} />
+      </mesh>
+
+      {/* Gold Contact Pads - Array on bottom */}
+      {Array.from({ length: 16 }).map((_, i) => (
+          <mesh key={i} position={[(i % 4) - 1.5, -0.11, Math.floor(i / 4) - 1.5]} rotation={[Math.PI/2, 0, 0]}>
+             <planeGeometry args={[0.8, 0.8]} />
+             <meshStandardMaterial color="#d4af37" metalness={1} roughness={0.2} />
+          </mesh>
+      ))}
+
+      {/* Central GPU Die */}
+      <group position={[0, 0.1, 0]}>
+         {/* Heat Spreader Base */}
+         <mesh position={[0, 0, 0]} castShadow receiveShadow>
+            <boxGeometry args={[2.5, 0.15, 2.5]} />
+            <meshStandardMaterial color="#4a4a4a" roughness={0.3} metalness={0.8} />
+         </mesh>
+         
+         {/* Die Surface (Shiny) */}
+         <mesh position={[0, 0.08, 0]} castShadow receiveShadow>
+            <boxGeometry args={[1.8, 0.02, 2.0]} />
+            <meshStandardMaterial color="#111" roughness={0.1} metalness={0.5} />
+         </mesh>
+
+         {/* HBM Memory Stacks (6 around center) */}
+         {[
+            [-1.8, 0], [1.8, 0], [-1, -1.8], [1, -1.8], [-1, 1.8], [1, 1.8]
+         ].map((pos, idx) => (
+             <mesh key={idx} position={[pos[0]*0.6, 0, pos[1]*0.6]} castShadow receiveShadow>
+                 <boxGeometry args={[0.5, 0.12, 0.8]} />
+                 <meshStandardMaterial color="#222" roughness={0.4} metalness={0.5} />
+             </mesh>
+         ))}
+      </group>
+
+      {/* Capacitors (Tiny Details) */}
+      {Array.from({ length: 20 }).map((_, i) => {
+          const angle = (i / 20) * Math.PI * 2;
+          const r = 1.5;
+          return (
+            <mesh key={i} position={[Math.cos(angle)*r, 0.02, Math.sin(angle)*r]} castShadow>
+                <boxGeometry args={[0.08, 0.05, 0.15]} />
+                <meshStandardMaterial color="#8B4513" />
+            </mesh>
+          );
+      })}
+    </group>
+  );
+};
+
 const ModelLoader = ({ file }) => {
     useEffect(() => { return () => { if (file?.previewUrl) URL.revokeObjectURL(file.previewUrl); }; }, [file]);
     if (!file) return null;
     if (file.isExample) {
-        return (
-            <group>
-                 <mesh position={[0, -0.1, 0]} castShadow receiveShadow>
-                    <boxGeometry args={[4, 0.2, 4]} />
-                    <meshStandardMaterial color="#333" roughness={0.8} />
-                 </mesh>
-                 <mesh position={[0, 0.25, 0]} castShadow receiveShadow>
-                    <boxGeometry args={[2.8, 0.5, 2.8]} />
-                    <meshStandardMaterial color="#888" roughness={0.4} metalness={0.6} />
-                 </mesh>
-            </group>
-        );
+        return <HopperChip />;
     }
     if (file.type.includes('IMAGE') || (file.data && file.data.type.startsWith('image/'))) {
          if (!file.previewUrl) return null;

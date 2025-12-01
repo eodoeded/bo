@@ -1,8 +1,27 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export const LoginOverlay = ({ onLogin }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLogin = async () => {
+    setIsLoading(true);
+    // Simulate network request
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    // Persist login state
+    localStorage.setItem('bo_studio_auth', 'true');
+    localStorage.setItem('bo_studio_user', JSON.stringify({
+      name: 'JP',
+      email: 'jp@brandedobjects.com',
+      avatar: 'JP'
+    }));
+    
+    setIsLoading(false);
+    onLogin();
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#12110d] overflow-hidden font-inter-light">
        {/* Background Ambient Effect */}
@@ -38,9 +57,10 @@ export const LoginOverlay = ({ onLogin }) => {
             type="button"
             initial="rest"
             animate="rest"
-            whileHover="hover"
-            whileTap="hover"
-            onClick={onLogin}
+            whileHover={isLoading ? "rest" : "hover"}
+            whileTap={isLoading ? "rest" : "hover"}
+            onClick={handleLogin}
+            disabled={isLoading}
             variants={{ rest: { color: "#E3E3FD", transition: { duration: 0.2 } }, hover: { color: "#FFFFFF", transition: { duration: 0.2 } } }}
             className="
               group w-full font-inter-light text-[#E3E3FD] text-[13px]
@@ -49,10 +69,15 @@ export const LoginOverlay = ({ onLogin }) => {
               backdrop-blur-[6.5px]
               px-[16px] py-[10px]
               flex items-center justify-center gap-3
+              disabled:opacity-50 disabled:cursor-wait
             "
           >
-             <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-4 h-4 grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all" alt="Google" />
-             <span>Sign in with Google</span>
+             {isLoading ? (
+               <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+             ) : (
+               <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-4 h-4 grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all" alt="Google" />
+             )}
+             <span>{isLoading ? 'Signing in...' : 'Sign in with Google'}</span>
           </motion.button>
           
           <div className="mt-8 flex items-center gap-4 w-full opacity-30">

@@ -1,10 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { ThreeViewport } from './components/ThreeViewport';
 import { AssetGallery } from './components/AssetGallery';
 import { LoginOverlay } from './components/LoginOverlay';
+import { SettingsModal } from './components/SettingsModal';
 
 // Helper to convert blob/file to Base64
 const fileToBase64 = (file) => {
@@ -196,6 +197,9 @@ const compositeImageWithAlignment = async (
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
   const [cadFile, setCadFile] = useState(null);
   const [referenceFile, setReferenceFile] = useState(null);
   const [prompt, setPrompt] = useState('');
@@ -203,9 +207,6 @@ function App() {
   const [currentView, setCurrentView] = useState('isometric');
   
   // Default Background: Vertical Gradient, Matching Landing Page
-  // Landing page uses: linear-gradient(180deg, #12110D 0%, #22201A 100%)
-  // Three.js gradient logic here is Bottom -> Top
-  // So color1 (bottom) should be #22201A, color2 (top) should be #12110D
   const [background, setBackground] = useState({ 
       mode: 'gradient', 
       color1: '#22201A', 
@@ -222,6 +223,15 @@ function App() {
   const [assets, setAssets] = useState([]);
   
   const viewportRef = useRef(null);
+
+  // Check auth on mount
+  useEffect(() => {
+      const auth = localStorage.getItem('bo_studio_auth');
+      if (auth === 'true') {
+          setIsAuthenticated(true);
+      }
+      setIsCheckingAuth(false);
+  }, []);
 
   const handleUploadCAD = (file) => {
     setCadFile(file);
@@ -444,13 +454,23 @@ CRITICAL INSTRUCTIONS:
     }
   };
 
+  if (isCheckingAuth) return null;
+
   if (!isAuthenticated) {
       return <LoginOverlay onLogin={() => setIsAuthenticated(true)} />;
   }
 
   return (
     <div className="flex flex-col h-screen bg-[#12110d] text-white overflow-hidden font-inter-light">
-      <Header credits={credits} />
+      <Header 
+        credits={credits} 
+        onOpenSettings={() => setIsSettingsOpen(true)}
+      />
+      
+      <SettingsModal 
+        isOpen={isSettingsOpen} 
+        onClose={() => setIsSettingsOpen(false)} 
+      />
       
       <main className="flex flex-1 overflow-hidden">
         <div className="flex-none z-20 shadow-[4px_0_24px_rgba(0,0,0,0.3)]">
