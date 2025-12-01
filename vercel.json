@@ -2,8 +2,7 @@
   "rewrites": [
     {
       "source": "/studio",
-      "destination": "/404.html"
+      "destination": "/studio.html"
     }
   ]
 }
-
