@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { ThreeViewport } from './components/ThreeViewport';
@@ -457,7 +458,22 @@ CRITICAL INSTRUCTIONS:
   if (isCheckingAuth) return null;
 
   if (!isAuthenticated) {
-      return <LoginOverlay onLogin={() => setIsAuthenticated(true)} />;
+      // Provide a valid-looking but potentially dummy Client ID if the env var is missing
+      // This allows the UI to render even if the auth flow fails
+      const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "1234567890-placeholder.apps.googleusercontent.com";
+      
+      return (
+        <GoogleOAuthProvider clientId={CLIENT_ID}>
+            <LoginOverlay onLogin={(userData) => {
+                // Store basic user data if available
+                if (userData) {
+                    localStorage.setItem('bo_studio_user', JSON.stringify(userData));
+                }
+                setIsAuthenticated(true);
+                localStorage.setItem('bo_studio_auth', 'true');
+            }} />
+        </GoogleOAuthProvider>
+      );
   }
 
   return (

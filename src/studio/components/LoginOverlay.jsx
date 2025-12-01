@@ -1,26 +1,46 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Box } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useGoogleLogin } from '@react-oauth/google';
 
 export const LoginOverlay = ({ onLogin }) => {
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleLogin = async () => {
-    setIsLoading(true);
-    // Simulate network request
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // Persist login state
-    localStorage.setItem('bo_studio_auth', 'true');
-    localStorage.setItem('bo_studio_user', JSON.stringify({
-      name: 'JP',
-      email: 'jp@brandedobjects.com',
-      avatar: 'JP'
-    }));
-    
-    setIsLoading(false);
-    onLogin();
-  };
+  const login = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      setIsLoading(true);
+      try {
+        // Fetch user info using the access token
+        const userInfoResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        });
+        
+        if (!userInfoResponse.ok) {
+            throw new Error('Failed to fetch user info');
+        }
+
+        const userInfo = await userInfoResponse.json();
+        
+        // Pass the user info back up
+        onLogin({
+            name: userInfo.name,
+            email: userInfo.email,
+            avatar: userInfo.picture,
+            googleId: userInfo.sub
+        });
+      } catch (err) {
+        console.error("Login details fetch failed", err);
+        setError("Failed to load profile.");
+        setIsLoading(false);
+      }
+    },
+    onError: (errorResponse) => {
+        console.error("Google Login Failed", errorResponse);
+        setError("Login failed. Check console.");
+        setIsLoading(false);
+    }
+  });
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#12110d] overflow-hidden font-inter-light">
@@ -59,7 +79,11 @@ export const LoginOverlay = ({ onLogin }) => {
             animate="rest"
             whileHover={isLoading ? "rest" : "hover"}
             whileTap={isLoading ? "rest" : "hover"}
-            onClick={handleLogin}
+            onClick={() => {
+                setIsLoading(true);
+                setError(null);
+                login();
+            }}
             disabled={isLoading}
             variants={{ rest: { color: "#E3E3FD", transition: { duration: 0.2 } }, hover: { color: "#FFFFFF", transition: { duration: 0.2 } } }}
             className="
@@ -77,8 +101,12 @@ export const LoginOverlay = ({ onLogin }) => {
              ) : (
                <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-4 h-4 grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all" alt="Google" />
              )}
-             <span>{isLoading ? 'Signing in...' : 'Sign in with Google'}</span>
+             <span>{isLoading ? 'Connecting...' : 'Sign in with Google'}</span>
           </motion.button>
+          
+          {error && (
+              <div className="mt-4 text-red-400 text-[10px] font-mono">{error}</div>
+          )}
           
           <div className="mt-8 flex items-center gap-4 w-full opacity-30">
               <div className="h-px bg-white/20 flex-1"></div>
