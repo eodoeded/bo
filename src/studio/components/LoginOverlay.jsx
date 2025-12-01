@@ -96,17 +96,17 @@ export const LoginOverlay = ({ onLogin }) => {
               disabled:opacity-50 disabled:cursor-wait
             "
           >
-             {isLoading ? (\
+             {isLoading ? (
                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-             ) : (\
+             ) : (
                <img src="https://www.svgrepo.com/show/475656/google-color.svg" className="w-4 h-4 grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all" alt="Google" />
-             )}\
+             )}
              <span>{isLoading ? 'Connecting...' : 'Sign in with Google'}</span>
           </motion.button>
           
-          {error && (\
+          {error && (
               <div className="mt-4 text-red-400 text-[10px] font-mono">{error}</div>
-          )}\
+          )}
           
           <div className="mt-8 flex items-center gap-4 w-full opacity-30">
               <div className="h-px bg-white/20 flex-1"></div>
