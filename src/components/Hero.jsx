@@ -127,9 +127,7 @@ export default function Hero() {
             animate="rest"
             whileHover="hover"
             whileTap="hover"
-            data-cal-link="branded-objects-nro6hy/15min"
-            data-cal-namespace="15min"
-            data-cal-config='{"layout":"month_view","theme":"dark"}'
+            onClick={() => window.location.href = '/studio'}
             variants={{ rest: { color: "#E3E3FD", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }, hover: { color: "#FFFFFF", transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } } }}
             className="
               group font-inter-light text-[#E3E3FD] text-[14px]
@@ -140,7 +138,7 @@ export default function Hero() {
               flex items-center
             "
           >
-            Let's talk
+            Enter Studio
             <motion.span variants={{ rest: { x: 0, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } }, hover: { x: 4, transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] } } }} className="ml-2 inline-block">→</motion.span>
           </motion.button>
         </motion.div>

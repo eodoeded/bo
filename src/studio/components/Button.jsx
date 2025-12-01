@@ -8,12 +8,12 @@ export const Button = ({
   className = '',
   ...props 
 }) => {
-  const baseStyles = "inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-900";
+  const baseStyles = "inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-white/20 rounded-none font-inter-light tracking-wide";
   
   const variants = {
-    primary: "bg-gray-900 text-white hover:bg-black border border-transparent shadow-sm",
-    secondary: "bg-white text-gray-900 border border-gray-200 hover:border-gray-400 hover:bg-gray-50",
-    ghost: "bg-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+    primary: "bg-[#3B3B3B] text-[#E3E3FD] border border-[#FFFFFF4D] hover:bg-[#4B4B4B] shadow-lg shadow-black/20",
+    secondary: "bg-transparent text-[#E3E3FD] border border-[#FFFFFF4D] hover:bg-white/5",
+    ghost: "bg-transparent text-[#E3E3FD]/60 hover:text-[#E3E3FD] hover:bg-white/5"
   };
 
   return (

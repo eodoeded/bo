@@ -4,6 +4,8 @@ import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar';
 import { ThreeViewport } from './components/ThreeViewport';
 import { AssetGallery } from './components/AssetGallery';
+import { LoginOverlay } from './components/LoginOverlay';
+
 // Helper to convert blob/file to Base64
 const fileToBase64 = (file) => {
   return new Promise((resolve, reject) => {
@@ -193,17 +195,18 @@ const compositeImageWithAlignment = async (
 };
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [cadFile, setCadFile] = useState(null);
   const [referenceFile, setReferenceFile] = useState(null);
   const [prompt, setPrompt] = useState('');
   
   const [currentView, setCurrentView] = useState('isometric');
   
-  // Default Background: Vertical Gradient, Dark Grey (#222) to Light Grey (#e5e5e5)
+  // Default Background: Vertical Gradient, Darker Theme
   const [background, setBackground] = useState({ 
       mode: 'gradient', 
-      color1: '#222222', 
-      color2: '#e5e5e5' 
+      color1: '#12110d', 
+      color2: '#2c2a24' 
   });
 
   const [lighting, setLighting] = useState({ rotation: 45, elevation: 45, intensity: 1.2 });
@@ -438,12 +441,16 @@ CRITICAL INSTRUCTIONS:
     }
   };
 
+  if (!isAuthenticated) {
+      return <LoginOverlay onLogin={() => setIsAuthenticated(true)} />;
+  }
+
   return (
-    <div className="flex flex-col h-screen bg-[#FAFAFA] text-gray-900 overflow-hidden">
+    <div className="flex flex-col h-screen bg-[#12110d] text-white overflow-hidden font-inter-light">
       <Header credits={credits} />
       
       <main className="flex flex-1 overflow-hidden">
-        <div className="flex-none z-20 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
+        <div className="flex-none z-20 shadow-[4px_0_24px_rgba(0,0,0,0.3)]">
             <Sidebar 
                 onUploadCAD={handleUploadCAD} 
                 onUploadReference={handleUploadRef}
@@ -467,7 +474,7 @@ CRITICAL INSTRUCTIONS:
             />
         </div>
 
-        <div className="flex-1 relative z-10 bg-gray-50">
+        <div className="flex-1 relative z-10 bg-[#1C1A14]">
             <ThreeViewport 
                 ref={viewportRef}
                 view={currentView} 
@@ -480,14 +487,14 @@ CRITICAL INSTRUCTIONS:
                 file={cadFile}
             />
             {isGenerating && statusMessage && (
-                <div className="absolute top-6 left-1/2 transform -translate-x-1/2 bg-white/90 backdrop-blur border border-gray-200 px-4 py-2 rounded-full shadow-sm z-50 flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full border-2 border-gray-900 border-t-transparent animate-spin"></div>
-                    <span className="text-xs font-mono font-medium text-gray-900">{statusMessage}</span>
+                <div className="absolute top-6 left-1/2 transform -translate-x-1/2 bg-[#1C1A14]/90 backdrop-blur border border-white/10 px-4 py-2 rounded-full shadow-lg z-50 flex items-center gap-3">
+                    <div className="w-3 h-3 rounded-full border-2 border-[#E3E3FD] border-t-transparent animate-spin"></div>
+                    <span className="text-[10px] font-mono font-medium text-[#E3E3FD] uppercase tracking-wider">{statusMessage}</span>
                 </div>
             )}
         </div>
 
-        <div className="w-96 border-l border-gray-200 bg-[#FAFAFA] flex-none z-20 overflow-hidden">
+        <div className="w-96 border-l border-white/10 bg-[#12110d] flex-none z-20 overflow-hidden">
             <AssetGallery assets={assets} onDownload={handleDownload} />
         </div>
       </main>
