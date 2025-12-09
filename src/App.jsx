@@ -2,7 +2,6 @@ import './App.css'
 import Header from './components/Header'
 import Hero from './components/Hero'
 import Proceses from './components/Proceses'
-import GridSection from './components/GridSection'
 import Divider from './components/Devider'
 
 function App() {
@@ -12,7 +11,6 @@ function App() {
          <Header />
          <Hero/>
          <Proceses />
-         <GridSection />
          <Divider />
     </>
   )
