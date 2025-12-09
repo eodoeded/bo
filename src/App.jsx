@@ -4,7 +4,6 @@ import Hero from './components/Hero'
 import Proceses from './components/Proceses'
 import GridSection from './components/GridSection'
 import Divider from './components/Devider'
-import Footer from './components/Footer'
 
 function App() {
   return (
@@ -15,7 +14,6 @@ function App() {
          <Proceses />
          <GridSection />
          <Divider />
-         <Footer />
     </>
   )
 }
