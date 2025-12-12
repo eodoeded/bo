@@ -24,9 +24,7 @@ const steps = [
 export default function WaitlistHowItWorks() {
   return (
     <section className="w-full py-24 px-6 border-t border-white/5 relative">
-        {/* Fine grid background */}
-        <div className="absolute inset-0 pointer-events-none opacity-[0.02] bg-[size:60px_60px] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)]"></div>
-
+        
       <div className="max-w-6xl mx-auto relative z-10">
         <motion.div
             initial={{ opacity: 0, y: 20 }}

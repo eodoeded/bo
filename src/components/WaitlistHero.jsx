@@ -57,9 +57,8 @@ export default function WaitlistHero() {
                     <div className="absolute bottom-0 right-0 w-6 h-6 border-b-[0.5px] border-r-[0.5px] border-white"></div>
                 </div>
                 
-                {/* Fine grid lines overlay */}
-                <div className="absolute inset-0 pointer-events-none opacity-10 bg-[size:40px_40px] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_70%,transparent_100%)]"></div>
-
+                {/* Fine grid lines overlay - REMOVED */}
+                
                 <div className="relative flex flex-col items-center justify-center h-full w-full">
                     <div className="relative flex items-center justify-center">
                         {/* Bottom Part */}
