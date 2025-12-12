@@ -16,14 +16,10 @@ export default function WaitlistFooter() {
                         </div>
                     </div>
                     
-                    <div className="col-span-1 md:col-span-3 md:col-start-8 space-y-6">
-                         <h4 className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">Platform</h4>
-                         <ul className="space-y-3 font-mono text-xs text-white/60">
-                            {/* Links removed as requested */}
-                        </ul>
-                    </div>
+                    {/* Platform section removed */}
+                    <div className="hidden md:block col-span-1 md:col-span-3 md:col-start-8"></div>
 
-                    <div className="col-span-1 md:col-span-2 space-y-6">
+                    <div className="col-span-1 md:col-span-2 md:col-start-11 space-y-6">
                         <h4 className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">Connect</h4>
                         <div className="flex flex-col gap-3">
                             <a href="https://www.linkedin.com/company/108913089/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-white/60 hover:text-white transition-colors group">

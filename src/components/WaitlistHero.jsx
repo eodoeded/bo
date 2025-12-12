@@ -81,14 +81,16 @@ export default function WaitlistHero() {
     setEmail('');
     const subject = encodeURIComponent("Join Waitlist - Branded Objects");
     const body = encodeURIComponent(`Please add ${emailBody} to the Branded Objects waitlist.`);
+    
+    // Simulate "sending" state before opening client
     setTimeout(() => {
         window.location.href = `mailto:brandedobjects@gmail.com?subject=${subject}&body=${body}`;
         setTimeout(() => setStatus('idle'), 2000);
-    }, 500);
+    }, 800);
   };
 
   return (
-    <section className="relative w-full h-screen min-h-[700px] flex flex-col pt-32 pb-0 px-6 overflow-hidden bg-[#020202]">
+    <section className="relative w-full h-screen min-h-[800px] flex flex-col pt-32 pb-0 px-6 overflow-hidden bg-[#020202]">
       
       {/* Background Grid */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.02]" style={{ 
@@ -104,7 +106,7 @@ export default function WaitlistHero() {
           LATENCY: 12ms <br/> SECURE_CONNECTION
       </div>
 
-      <div className="max-w-[1400px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 h-full items-center">
+      <div className="max-w-[1400px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 h-full items-center relative z-20">
         
         {/* Left Column: Text & Form */}
         <div className="flex flex-col items-start text-left z-20 mb-12 lg:mb-0 lg:-mt-20">
@@ -171,44 +173,41 @@ export default function WaitlistHero() {
                     className="mt-4 font-mono text-[10px] text-[#E3E3FD] tracking-widest uppercase flex items-center gap-2"
                 >
                     <div className="w-1.5 h-1.5 bg-[#E3E3FD] animate-pulse rounded-full"></div>
-                    Redirecting to secure client...
+                    Opening secure channel...
                 </motion.p>
             )}
         </div>
 
-        {/* Right Column: Node Graph with Spot Mini */}
-        <div className="relative h-[400px] lg:h-[600px] w-full flex items-center justify-center lg:-mt-20">
-            {/* Graph Container */}
-            <div className="relative w-[500px] h-[400px] scale-[0.65] md:scale-90 lg:scale-100 border border-white/5 bg-white/[0.01]">
-                <Corner className="top-0 left-0 border-t border-l" />
-                <Corner className="top-0 right-0 border-t border-r" />
-                <Corner className="bottom-0 left-0 border-b border-l" />
-                <Corner className="bottom-0 right-0 border-b border-r" />
-                
-                <div className="absolute top-2 left-2 font-mono text-[8px] text-white/20">FIG 1.0: LOGIC FLOW</div>
+      </div>
 
+      {/* Right Column: Node Graph with Spot Mini - Unrestrained & Spread */}
+      <div className="absolute top-0 right-0 w-full lg:w-1/2 h-full pointer-events-none z-10">
+            {/* Graph Container - No Border, Full Spread */}
+            <div className="relative w-full h-full">
+                
                 {/* 
-                    Coordinates relative to 500x400 container.
-                    Studio (Left): x=20, y=150. Width=160 (w-40). Right Port: x=180-5=175. y=150+32=182
-                    Core (Center): x=220, y=100. Width=200. Left Port: x=220-5=215. y=100+100(mid)=200. Right Port: x=420-5=415.
-                    Output (Right): x=460, y=150. Width=160. Left Port: x=460-5=455.
+                    Unrestrained Coordinates. 
+                    Using percentage based positioning or wider spread.
+                    Studio: Top Leftish.
+                    Core: Center Rightish.
+                    Output: Bottom Rightish.
                 */}
 
-                {/* Studio Input */}
-                <Node title="Design_Studio" x={-20} y={150} delay={0.4} width="w-40">
+                {/* Studio Input - Top Left of area */}
+                <Node title="Design_Studio" x="10%" y="20%" delay={0.4} width="w-48">
                     <div className="flex items-center gap-3 text-white/60">
                         <Database size={14} />
-                        <span className="font-mono text-[9px]">ASSETS</span>
+                        <span className="font-mono text-[9px]">ASSETS_LOADED</span>
                     </div>
                     <div className="flex items-center gap-3 text-white/60">
                         <Lock size={14} className="text-[#E3E3FD]"/>
-                        <span className="font-mono text-[9px] text-[#E3E3FD]">RULES</span>
+                        <span className="font-mono text-[9px] text-[#E3E3FD]">RULES_LOCKED</span>
                     </div>
                 </Node>
 
-                {/* System Core with Spot Mini */}
-                <Node title="Branded_Objects" x={160} y={80} delay={0.6} width="w-48">
-                    <div className="h-40 w-full relative flex items-center justify-center overflow-hidden bg-[#0A0A0A] border border-white/10 mb-2 shadow-inner">
+                {/* System Core with Spot Mini - Center */}
+                <Node title="Branded_Objects" x="40%" y="45%" delay={0.6} width="w-64">
+                    <div className="h-48 w-full relative flex items-center justify-center overflow-hidden bg-[#0A0A0A] border border-white/10 mb-2 shadow-inner">
                          {/* Spot Mini Animation */}
                          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05]"></div>
                         <motion.div
@@ -216,19 +215,19 @@ export default function WaitlistHero() {
                             animate={{ y: [0, -4, 0] }}
                             transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
                         >
-                            <img src={bottomComp} alt="Bottom" className="w-[100px] object-contain opacity-100" />
+                            <img src={bottomComp} alt="Bottom" className="w-[140px] object-contain opacity-100" />
                         </motion.div>
                         <motion.div
-                            className="absolute top-12"
+                            className="absolute top-16"
                             animate={{ y: [0, -6, 0] }}
                             transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
                             style={{ zIndex: 2 }}
                         >
-                            <img src={upComp} alt="Top" className="w-[50px] object-contain opacity-100" />
+                            <img src={upComp} alt="Top" className="w-[70px] object-contain opacity-100" />
                         </motion.div>
                     </div>
                     <div className="flex justify-between items-center px-1">
-                        <span className="font-mono text-[8px] text-white/40">GENERATING</span>
+                        <span className="font-mono text-[8px] text-white/40">GENERATING_ASSET_ID_8492</span>
                         <div className="flex gap-0.5">
                             {[1,2,3,4,5].map(i => (
                                 <div key={i} className="w-0.5 h-1.5 bg-[#E3E3FD]" style={{opacity: 0.2 + (i*0.15)}}></div>
@@ -237,33 +236,53 @@ export default function WaitlistHero() {
                     </div>
                 </Node>
 
-                {/* Client Output */}
-                <Node title="Client_Output" x={380} y={150} delay={0.8} width="w-40">
+                {/* Client Output - Bottom Right */}
+                <Node title="Client_Output" x="75%" y="70%" delay={0.8} width="w-48">
                     <div className="flex items-center gap-3 text-white/60">
                         <Layout size={14} />
-                        <span className="font-mono text-[9px]">RESULT</span>
+                        <span className="font-mono text-[9px]">RENDER_COMPLETE</span>
                     </div>
                     <div className="flex items-center gap-3 text-white/60">
                         <Zap size={14} className="text-[#E3E3FD]"/>
-                        <span className="font-mono text-[9px]">INSTANT</span>
+                        <span className="font-mono text-[9px]">INSTANT_DELIVERY</span>
                     </div>
                 </Node>
 
-                {/* Connections */}
-                {/* 
-                    Studio (-20, 150) -> Out: 135, 184 (150+34)
-                    Core (160, 80) -> In: 155, 180? No. Core x=160. Port In x=155. Top 80+Height(mid)?
-                    Core Height: Header(30)+Body(170)+Footer(20) ~ 220. Mid Y ~ 80+110 = 190.
-                    Core (160, 80). Port In (155, 190). Port Out (355, 190).
-                    Output (380, 150). Port In (375, 184).
+                {/* Connections (Calculated loosely based on % to px approx for SVG) 
+                    Note: SVG needs absolute units or viewBox. 
+                    Let's use a full screen SVG with percentage coordinates via layout.
+                    Actually, React refs would be best for exact connections, but for this effect,
+                    hardcoded approximate percentages converted to viewport units works if responsive.
+                    Or just lines that fade out.
+                    Let's try drawing long connecting lines that span the distance.
                 */}
-                <Connection start={{x: 135, y: 184}} end={{x: 155, y: 190}} delay={0.5} />
-                <Connection start={{x: 355, y: 190}} end={{x: 375, y: 184}} delay={0.7} />
+                <svg className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-visible z-0">
+                    {/* Studio -> Core */}
+                    <motion.path
+                      d="M 200 250 L 400 250 L 400 500 L 550 500" // Approx path based on laptop screen
+                      fill="none"
+                      stroke="#E3E3FD"
+                      strokeWidth="1"
+                      strokeOpacity="0.15"
+                      initial={{ pathLength: 0, opacity: 0 }}
+                      animate={{ pathLength: 1, opacity: 1 }}
+                      transition={{ duration: 1.5, delay: 0.5 }}
+                    />
+                     {/* Core -> Output */}
+                    <motion.path
+                      d="M 850 500 L 950 500 L 950 750 L 1050 750" // Approx path
+                      fill="none"
+                      stroke="#E3E3FD"
+                      strokeWidth="1"
+                      strokeOpacity="0.15"
+                      initial={{ pathLength: 0, opacity: 0 }}
+                      animate={{ pathLength: 1, opacity: 1 }}
+                      transition={{ duration: 1.5, delay: 0.7 }}
+                    />
+                </svg>
 
             </div>
         </div>
-
-      </div>
 
     </section>
   );

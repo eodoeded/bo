@@ -1,13 +1,14 @@
 import { motion } from 'framer-motion';
+import { Database, Image, Layers, Palette, Lock, Upload, Download } from 'lucide-react';
 
 const features = [
-    "AI IMAGE GENERATOR",
-    "BACKGROUND REMOVAL",
-    "TEXT LAYERS",
-    "COLOUR LAYERS",
-    "IMAGE/LOGO UPLOAD",
-    "LOCKING SYSTEM",
-    "EXPORT BUTTON"
+    { name: "AI IMAGE GENERATOR", icon: Image },
+    { name: "BACKGROUND REMOVAL", icon: Layers },
+    { name: "TEXT LAYERS", icon: Database },
+    { name: "COLOUR LAYERS", icon: Palette },
+    { name: "IMAGE/LOGO UPLOAD", icon: Upload },
+    { name: "LOCKING SYSTEM", icon: Lock },
+    { name: "EXPORT BUTTON", icon: Download }
 ];
 
 const Corner = ({ className = "" }) => (
@@ -16,50 +17,59 @@ const Corner = ({ className = "" }) => (
 
 export default function WaitlistFeatures() {
   return (
-    <section id="specs" className="w-full py-24 px-6 border-t border-white/5 bg-[#020202]">
-      <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-16 items-start">
+    <section id="specs" className="w-full py-32 px-6 border-t border-white/5 bg-[#020202]">
+      <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
         
-        <div className="flex-1 sticky top-24">
+        {/* Left: Sticky Header */}
+        <div className="lg:col-span-4 sticky top-32">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
             >
-                 <div className="mb-6 flex items-center gap-3">
+                 <div className="mb-8 flex items-center gap-3">
                      <div className="w-1.5 h-1.5 bg-[#E3E3FD]"></div>
                      <span className="font-mono text-[9px] text-white/40 tracking-widest uppercase">Specifications</span>
                 </div>
 
-                <h2 className="font-montreal font-medium text-white text-[32px] md:text-[40px] tracking-tight mb-6 leading-tight">
-                    Everything you need to ship.
+                <h2 className="font-montreal font-medium text-white text-4xl md:text-5xl tracking-tight mb-8 leading-[0.9]">
+                    System<br/>Kernel.
                 </h2>
-                <p className="font-montreal text-white/60 text-[16px] leading-relaxed max-w-sm">
-                    The MVP includes the essentials to let your clients create without chaos. Precise control over brand assets.
+                <p className="font-montreal text-white/60 text-lg leading-relaxed max-w-sm mb-12">
+                    The MVP includes the essential modules to let your clients create without chaos. Precise control over every brand asset.
                 </p>
+                
+                <div className="hidden lg:block font-mono text-[9px] text-white/20 uppercase tracking-widest">
+                    v1.0 Release Candidate
+                </div>
             </motion.div>
         </div>
 
-        <div className="flex-1 w-full bg-[#050505] border border-white/10 p-1 relative">
-            <Corner className="top-0 left-0 border-t border-l" />
-            <Corner className="bottom-0 right-0 border-b border-r" />
-            
-            <div className="flex flex-col">
+        {/* Right: Technical Grid */}
+        <div className="lg:col-span-8 w-full">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/10 border border-white/10">
                 {features.map((feature, index) => (
                     <motion.div 
                         key={index}
-                        initial={{ opacity: 0, x: 10 }}
-                        whileInView={{ opacity: 1, x: 0 }}
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ delay: index * 0.05, duration: 0.5 }}
-                        className="flex items-center justify-between py-5 px-6 border-b border-white/5 last:border-b-0 hover:bg-white/[0.02] transition-colors group cursor-crosshair"
+                        transition={{ delay: index * 0.05 }}
+                        className="bg-[#050505] p-8 flex items-center justify-between group hover:bg-[#0A0A0A] transition-colors relative"
                     >
-                        <div className="flex items-center gap-3">
-                            <span className="font-mono text-[#E3E3FD]/40 text-[9px] w-6">0{index + 1}</span>
-                            <span className="font-mono text-white/60 text-[10px] tracking-widest uppercase group-hover:text-[#E3E3FD] transition-colors">{feature}</span>
+                        {/* Hover Corner */}
+                        <Corner className="top-0 left-0 border-t border-l opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                        <div className="flex items-center gap-6">
+                            <span className="font-mono text-[#E3E3FD]/20 text-[9px]">0{index + 1}</span>
+                            <span className="font-mono text-white/70 text-xs tracking-widest uppercase group-hover:text-white transition-colors">{feature.name}</span>
                         </div>
-                        <div className="w-1 h-1 bg-white/20 group-hover:bg-[#E3E3FD] transition-colors"></div>
+                        
+                        <feature.icon size={16} className="text-white/20 group-hover:text-[#E3E3FD] transition-colors" />
                     </motion.div>
                 ))}
+                {/* Filler for even grid if odd number */}
+                <div className="bg-[#050505] p-8 hidden md:block"></div>
             </div>
         </div>
 

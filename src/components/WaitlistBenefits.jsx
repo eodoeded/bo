@@ -1,77 +1,80 @@
 import { motion } from 'framer-motion';
-import { Clock, TrendingUp } from 'lucide-react';
+import { Clock, TrendingUp, ShieldCheck, Zap } from 'lucide-react';
 
 const Corner = ({ className = "" }) => (
     <div className={`absolute w-1.5 h-1.5 border-white/40 ${className}`} />
 );
 
-const Badge = ({ children, className = "", color = "text-[#E3E3FD]" }) => (
-    <span className={`font-mono text-[9px] uppercase tracking-widest border border-white/10 px-1.5 py-0.5 rounded-[1px] bg-white/[0.02] ${color} ${className}`}>
-        {children}
-    </span>
-);
-
 export default function WaitlistBenefits() {
   return (
-    <section id="value" className="w-full py-24 px-6 relative overflow-hidden border-t border-white/5 bg-[#020202]">
+    <section id="value" className="w-full py-32 px-6 relative overflow-hidden border-t border-white/5 bg-[#020202]">
       
-      <div className="max-w-5xl mx-auto relative z-10">
-        <div className="flex flex-col md:flex-row gap-12 md:gap-24 items-start">
+      <div className="max-w-[1400px] mx-auto relative z-10">
+        
+        <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-24 flex flex-col md:flex-row justify-between items-end gap-8 border-b border-white/10 pb-8"
+        >
+            <div>
+                <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-4">Value Proposition</span>
+                <h2 className="font-montreal font-medium text-white text-4xl md:text-6xl tracking-tight leading-[0.9]">
+                    Entropy.<br/>Solved.
+                </h2>
+            </div>
+            <p className="font-montreal text-white/50 text-lg md:text-xl max-w-md leading-relaxed text-right md:text-right">
+                Studios waste 15–25 hours every month on "quick edits." Branded Objects automates the mundane.
+            </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             
+            {/* Card 1 */}
             <motion.div 
-                className="flex-1"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
+                className="bg-[#050505] border border-white/10 p-12 relative group hover:border-white/20 transition-all duration-500"
             >
-                <div className="mb-6 flex items-center gap-3">
-                     <div className="w-1.5 h-1.5 bg-[#E3E3FD]"></div>
-                     <span className="font-mono text-[9px] text-white/40 tracking-widest uppercase">Value Proposition</span>
+                <Corner className="top-0 right-0 border-t border-r" />
+                <Corner className="bottom-0 left-0 border-b border-l" />
+                
+                <div className="flex justify-between items-start mb-16">
+                    <div className="w-12 h-12 bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-[#E3E3FD] transition-colors">
+                        <Clock size={20} className="text-white/60 group-hover:text-[#E3E3FD] transition-colors" />
+                    </div>
+                    <span className="font-mono text-[9px] text-white/20 uppercase tracking-widest group-hover:text-[#E3E3FD] transition-colors">01 / Focus</span>
                 </div>
                 
-                <h2 className="font-montreal font-medium text-white text-[32px] md:text-[48px] leading-[1.1] tracking-tight mb-8">
-                    Reclaim your <br/><span className="text-[#E3E3FD]/40">creative time.</span>
-                </h2>
-                <p className="font-montreal text-white/60 text-[16px] md:text-[18px] leading-relaxed max-w-sm">
-                    Studios waste 15–25 hours every month making small, repetitive assets. Branded Objects handles the entropy.
+                <h3 className="font-montreal font-medium text-white text-3xl mb-4">Reclaim Creative Time</h3>
+                <p className="text-white/50 font-montreal text-lg leading-relaxed max-w-sm">
+                    Stop resizing banners. Let the client generate simple assets while you focus on the big picture strategy.
                 </p>
             </motion.div>
 
+            {/* Card 2 */}
             <motion.div 
-                className="flex-1 w-full grid gap-6"
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="bg-[#050505] border border-white/10 p-12 relative group hover:border-white/20 transition-all duration-500"
             >
-                <div className="bg-[#050505] p-8 border border-white/10 relative group hover:border-[#E3E3FD]/30 transition-colors">
-                    <Corner className="top-0 right-0 border-t border-r" />
-                    <Corner className="bottom-0 left-0 border-b border-l" />
-                    
-                    <div className="flex justify-between items-start mb-6">
-                        <Badge>Efficiency</Badge>
-                        <Clock size={16} className="text-[#E3E3FD]" />
+                <Corner className="top-0 right-0 border-t border-r" />
+                <Corner className="bottom-0 left-0 border-b border-l" />
+
+                <div className="flex justify-between items-start mb-16">
+                    <div className="w-12 h-12 bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-[#E3E3FD] transition-colors">
+                        <TrendingUp size={20} className="text-white/60 group-hover:text-[#E3E3FD] transition-colors" />
                     </div>
-                    
-                    <h3 className="text-white font-montreal font-medium text-xl mb-3">Focus</h3>
-                    <p className="text-white/50 font-montreal text-sm leading-relaxed">
-                        Stop tweaking banners. Let the client generate simple assets while you focus on the big picture.
-                    </p>
+                    <span className="font-mono text-[9px] text-white/20 uppercase tracking-widest group-hover:text-[#E3E3FD] transition-colors">02 / Scale</span>
                 </div>
-
-                <div className="bg-[#050505] p-8 border border-white/10 relative group hover:border-[#E3E3FD]/30 transition-colors">
-                    <Corner className="top-0 right-0 border-t border-r" />
-                    <Corner className="bottom-0 left-0 border-b border-l" />
-
-                    <div className="flex justify-between items-start mb-6">
-                        <Badge>Revenue</Badge>
-                        <TrendingUp size={16} className="text-[#E3E3FD]" />
-                    </div>
-
-                    <h3 className="text-white font-montreal font-medium text-xl mb-3">Scale</h3>
-                    <p className="text-white/50 font-montreal text-sm leading-relaxed">
-                        Sell the mini-tool as part of a monthly retainer. Recurring value for your clients, recurring revenue for you.
-                    </p>
-                </div>
+                
+                <h3 className="font-montreal font-medium text-white text-3xl mb-4">Recurring Revenue</h3>
+                <p className="text-white/50 font-montreal text-lg leading-relaxed max-w-sm">
+                    Sell the tool as part of a retainer. Provide ongoing value to your clients without ongoing manual labor.
+                </p>
             </motion.div>
 
         </div>
