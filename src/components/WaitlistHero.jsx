@@ -24,7 +24,7 @@ const FloatingContent = ({ children, isDragging }) => {
 const Node = ({ id, title, children, x, y, onDragStart, isDragging, width = "w-48" }) => {
   return (
     <div 
-      className={`absolute z-20 hidden md:block cursor-grab active:cursor-grabbing`}
+      className={`absolute z-20 cursor-grab active:cursor-grabbing`}
       style={{ 
           left: `${x}%`, 
           top: `${y}%`,
@@ -33,15 +33,15 @@ const Node = ({ id, title, children, x, y, onDragStart, isDragging, width = "w-4
       onPointerDown={(e) => onDragStart(e, id)}
     >
         <FloatingContent isDragging={isDragging}>
-            <div className={`bg-[#050505] border border-white/10 p-4 ${width} shadow-2xl backdrop-blur-md group hover:border-white/30 transition-colors relative`}>
+            <div className={`bg-[#050505] border border-white/10 p-2 md:p-4 ${width} shadow-2xl backdrop-blur-md group hover:border-white/30 transition-colors relative`}>
                 <Corner className="top-0 left-0 border-t border-l group-hover:border-white transition-colors" />
                 <Corner className="bottom-0 right-0 border-b border-r group-hover:border-white transition-colors" />
 
-                <div className="flex justify-between items-center mb-3 pb-2 border-b border-white/5">
-                    <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest group-hover:text-white transition-colors">{title}</span>
+                <div className="flex justify-between items-center mb-2 md:mb-3 pb-1 md:pb-2 border-b border-white/5">
+                    <span className="font-mono text-[7px] md:text-[9px] text-white/40 uppercase tracking-widest group-hover:text-white transition-colors">{title}</span>
                     <div className="w-1 h-1 bg-[#E3E3FD] animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
                 </div>
-                <div className="flex flex-col gap-2 relative z-10">
+                <div className="flex flex-col gap-1 md:gap-2 relative z-10">
                     {children}
                 </div>
                 
@@ -158,7 +158,7 @@ export default function WaitlistHero() {
       {/* Node Graph Layer */}
       <div ref={containerRef} className="absolute inset-0 w-full h-full z-10 touch-none">
           
-          <svg className="absolute inset-0 w-full h-full pointer-events-none hidden md:block" viewBox="0 0 100 100" preserveAspectRatio="none" style={{zIndex: 10}}>
+          <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none" style={{zIndex: 10}}>
                {/* 
                   Unique Style: "Energy Pulse"
                   - Base wire is static and dim
@@ -249,15 +249,15 @@ export default function WaitlistHero() {
             y={nodes.studio.y} 
             onDragStart={handleDragStart} 
             isDragging={draggingId === 'studio'}
-            width="w-48"
+            width="w-28 md:w-48"
           >
-                <div className="flex items-center gap-3 text-white/60">
-                    <Database size={14} />
-                    <span className="font-mono text-[9px]">ASSETS_LOADED</span>
+                <div className="flex items-center gap-2 md:gap-3 text-white/60">
+                    <Database size={12} className="md:w-[14px] md:h-[14px]" />
+                    <span className="font-mono text-[7px] md:text-[9px]">ASSETS_LOADED</span>
                 </div>
-                <div className="flex items-center gap-3 text-white/60">
-                    <Lock size={14} className="text-[#E3E3FD]"/>
-                    <span className="font-mono text-[9px] text-[#E3E3FD]">RULES_LOCKED</span>
+                <div className="flex items-center gap-2 md:gap-3 text-white/60">
+                    <Lock size={12} className="text-[#E3E3FD] md:w-[14px] md:h-[14px]"/>
+                    <span className="font-mono text-[7px] md:text-[9px] text-[#E3E3FD]">RULES_LOCKED</span>
                 </div>
           </Node>
 
@@ -268,21 +268,21 @@ export default function WaitlistHero() {
             y={nodes.core.y} 
             onDragStart={handleDragStart} 
             isDragging={draggingId === 'core'}
-            width="w-64"
+            width="w-40 md:w-64"
           >
                 {/* Spot Mini - Base Only */}
-                <div className="h-48 w-full relative flex items-center justify-center overflow-hidden bg-[#0A0A0A] border border-white/10 mb-2 shadow-inner pointer-events-none">
+                <div className="h-28 md:h-48 w-full relative flex items-center justify-center overflow-hidden bg-[#0A0A0A] border border-white/10 mb-2 shadow-inner pointer-events-none">
                      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05]"></div>
                     <motion.div
                         className="relative z-0"
                         animate={{ y: [0, -4, 0] }}
                         transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
                     >
-                        <img src={bottomComp} alt="Bottom" className="w-[140px] object-contain opacity-100" />
+                        <img src={bottomComp} alt="Bottom" className="w-[80px] md:w-[140px] object-contain opacity-100" />
                     </motion.div>
                 </div>
                 <div className="flex justify-between items-center px-1">
-                    <span className="font-mono text-[8px] text-white/40">GENERATING_ASSET_ID_8492</span>
+                    <span className="font-mono text-[6px] md:text-[8px] text-white/40">GENERATING_ASSET_ID_8492</span>
                     <div className="flex gap-0.5">
                         {[1,2,3,4,5].map(i => (
                             <div key={i} className="w-0.5 h-1.5 bg-[#E3E3FD]" style={{opacity: 0.2 + (i*0.15)}}></div>
@@ -298,15 +298,15 @@ export default function WaitlistHero() {
             y={nodes.output.y} 
             onDragStart={handleDragStart} 
             isDragging={draggingId === 'output'}
-            width="w-48"
+            width="w-28 md:w-48"
           >
-                <div className="flex items-center gap-3 text-white/60">
-                    <Layout size={14} />
-                    <span className="font-mono text-[9px]">RENDER_COMPLETE</span>
+                <div className="flex items-center gap-2 md:gap-3 text-white/60">
+                    <Layout size={12} className="md:w-[14px] md:h-[14px]" />
+                    <span className="font-mono text-[7px] md:text-[9px]">RENDER_COMPLETE</span>
                 </div>
-                <div className="flex items-center gap-3 text-white/60">
-                    <Zap size={14} className="text-[#E3E3FD]"/>
-                    <span className="font-mono text-[9px]">INSTANT_DELIVERY</span>
+                <div className="flex items-center gap-2 md:gap-3 text-white/60">
+                    <Zap size={12} className="text-[#E3E3FD] md:w-[14px] md:h-[14px]"/>
+                    <span className="font-mono text-[7px] md:text-[9px]">INSTANT_DELIVERY</span>
                 </div>
           </Node>
       </div>
