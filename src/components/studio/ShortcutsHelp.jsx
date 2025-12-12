@@ -32,16 +32,16 @@ export const ShortcutsHelp = ({ onClose }) => (
                     <div className="flex justify-between"><span className="text-white/60">Zoom In/Out</span> <span className="text-white">Ctrl + Scroll</span></div>
                     <div className="flex justify-between"><span className="text-white/60">Zoom to Fit</span> <span className="text-white">Shift + 1</span></div>
                     <div className="flex justify-between"><span className="text-white/60">Zoom to Selection</span> <span className="text-white">Shift + 2</span></div>
+                    <div className="flex justify-between"><span className="text-white/60">Shortcuts</span> <span className="text-white">?</span></div>
                 </div>
                 <div className="space-y-4 pt-4 border-t border-white/10">
                     <h3 className="text-[#E3E3FD] uppercase tracking-wider">Arrange</h3>
                     <div className="flex justify-between"><span className="text-white/60">Bring Forward</span> <span className="text-white">]</span></div>
                     <div className="flex justify-between"><span className="text-white/60">Send Backward</span> <span className="text-white">[</span></div>
                     <div className="flex justify-between"><span className="text-white/60">Lock/Unlock</span> <span className="text-white">L</span></div>
-                    <div className="flex justify-between"><span className="text-white/60">Distribute</span> <span className="text-white">Properties Panel</span></div>
+                    <div className="flex justify-between"><span className="text-white/60">Duplicate</span> <span className="text-white">Ctrl + D</span></div>
                 </div>
             </div>
         </div>
     </div>
 );
-

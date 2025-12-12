@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { 
     Type, Image as ImageIcon, Sparkles, Layers, 
     Settings, Download, ChevronRight, Maximize2, 
@@ -20,8 +20,8 @@ import { Link } from 'react-router-dom';
 import html2canvas from 'html2canvas';
 import { SmartImage } from './studio/SmartImage';
 import { LayerProperties } from './studio/LayerProperties';
-import { CanvasProperties } from './studio/CanvasProperties';
-import { ShortcutsHelp } from './studio/ShortcutsHelp';
+import { CanvasProperties } from './studio/CanvasProperties'; 
+import { ShortcutsHelp } from './studio/ShortcutsHelp'; // New
 import { generateImage } from '../services/gemini';
 
 // --- HISTORY SYSTEM HOOK ---
@@ -107,9 +107,9 @@ const INITIAL_LAYERS = [
     opacity: 1, 
     visible: true, 
     rotation: 0,
-    brightness: 100, contrast: 100, blur: 0,
-    flipX: false, flipY: false,
-    shadow: false, shadowColor: '#000000', shadowBlur: 10, shadowX: 0, shadowY: 4
+    brightness: 100,
+    contrast: 100,
+    blur: 0
   },
   {
     id: 'card-title',
@@ -129,9 +129,7 @@ const INITIAL_LAYERS = [
     fontWeight: 'normal',
     fontStyle: 'normal',
     textDecoration: 'none',
-    textTransform: 'none',
-    flipX: false, flipY: false,
-    shadow: false, shadowColor: '#000000', shadowBlur: 10, shadowX: 0, shadowY: 4
+    textTransform: 'none'
   },
   {
     id: 'ai-frame',
@@ -150,9 +148,9 @@ const INITIAL_LAYERS = [
     opacity: 1,
     visible: true,
     rotation: 0,
-    brightness: 100, contrast: 100, blur: 0,
-    flipX: false, flipY: false,
-    shadow: false, shadowColor: '#000000', shadowBlur: 10, shadowX: 0, shadowY: 4
+    brightness: 100,
+    contrast: 100,
+    blur: 0
   }
 ];
 
@@ -163,7 +161,7 @@ export default function Studio() {
     const [selectedTool, setSelectedTool] = useState('select');
     const [statusMessage, setStatusMessage] = useState(null); 
     const [snapToGrid, setSnapToGrid] = useState(false); // Snap Toggle
-    const [showShortcuts, setShowShortcuts] = useState(false); // Shortcuts Help
+    const [showShortcuts, setShowShortcuts] = useState(false); // New
     
     // Canvas Viewport
     const [zoom, setZoom] = useState(1);
@@ -451,9 +449,9 @@ export default function Studio() {
             opacity: 1, 
             visible: true, 
             rotation: 0,
-            brightness: 100, contrast: 100, blur: 0,
-            flipX: false, flipY: false,
-            shadow: false, shadowColor: '#000000', shadowBlur: 10, shadowX: 0, shadowY: 4,
+            brightness: 100,
+            contrast: 100,
+            blur: 0,
             aiPromptTemplate: type === 'AI_FRAME' ? "A render of {subject}" : undefined,
             filterType: 'none',
             blendMode: 'normal'
@@ -875,11 +873,6 @@ export default function Studio() {
                 if (e.type === 'keydown') setIsSpacePressed(true);
                 if (e.type === 'keyup') setIsSpacePressed(false);
             }
-
-            // Shortcuts Help (?)
-            if (e.key === '?' && !editingTextId) {
-                setShowShortcuts(prev => !prev);
-            }
         };
         
         window.addEventListener('keydown', handleKey);
@@ -931,6 +924,10 @@ export default function Studio() {
     useEffect(() => {
         const handleKeyDown = (e) => {
             if (editingTextId) return; 
+            
+            if (e.key === '?') {
+                 setShowShortcuts(prev => !prev);
+            }
 
             // Copy
             if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
@@ -994,20 +991,8 @@ export default function Studio() {
     return (
         <div className="min-h-screen bg-[#020202] text-white font-montreal flex flex-col overflow-hidden selection:bg-[#E3E3FD] selection:text-black" onClick={() => setContextMenu(null)}>
             
-            {/* Shortcuts Modal */}
-            <AnimatePresence>
-                {showShortcuts && (
-                    <motion.div 
-                        initial={{ opacity: 0 }} 
-                        animate={{ opacity: 1 }} 
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100]"
-                    >
-                        <ShortcutsHelp onClose={() => setShowShortcuts(false)} />
-                    </motion.div>
-                )}
-            </AnimatePresence>
-
+            {showShortcuts && <ShortcutsHelp onClose={() => setShowShortcuts(false)} />}
+            
             {/* Top Bar */}
             <header className="h-12 border-b border-white/10 flex items-center justify-between px-4 bg-[#050505] relative z-20">
                 <div className="flex items-center gap-6">
@@ -1038,8 +1023,6 @@ export default function Studio() {
                         <IconButton icon={Undo} onClick={() => setLayers(undo())} disabled={!canUndo} title="Undo (Ctrl+Z)" />
                         <IconButton icon={Redo} onClick={() => setLayers(redo())} disabled={!canRedo} title="Redo (Ctrl+Shift+Z)" />
                     </div>
-                    <div className="h-4 w-px bg-white/10"></div>
-                    <IconButton icon={HelpCircle} onClick={() => setShowShortcuts(true)} title="Keyboard Shortcuts (?)" />
                     <div className="h-4 w-px bg-white/10"></div>
                     <div className="flex items-center gap-2 bg-[#0A0A0A] border border-white/10 p-1 rounded-[2px]">
                         <button 
@@ -1148,6 +1131,8 @@ export default function Studio() {
                         <IconButton icon={ZoomOut} onClick={() => setZoom(z => Math.max(0.1, z - 0.1))} title="Zoom Out" />
                         <span className="font-mono text-[9px] text-white/60 px-2 w-10 text-center">{Math.round(zoom * 100)}%</span>
                         <IconButton icon={ZoomIn} onClick={() => setZoom(z => Math.min(5, z + 0.1))} title="Zoom In" />
+                        <div className="w-px h-4 bg-white/10 mx-1"></div>
+                        <IconButton icon={HelpCircle} onClick={() => setShowShortcuts(true)} title="Shortcuts (?)" />
                     </div>
 
                     {/* Canvas Wrapper */}
@@ -1222,9 +1207,8 @@ export default function Studio() {
                                                 borderRadius: layer.borderRadius ? `${layer.borderRadius}px` : '0px',
                                                 mixBlendMode: layer.blendMode || 'normal',
                                                 opacity: layer.opacity !== undefined ? layer.opacity : 1,
-                                                transform: `rotate(${layer.rotation || 0}deg) scaleX(${layer.flipX ? -1 : 1}) scaleY(${layer.flipY ? -1 : 1})`, 
-                                                filter: `brightness(${layer.brightness !== undefined ? layer.brightness : 100}%) contrast(${layer.contrast !== undefined ? layer.contrast : 100}%) blur(${layer.blur || 0}px)`,
-                                                boxShadow: layer.shadow ? `${layer.shadowX || 0}px ${layer.shadowY || 4}px ${layer.shadowBlur || 10}px ${layer.shadowColor || '#000000'}` : 'none',
+                                                transform: `rotate(${layer.rotation || 0}deg)`,
+                                                filter: `brightness(${layer.brightness !== undefined ? layer.brightness : 100}%) contrast(${layer.contrast !== undefined ? layer.contrast : 100}%) blur(${layer.blur !== undefined ? layer.blur : 0}px)`,
                                                 whiteSpace: layer.type === 'TEXT' ? 'nowrap' : 'normal'
                                             }}
                                         >
