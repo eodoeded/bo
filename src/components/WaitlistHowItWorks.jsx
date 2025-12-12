@@ -28,12 +28,12 @@ const steps = [
 
 export default function WaitlistHowItWorks() {
   return (
-    <section id="process" className="w-full py-32 px-6 border-t border-white/5 bg-[#020202] relative overflow-hidden">
+    <section id="process" className="w-full py-20 md:py-32 px-6 border-t border-white/5 bg-[#020202] relative overflow-hidden">
       
       {/* Background Decor */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-white/[0.02] to-transparent pointer-events-none"></div>
 
-      <div className="max-w-[1400px] mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+      <div className="max-w-[1400px] mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
         
         {/* Left: Steps */}
         <div>
@@ -41,7 +41,7 @@ export default function WaitlistHowItWorks() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="mb-16 border-l border-white/20 pl-6"
+                className="mb-12 md:mb-16 border-l border-white/20 pl-6"
             >
                 <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-4">System Workflow</span>
                 <h2 className="font-montreal font-medium text-white text-4xl md:text-5xl tracking-tight leading-tight">
@@ -57,7 +57,7 @@ export default function WaitlistHowItWorks() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: index * 0.2 }}
-                        className="group relative pl-12 border-l border-white/10 hover:border-[#E3E3FD] transition-colors duration-500"
+                        className="group relative pl-6 md:pl-12 border-l border-white/10 hover:border-[#E3E3FD] transition-colors duration-500"
                     >
                         <span className="absolute -left-[5px] top-0 w-2.5 h-2.5 bg-[#020202] border border-white/20 group-hover:border-[#E3E3FD] transition-colors rotate-45"></span>
                         

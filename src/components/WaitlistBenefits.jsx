@@ -7,12 +7,12 @@ const Corner = ({ className = "" }) => (
 
 export default function WaitlistBenefits() {
   return (
-    <section id="value" className="w-full py-32 px-6 relative overflow-hidden border-t border-white/5 bg-[#020202]">
+    <section id="value" className="w-full py-20 md:py-32 px-6 relative overflow-hidden border-t border-white/5 bg-[#020202]">
       
       <div className="max-w-[1400px] mx-auto relative z-10">
         
         {/* Header Block */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-24 border-b border-white/10 pb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-12 md:mb-24 border-b border-white/10 pb-12">
             <div className="lg:col-span-8">
                 <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-6">Value Proposition</span>
                 <h2 className="font-montreal font-medium text-white text-4xl md:text-6xl tracking-tight leading-[0.95] mb-6">

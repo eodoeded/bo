@@ -139,7 +139,7 @@ export default function WaitlistHero() {
   };
 
   return (
-    <section className="relative w-full h-screen min-h-[800px] overflow-hidden bg-[#020202]">
+    <section className="relative w-full h-screen min-h-[600px] md:min-h-[800px] overflow-hidden bg-[#020202]">
       
       {/* Background Grid */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.02]" style={{ 

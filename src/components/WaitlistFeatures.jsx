@@ -16,11 +16,11 @@ const specs = [
 
 export default function WaitlistFeatures() {
   return (
-    <section id="specs" className="w-full py-32 px-6 border-t border-white/5 bg-[#020202]">
+    <section id="specs" className="w-full py-20 md:py-32 px-6 border-t border-white/5 bg-[#020202]">
       <div className="max-w-[1400px] mx-auto">
         
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-20 border-b border-white/10 pb-8">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-10 md:mb-20 border-b border-white/10 pb-8">
              <div>
                 <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-4">Specifications</span>
                 <h2 className="font-montreal font-medium text-white text-4xl md:text-5xl tracking-tight leading-[0.9]">
@@ -36,7 +36,7 @@ export default function WaitlistFeatures() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-px bg-white/10 border border-white/10">
             
             {/* Left: Features List */}
-            <div className="bg-[#050505] p-12 relative">
+            <div className="bg-[#050505] p-6 md:p-12 relative">
                 <Corner className="top-0 left-0 border-t border-l" />
                 <h3 className="font-mono text-sm text-white/40 uppercase tracking-widest mb-8">Features</h3>
                 
@@ -61,7 +61,7 @@ export default function WaitlistFeatures() {
             </div>
 
             {/* Right: Technical Description */}
-            <div className="bg-[#050505] p-12 relative flex flex-col justify-between">
+            <div className="bg-[#050505] p-6 md:p-12 relative flex flex-col justify-between">
                 <Corner className="bottom-0 right-0 border-b border-r" />
                 
                 <div>
@@ -83,7 +83,7 @@ export default function WaitlistFeatures() {
                     </p>
                 </div>
 
-                <div className="mt-12 pt-8 border-t border-white/5 flex gap-12">
+                <div className="mt-8 md:mt-12 pt-8 border-t border-white/5 flex gap-6 md:gap-12">
                      <div>
                         <span className="block font-mono text-[9px] text-white/30 uppercase tracking-widest mb-1">Uptime</span>
                         <span className="font-mono text-xl text-[#E3E3FD]">99.9%</span>
