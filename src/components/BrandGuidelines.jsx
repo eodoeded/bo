@@ -1002,24 +1002,41 @@ export default function BrandGuidelines() {
                 <div>
                     <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest mb-6 block">LinkedIn Banner (1584 x 396px)</span>
                     <div className="grid grid-cols-1 gap-8">
-                        {/* Option 1: Minimal Typography */}
+                        {/* Option 1: 3D Node (New Request) */}
                         <div className="group relative">
                             <div className="w-full aspect-[4/1] bg-[#020202] border border-white/10 flex items-center justify-between px-16 relative overflow-hidden">
                                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05]"></div>
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-[#E3E3FD]/5 blur-3xl rounded-full"></div>
+                                
+                                {/* 3D Asset Floating */}
+                                <div className="absolute right-24 top-1/2 -translate-y-1/2 scale-75 opacity-80 mix-blend-screen grayscale group-hover:grayscale-0 transition-all duration-700">
+                                     <motion.div
+                                        className="relative z-0"
+                                        animate={{ y: [0, -4, 0] }}
+                                        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                                    >
+                                        <img src={bottomComp} alt="Bottom" className="w-[200px] object-contain" />
+                                    </motion.div>
+                                    <motion.div
+                                        className="absolute -top-8 left-10"
+                                        animate={{ y: [0, -6, 0] }}
+                                        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
+                                        style={{ zIndex: 2 }}
+                                    >
+                                        <img src={upComp} alt="Top" className="w-[100px] object-contain" />
+                                    </motion.div>
+                                </div>
                                 
                                 <div className="relative z-10">
-                                    <h3 className="font-montreal text-3xl text-white tracking-tight leading-none mb-2">Branded Objects</h3>
-                                    <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest">Automated Brand Governance</p>
-                                </div>
-                                <div className="relative z-10 flex gap-2">
-                                     <div className="w-1.5 h-1.5 bg-[#E3E3FD]"></div>
-                                     <div className="w-1.5 h-1.5 bg-white/20"></div>
-                                     <div className="w-1.5 h-1.5 bg-white/20"></div>
+                                    <Badge className="mb-4">System v2.2</Badge>
+                                    <h3 className="font-montreal font-medium text-4xl text-white tracking-tight leading-none mb-2">Branded Objects</h3>
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-1.5 h-1.5 bg-[#E3E3FD] animate-pulse"></div>
+                                        <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest">Automated Brand Governance</p>
+                                    </div>
                                 </div>
                             </div>
                             <div className="flex justify-between items-center mt-3">
-                                <span className="font-mono text-[10px] text-white/40">Option 01: Minimal</span>
+                                <span className="font-mono text-[10px] text-white/40">Option 01: 3D Node</span>
                                 <button className="flex items-center gap-2 text-[#E3E3FD] hover:text-white transition-colors">
                                     <Download size={12} />
                                     <span className="font-mono text-[10px] uppercase tracking-widest">Download .png</span>
@@ -1052,7 +1069,7 @@ export default function BrandGuidelines() {
                                 <div className="absolute bottom-4 left-6 font-mono text-[9px] text-white/30 uppercase tracking-widest">System_v2.2</div>
                             </div>
                              <div className="flex justify-between items-center mt-3">
-                                <span className="font-mono text-[10px] text-white/40">Option 02: System</span>
+                                <span className="font-mono text-[10px] text-white/40">Option 02: System Flow</span>
                                 <button className="flex items-center gap-2 text-[#E3E3FD] hover:text-white transition-colors">
                                     <Download size={12} />
                                     <span className="font-mono text-[10px] uppercase tracking-widest">Download .png</span>
@@ -1066,27 +1083,29 @@ export default function BrandGuidelines() {
                 <div className="border-t border-white/10 pt-12">
                      <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest mb-6 block">Profile Picture (400 x 400px)</span>
                      <div className="flex gap-8">
-                        {/* Option 1: Symbol */}
+                        {/* Option 1: The Grid (New) */}
                         <div className="group">
                              <div className="w-32 h-32 bg-[#020202] border border-white/10 flex items-center justify-center relative overflow-hidden">
-                                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
-                                <div className="w-12 h-12 border-2 border-white flex items-center justify-center rotate-45 group-hover:rotate-90 transition-transform duration-700">
+                                <div className="grid grid-cols-2 gap-1 p-1 border border-white/20">
+                                    <div className="w-4 h-4 bg-white/10"></div>
                                     <div className="w-4 h-4 bg-[#E3E3FD]"></div>
+                                    <div className="w-4 h-4 bg-white/10"></div>
+                                    <div className="w-4 h-4 bg-white/10"></div>
                                 </div>
                              </div>
                              <div className="flex justify-between items-center mt-3 w-32">
-                                <span className="font-mono text-[9px] text-white/40">Symbol</span>
+                                <span className="font-mono text-[9px] text-white/40">Grid Mark</span>
                                 <Download size={12} className="text-[#E3E3FD] cursor-pointer hover:text-white"/>
                             </div>
                         </div>
 
-                        {/* Option 2: Monogram */}
+                        {/* Option 2: Technical Monogram (New) */}
                         <div className="group">
-                             <div className="w-32 h-32 bg-[#E3E3FD] border border-white/10 flex items-center justify-center relative text-black">
-                                <span className="font-montreal font-medium text-4xl tracking-tighter">Bo.</span>
+                             <div className="w-32 h-32 bg-[#0A0A0A] border border-white/10 flex items-center justify-center relative text-white">
+                                <span className="font-mono text-xl tracking-[0.2em] group-hover:text-[#E3E3FD] transition-colors">[ B ]</span>
                              </div>
                              <div className="flex justify-between items-center mt-3 w-32">
-                                <span className="font-mono text-[9px] text-white/40">Monogram</span>
+                                <span className="font-mono text-[9px] text-white/40">Tech Mono</span>
                                 <Download size={12} className="text-[#E3E3FD] cursor-pointer hover:text-white"/>
                             </div>
                         </div>
