@@ -673,3 +673,11 @@ export default function BrandGuidelines() {
         </section>
 
       </div>
+      
+      <footer className="py-12 border-t border-white/5 text-center relative z-10">
+        <span className="font-mono text-[10px] text-white/20 uppercase tracking-widest hover:text-white/40 transition-colors cursor-default">© 2025 Branded Objects Systems</span>
+      </footer>
+
+    </div>
+  );
+}
