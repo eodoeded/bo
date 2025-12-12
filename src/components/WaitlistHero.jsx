@@ -20,7 +20,7 @@ const Node = ({ title, icon: Icon, children, x, y, delay = 0, width = "w-48" }) 
     initial={{ opacity: 0, scale: 0.9 }}
     animate={{ opacity: 1, scale: 1 }}
     transition={{ duration: 0.5, delay }}
-    className={`absolute z-10 bg-[#050505] border border-white/10 p-4 ${width} shadow-2xl backdrop-blur-md group hover:border-white/30 transition-colors`}
+    className={`absolute z-10 bg-[#050505] border border-white/10 p-4 ${width} shadow-2xl backdrop-blur-md group hover:border-white/30 transition-colors hidden md:block`}
     style={{ left: x, top: y }}
   >
     <Corner className="top-0 left-0 border-t border-l group-hover:border-white transition-colors" />
@@ -41,13 +41,11 @@ const Node = ({ title, icon: Icon, children, x, y, delay = 0, width = "w-48" }) 
 );
 
 const Connection = ({ start, end, delay }) => {
-    const midX = (start.x + end.x) / 2;
-    const path = `M ${start.x} ${start.y} L ${midX} ${start.y} L ${midX} ${end.y} L ${end.x} ${end.y}`;
-  
+    // Basic SVG line connection for visual effect
     return (
-      <svg className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-visible z-0">
+      <svg className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-visible z-0 hidden md:block">
         <motion.path
-          d={path}
+          d={`M ${start.x} ${start.y} L ${end.x} ${end.y}`}
           fill="none"
           stroke="#E3E3FD"
           strokeWidth="1"
@@ -57,7 +55,7 @@ const Connection = ({ start, end, delay }) => {
           transition={{ duration: 1.2, delay, ease: "easeInOut" }}
         />
         <motion.path
-          d={path}
+          d={`M ${start.x} ${start.y} L ${end.x} ${end.y}`}
           fill="none"
           stroke="#E3E3FD"
           strokeWidth="1"
@@ -73,24 +71,36 @@ export default function WaitlistHero() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState('idle');
 
-  const handleJoin = (e) => {
+  const handleJoin = async (e) => {
     e.preventDefault();
     if (!email) return;
-    setStatus('success');
-    const emailBody = email; 
-    setEmail('');
-    const subject = encodeURIComponent("Join Waitlist - Branded Objects");
-    const body = encodeURIComponent(`Please add ${emailBody} to the Branded Objects waitlist.`);
+    setStatus('sending');
     
-    // Simulate "sending" state before opening client
-    setTimeout(() => {
-        window.location.href = `mailto:brandedobjects@gmail.com?subject=${subject}&body=${body}`;
-        setTimeout(() => setStatus('idle'), 2000);
-    }, 800);
+    try {
+        const response = await fetch("https://formspree.io/f/xzzzdnlj", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email: email })
+        });
+
+        if (response.ok) {
+            setStatus('success');
+            setEmail('');
+            setTimeout(() => setStatus('idle'), 3000);
+        } else {
+            setStatus('error');
+            setTimeout(() => setStatus('idle'), 3000);
+        }
+    } catch (error) {
+        setStatus('error');
+        setTimeout(() => setStatus('idle'), 3000);
+    }
   };
 
   return (
-    <section className="relative w-full h-screen min-h-[800px] flex flex-col pt-32 pb-0 px-6 overflow-hidden bg-[#020202]">
+    <section className="relative w-full min-h-screen flex flex-col pt-32 pb-20 px-6 overflow-hidden bg-[#020202]">
       
       {/* Background Grid */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.02]" style={{ 
@@ -106,10 +116,10 @@ export default function WaitlistHero() {
           LATENCY: 12ms <br/> SECURE_CONNECTION
       </div>
 
-      <div className="max-w-[1400px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 h-full items-center relative z-20">
+      <div className="max-w-[1400px] mx-auto w-full h-full relative z-20 flex items-center">
         
         {/* Left Column: Text & Form */}
-        <div className="flex flex-col items-start text-left z-20 mb-12 lg:mb-0 lg:-mt-20">
+        <div className="flex flex-col items-start text-left z-20 max-w-2xl">
             {/* Simplified Header - Removed complex badge stack */}
             <div className="flex items-center gap-3 mb-8">
                 <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">Early Access Protocol</span>
@@ -152,17 +162,20 @@ export default function WaitlistHero() {
 
                     <input 
                         type="email" 
+                        name="email"
                         placeholder="studio@agency.com" 
-                        className="flex-1 bg-transparent text-white pl-10 pr-6 py-4 font-mono text-xs focus:outline-none placeholder:text-white/20 tracking-wider"
+                        className="flex-1 bg-transparent text-white pl-10 pr-6 py-4 font-mono text-xs focus:outline-none placeholder:text-white/20 tracking-wider w-full"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        required
                     />
                     <button 
                         type="submit"
-                        className="bg-white text-black px-8 py-4 font-mono font-semibold text-[11px] tracking-[0.2em] hover:bg-[#E3E3FD] transition-colors whitespace-nowrap uppercase border border-transparent flex items-center gap-2 group/btn"
+                        className="bg-white text-black px-8 py-4 font-mono font-semibold text-[11px] tracking-[0.2em] hover:bg-[#E3E3FD] transition-colors whitespace-nowrap uppercase border border-transparent flex items-center gap-2 justify-center group/btn mt-2 sm:mt-0 w-full sm:w-auto"
+                        disabled={status === 'sending' || status === 'success'}
                     >
-                        Request Access
-                        <ArrowRight size={12} className="group-hover/btn:translate-x-0.5 transition-transform" />
+                        {status === 'sending' ? 'Sending...' : status === 'success' ? 'Joined' : 'Request Access'}
+                        {status === 'idle' && <ArrowRight size={12} className="group-hover/btn:translate-x-0.5 transition-transform" />}
                     </button>
                 </div>
             </motion.form>
@@ -173,116 +186,112 @@ export default function WaitlistHero() {
                     className="mt-4 font-mono text-[10px] text-[#E3E3FD] tracking-widest uppercase flex items-center gap-2"
                 >
                     <div className="w-1.5 h-1.5 bg-[#E3E3FD] animate-pulse rounded-full"></div>
-                    Opening secure channel...
+                    Added to secure waitlist.
+                </motion.p>
+            )}
+             {status === 'error' && (
+                <motion.p 
+                    initial={{ opacity: 0 }} 
+                    animate={{ opacity: 1 }} 
+                    className="mt-4 font-mono text-[10px] text-red-400 tracking-widest uppercase flex items-center gap-2"
+                >
+                    <div className="w-1.5 h-1.5 bg-red-400 rounded-full"></div>
+                    Error. Please try again.
                 </motion.p>
             )}
         </div>
 
       </div>
 
-      {/* Right Column: Node Graph with Spot Mini - Unrestrained & Spread */}
-      <div className="absolute top-0 right-0 w-full lg:w-1/2 h-full pointer-events-none z-10">
-            {/* Graph Container - No Border, Full Spread */}
-            <div className="relative w-full h-full">
-                
-                {/* 
-                    Unrestrained Coordinates. 
-                    Using percentage based positioning or wider spread.
-                    Studio: Top Leftish.
-                    Core: Center Rightish.
-                    Output: Bottom Rightish.
-                */}
+      {/* Node Graph - Spread Across Screen */}
+      <div className="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-hidden">
+            {/* 
+                Coordinates:
+                - Using viewport units (vw/vh) via calc() for responsive positioning
+                - Nodes hidden on mobile (md:block)
+            */}
 
-                {/* Studio Input - Top Left of area */}
-                <Node title="Design_Studio" x="10%" y="20%" delay={0.4} width="w-48">
-                    <div className="flex items-center gap-3 text-white/60">
-                        <Database size={14} />
-                        <span className="font-mono text-[9px]">ASSETS_LOADED</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-white/60">
-                        <Lock size={14} className="text-[#E3E3FD]"/>
-                        <span className="font-mono text-[9px] text-[#E3E3FD]">RULES_LOCKED</span>
-                    </div>
-                </Node>
+            {/* Studio Input - Far Left */}
+            <Node title="Design_Studio" x="5%" y="25%" delay={0.4} width="w-48">
+                <div className="flex items-center gap-3 text-white/60">
+                    <Database size={14} />
+                    <span className="font-mono text-[9px]">ASSETS_LOADED</span>
+                </div>
+                <div className="flex items-center gap-3 text-white/60">
+                    <Lock size={14} className="text-[#E3E3FD]"/>
+                    <span className="font-mono text-[9px] text-[#E3E3FD]">RULES_LOCKED</span>
+                </div>
+            </Node>
 
-                {/* System Core with Spot Mini - Center */}
-                <Node title="Branded_Objects" x="40%" y="45%" delay={0.6} width="w-64">
-                    <div className="h-48 w-full relative flex items-center justify-center overflow-hidden bg-[#0A0A0A] border border-white/10 mb-2 shadow-inner">
-                         {/* Spot Mini Animation */}
-                         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05]"></div>
-                        <motion.div
-                            className="relative z-0"
-                            animate={{ y: [0, -4, 0] }}
-                            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                        >
-                            <img src={bottomComp} alt="Bottom" className="w-[140px] object-contain opacity-100" />
-                        </motion.div>
-                        <motion.div
-                            className="absolute top-16"
-                            animate={{ y: [0, -6, 0] }}
-                            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
-                            style={{ zIndex: 2 }}
-                        >
-                            <img src={upComp} alt="Top" className="w-[70px] object-contain opacity-100" />
-                        </motion.div>
+            {/* System Core - Center Right */}
+            <Node title="Branded_Objects" x="55%" y="40%" delay={0.6} width="w-64">
+                <div className="h-48 w-full relative flex items-center justify-center overflow-hidden bg-[#0A0A0A] border border-white/10 mb-2 shadow-inner">
+                     <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05]"></div>
+                    <motion.div
+                        className="relative z-0"
+                        animate={{ y: [0, -4, 0] }}
+                        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                    >
+                        <img src={bottomComp} alt="Bottom" className="w-[140px] object-contain opacity-100" />
+                    </motion.div>
+                    <motion.div
+                        className="absolute top-16"
+                        animate={{ y: [0, -6, 0] }}
+                        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
+                        style={{ zIndex: 2 }}
+                    >
+                        <img src={upComp} alt="Top" className="w-[70px] object-contain opacity-100" />
+                    </motion.div>
+                </div>
+                <div className="flex justify-between items-center px-1">
+                    <span className="font-mono text-[8px] text-white/40">GENERATING_ASSET_ID_8492</span>
+                    <div className="flex gap-0.5">
+                        {[1,2,3,4,5].map(i => (
+                            <div key={i} className="w-0.5 h-1.5 bg-[#E3E3FD]" style={{opacity: 0.2 + (i*0.15)}}></div>
+                        ))}
                     </div>
-                    <div className="flex justify-between items-center px-1">
-                        <span className="font-mono text-[8px] text-white/40">GENERATING_ASSET_ID_8492</span>
-                        <div className="flex gap-0.5">
-                            {[1,2,3,4,5].map(i => (
-                                <div key={i} className="w-0.5 h-1.5 bg-[#E3E3FD]" style={{opacity: 0.2 + (i*0.15)}}></div>
-                            ))}
-                        </div>
-                    </div>
-                </Node>
+                </div>
+            </Node>
 
-                {/* Client Output - Bottom Right */}
-                <Node title="Client_Output" x="75%" y="70%" delay={0.8} width="w-48">
-                    <div className="flex items-center gap-3 text-white/60">
-                        <Layout size={14} />
-                        <span className="font-mono text-[9px]">RENDER_COMPLETE</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-white/60">
-                        <Zap size={14} className="text-[#E3E3FD]"/>
-                        <span className="font-mono text-[9px]">INSTANT_DELIVERY</span>
-                    </div>
-                </Node>
+            {/* Client Output - Far Right Bottom */}
+            <Node title="Client_Output" x="80%" y="70%" delay={0.8} width="w-48">
+                <div className="flex items-center gap-3 text-white/60">
+                    <Layout size={14} />
+                    <span className="font-mono text-[9px]">RENDER_COMPLETE</span>
+                </div>
+                <div className="flex items-center gap-3 text-white/60">
+                    <Zap size={14} className="text-[#E3E3FD]"/>
+                    <span className="font-mono text-[9px]">INSTANT_DELIVERY</span>
+                </div>
+            </Node>
 
-                {/* Connections (Calculated loosely based on % to px approx for SVG) 
-                    Note: SVG needs absolute units or viewBox. 
-                    Let's use a full screen SVG with percentage coordinates via layout.
-                    Actually, React refs would be best for exact connections, but for this effect,
-                    hardcoded approximate percentages converted to viewport units works if responsive.
-                    Or just lines that fade out.
-                    Let's try drawing long connecting lines that span the distance.
-                */}
-                <svg className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-visible z-0">
-                    {/* Studio -> Core */}
-                    <motion.path
-                      d="M 200 250 L 400 250 L 400 500 L 550 500" // Approx path based on laptop screen
-                      fill="none"
-                      stroke="#E3E3FD"
-                      strokeWidth="1"
-                      strokeOpacity="0.15"
-                      initial={{ pathLength: 0, opacity: 0 }}
-                      animate={{ pathLength: 1, opacity: 1 }}
-                      transition={{ duration: 1.5, delay: 0.5 }}
-                    />
-                     {/* Core -> Output */}
-                    <motion.path
-                      d="M 850 500 L 950 500 L 950 750 L 1050 750" // Approx path
-                      fill="none"
-                      stroke="#E3E3FD"
-                      strokeWidth="1"
-                      strokeOpacity="0.15"
-                      initial={{ pathLength: 0, opacity: 0 }}
-                      animate={{ pathLength: 1, opacity: 1 }}
-                      transition={{ duration: 1.5, delay: 0.7 }}
-                    />
-                </svg>
+            {/* Connecting Lines - Adjusted for spread */}
+            <svg className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-visible z-0 hidden md:block">
+                {/* Studio to Core */}
+                <motion.path
+                  d="M 150 250 C 400 250, 400 450, 800 450" // Curved path
+                  fill="none"
+                  stroke="#E3E3FD"
+                  strokeWidth="1"
+                  strokeOpacity="0.1"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 1.5, delay: 0.5 }}
+                />
+                 {/* Core to Output */}
+                <motion.path
+                  d="M 1050 500 C 1200 500, 1200 750, 1400 750" // Curved path
+                  fill="none"
+                  stroke="#E3E3FD"
+                  strokeWidth="1"
+                  strokeOpacity="0.1"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 1.5, delay: 0.7 }}
+                />
+            </svg>
 
-            </div>
-        </div>
+      </div>
 
     </section>
   );
