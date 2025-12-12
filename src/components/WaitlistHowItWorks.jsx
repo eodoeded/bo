@@ -31,7 +31,7 @@ const steps = [
 
 export default function WaitlistHowItWorks() {
   return (
-    <section className="w-full py-32 px-6 border-t border-white/5 bg-[#020202] relative">
+    <section id="process" className="w-full py-32 px-6 border-t border-white/5 bg-[#020202] relative">
       <div className="max-w-6xl mx-auto relative z-10">
         
         {/* Header */}

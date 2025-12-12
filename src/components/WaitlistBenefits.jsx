@@ -13,7 +13,7 @@ const Badge = ({ children, className = "", color = "text-[#E3E3FD]" }) => (
 
 export default function WaitlistBenefits() {
   return (
-    <section className="w-full py-24 px-6 relative overflow-hidden border-t border-white/5 bg-[#020202]">
+    <section id="value" className="w-full py-24 px-6 relative overflow-hidden border-t border-white/5 bg-[#020202]">
       
       <div className="max-w-5xl mx-auto relative z-10">
         <div className="flex flex-col md:flex-row gap-12 md:gap-24 items-start">

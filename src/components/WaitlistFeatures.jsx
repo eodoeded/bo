@@ -16,7 +16,7 @@ const Corner = ({ className = "" }) => (
 
 export default function WaitlistFeatures() {
   return (
-    <section className="w-full py-24 px-6 border-t border-white/5 bg-[#020202]">
+    <section id="specs" className="w-full py-24 px-6 border-t border-white/5 bg-[#020202]">
       <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-16 items-start">
         
         <div className="flex-1 sticky top-24">
