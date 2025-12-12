@@ -19,6 +19,7 @@ import { Link } from 'react-router-dom';
 import html2canvas from 'html2canvas';
 import { SmartImage } from './studio/SmartImage';
 import { LayerProperties } from './studio/LayerProperties';
+import { CanvasProperties } from './studio/CanvasProperties'; // Imported
 import { generateImage } from '../services/gemini';
 
 // --- HISTORY SYSTEM HOOK ---
@@ -101,8 +102,9 @@ const INITIAL_LAYERS = [
     locked: false, 
     allowContentChange: false,
     lockPosition: true, 
-    opacity: 1, // New
-    visible: true, // New
+    opacity: 1, 
+    visible: true, 
+    rotation: 0 // New
   },
   {
     id: 'card-title',
@@ -118,7 +120,8 @@ const INITIAL_LAYERS = [
     lockPosition: false,
     opacity: 1,
     visible: true,
-    fontWeight: 'normal', // New
+    rotation: 0,
+    fontWeight: 'normal',
     fontStyle: 'normal',
     textDecoration: 'none',
     textTransform: 'none'
@@ -139,6 +142,7 @@ const INITIAL_LAYERS = [
     lockPosition: false,
     opacity: 1,
     visible: true,
+    rotation: 0
   }
 ];
 
@@ -405,8 +409,9 @@ export default function Studio() {
             locked: false,
             allowContentChange: true,
             lockPosition: false, 
-            opacity: 1, // New
-            visible: true, // New
+            opacity: 1, 
+            visible: true, 
+            rotation: 0,
             aiPromptTemplate: type === 'AI_FRAME' ? "A render of {subject}" : undefined,
             filterType: 'none',
             blendMode: 'normal'
@@ -1022,17 +1027,6 @@ export default function Studio() {
 
                                     <button onClick={() => addLayer('AI_FRAME')} className="flex flex-col items-center justify-center p-3 border border-white/10 hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group"><Sparkles size={16} className="text-white/60 group-hover:text-[#E3E3FD]" /><span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">AI Gen</span></button>
                                 </div>
-                                <div className="p-4 border border-white/10 bg-[#0A0A0A]">
-                                    <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-2">Canvas Spec</span>
-                                    <div className="grid grid-cols-2 gap-2 mb-2">
-                                         <div className="bg-[#050505] border border-white/10 px-2 py-1.5 flex justify-between items-center"><span className="font-mono text-[9px] text-white/40">W</span><input type="number" value={canvasConfig.width} onChange={(e) => setCanvasConfig({...canvasConfig, width: Number(e.target.value)})} className="w-12 bg-transparent text-right font-mono text-[9px] text-[#E3E3FD] focus:outline-none" /></div>
-                                         <div className="bg-[#050505] border border-white/10 px-2 py-1.5 flex justify-between items-center"><span className="font-mono text-[9px] text-white/40">H</span><input type="number" value={canvasConfig.height} onChange={(e) => setCanvasConfig({...canvasConfig, height: Number(e.target.value)})} className="w-12 bg-transparent text-right font-mono text-[9px] text-[#E3E3FD] focus:outline-none" /></div>
-                                    </div>
-                                    <div className="w-full bg-[#050505] border border-white/10 px-2 py-1.5 flex justify-between items-center">
-                                        <span className="font-mono text-[9px] text-white/40">BG</span>
-                                        <div className="flex items-center gap-2"><input type="color" value={canvasConfig.backgroundColor} onChange={(e) => setCanvasConfig({...canvasConfig, backgroundColor: e.target.value})} className="w-4 h-4 rounded-full bg-transparent border-0 p-0" /><span className="font-mono text-[9px] text-white/60">{canvasConfig.backgroundColor}</span></div>
-                                    </div>
-                                </div>
                             </div>
                         ) : (
                             <div className="p-2 space-y-1">
@@ -1153,6 +1147,7 @@ export default function Studio() {
                                                 borderRadius: layer.borderRadius ? `${layer.borderRadius}px` : '0px',
                                                 mixBlendMode: layer.blendMode || 'normal',
                                                 opacity: layer.opacity !== undefined ? layer.opacity : 1,
+                                                transform: `rotate(${layer.rotation || 0}deg)`, // New: Rotation
                                                 whiteSpace: layer.type === 'TEXT' ? 'nowrap' : 'normal'
                                             }}
                                         >
@@ -1344,10 +1339,10 @@ export default function Studio() {
                                 onAlign={alignSelectedLayers} 
                             />
                         ) : (
-                            <div className="h-full flex flex-col items-center justify-center text-white/20">
-                                <MousePointer size={24} strokeWidth={1} className="mb-2" />
-                                <span className="font-mono text-[10px] uppercase tracking-widest">Select an element</span>
-                            </div>
+                            <CanvasProperties 
+                                config={canvasConfig}
+                                onChange={setCanvasConfig}
+                            />
                         )}
                         
                         {/* Multi-selection info overlay if needed, but LayerProperties now handles the editing interface */}

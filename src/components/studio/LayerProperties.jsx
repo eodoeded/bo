@@ -1,5 +1,5 @@
 import React from 'react';
-import { Lock, Unlock, Trash2, Check, Sliders, ChevronRight, AlignLeft, AlignCenter, AlignRight, AlignVerticalDistributeCenter, AlignHorizontalDistributeCenter, AlignJustify, AlignEndVertical, Bold, Italic, Underline, Type } from 'lucide-react';
+import { Lock, Unlock, Trash2, Check, Sliders, ChevronRight, AlignLeft, AlignCenter, AlignRight, AlignVerticalDistributeCenter, AlignHorizontalDistributeCenter, AlignJustify, AlignEndVertical, Bold, Italic, Underline, Type, RotateCw } from 'lucide-react';
 
 const InputRow = ({ label, children }) => (
   <div className="mb-4">
@@ -229,18 +229,33 @@ export const LayerProperties = ({
         <div className="pt-4 border-t border-white/10">
            <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest block mb-4">Appearance</span>
            
-           <div className="mb-4">
-               <div className="flex justify-between mb-1">
-                   <label className="font-mono text-[8px] text-white/30 uppercase tracking-widest">Opacity</label>
-                   <span className="font-mono text-[8px] text-white/60">{Math.round((layer.opacity !== undefined ? layer.opacity : 1) * 100)}%</span>
+           <div className="grid grid-cols-2 gap-3 mb-4">
+               <div>
+                   <label className="font-mono text-[8px] text-white/30 uppercase tracking-widest block mb-1">Opacity</label>
+                   <div className="flex gap-2 items-center">
+                       <input 
+                           type="range" 
+                           min="0" max="1" step="0.01"
+                           value={layer.opacity !== undefined ? layer.opacity : 1}
+                           onChange={(e) => onUpdate(layer.id, { opacity: parseFloat(e.target.value) })}
+                           className="flex-1 h-1 bg-white/10 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-[#E3E3FD] [&::-webkit-slider-thumb]:rounded-full"
+                       />
+                       <span className="font-mono text-[8px] text-white/60 w-6 text-right">{Math.round((layer.opacity !== undefined ? layer.opacity : 1) * 100)}%</span>
+                   </div>
                </div>
-               <input 
-                   type="range" 
-                   min="0" max="1" step="0.01"
-                   value={layer.opacity !== undefined ? layer.opacity : 1}
-                   onChange={(e) => onUpdate(layer.id, { opacity: parseFloat(e.target.value) })}
-                   className="w-full h-1 bg-white/10 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-[#E3E3FD] [&::-webkit-slider-thumb]:rounded-full"
-               />
+               <div>
+                   <label className="font-mono text-[8px] text-white/30 uppercase tracking-widest block mb-1">Rotation</label>
+                   <div className="flex gap-2 items-center">
+                       <RotateCw size={12} className="text-white/40" />
+                       <input 
+                           type="number" 
+                           value={layer.rotation || 0}
+                           onChange={(e) => onUpdate(layer.id, { rotation: Number(e.target.value) })}
+                           className="w-full bg-[#0A0A0A] border border-white/10 px-2 py-1 font-mono text-[9px] text-white focus:outline-none focus:border-[#E3E3FD]"
+                       />
+                       <span className="font-mono text-[8px] text-white/40">deg</span>
+                   </div>
+               </div>
            </div>
 
            {(layer.type === 'IMAGE' || layer.type === 'AI_FRAME') && (
