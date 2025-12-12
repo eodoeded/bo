@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Box, Layout, Type, MousePointer, CreditCard, Layers, Grid as GridIcon, Database, Cpu, Activity, User, Mail, Send, ChevronDown, Check, AlertCircle, Terminal, BarChart2, CornerDownRight, Zap, Move, Eye, Code, Command, Github, Twitter, Disc, Lock, Unlock, Edit3, Image as ImageIcon } from 'lucide-react';
+import { ArrowLeft, Box, Layout, Type, MousePointer, CreditCard, Layers, Grid as GridIcon, Database, Cpu, Activity, User, Mail, Send, ChevronDown, Check, AlertCircle, Terminal, BarChart2, CornerDownRight, Zap, Move, Eye, Code, Command, Github, Twitter, Disc, Lock, Unlock, Edit3, Image as ImageIcon, Linkedin, Download, Share2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import upComp from "../assets/up-comp.png";
@@ -180,109 +180,99 @@ export default function BrandGuidelines() {
             </p>
         </div>
 
-        {/* Centered Node Graph */}
-        <div className="relative w-full h-full flex items-center justify-center scale-90 md:scale-100">
-            <div className="relative w-[1000px] h-[600px]">
-                {/* Input Layer */}
-                <Node title="Data_Ingest" outputs={[1]} x={50} y={250} delay={0.2} width="w-40" status="active">
-                    <div className="space-y-3">
-                        <div className="flex items-center gap-3 p-2 bg-white/5 border border-white/5">
-                            <Database size={14} className="text-white/40"/>
-                            <span className="font-mono text-[10px] text-white/60">JSON_STREAM</span>
-                        </div>
-                        <div className="flex gap-1">
-                            <div className="h-0.5 w-full bg-white/10 overflow-hidden">
-                                <motion.div className="h-full bg-[#E3E3FD]" animate={{x:['0%','100%']}} transition={{duration:1.5, repeat:Infinity, ease:"linear"}} />
+            {/* Centered Node Graph */}
+            <div className="relative w-full h-full flex items-center justify-center scale-90 md:scale-100">
+                <div className="relative w-[1000px] h-[600px]">
+                    {/* Input Layer */}
+                    <Node title="Data_Ingest" outputs={[1]} x={50} y={250} delay={0.2} width="w-40" status="active">
+                        <div className="space-y-3">
+                            <div className="flex items-center gap-3 p-2 bg-white/5 border border-white/5">
+                                <Database size={14} className="text-white/40"/>
+                                <span className="font-mono text-[10px] text-white/60">JSON_STREAM</span>
+                            </div>
+                            <div className="flex gap-1">
+                                <div className="h-0.5 w-full bg-white/10 overflow-hidden">
+                                    <motion.div className="h-full bg-[#E3E3FD]" animate={{x:['0%','100%']}} transition={{duration:1.5, repeat:Infinity, ease:"linear"}} />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </Node>
+                    </Node>
 
-                {/* Processing Layer */}
-                <Node title="Neural_Core" inputs={[1]} outputs={[1, 1]} x={350} y={150} delay={0.4} width="w-48">
-                    <div className="space-y-2">
-                        <div className="flex justify-between items-center text-[10px] font-mono text-white/40">
-                            <span>LATENCY</span>
-                            <span className="text-[#E3E3FD]">12ms</span>
+                    {/* Processing Layer */}
+                    <Node title="Neural_Core" inputs={[1]} outputs={[1, 1]} x={350} y={150} delay={0.4} width="w-48">
+                        <div className="space-y-2">
+                            <div className="flex justify-between items-center text-[10px] font-mono text-white/40">
+                                <span>LATENCY</span>
+                                <span className="text-[#E3E3FD]">12ms</span>
+                            </div>
+                            <div className="grid grid-cols-5 gap-1 h-6">
+                                {[...Array(10)].map((_,i) => (
+                                    <motion.div 
+                                        key={i}
+                                        className="bg-[#E3E3FD]/20 border border-[#E3E3FD]/10"
+                                        animate={{opacity:[0.2, 1, 0.2]}}
+                                        transition={{duration:Math.random()*2 + 1, repeat:Infinity}}
+                                    />
+                                ))}
+                            </div>
                         </div>
-                        <div className="grid grid-cols-5 gap-1 h-6">
-                            {[...Array(10)].map((_,i) => (
-                                <motion.div 
-                                    key={i}
-                                    className="bg-[#E3E3FD]/20 border border-[#E3E3FD]/10"
-                                    animate={{opacity:[0.2, 1, 0.2]}}
-                                    transition={{duration:Math.random()*2 + 1, repeat:Infinity}}
-                                />
-                            ))}
-                        </div>
-                    </div>
-                </Node>
+                    </Node>
 
-                <Node title="Logic_Gate" inputs={[1]} outputs={[1]} x={350} y={400} delay={0.5} width="w-40">
-                     <div className="p-2 bg-white/5 border border-white/5">
-                        <div className="flex justify-between items-center mb-2">
-                            <Activity size={12} className="text-white/40"/>
-                            <span className="font-mono text-[9px] text-[#E3E3FD]">OPTIMAL</span>
-                        </div>
-                        <div className="h-6 w-full flex items-end gap-[2px]">
-                            {[40, 70, 30, 80, 50, 90, 60].map((h, i) => (
-                                <motion.div key={i} className="flex-1 bg-white/20" animate={{height: [`${h}%`, `${Math.random()*80+20}%`]}} transition={{duration:2, repeat:Infinity}} />
-                            ))}
-                        </div>
-                     </div>
-                </Node>
+                    <Node title="Logic_Gate" inputs={[1]} outputs={[1]} x={350} y={400} delay={0.5} width="w-40">
+                         <div className="p-2 bg-white/5 border border-white/5">
+                            <div className="flex justify-between items-center mb-2">
+                                <Activity size={12} className="text-white/40"/>
+                                <span className="font-mono text-[9px] text-[#E3E3FD]">OPTIMAL</span>
+                            </div>
+                            <div className="h-6 w-full flex items-end gap-[2px]">
+                                {[40, 70, 30, 80, 50, 90, 60].map((h, i) => (
+                                    <motion.div key={i} className="flex-1 bg-white/20" animate={{height: [`${h}%`, `${Math.random()*80+20}%`]}} transition={{duration:2, repeat:Infinity}} />
+                                ))}
+                            </div>
+                         </div>
+                    </Node>
 
-                {/* Output Layer */}
-                <Node type="minimal" inputs={[1, 1]} outputs={[1]} x={700} y={250} delay={0.7}>
-                    <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-[#E3E3FD]/10 flex items-center justify-center text-[#E3E3FD] border border-[#E3E3FD]/20">
-                            <Cpu size={16} />
+                    {/* Output Layer */}
+                    <Node type="minimal" inputs={[1, 1]} outputs={[1]} x={700} y={250} delay={0.7}>
+                        <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 bg-[#E3E3FD]/10 flex items-center justify-center text-[#E3E3FD] border border-[#E3E3FD]/20">
+                                <Cpu size={16} />
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="font-montreal font-medium text-sm text-white">Renderer</span>
+                                <span className="font-mono text-[9px] text-white/40">v2.4.0-stable</span>
+                            </div>
                         </div>
-                        <div className="flex flex-col">
-                            <span className="font-montreal font-medium text-sm text-white">Renderer</span>
-                            <span className="font-mono text-[9px] text-white/40">v2.4.0-stable</span>
-                        </div>
-                    </div>
-                </Node>
+                    </Node>
 
-                {/* Final */}
-                <Node type="minimal" inputs={[1]} x={900} y={250} delay={0.9}>
-                    <span className="font-mono text-[10px] tracking-[0.2em] text-[#E3E3FD] uppercase">Deployment</span>
-                </Node>
+                    {/* Final */}
+                    <Node type="minimal" inputs={[1]} x={900} y={250} delay={0.9}>
+                        <span className="font-mono text-[10px] tracking-[0.2em] text-[#E3E3FD] uppercase">Deployment</span>
+                    </Node>
 
-                {/* Connections - Fixed Coordinates relative to Node ports */}
-                {/* Node widths: w-40=160px, w-48=192px. Padding p-3. Ports top-8 (32px).
-                    Outputs: x + w - 5px. Inputs: x - 5px.
+                    {/* Connections - Fixed Coordinates relative to Node ports */}
+                    {/* 
+                        Data_Ingest (50, 250, w=160). Port Right: x=210, y=282 (250+32)
+                        Neural_Core (350, 150, w=192). Port Left: x=345, y=182 (150+32). Port Right: x=542, y=182.
+                        Logic_Gate (350, 400, w=160). Port Left: x=345, y=432 (400+32). Port Right: x=510, y=432.
+                        Renderer (700, 250, minimal). Port Left: x=695, y=274 (250+24). Port Right: x=840, y=274.
+                        Deployment (900, 250, minimal). Port Left: x=895, y=274.
+                    */}
                     
-                    Data_Ingest (50, 250) -> Out: 50+160-5 = 205, 250+32 = 282.
-                    Neural_Core (350, 150) -> In: 350-5 = 345, 150+32 = 182.
-                    Logic_Gate (350, 400) -> In: 350-5 = 345, 400+32 = 432.
+                    {/* Data to Neural */}
+                    <Connection start={{x: 210, y: 282}} end={{x: 345, y: 182}} delay={0.5} active={true} />
+                    {/* Data to Logic */}
+                    <Connection start={{x: 210, y: 282}} end={{x: 345, y: 432}} delay={0.6} active={true} />
                     
-                    Neural_Core (350, 150) -> Out: 350+192-5 = 537, 150+32 = 182.
-                    Logic_Gate (350, 400) -> Out: 350+160-5 = 505, 400+32 = 432.
+                    {/* Neural to Renderer */}
+                    <Connection start={{x: 542, y: 182}} end={{x: 695, y: 274}} delay={0.8} active={true} />
+                    {/* Logic to Renderer */}
+                    <Connection start={{x: 510, y: 432}} end={{x: 695, y: 274}} delay={0.9} dashed={true} />
                     
-                    Renderer (700, 250) -> In: 700-5 = 695, 250+24(mid) = 274? No, minimal type is different.
-                    Minimal node: px-4 py-2. Height approx 40px. Ports centered vertical?
-                    Let's assume Minimal ports are centered vertically at y + 20? 
-                    Renderer (700, 250). In: 695, 270. Out: 700+width?-5, 270.
-                    
-                    Let's standardise lines to exact calculated points.
-                */}
-                
-                {/* Data to Neural */}
-                <Connection start={{x: 205, y: 282}} end={{x: 345, y: 182}} delay={0.5} active={true} />
-                {/* Data to Logic */}
-                <Connection start={{x: 205, y: 282}} end={{x: 345, y: 432}} delay={0.6} active={true} />
-                
-                {/* Neural to Renderer */}
-                <Connection start={{x: 537, y: 182}} end={{x: 695, y: 270}} delay={0.8} active={true} />
-                {/* Logic to Renderer */}
-                <Connection start={{x: 505, y: 432}} end={{x: 695, y: 270}} delay={0.9} dashed={true} />
-                
-                {/* Renderer to Deployment (Deployment at 900) */}
-                <Connection start={{x: 840, y: 270}} end={{x: 895, y: 270}} delay={1.1} active={true} />
+                    {/* Renderer to Deployment (Deployment at 900) */}
+                    <Connection start={{x: 840, y: 274}} end={{x: 895, y: 274}} delay={1.1} active={true} />
+                </div>
             </div>
-        </div>
       </section>
 
       {/* Main Content */}
@@ -396,6 +386,59 @@ export default function BrandGuidelines() {
                             {/* Ports */}
                             <div className="absolute -left-[5px] top-10 w-1.5 h-2 bg-[#050505] border border-[#E3E3FD] shadow-[0_0_8px_rgba(227,227,253,0.3)]"></div>
                             <div className="absolute -right-[5px] top-10 w-1.5 h-2 bg-[#050505] border border-[#E3E3FD] shadow-[0_0_8px_rgba(227,227,253,0.3)]"></div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 3D Asset Node Example */}
+                <div className="relative p-12 border border-white/10 bg-[#0A0A0A] overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none"></div>
+                    <div className="flex justify-between items-center mb-12 relative z-10">
+                         <div className="flex items-center gap-3">
+                            <span className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">3D Asset Container</span>
+                            <div className="h-px w-12 bg-white/10"></div>
+                        </div>
+                        <Badge>Experimental</Badge>
+                    </div>
+
+                    <div className="flex justify-center relative z-10">
+                         <div className="bg-[#050505] border border-white/20 p-1 pb-6 shadow-2xl relative group w-64">
+                            {/* Ports */}
+                            <div className="absolute -left-[5px] top-8 w-1.5 h-2 bg-[#050505] border border-white/30 group-hover:border-[#E3E3FD] transition-colors"></div>
+                            <div className="absolute -right-[5px] top-8 w-1.5 h-2 bg-[#050505] border border-white/30 group-hover:border-[#E3E3FD] transition-colors"></div>
+                            
+                            {/* Node Header */}
+                            <div className="flex justify-between items-center p-3 border-b border-white/10 mb-2">
+                                <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">Model_Viewer</span>
+                                <div className="w-1.5 h-1.5 bg-[#E3E3FD]"></div>
+                            </div>
+
+                            {/* 3D Content */}
+                            <div className="relative h-40 w-full flex items-center justify-center overflow-hidden bg-white/[0.02]">
+                                <motion.div
+                                    className="relative z-0"
+                                    animate={{ y: [0, -4, 0] }}
+                                    transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                                >
+                                    <img src={bottomComp} alt="Bottom" className="w-[120px] object-contain opacity-80 mix-blend-screen grayscale" />
+                                </motion.div>
+                                <motion.div
+                                    className="absolute top-4"
+                                    animate={{ y: [0, -6, 0] }}
+                                    transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
+                                    style={{ zIndex: 2 }}
+                                >
+                                    <img src={upComp} alt="Top" className="w-[60px] object-contain opacity-90 mix-blend-screen grayscale" />
+                                </motion.div>
+                                {/* Grid Overlay */}
+                                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10"></div>
+                            </div>
+
+                            {/* Node Footer */}
+                             <div className="px-3 pt-2 flex justify-between items-center">
+                                <span className="font-mono text-[8px] text-white/30">OBJ_Loader</span>
+                                <span className="font-mono text-[8px] text-[#E3E3FD]">Active</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -945,40 +988,154 @@ export default function BrandGuidelines() {
             </div>
         </section>
 
+        {/* 12. Social Assets (New Section) */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+             <div className="md:col-span-4 sticky top-32 h-fit">
+                <SectionHeader title="Social Assets" number="12" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed">
+                   Optimized assets for LinkedIn presence. High-contrast, minimal designs for maximum visibility.
+                </p>
+            </div>
+            
+            <div className="md:col-span-8 space-y-12">
+                {/* Banner Assets */}
+                <div>
+                    <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest mb-6 block">LinkedIn Banner (1584 x 396px)</span>
+                    <div className="grid grid-cols-1 gap-8">
+                        {/* Option 1: Minimal Typography */}
+                        <div className="group relative">
+                            <div className="w-full aspect-[4/1] bg-[#020202] border border-white/10 flex items-center justify-between px-16 relative overflow-hidden">
+                                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05]"></div>
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-[#E3E3FD]/5 blur-3xl rounded-full"></div>
+                                
+                                <div className="relative z-10">
+                                    <h3 className="font-montreal text-3xl text-white tracking-tight leading-none mb-2">Branded Objects</h3>
+                                    <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest">Automated Brand Governance</p>
+                                </div>
+                                <div className="relative z-10 flex gap-2">
+                                     <div className="w-1.5 h-1.5 bg-[#E3E3FD]"></div>
+                                     <div className="w-1.5 h-1.5 bg-white/20"></div>
+                                     <div className="w-1.5 h-1.5 bg-white/20"></div>
+                                </div>
+                            </div>
+                            <div className="flex justify-between items-center mt-3">
+                                <span className="font-mono text-[10px] text-white/40">Option 01: Minimal</span>
+                                <button className="flex items-center gap-2 text-[#E3E3FD] hover:text-white transition-colors">
+                                    <Download size={12} />
+                                    <span className="font-mono text-[10px] uppercase tracking-widest">Download .png</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Option 2: Node System */}
+                        <div className="group relative">
+                            <div className="w-full aspect-[4/1] bg-[#0A0A0A] border border-white/10 flex items-center justify-center relative overflow-hidden">
+                                <div className="absolute inset-0" style={{ 
+                                    backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)', 
+                                    backgroundSize: '40px 40px' 
+                                }}></div>
+                                
+                                <div className="relative z-10 flex items-center gap-8 opacity-60 grayscale group-hover:grayscale-0 transition-all duration-700">
+                                     <div className="w-24 h-12 border border-white/20 bg-[#020202] flex items-center justify-center">
+                                        <div className="w-1.5 h-1.5 bg-white/40 rounded-full"></div>
+                                     </div>
+                                     <div className="h-px w-16 bg-white/20"></div>
+                                     <div className="w-24 h-12 border border-[#E3E3FD]/50 bg-[#E3E3FD]/10 flex items-center justify-center shadow-[0_0_15px_rgba(227,227,253,0.1)]">
+                                        <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse"></div>
+                                     </div>
+                                     <div className="h-px w-16 bg-white/20"></div>
+                                     <div className="w-24 h-12 border border-white/20 bg-[#020202] flex items-center justify-center">
+                                        <div className="w-1.5 h-1.5 bg-white/40 rounded-full"></div>
+                                     </div>
+                                </div>
+                                
+                                <div className="absolute bottom-4 left-6 font-mono text-[9px] text-white/30 uppercase tracking-widest">System_v2.2</div>
+                            </div>
+                             <div className="flex justify-between items-center mt-3">
+                                <span className="font-mono text-[10px] text-white/40">Option 02: System</span>
+                                <button className="flex items-center gap-2 text-[#E3E3FD] hover:text-white transition-colors">
+                                    <Download size={12} />
+                                    <span className="font-mono text-[10px] uppercase tracking-widest">Download .png</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Profile Picture Assets */}
+                <div className="border-t border-white/10 pt-12">
+                     <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest mb-6 block">Profile Picture (400 x 400px)</span>
+                     <div className="flex gap-8">
+                        {/* Option 1: Symbol */}
+                        <div className="group">
+                             <div className="w-32 h-32 bg-[#020202] border border-white/10 flex items-center justify-center relative overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+                                <div className="w-12 h-12 border-2 border-white flex items-center justify-center rotate-45 group-hover:rotate-90 transition-transform duration-700">
+                                    <div className="w-4 h-4 bg-[#E3E3FD]"></div>
+                                </div>
+                             </div>
+                             <div className="flex justify-between items-center mt-3 w-32">
+                                <span className="font-mono text-[9px] text-white/40">Symbol</span>
+                                <Download size={12} className="text-[#E3E3FD] cursor-pointer hover:text-white"/>
+                            </div>
+                        </div>
+
+                        {/* Option 2: Monogram */}
+                        <div className="group">
+                             <div className="w-32 h-32 bg-[#E3E3FD] border border-white/10 flex items-center justify-center relative text-black">
+                                <span className="font-montreal font-medium text-4xl tracking-tighter">Bo.</span>
+                             </div>
+                             <div className="flex justify-between items-center mt-3 w-32">
+                                <span className="font-mono text-[9px] text-white/40">Monogram</span>
+                                <Download size={12} className="text-[#E3E3FD] cursor-pointer hover:text-white"/>
+                            </div>
+                        </div>
+                     </div>
+                </div>
+            </div>
+        </section>
+
       </div>
       
       {/* Expanded Footer Component */}
       <footer className="w-full border-t border-white/10 bg-[#020202] relative z-10">
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-20">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
-                <div className="col-span-1 md:col-span-2">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-20">
+                <div className="col-span-1 md:col-span-5">
                     <h3 className="font-montreal font-medium text-2xl text-white mb-6">Branded Objects</h3>
-                    <p className="font-montreal text-white/60 text-sm max-w-md leading-relaxed">
+                    <p className="font-montreal text-white/60 text-sm max-w-md leading-relaxed mb-8">
                         A modular design system for automated brand governance. Empowering studios to create custom tools for their clients.
                     </p>
+                    <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-[#E3E3FD] rounded-full animate-pulse"></div>
+                        <span className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">All Systems Operational</span>
+                    </div>
                 </div>
                 
-                <div className="space-y-6">
-                    <h4 className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">Sitemap</h4>
-                    <ul className="space-y-3 font-mono text-xs text-white/60">
-                        <li className="hover:text-white cursor-pointer transition-colors">Typography</li>
-                        <li className="hover:text-white cursor-pointer transition-colors">Interface</li>
-                        <li className="hover:text-white cursor-pointer transition-colors">Components</li>
-                        <li className="hover:text-white cursor-pointer transition-colors">Motion</li>
+                <div className="col-span-1 md:col-span-3 md:col-start-8 space-y-6">
+                     <h4 className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">Platform</h4>
+                     <ul className="space-y-3 font-mono text-xs text-white/60">
+                        <li className="hover:text-white cursor-pointer transition-colors flex items-center gap-2 group">
+                            <span className="w-1 h-1 bg-white/20 group-hover:bg-[#E3E3FD] transition-colors"></span>
+                            Login
+                        </li>
+                        <li className="hover:text-white cursor-pointer transition-colors flex items-center gap-2 group">
+                            <span className="w-1 h-1 bg-white/20 group-hover:bg-[#E3E3FD] transition-colors"></span>
+                            Request Access
+                        </li>
                     </ul>
                 </div>
 
-                <div className="space-y-6">
+                <div className="col-span-1 md:col-span-2 space-y-6">
                     <h4 className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">Connect</h4>
-                    <div className="flex gap-4">
-                        <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center rounded-sm hover:bg-white hover:text-black transition-all">
-                            <Twitter size={16} />
+                    <div className="flex flex-col gap-3">
+                        <a href="https://www.linkedin.com/company/108913089/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-white/60 hover:text-white transition-colors group">
+                            <Linkedin size={14} className="group-hover:text-[#E3E3FD] transition-colors"/>
+                            <span className="font-mono text-xs">LinkedIn</span>
                         </a>
-                        <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center rounded-sm hover:bg-white hover:text-black transition-all">
-                            <Github size={16} />
-                        </a>
-                        <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center rounded-sm hover:bg-white hover:text-black transition-all">
-                            <Disc size={16} />
+                         <a href="mailto:brandedobjects@gmail.com" className="flex items-center gap-3 text-white/60 hover:text-white transition-colors group">
+                            <Mail size={14} className="group-hover:text-[#E3E3FD] transition-colors"/>
+                            <span className="font-mono text-xs">Email</span>
                         </a>
                     </div>
                 </div>
