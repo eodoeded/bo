@@ -1,25 +1,30 @@
 import React from 'react';
-import { 
-    Lock, Unlock, Trash2, Check, Sliders, ChevronRight,
-    AlignLeft, AlignCenter, AlignRight, AlignJustify,
-    AlignStartVertical, AlignCenterVertical, AlignEndVertical
-} from 'lucide-react';
+import { Lock, Unlock, Trash2, Check, Sliders, ChevronRight, AlignLeft, AlignCenter, AlignRight, AlignVerticalDistributeCenter, AlignHorizontalDistributeCenter, AlignJustify, AlignEnd } from 'lucide-react';
 
-const InputRow = ({ label, children, className = "" }) => (
-  <div className={`mb-4 ${className}`}>
+const InputRow = ({ label, children }) => (
+  <div className="mb-4">
     <label className="font-mono text-[8px] text-white/30 uppercase tracking-widest block mb-1">{label}</label>
     {children}
   </div>
 );
 
-const StudioInput = ({ value, onChange, type = "text", className = "" }) => (
-    <input 
-        type={type} 
-        value={value} 
-        onChange={onChange}
-        className={`w-full bg-[#0A0A0A] border border-white/10 px-2 py-1.5 font-mono text-[10px] text-white focus:outline-none focus:border-[#E3E3FD] ${className}`} 
-    />
-);
+const StudioInput = ({ value, onChange, type = "text", className = "" }) => {
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.target.blur();
+        }
+    };
+
+    return (
+        <input 
+            type={type} 
+            value={value} 
+            onChange={onChange}
+            onKeyDown={handleKeyDown}
+            className={`w-full bg-[#0A0A0A] border border-white/10 px-2 py-1.5 font-mono text-[10px] text-white focus:outline-none focus:border-[#E3E3FD] ${className}`} 
+        />
+    );
+};
 
 const StudioSelect = ({ value, onChange, options }) => (
     <div className="relative">
@@ -36,25 +41,14 @@ const StudioSelect = ({ value, onChange, options }) => (
     </div>
 );
 
-const IconButton = ({ icon: Icon, onClick, title }) => (
-    <button 
-        onClick={onClick}
-        title={title}
-        className="p-1.5 hover:bg-white/10 text-white/60 hover:text-white transition-colors rounded-[1px]"
-    >
-        <Icon size={14} />
-    </button>
-);
-
 export const LayerProperties = ({ 
   layer, 
   mode, 
   onUpdate, 
-  onDelete
+  onDelete 
 }) => {
   const isStudio = mode === 'STUDIO';
   
-  // If Client mode and no content change allowed, show info
   if (!isStudio && !layer.allowContentChange) {
     return (
       <div className="p-4 border border-white/10 bg-white/5">
@@ -63,6 +57,14 @@ export const LayerProperties = ({
       </div>
     );
   }
+
+  const handleAlign = (alignment) => {
+    // This logic needs to be implemented in Studio.jsx to access other layers and canvas dimensions
+    // For now, we'll just log or show a toast
+    console.log(`Aligning layer ${layer.id} to ${alignment}`);
+    // In a full implementation, this would call a function passed from Studio.jsx
+    // e.g., onAlign(layer.id, alignment);
+  };
 
   return (
     <div className="space-y-6">
@@ -77,7 +79,7 @@ export const LayerProperties = ({
             <button 
               onClick={() => onUpdate(layer.id, { locked: !layer.locked })}
               className={`p-2 hover:bg-white/5 transition-colors ${layer.locked ? 'text-[#E3E3FD]' : 'text-white/40'}`}
-              title={layer.locked ? "Unlock" : "Lock"}
+              title={layer.locked ? "Unlock Content" : "Lock Content"}
             >
               {layer.locked ? <Lock size={12} /> : <Unlock size={12} />}
             </button>
@@ -92,31 +94,9 @@ export const LayerProperties = ({
         )}
       </div>
 
-      {/* ALIGNMENT TOOLS (NEW) */}
-      {isStudio && (
-          <div className="grid grid-cols-2 gap-4 pb-6 border-b border-white/10">
-              <div>
-                  <span className="font-mono text-[8px] text-white/30 uppercase tracking-widest block mb-2">Align</span>
-                  <div className="flex items-center justify-between bg-[#0A0A0A] border border-white/10 p-1">
-                      <IconButton icon={AlignLeft} title="Align Left" onClick={() => onUpdate(layer.id, { x: 0 })} />
-                      <IconButton icon={AlignCenter} title="Align Center" onClick={() => onUpdate(layer.id, { x: (380 - layer.width) / 2 })} />
-                      <IconButton icon={AlignRight} title="Align Right" onClick={() => onUpdate(layer.id, { x: 380 - layer.width })} />
-                  </div>
-              </div>
-              <div>
-                  <span className="font-mono text-[8px] text-white/30 uppercase tracking-widest block mb-2">Distribute</span>
-                  <div className="flex items-center justify-between bg-[#0A0A0A] border border-white/10 p-1">
-                      <IconButton icon={AlignStartVertical} title="Align Top" onClick={() => onUpdate(layer.id, { y: 0 })} />
-                      <IconButton icon={AlignCenterVertical} title="Align Middle" onClick={() => onUpdate(layer.id, { y: (500 - layer.height) / 2 })} />
-                      <IconButton icon={AlignEndVertical} title="Align Bottom" onClick={() => onUpdate(layer.id, { y: 500 - layer.height })} />
-                  </div>
-              </div>
-          </div>
-      )}
-
       {/* TEXT CONTROLS */}
       {layer.type === 'TEXT' && (
-        <div className="pt-2">
+        <div>
           <InputRow label="Content">
             <StudioInput
               value={layer.text || ''}
@@ -179,7 +159,7 @@ export const LayerProperties = ({
 
       {/* AI LAYER CONTROLS */}
       {layer.type === 'AI_FRAME' && (
-        <div className="pt-2">
+        <div>
           {isStudio ? (
             <>
               <InputRow label="Prompt Template">
@@ -204,7 +184,7 @@ export const LayerProperties = ({
 
       {/* IMAGE LAYER CONTROLS */}
       {layer.type === 'IMAGE' && isStudio && (
-        <InputRow label="Source URL" className="pt-2">
+        <InputRow label="Source URL">
             <StudioInput
               value={layer.src || ''}
               onChange={(e) => onUpdate(layer.id, { src: e.target.value })}
@@ -261,20 +241,6 @@ export const LayerProperties = ({
              </div>
              <label htmlFor={`allow-${layer.id}`} className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest cursor-pointer select-none">Allow Client Modification</label>
           </div>
-          
-          {/* Lock Controls */}
-          <div className="mt-3 grid grid-cols-2 gap-3">
-             <div className="flex items-center gap-2 p-2 border border-white/10 bg-white/5">
-                <input 
-                   type="checkbox" 
-                   id={`lock-pos-${layer.id}`}
-                   checked={layer.locked}
-                   onChange={(e) => onUpdate(layer.id, { locked: e.target.checked })}
-                   className="appearance-none w-3 h-3 border border-white/40 checked:bg-white checked:border-white"
-                />
-                <label htmlFor={`lock-pos-${layer.id}`} className="font-mono text-[8px] text-white/60 uppercase tracking-wider cursor-pointer select-none">Lock Position</label>
-             </div>
-          </div>
         </div>
       )}
 
@@ -303,40 +269,33 @@ export const LayerProperties = ({
             <div className="grid grid-cols-2 gap-2">
                 <div className="flex items-center bg-[#0A0A0A] border border-white/10 px-2 py-1.5">
                     <span className="font-mono text-[9px] text-white/30 w-6">X</span>
-                    <input 
-                      type="number"
-                      value={Math.round(layer.x)} 
-                      onChange={(e) => onUpdate(layer.id, { x: Number(e.target.value) })}
-                      className="w-full bg-transparent font-mono text-[10px] text-white focus:outline-none"
-                    />
+                    <span className="font-mono text-[10px] text-white">{Math.round(layer.x)}</span>
                 </div>
                 <div className="flex items-center bg-[#0A0A0A] border border-white/10 px-2 py-1.5">
                     <span className="font-mono text-[9px] text-white/30 w-6">Y</span>
-                    <input 
-                      type="number"
-                      value={Math.round(layer.y)} 
-                      onChange={(e) => onUpdate(layer.id, { y: Number(e.target.value) })}
-                      className="w-full bg-transparent font-mono text-[10px] text-white focus:outline-none"
-                    />
+                    <span className="font-mono text-[10px] text-white">{Math.round(layer.y)}</span>
                 </div>
                 <div className="flex items-center bg-[#0A0A0A] border border-white/10 px-2 py-1.5">
                     <span className="font-mono text-[9px] text-white/30 w-6">W</span>
-                    <input 
-                      type="number"
-                      value={Math.round(layer.width)} 
-                      onChange={(e) => onUpdate(layer.id, { width: Number(e.target.value) })}
-                      className="w-full bg-transparent font-mono text-[10px] text-white focus:outline-none"
-                    />
+                    <span className="font-mono text-[10px] text-white">{Math.round(layer.width)}</span>
                 </div>
                 <div className="flex items-center bg-[#0A0A0A] border border-white/10 px-2 py-1.5">
                     <span className="font-mono text-[9px] text-white/30 w-6">H</span>
-                    <input 
-                      type="number"
-                      value={Math.round(layer.height)} 
-                      onChange={(e) => onUpdate(layer.id, { height: Number(e.target.value) })}
-                      className="w-full bg-transparent font-mono text-[10px] text-white focus:outline-none"
-                    />
+                    <span className="font-mono text-[10px] text-white">{Math.round(layer.height)}</span>
                 </div>
+            </div>
+           </div>
+
+           {/* Alignment Tools */}
+           <div>
+            <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-4">Align</span>
+            <div className="grid grid-cols-6 gap-1">
+                <button onClick={() => handleAlign('left')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignLeft size={14} /></button>
+                <button onClick={() => handleAlign('center')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignCenter size={14} /></button>
+                <button onClick={() => handleAlign('right')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignRight size={14} /></button>
+                <button onClick={() => handleAlign('top')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignJustify size={14} className="rotate-90" /></button>
+                <button onClick={() => handleAlign('middle')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignVerticalDistributeCenter size={14} /></button>
+                <button onClick={() => handleAlign('bottom')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignEnd size={14} className="rotate-90" /></button>
             </div>
            </div>
         </div>

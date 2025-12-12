@@ -239,6 +239,19 @@ export default function Studio() {
         setSelectedLayerId(newLayer.id);
     };
 
+    const zoomToFit = () => {
+        if (!viewportRef.current) return;
+        const rect = viewportRef.current.getBoundingClientRect();
+        const margin = 50;
+        
+        const scaleX = (rect.width - margin * 2) / canvasConfig.width;
+        const scaleY = (rect.height - margin * 2) / canvasConfig.height;
+        const newZoom = Math.min(scaleX, scaleY, 1); // Don't zoom in more than 100% automatically
+        
+        setZoom(newZoom);
+        setPan({ x: 0, y: 0 }); // Center
+    };
+
     // --- ACTIONS ---
 
     const handleUploadClick = () => {
@@ -254,40 +267,13 @@ export default function Studio() {
 
         // Use functional update to ensure we have latest state
         setLayers(prev => {
-            const newLayers = [...prev];
-            files.forEach((file, index) => {
-                const reader = new FileReader();
-                // Note: Reading is async, but we need to update state.
-                // Simple trick: Create object immediately with placeholder then update?
-                // Or just use reader.readAsDataURL and wait? 
-                // For multiple files, let's just do one by one or closure.
-                // A better way for this simplified component:
-                
-                reader.onload = (event) => {
-                    const newLayer = {
-                        id: `img-${Math.random().toString(36).substr(2, 5)}`,
-                        type: 'IMAGE',
-                        x: 50 + (index * 20), 
-                        y: 50 + (index * 20),
-                        width: 200, height: 200,
-                        zIndex: prev.length + 1 + index,
-                        src: event.target.result,
-                        locked: false,
-                        allowContentChange: true,
-                        filterType: 'none',
-                        blendMode: 'normal'
-                    };
-                    // We need to call setLayers again or use a reducer.
-                    // Since this is inside a loop, calling setLayers multiple times is bad.
-                    // Fix: Read all then update once.
-                };
-                reader.readAsDataURL(file);
-            });
-            // Actually, for the fix, let's just support 1 file perfectly or do it better:
-            return prev;
+            // This is tricky inside a synchronous event handler with async file reading
+            // Correct approach: Read first, then update.
+            // For now, we will rely on side-effects for this specific user flow which is acceptable for prototypes
+            return prev; 
         });
 
-        // Better Implementation:
+        // Simple loop for now
         files.forEach((file, idx) => {
             const reader = new FileReader();
             reader.onload = (ev) => {
@@ -297,6 +283,23 @@ export default function Studio() {
         });
         
         showToast(`Uploading...`);
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        const files = Array.from(e.dataTransfer.files);
+        if (files.length === 0) return;
+
+        files.forEach((file) => {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    addLayer('IMAGE', event.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        showToast(`Dropped ${files.length} Image(s)`);
     };
 
     const handleExport = async () => {
@@ -328,6 +331,8 @@ export default function Studio() {
     // --- PASTE SUPPORT ---
     useEffect(() => {
         const handlePaste = (e) => {
+            if (editingTextId) return; // Don't intercept paste when editing text
+
             const items = e.clipboardData?.items;
             if (!items) return;
 
@@ -345,7 +350,7 @@ export default function Studio() {
         };
         window.addEventListener('paste', handlePaste);
         return () => window.removeEventListener('paste', handlePaste);
-    }, [layers]); // Dep on layers so addLayer works with current state logic if needed
+    }, [layers, editingTextId]);
 
     // --- INTERACTION HANDLERS ---
 
@@ -385,8 +390,10 @@ export default function Studio() {
             e.stopPropagation();
             
             if (mode === 'CLIENT' && layer.locked) return;
+            // Allow selection of locked layers in Studio, but not move
             if (mode === 'STUDIO' && layer.locked) {
                 setSelectedLayerId(layer.id);
+                // We don't start dragging here
                 return; 
             }
 
@@ -407,10 +414,6 @@ export default function Studio() {
             // Clicked empty space = Deselect
             if (e.target === viewportRef.current) {
                 setSelectedLayerId(null);
-                // Also allow panning if clicking empty space?
-                // Figma allows panning on empty space with middle click or space, 
-                // but left click drag on empty space usually creates selection box.
-                // For now, let's keep it simple: Click background = Deselect.
             }
         }
     };
@@ -480,19 +483,13 @@ export default function Studio() {
                 const mouseX = e.clientX - rect.left;
                 const mouseY = e.clientY - rect.top;
                 
-                // Calculate world point under mouse before zoom
                 const cx = rect.width / 2;
                 const cy = rect.height / 2;
                 const worldX = (mouseX - cx - pan.x) / zoom;
                 const worldY = (mouseY - cy - pan.y) / zoom;
 
-                // Update Zoom
-                const delta = -e.deltaY * 0.01; // Slower zoom
+                const delta = -e.deltaY * 0.01;
                 const newZoom = Math.min(Math.max(0.1, zoom + delta), 5);
-                
-                // Calculate new pan to keep world point under mouse
-                // MousePos = Center + (WorldPos * NewZoom) + NewPan
-                // NewPan = MousePos - Center - (WorldPos * NewZoom)
                 
                 const newPanX = mouseX - cx - (worldX * newZoom);
                 const newPanY = mouseY - cy - (worldY * newZoom);
@@ -500,15 +497,14 @@ export default function Studio() {
                 setZoom(newZoom);
                 setPan({ x: newPanX, y: newPanY });
             } else {
-                // Pan
-                e.preventDefault(); // Prevent browser back/forward
+                e.preventDefault(); 
                 setPan(p => ({ x: p.x - e.deltaX, y: p.y - e.deltaY }));
             }
         };
 
         viewport.addEventListener('wheel', onWheel, { passive: false });
         return () => viewport.removeEventListener('wheel', onWheel);
-    }, [zoom, pan]); // Re-bind when zoom/pan changes to have fresh state
+    }, [zoom, pan]); 
 
     const handleContextMenu = (e) => {
         e.preventDefault();
@@ -567,10 +563,10 @@ export default function Studio() {
                 e.preventDefault();
                 if (selectedLayerId) duplicateLayer(selectedLayerId);
             }
-            // Layer Order
-            if (selectedLayerId && e.key === '[') reorderLayer(selectedLayerId, 'down');
-            if (selectedLayerId && e.key === ']') reorderLayer(selectedLayerId, 'up');
-
+            // Zoom Fit
+            if (e.shiftKey && e.key === '1') {
+                zoomToFit();
+            }
             // Nudge
             if (selectedLayerId && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
                 e.preventDefault();
@@ -585,20 +581,10 @@ export default function Studio() {
                     updateLayer(selectedLayerId, updates);
                 }
             }
-            // Reset Zoom
-            if (e.shiftKey && e.key === '1') {
-                setZoom(1);
-                setPan({x:0, y:0});
-            }
-            // Space for Pan (Toggle)
-            if (e.key === ' ' && !e.repeat) {
-                // Implementing hold-space to pan is complex with React state updates in event listeners
-                // For now, let's just toggle or rely on middle click
-            }
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [selectedLayerId, mode, canUndo, canRedo, editingTextId, layers]);
+    }, [selectedLayerId, mode, canUndo, canRedo, editingTextId, layers, zoom, pan]);
 
     return (
         <div className="min-h-screen bg-[#020202] text-white font-montreal flex flex-col overflow-hidden selection:bg-[#E3E3FD] selection:text-black" onClick={() => setContextMenu(null)}>
@@ -681,8 +667,15 @@ export default function Studio() {
                                         <span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">Image</span>
                                         <div className="absolute top-1 right-1"><Plus size={8} className="text-[#E3E3FD]" /></div>
                                     </button>
-                                    {/* Moved input out of button to prevent nesting issues */}
-                                    
+                                    <input 
+                                        type="file" 
+                                        multiple 
+                                        className="hidden" 
+                                        accept="image/*" 
+                                        ref={fileInputRef}
+                                        onChange={handleFileUpload} 
+                                    />
+
                                     <button onClick={() => addLayer('AI_FRAME')} className="flex flex-col items-center justify-center p-3 border border-white/10 hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group"><Sparkles size={16} className="text-white/60 group-hover:text-[#E3E3FD]" /><span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">AI Gen</span></button>
                                 </div>
                                 <div className="p-4 border border-white/10 bg-[#0A0A0A]">
@@ -739,6 +732,8 @@ export default function Studio() {
                         ref={viewportRef}
                         onMouseDown={handleMouseDown}
                         onContextMenu={handleContextMenu}
+                        onDrop={handleDrop}
+                        onDragOver={(e) => e.preventDefault()}
                         style={{ cursor: isPanning ? 'grabbing' : (selectedTool === 'pan' ? 'grab' : 'default') }}
                     >
                         <Ruler orientation="horizontal" zoom={zoom} pan={pan} />
@@ -798,12 +793,18 @@ export default function Studio() {
                                             {/* Content Rendering */}
                                             {layer.type === 'TEXT' && (
                                                 editingTextId === layer.id ? (
-                                                    <input
+                                                    <textarea
                                                         autoFocus
                                                         value={layer.text}
                                                         onChange={(e) => updateLayer(layer.id, { text: e.target.value })}
                                                         onBlur={handleTextBlur}
-                                                        onKeyDown={(e) => { if(e.key === 'Enter') handleTextBlur(); e.stopPropagation(); }}
+                                                        onKeyDown={(e) => { 
+                                                            if(e.key === 'Enter' && !e.shiftKey) { 
+                                                                handleTextBlur(); 
+                                                                e.preventDefault(); 
+                                                            } 
+                                                            e.stopPropagation(); 
+                                                        }}
                                                         style={{
                                                             color: layer.color,
                                                             fontSize: `${layer.fontSize}px`,
@@ -814,8 +815,11 @@ export default function Studio() {
                                                             border: 'none',
                                                             outline: 'none',
                                                             width: '100%',
+                                                            height: '100%',
                                                             padding: 0,
-                                                            margin: 0
+                                                            margin: 0,
+                                                            resize: 'none',
+                                                            overflow: 'hidden'
                                                         }}
                                                     />
                                                 ) : (
@@ -824,7 +828,8 @@ export default function Studio() {
                                                         fontSize: `${layer.fontSize}px`,
                                                         fontFamily: layer.fontFamily,
                                                         textAlign: layer.textAlign,
-                                                        lineHeight: 1.2
+                                                        lineHeight: 1.2,
+                                                        whiteSpace: 'pre-wrap'
                                                     }}>
                                                         {layer.text || 'Text Layer'}
                                                     </div>
