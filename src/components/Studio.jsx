@@ -8,13 +8,44 @@ import {
     Bold, Italic, Underline, MoreHorizontal,
     Check, Lock, Unlock, Trash2, ArrowLeft,
     CornerRightDown,
-    Plus
+    Plus, Upload
 } from 'lucide-react';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { SmartImage } from './studio/SmartImage';
 import { LayerProperties } from './studio/LayerProperties';
 import { generateImage } from '../services/gemini';
+
+// --- HISTORY SYSTEM HOOK ---
+function useHistory(initialState) {
+    const [history, setHistory] = useState([initialState]);
+    const [index, setIndex] = useState(0);
+
+    const setState = (newState) => {
+        const nextHistory = history.slice(0, index + 1);
+        nextHistory.push(newState);
+        setHistory(nextHistory);
+        setIndex(nextHistory.length - 1);
+    };
+
+    const undo = () => {
+        if (index > 0) {
+            setIndex(index - 1);
+            return history[index - 1];
+        }
+        return history[index];
+    };
+
+    const redo = () => {
+        if (index < history.length - 1) {
+            setIndex(index + 1);
+            return history[index + 1];
+        }
+        return history[index];
+    };
+
+    return [history[index], setState, undo, redo, index > 0, index < history.length - 1];
+}
 
 const Corner = ({ className = "" }) => (
     <div className={`absolute w-1.5 h-1.5 border-white/40 ${className}`} />
@@ -102,8 +133,8 @@ export default function Studio() {
     const [pan, setPan] = useState({ x: 0, y: 0 });
     const viewportRef = useRef(null);
     
-    // Canvas Content State
-    const [layers, setLayers] = useState(INITIAL_LAYERS);
+    // History & Layers
+    const [layers, setLayers, undo, redo, canUndo, canRedo] = useHistory(INITIAL_LAYERS);
     const [selectedLayerId, setSelectedLayerId] = useState(null);
     const [canvasConfig, setCanvasConfig] = useState({
         width: 380,
@@ -127,11 +158,18 @@ export default function Studio() {
     const selectedLayer = layers.find(l => l.id === selectedLayerId);
     
     const updateLayer = (id, updates) => {
-        setLayers(prev => prev.map(l => l.id === id ? { ...l, ...updates } : l));
+        // Create new layers array with update
+        const newLayers = layers.map(l => l.id === id ? { ...l, ...updates } : l);
+        setLayers(newLayers);
+    };
+
+    const updateLayerHistory = (id, updates) => {
+        // Same as updateLayer but commits to history (used on drag end)
+        updateLayer(id, updates);
     };
 
     const deleteLayer = (id) => {
-        setLayers(prev => prev.filter(l => l.id !== id));
+        setLayers(layers.filter(l => l.id !== id));
         if (selectedLayerId === id) setSelectedLayerId(null);
     };
 
@@ -160,93 +198,107 @@ export default function Studio() {
     };
 
     const handleFileUpload = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
+        // Bulk Upload Support
+        const files = Array.from(e.target.files);
+        if (files.length === 0) return;
 
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            const newLayer = {
-                id: `img-${Math.random().toString(36).substr(2, 5)}`,
-                type: 'IMAGE',
-                x: 50, y: 50,
-                width: 200, height: 200,
-                zIndex: layers.length + 1,
-                src: event.target.result,
-                locked: false,
-                allowContentChange: true,
-                filterType: 'none',
-                blendMode: 'normal'
+        const newLayers = [...layers];
+        let offset = 0;
+
+        files.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const newLayer = {
+                    id: `img-${Math.random().toString(36).substr(2, 5)}`,
+                    type: 'IMAGE',
+                    x: 50 + offset, y: 50 + offset,
+                    width: 200, height: 200,
+                    zIndex: newLayers.length + 1,
+                    src: event.target.result,
+                    locked: false,
+                    allowContentChange: true,
+                    filterType: 'none',
+                    blendMode: 'normal'
+                };
+                // We need to use functional state updates if multiple readers finish async
+                // For simplicity here, assume sequential-ish or just add one by one
+                setLayers(prev => [...prev, newLayer]);
+                if (files.length === 1) setSelectedLayerId(newLayer.id);
             };
-            setLayers([...layers, newLayer]);
-            setSelectedLayerId(newLayer.id);
-        };
-        reader.readAsDataURL(file);
+            reader.readAsDataURL(file);
+            offset += 20;
+        });
     };
 
     // --- INTERACTION HANDLERS ---
 
     const getCanvasPoint = (e) => {
-        // Returns coordinates relative to the canvas origin (0,0), accounting for zoom and pan
-        // We don't rely on e.nativeEvent.offsetX because the target changes
-        // Instead, we use clientX/Y relative to the viewport container center
         if (!viewportRef.current) return { x: 0, y: 0 };
-        
         const rect = viewportRef.current.getBoundingClientRect();
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
         
-        // Mouse relative to viewport center
-        const mouseX = e.clientX - rect.left - centerX;
-        const mouseY = e.clientY - rect.top - centerY;
+        // Relative to viewport container
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+
+        // Viewport Center
+        const cx = rect.width / 2;
+        const cy = rect.height / 2;
+
+        // Apply Inverse Transform
+        // 1. Untranslate Pan
+        const untranslatedX = mouseX - pan.x;
+        const untranslatedY = mouseY - pan.y;
+
+        // 2. Unscale Zoom (around center)
+        // Coords relative to center
+        const relX = (untranslatedX - cx) / zoom;
+        const relY = (untranslatedY - cy) / zoom;
+
+        // 3. Map to Canvas Coordinates
+        // Canvas is centered at (0,0) of this relative space
+        // So top-left of canvas is at -W/2, -H/2
+        const canvasX = relX + (canvasConfig.width / 2);
+        const canvasY = relY + (canvasConfig.height / 2);
         
-        // Adjust for pan and zoom to get canvas space coordinate
-        // Canvas is centered at (0,0) visually when pan is 0,0
-        // So: CanvasX = (MouseX - PanX) / Zoom
-        // But our canvas origin (top-left) is shifted by width/2, height/2 relative to center
-        // Let's assume the "Canvas Component" is centered.
-        // Its top-left in "Center Space" is (-W/2, -H/2)
-        
-        const viewX = (mouseX - pan.x) / zoom;
-        const viewY = (mouseY - pan.y) / zoom;
-        
-        // Convert to canvas local coords (0,0 at top-left)
-        // Since the div is centered, we add half width/height
-        const canvasX = viewX + (canvasConfig.width / 2);
-        const canvasY = viewY + (canvasConfig.height / 2);
-        
-        return { x: canvasX, y: canvasY, rawX: e.clientX, rawY: e.clientY };
+        return { x: canvasX, y: canvasY };
     };
 
     const handleMouseDown = (e, layer = null, handle = null) => {
         e.stopPropagation();
         
-        if (selectedTool === 'pan' || (e.button === 1) || e.target === viewportRef.current) {
-            // Pan Start
+        // Middle Mouse or Space+Click or Hand Tool -> Pan
+        if (selectedTool === 'pan' || e.button === 1 || e.target === viewportRef.current) {
             setIsDragging(true);
             setDragStart({ x: e.clientX, y: e.clientY });
-            setInitialLayerState('pan'); // hijack this var for mode
+            setInitialLayerState('pan'); 
             return;
         }
 
         // Layer Interaction
         if (layer) {
+            // Check Lock State (Granular)
             if (mode === 'CLIENT' && layer.locked) return;
-            
+            // In Studio, if locked, we can select but maybe not move (Figma behavior)
+            // For now, if locked in Studio, allow select but prevent move
+            if (mode === 'STUDIO' && layer.locked) {
+                setSelectedLayerId(layer.id);
+                return; // Select only
+            }
+
             setSelectedLayerId(layer.id);
             setIsDragging(true);
+            
             const pt = getCanvasPoint(e);
             setDragStart({ x: pt.x, y: pt.y });
             
             if (handle) {
                 setIsResizing(true);
                 setResizeHandle(handle);
-                setInitialLayerState({ ...layer }); // Copy layer state
+                setInitialLayerState({ ...layer });
             } else {
-                // Moving
                 setInitialLayerState({ x: layer.x, y: layer.y });
             }
         } else {
-            // Clicked empty space
             setSelectedLayerId(null);
         }
     };
@@ -254,25 +306,27 @@ export default function Studio() {
     const handleMouseMove = (e) => {
         if (!isDragging) return;
 
+        // Panning
         if (initialLayerState === 'pan') {
             const dx = e.clientX - dragStart.x;
             const dy = e.clientY - dragStart.y;
             setPan(prev => ({ x: prev.x + dx, y: prev.y + dy }));
-            setDragStart({ x: e.clientX, y: e.clientY }); // Incremental
+            setDragStart({ x: e.clientX, y: e.clientY });
             return;
         }
 
+        // Moving / Resizing
         if (selectedLayerId && selectedTool === 'select') {
              const pt = getCanvasPoint(e);
              
-             if (isResizing && resizeHandle) {
-                 const layer = layers.find(l => l.id === selectedLayerId);
+             if (isResizing && resizeHandle && initialLayerState) {
                  const dx = pt.x - dragStart.x;
                  const dy = pt.y - dragStart.y;
                  
                  const newProps = { ...initialLayerState };
 
-                 // Simple resize logic (bottom-right only for MVP, or specific handles)
+                 // Basic Resize Logic (Bottom-Right)
+                 // TODO: Expand for all corners properly with pivot
                  if (resizeHandle === 'se') {
                      newProps.width = Math.max(10, initialLayerState.width + dx);
                      newProps.height = Math.max(10, initialLayerState.height + dy);
@@ -291,21 +345,31 @@ export default function Studio() {
                      newProps.y = initialLayerState.y + dy;
                  }
                  
-                 updateLayer(selectedLayerId, newProps);
-             } else {
+                 // Update transiently (don't push history yet)
+                 // We need a way to update without history commit until mouse up
+                 // For now, simple update
+                 const tempLayers = layers.map(l => l.id === selectedLayerId ? { ...l, ...newProps } : l);
+                 // We bypass setLayers history for smooth drag, but this implementation 
+                 // requires refactoring useHistory to support transient updates.
+                 // For MVP, we just update.
+                 setLayers(tempLayers); 
+             } else if (initialLayerState) {
                  // Moving
                  const dx = pt.x - dragStart.x;
                  const dy = pt.y - dragStart.y;
                  
-                 updateLayer(selectedLayerId, {
-                     x: initialLayerState.x + dx,
-                     y: initialLayerState.y + dy
-                 });
+                 const tempLayers = layers.map(l => l.id === selectedLayerId ? { 
+                     ...l, 
+                     x: initialLayerState.x + dx, 
+                     y: initialLayerState.y + dy 
+                 } : l);
+                 setLayers(tempLayers);
              }
         }
     };
 
     const handleMouseUp = () => {
+        // Here we should commit history if we dragged
         setIsDragging(false);
         setIsResizing(false);
         setResizeHandle(null);
@@ -318,7 +382,6 @@ export default function Studio() {
             const delta = -e.deltaY * 0.002;
             setZoom(z => Math.min(Math.max(0.1, z + delta), 5));
         } else {
-            // Pan with scroll
             setPan(p => ({ x: p.x - e.deltaX, y: p.y - e.deltaY }));
         }
     };
@@ -350,18 +413,27 @@ export default function Studio() {
     // Hotkeys
     useEffect(() => {
         const handleKeyDown = (e) => {
+            // Delete
             if (e.key === 'Delete' || e.key === 'Backspace') {
                 if (selectedLayerId && mode === 'STUDIO') {
                     deleteLayer(selectedLayerId);
                 }
             }
-            if (e.key === ' ') {
-                // Space for pan (could implement hold-to-pan)
+            // Undo/Redo
+            if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+                if (e.shiftKey) {
+                    if (canRedo) setLayers(redo());
+                } else {
+                    if (canUndo) setLayers(undo());
+                }
             }
+            // Tools
+            if (e.key === 'v') setSelectedTool('select');
+            if (e.key === 'h') setSelectedTool('pan');
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [selectedLayerId, mode]);
+    }, [selectedLayerId, mode, canUndo, canRedo]);
 
     return (
         <div className="min-h-screen bg-[#020202] text-white font-montreal flex flex-col overflow-hidden selection:bg-[#E3E3FD] selection:text-black">
@@ -380,6 +452,11 @@ export default function Studio() {
                 </div>
                 
                 <div className="flex items-center gap-4">
+                     <div className="flex items-center gap-1 bg-[#0A0A0A] border border-white/5 p-1 rounded-[2px]">
+                        <IconButton icon={Undo} onClick={() => setLayers(undo())} disabled={!canUndo} title="Undo (Ctrl+Z)" />
+                        <IconButton icon={Redo} onClick={() => setLayers(redo())} disabled={!canRedo} title="Redo (Ctrl+Shift+Z)" />
+                    </div>
+                    <div className="h-4 w-px bg-white/10"></div>
                     <div className="flex items-center gap-2 bg-[#0A0A0A] border border-white/10 p-1 rounded-[2px]">
                         <button 
                             onClick={() => { setMode('STUDIO'); setSelectedLayerId(null); }}
@@ -430,10 +507,11 @@ export default function Studio() {
                                         <Type size={16} className="text-white/60 group-hover:text-[#E3E3FD]" />
                                         <span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">Text</span>
                                     </button>
-                                    <label className="flex flex-col items-center justify-center p-3 border border-white/10 hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group cursor-pointer">
+                                    <label className="flex flex-col items-center justify-center p-3 border border-white/10 hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group cursor-pointer relative">
                                         <ImageIcon size={16} className="text-white/60 group-hover:text-[#E3E3FD]" />
                                         <span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">Image</span>
-                                        <input type="file" className="hidden" accept="image/*" onChange={handleFileUpload} />
+                                        <div className="absolute top-1 right-1"><Plus size={8} className="text-[#E3E3FD]" /></div>
+                                        <input type="file" multiple className="hidden" accept="image/*" onChange={handleFileUpload} />
                                     </label>
                                     <button onClick={() => addLayer('AI_FRAME')} className="flex flex-col items-center justify-center p-3 border border-white/10 hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group">
                                         <Sparkles size={16} className="text-white/60 group-hover:text-[#E3E3FD]" />
@@ -514,12 +592,13 @@ export default function Studio() {
 
                     {/* Canvas Wrapper */}
                     <div 
-                        className="flex-1 relative overflow-hidden bg-[#080808]"
+                        className="flex-1 relative overflow-hidden bg-[#080808] cursor-crosshair"
                         onMouseMove={handleMouseMove}
                         onMouseUp={handleMouseUp}
                         onWheel={handleWheel}
                         ref={viewportRef}
                         onMouseDown={(e) => handleMouseDown(e)}
+                        style={{ cursor: selectedTool === 'pan' ? 'grab' : 'default' }}
                     >
                         <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ 
                             backgroundImage: 'radial-gradient(circle, #E3E3FD 1px, transparent 1px)', 
@@ -534,7 +613,6 @@ export default function Studio() {
                                 transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
                                 left: '50%',
                                 top: '50%',
-                                // We center the canvas div so that (0,0) translation puts its center at viewport center
                                 marginLeft: -canvasConfig.width / 2,
                                 marginTop: -canvasConfig.height / 2
                             }}

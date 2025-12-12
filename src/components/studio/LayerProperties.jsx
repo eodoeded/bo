@@ -225,6 +225,20 @@ export const LayerProperties = ({
              </div>
              <label htmlFor={`allow-${layer.id}`} className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest cursor-pointer select-none">Allow Client Modification</label>
           </div>
+          
+          {/* Lock Controls */}
+          <div className="mt-3 grid grid-cols-2 gap-3">
+             <div className="flex items-center gap-2 p-2 border border-white/10 bg-white/5">
+                <input 
+                   type="checkbox" 
+                   id={`lock-pos-${layer.id}`}
+                   checked={layer.locked}
+                   onChange={(e) => onUpdate(layer.id, { locked: e.target.checked })}
+                   className="appearance-none w-3 h-3 border border-white/40 checked:bg-white checked:border-white"
+                />
+                <label htmlFor={`lock-pos-${layer.id}`} className="font-mono text-[8px] text-white/60 uppercase tracking-wider cursor-pointer select-none">Lock Position</label>
+             </div>
+          </div>
         </div>
       )}
 
@@ -253,19 +267,39 @@ export const LayerProperties = ({
             <div className="grid grid-cols-2 gap-2">
                 <div className="flex items-center bg-[#0A0A0A] border border-white/10 px-2 py-1.5">
                     <span className="font-mono text-[9px] text-white/30 w-6">X</span>
-                    <span className="font-mono text-[10px] text-white">{Math.round(layer.x)}</span>
+                    <input 
+                      type="number"
+                      value={Math.round(layer.x)} 
+                      onChange={(e) => onUpdate(layer.id, { x: Number(e.target.value) })}
+                      className="w-full bg-transparent font-mono text-[10px] text-white focus:outline-none"
+                    />
                 </div>
                 <div className="flex items-center bg-[#0A0A0A] border border-white/10 px-2 py-1.5">
                     <span className="font-mono text-[9px] text-white/30 w-6">Y</span>
-                    <span className="font-mono text-[10px] text-white">{Math.round(layer.y)}</span>
+                    <input 
+                      type="number"
+                      value={Math.round(layer.y)} 
+                      onChange={(e) => onUpdate(layer.id, { y: Number(e.target.value) })}
+                      className="w-full bg-transparent font-mono text-[10px] text-white focus:outline-none"
+                    />
                 </div>
                 <div className="flex items-center bg-[#0A0A0A] border border-white/10 px-2 py-1.5">
                     <span className="font-mono text-[9px] text-white/30 w-6">W</span>
-                    <span className="font-mono text-[10px] text-white">{Math.round(layer.width)}</span>
+                    <input 
+                      type="number"
+                      value={Math.round(layer.width)} 
+                      onChange={(e) => onUpdate(layer.id, { width: Number(e.target.value) })}
+                      className="w-full bg-transparent font-mono text-[10px] text-white focus:outline-none"
+                    />
                 </div>
                 <div className="flex items-center bg-[#0A0A0A] border border-white/10 px-2 py-1.5">
                     <span className="font-mono text-[9px] text-white/30 w-6">H</span>
-                    <span className="font-mono text-[10px] text-white">{Math.round(layer.height)}</span>
+                    <input 
+                      type="number"
+                      value={Math.round(layer.height)} 
+                      onChange={(e) => onUpdate(layer.id, { height: Number(e.target.value) })}
+                      className="w-full bg-transparent font-mono text-[10px] text-white focus:outline-none"
+                    />
                 </div>
             </div>
            </div>
@@ -274,4 +308,3 @@ export const LayerProperties = ({
     </div>
   );
 };
-
