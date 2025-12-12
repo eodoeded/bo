@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Box, Layout, Type, MousePointer, CreditCard, Layers, Grid as GridIcon, Database, Cpu, Activity, User, Mail, Send, ChevronDown, Check, AlertCircle, Terminal, BarChart2, CornerDownRight, Zap, Move, Eye, Code, Command, Github, Twitter, Disc, Lock, Unlock, Edit3, Image as ImageIcon, Linkedin, Download, Share2 } from 'lucide-react';
+import { ArrowLeft, Box, Layout, Type, MousePointer, CreditCard, Layers, Grid as GridIcon, Database, Cpu, Activity, User, Mail, Send, ChevronDown, Check, AlertCircle, Terminal, BarChart2, CornerDownRight, Zap, Move, Eye, Code, Command, Github, Twitter, Disc, Lock, Unlock, Edit3, Image as ImageIcon, Linkedin, Download, Share2, Sliders, Hand, ZoomIn, MoreHorizontal, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState, useRef } from 'react';
 import html2canvas from 'html2canvas';
@@ -19,9 +19,6 @@ const Badge = ({ children, className = "", color = "text-[#E3E3FD]" }) => (
 );
 
 const Node = ({ title, inputs = [], outputs = [], children, x, y, delay = 0, width = "w-32", type = "default", status }) => {
-    // Offset for center-based positioning logic
-    const widthVal = type === "minimal" ? 140 : parseInt(width.replace('w-', '')) * 4; 
-    
     return (
       <motion.div 
         initial={{ opacity: 0, scale: 0.9, y: y + 20 }}
@@ -104,7 +101,7 @@ const Connection = ({ start, end, delay, dashed = false, active = false }) => {
         <motion.path
             d={path}
             fill="none"
-            stroke="#E3E3FD" // Acid Green
+            stroke="#E3E3FD" // Lavender
             strokeWidth="1.5"
             strokeLinecap="square"
             initial={{ pathLength: 0, pathOffset: 0, opacity: 0 }}
@@ -138,6 +135,15 @@ const SectionHeader = ({ title, number }) => (
     </div>
 );
 
+// Helper for Studio UI components in Brand Guidelines
+const IconButton = ({ icon: Icon, active }) => (
+    <button 
+        className={`p-2 border ${active ? 'bg-[#E3E3FD] text-black border-[#E3E3FD]' : 'bg-transparent text-white/60 border-transparent hover:bg-white/5 hover:text-white'} transition-colors rounded-[1px]`}
+    >
+        <Icon size={14} />
+    </button>
+);
+
 export default function BrandGuidelines() {
   const downloadRef1 = useRef(null);
   const downloadRef2 = useRef(null);
@@ -166,7 +172,7 @@ export default function BrandGuidelines() {
       
       {/* Background Grid - "Weird" glitchy pattern */}
       <div className="fixed inset-0 pointer-events-none opacity-[0.04]" style={{ 
-          backgroundImage: 'linear-gradient(rgba(204, 255, 0, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(227, 227, 253, 0.1) 1px, transparent 1px)', 
+          backgroundImage: 'linear-gradient(rgba(227, 227, 253, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(227, 227, 253, 0.1) 1px, transparent 1px)', 
           backgroundSize: '20px 20px' 
       }}></div>
       <div className="fixed inset-0 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05] mix-blend-overlay"></div>
@@ -271,57 +277,18 @@ export default function BrandGuidelines() {
                         <span className="font-mono text-[10px] tracking-[0.2em] text-[#E3E3FD] uppercase">Deployment</span>
                     </Node>
 
-                    {/* Connections - Fixed Coordinates relative to Node ports */}
-                    {/* 
-                        Data_Ingest (50, 250, w=160). 
-                        Right Port: x = 50 + 160 + 5 (padding) = 215. 
-                        Top is at 32px + 4px (padding) = 36? 
-                        Wait, Node padding is p-3 (12px). "top-8" is 32px absolute from top.
-                        So port center Y = 250 (node top) + 32 (top-8) + 4 (h-2/2) = 286.
-                        
-                        Neural_Core (350, 150, w=192).
-                        Left Port: x = 350 - 5 = 345.
-                        Y = 150 + 32 + 4 = 186.
-                        
-                        Logic_Gate (350, 400, w=160).
-                        Left Port: x = 350 - 5 = 345.
-                        Y = 400 + 32 + 4 = 436.
-                        
-                        Renderer (700, 250, minimal). 
-                        Minimal node has different padding/layout.
-                        It uses "top-1/2 -translate-y-1/2".
-                        Height of minimal node? px-4 py-2 + content. ~ 50px? 
-                        Center Y ~ 250 + 25 = 275.
-                        Left Port: x = 700 - 4 = 696.
-                        
-                        Re-checking coordinates in previous file:
-                        start={{x: 210, y: 282}} -> Updated to 215, 286?
-                        The user said "i cant see these".
-                        
-                        Let's adjust coordinates to match the calculated logic above more closely and ensure stroke width is higher.
-                    */}
-                    
-                    {/* Data to Neural */}
+                    {/* Connections */}
                     <Connection start={{x: 215, y: 286}} end={{x: 345, y: 186}} delay={0.5} active={true} />
-                    {/* Data to Logic */}
                     <Connection start={{x: 215, y: 286}} end={{x: 345, y: 436}} delay={0.6} active={true} />
-                    
-                    {/* Neural to Renderer */}
                     <Connection start={{x: 547, y: 186}} end={{x: 696, y: 275}} delay={0.8} active={true} />
-                    {/* Logic to Renderer */}
                     <Connection start={{x: 515, y: 436}} end={{x: 696, y: 275}} delay={0.9} dashed={true} />
-                    
-                    {/* Renderer to Deployment */}
                     <Connection start={{x: 844, y: 275}} end={{x: 896, y: 275}} delay={1.1} active={true} />
                 </div>
             </div>
       </section>
 
-      {/* Main Content - (Rest of component remains structurally same but inherits global style changes) */}
+      {/* Main Content */}
       <div className="max-w-[1400px] mx-auto py-32 px-6 md:px-12 space-y-48 relative z-10">
-        
-        {/* ... Sections ... */}
-        {/* I am re-rendering the whole file to ensure style consistency */}
         
         {/* 01. Typography */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
@@ -384,41 +351,176 @@ export default function BrandGuidelines() {
             </div>
         </section>
 
-        {/* ... (Other sections follow same pattern, applying new accent color #E3E3FD where appropriate) ... */}
-        {/* I'll abbreviate the middle sections to focus on key changes, but in a real 'write' I must include everything. I will keep the structure intact. */}
-        
-        {/* 02. Node Architecture */}
-        {/* (Already rendered above in the component body) */}
+        {/* 13. Application UI */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+            <div className="md:col-span-4 sticky top-32 h-fit">
+                <SectionHeader title="Application UI" number="13" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
+                    The Studio interface components. Designed for density and precision.
+                </p>
+            </div>
+            
+            <div className="md:col-span-8 space-y-12">
+                {/* Toolbar */}
+                <div className="bg-[#050505] border border-white/10 p-8">
+                    <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-4">Floating Toolbar</span>
+                    <div className="inline-flex bg-[#050505] border border-white/10 p-1 items-center gap-1 rounded-[2px] shadow-xl">
+                        <IconButton icon={MousePointer} active={true} />
+                        <IconButton icon={Hand} />
+                        <div className="w-px h-4 bg-white/10 mx-1"></div>
+                        <IconButton icon={Type} />
+                        <IconButton icon={ImageIcon} />
+                        <IconButton icon={Box} />
+                    </div>
+                </div>
 
-        {/* 03. Asset Governance */}
-        {/* (Already rendered above) */}
+                {/* Property Item */}
+                <div className="bg-[#050505] border border-white/10 p-8">
+                    <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-4">Property Control</span>
+                    <div className="grid grid-cols-2 gap-4 max-w-sm">
+                        <div className="bg-[#0A0A0A] border border-white/10 px-2 py-1.5 flex items-center gap-2 group hover:border-white/30 transition-colors">
+                            <span className="font-mono text-[9px] text-white/30">W</span>
+                            <span className="font-mono text-[10px] text-white">1080</span>
+                        </div>
+                        <div className="bg-[#0A0A0A] border border-white/10 px-2 py-1.5 flex items-center gap-2 group hover:border-white/30 transition-colors">
+                            <span className="font-mono text-[9px] text-white/30">H</span>
+                            <span className="font-mono text-[10px] text-white">1350</span>
+                        </div>
+                    </div>
+                </div>
 
-        {/* 04. Interface & Cards */}
-        {/* (Already rendered above) */}
+                {/* Effects Panel */}
+                <div className="bg-[#050505] border border-white/10 p-8">
+                    <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-4">Effect Panel</span>
+                    <div className="bg-[#0A0A0A] border border-white/10 p-3 space-y-3 relative overflow-hidden group max-w-sm">
+                        <Corner className="top-0 left-0 border-t border-l" />
+                        <Corner className="bottom-0 right-0 border-b border-r" />
+                        
+                        <div className="flex items-center justify-between">
+                            <span className="font-mono text-[10px] text-white">Dither</span>
+                            <div className="w-8 h-4 bg-[#E3E3FD] rounded-full relative">
+                                <div className="absolute right-0.5 top-0.5 w-3 h-3 bg-black rounded-full"></div>
+                            </div>
+                        </div>
+                        <div className="space-y-1">
+                            <div className="flex justify-between text-[8px] font-mono text-white/40">
+                                <span>INTENSITY</span>
+                                <span>80%</span>
+                            </div>
+                            <div className="h-1 bg-white/10 rounded-full overflow-hidden">
+                                <div className="h-full w-[80%] bg-[#E3E3FD]"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        {/* 05. Forms & Inputs */}
-        {/* (Already rendered above) */}
+        {/* 14. Marketing Components */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+            <div className="md:col-span-4 sticky top-32 h-fit">
+                <SectionHeader title="Marketing" number="14" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
+                    Public-facing components for the marketing site. Bold, high-contrast, informative.
+                </p>
+            </div>
+            
+            <div className="md:col-span-8 space-y-12">
+                {/* Benefit Card */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="bg-[#050505] border border-white/10 p-8 relative group hover:bg-[#080808] transition-colors">
+                        <Corner className="top-0 right-0 border-t border-r" />
+                        <Corner className="bottom-0 left-0 border-b border-l" />
+                        
+                        <div className="w-12 h-12 border border-white/10 bg-white/5 flex items-center justify-center mb-8 group-hover:border-[#E3E3FD] transition-colors">
+                            <CreditCard size={20} className="text-white/60 group-hover:text-[#E3E3FD] transition-colors" />
+                        </div>
+                        
+                        <h3 className="font-mono text-sm text-[#E3E3FD] uppercase tracking-widest mb-3">01 // Revenue</h3>
+                        <h4 className="font-montreal font-medium text-2xl text-white mb-4">Productised Service</h4>
+                        <p className="text-white/50 font-montreal text-sm leading-relaxed">
+                            Don't just bill for hours. Sell the tool as a subscription.
+                        </p>
+                    </div>
+                    
+                    {/* Feature Row */}
+                    <div className="bg-[#050505] p-8 relative flex flex-col justify-center">
+                        <Corner className="top-0 left-0 border-t border-l" />
+                        <div className="flex items-center justify-between py-3 border-b border-white/5 group hover:bg-white/[0.02] transition-colors px-2">
+                            <div className="flex items-center gap-4">
+                                <Cpu size={14} className="text-[#E3E3FD]/50 group-hover:text-[#E3E3FD] transition-colors" />
+                                <span className="font-mono text-xs text-white/70 group-hover:text-white transition-colors uppercase tracking-wider">AI GENERATION</span>
+                            </div>
+                            <span className="font-mono text-[10px] text-[#E3E3FD]">v1.4</span>
+                        </div>
+                        <div className="flex items-center justify-between py-3 border-b border-white/5 group hover:bg-white/[0.02] transition-colors px-2">
+                            <div className="flex items-center gap-4">
+                                <Lock size={14} className="text-[#E3E3FD]/50 group-hover:text-[#E3E3FD] transition-colors" />
+                                <span className="font-mono text-xs text-white/70 group-hover:text-white transition-colors uppercase tracking-wider">LOCKING</span>
+                            </div>
+                            <span className="font-mono text-[10px] text-[#E3E3FD]">Strict</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        {/* 06. Buttons & Actions */}
-        {/* (Already rendered above) */}
+        {/* 15. Interactive Nodes */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+            <div className="md:col-span-4 sticky top-32 h-fit">
+                <SectionHeader title="Interactive Node" number="15" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
+                    The floating, draggable node component used in the hero section.
+                </p>
+            </div>
+            
+            <div className="md:col-span-8 h-[400px] bg-[#050505] relative overflow-hidden border border-white/10">
+                <div className="absolute inset-0 pointer-events-none opacity-[0.05]" style={{ 
+                    backgroundImage: 'linear-gradient(rgba(227, 227, 253, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(227, 227, 253, 0.1) 1px, transparent 1px)', 
+                    backgroundSize: '20px 20px' 
+                }}></div>
+                
+                {/* Static Representation of Hero Node */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64">
+                    <motion.div
+                        animate={{ y: [0, -8, 0] }}
+                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                    >
+                        <div className="bg-[#050505] border border-white/10 p-4 shadow-2xl backdrop-blur-md group hover:border-white/30 transition-colors relative">
+                            <Corner className="top-0 left-0 border-t border-l group-hover:border-white transition-colors" />
+                            <Corner className="bottom-0 right-0 border-b border-r group-hover:border-white transition-colors" />
 
-        {/* 07. Accordions */}
-        {/* (Already rendered above) */}
-
-        {/* 08. Data Viz */}
-        {/* (Already rendered above) */}
-
-        {/* 09. Overlays */}
-        {/* (Already rendered above) */}
-
-        {/* 10. Motion */}
-        {/* (Already rendered above) */}
-
-        {/* 11. Grid */}
-        {/* (Already rendered above) */}
-
-        {/* 12. Social Assets */}
-        {/* (Already rendered above) */}
+                            <div className="flex justify-between items-center mb-3 pb-2 border-b border-white/5">
+                                <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest group-hover:text-white transition-colors">Branded_Objects</span>
+                                <div className="w-1 h-1 bg-[#E3E3FD] animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
+                            </div>
+                            
+                            <div className="h-32 w-full relative flex items-center justify-center overflow-hidden bg-[#0A0A0A] border border-white/10 mb-2 shadow-inner">
+                                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05]"></div>
+                                <motion.div
+                                    className="relative z-0"
+                                    animate={{ y: [0, -4, 0] }}
+                                    transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                                >
+                                    <img src={bottomComp} alt="Bottom" className="w-[100px] object-contain opacity-100" />
+                                </motion.div>
+                            </div>
+                            <div className="flex justify-between items-center px-1">
+                                <span className="font-mono text-[8px] text-white/40">GENERATING_ASSET</span>
+                                <div className="flex gap-0.5">
+                                    {[1,2,3,4,5].map(i => (
+                                        <div key={i} className="w-0.5 h-1.5 bg-[#E3E3FD]" style={{opacity: 0.2 + (i*0.15)}}></div>
+                                    ))}
+                                </div>
+                            </div>
+                            
+                            <div className="absolute -left-[5px] top-1/2 -translate-y-1/2 w-1.5 h-2 bg-[#050505] border border-white/30 group-hover:border-[#E3E3FD] transition-colors" />
+                            <div className="absolute -right-[5px] top-1/2 -translate-y-1/2 w-1.5 h-2 bg-[#050505] border border-white/30 group-hover:border-[#E3E3FD] transition-colors" />
+                        </div>
+                    </motion.div>
+                </div>
+            </div>
+        </section>
 
       </div>
       
