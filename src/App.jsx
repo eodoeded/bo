@@ -1,38 +1,53 @@
-import { Routes, Route } from 'react-router-dom'
-import './App.css'
-import Header from './components/Header'
-import WaitlistHero from './components/WaitlistHero'
-import WaitlistHowItWorks from './components/WaitlistHowItWorks'
-import WaitlistBenefits from './components/WaitlistBenefits'
-import WaitlistFeatures from './components/WaitlistFeatures'
-import WaitlistFooter from './components/WaitlistFooter'
-import BrandGuidelines from './components/BrandGuidelines'
-import Studio from './components/Studio'
+import React, { useEffect } from 'react';
+import { useLocation, Routes, Route } from 'react-router-dom';
+import { Analytics } from "@vercel/analytics/react";
+
+import Header from './components/Header';
+import WaitlistHero from './components/WaitlistHero';
+import WaitlistHowItWorks from './components/WaitlistHowItWorks';
+import WaitlistBenefits from './components/WaitlistBenefits';
+import WaitlistFeatures from './components/WaitlistFeatures';
+import WaitlistFooter from './components/WaitlistFooter';
+import BrandGuidelines from './components/BrandGuidelines';
+import Studio from './components/Studio';
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 
 function LandingPage() {
   return (
-    <>
+    <div className="min-h-screen bg-[#020202] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal">
       <Header />
-      <WaitlistHero />
-      <WaitlistHowItWorks />
-      <WaitlistBenefits />
-      <WaitlistFeatures />
+      <main className="relative">
+        <WaitlistHero />
+        <WaitlistHowItWorks />
+        <WaitlistBenefits />
+        <WaitlistFeatures />
+      </main>
       <WaitlistFooter />
-    </>
+    </div>
   );
 }
 
 function App() {
   return (
     <>
-      <div className="fixed inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.04] pointer-events-none z-[100]"></div>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/brandguidelines" element={<BrandGuidelines />} />
         <Route path="/studio" element={<Studio />} />
       </Routes>
+      <Analytics />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Lock, Unlock, Trash2, Check, Sliders, ChevronRight, AlignLeft, AlignCenter, AlignRight, AlignVerticalDistributeCenter, AlignHorizontalDistributeCenter, AlignJustify, AlignEndVertical, Bold, Italic, Underline, Type, RotateCw, ArrowUp, ArrowDown } from 'lucide-react';
+import { Lock, Unlock, Trash2, Check, Sliders, ChevronRight, AlignLeft, AlignCenter, AlignRight, AlignVerticalDistributeCenter, AlignHorizontalDistributeCenter, AlignJustify, AlignEndVertical, Bold, Italic, Underline, Type, RotateCw, ArrowUp, ArrowDown, Sun, Droplet, Circle, CircleDashed } from 'lucide-react';
 
 const InputRow = ({ label, children }) => (
   <div className="mb-4">
@@ -41,13 +41,32 @@ const StudioSelect = ({ value, onChange, options }) => (
     </div>
 );
 
+const AdjustmentSlider = ({ icon: Icon, value, min, max, onChange, label, unit = "" }) => (
+    <div className="mb-2">
+        <div className="flex justify-between mb-1">
+             <div className="flex items-center gap-1.5">
+                <Icon size={10} className="text-white/40" />
+                <span className="font-mono text-[8px] text-white/40 uppercase tracking-widest">{label}</span>
+             </div>
+             <span className="font-mono text-[8px] text-white/60">{value}{unit}</span>
+        </div>
+        <input 
+           type="range" 
+           min={min} max={max} step="1"
+           value={value}
+           onChange={onChange}
+           className="w-full h-1 bg-white/10 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-2.5 [&::-webkit-slider-thumb]:h-2.5 [&::-webkit-slider-thumb]:bg-[#E3E3FD] [&::-webkit-slider-thumb]:rounded-full hover:[&::-webkit-slider-thumb]:scale-125 transition-all"
+       />
+    </div>
+);
+
 export const LayerProperties = ({ 
   layer, 
   mode, 
   onUpdate, 
   onDelete,
   onAlign,
-  onDistribute // New prop
+  onDistribute 
 }) => {
   const isStudio = mode === 'STUDIO';
   
@@ -260,31 +279,52 @@ export const LayerProperties = ({
            </div>
 
            {(layer.type === 'IMAGE' || layer.type === 'AI_FRAME') && (
-               <div className="grid grid-cols-2 gap-3 mb-3">
-                  <InputRow label="Filter">
-                    <StudioSelect
-                      value={layer.filterType || 'none'}
-                      onChange={(e) => onUpdate(layer.id, { filterType: e.target.value })}
-                      options={[
-                          { value: 'none', label: 'Passthrough' },
-                          { value: 'dither', label: 'Dither (1-bit)' },
-                          { value: 'threshold', label: 'Threshold' },
-                          { value: 'grayscale', label: 'Grayscale' }
-                      ]}
-                    />
-                  </InputRow>
-                  <InputRow label="Blend Mode">
-                    <StudioSelect
-                      value={layer.blendMode || 'normal'}
-                      onChange={(e) => onUpdate(layer.id, { blendMode: e.target.value })}
-                      options={[
-                          { value: 'normal', label: 'Normal' },
-                          { value: 'screen', label: 'Screen' },
-                          { value: 'multiply', label: 'Multiply' },
-                          { value: 'overlay', label: 'Overlay' }
-                      ]}
-                    />
-                  </InputRow>
+               <div className="space-y-4">
+                   <div className="grid grid-cols-2 gap-3">
+                      <InputRow label="Filter">
+                        <StudioSelect
+                          value={layer.filterType || 'none'}
+                          onChange={(e) => onUpdate(layer.id, { filterType: e.target.value })}
+                          options={[
+                              { value: 'none', label: 'Passthrough' },
+                              { value: 'dither', label: 'Dither (1-bit)' },
+                              { value: 'threshold', label: 'Threshold' },
+                              { value: 'grayscale', label: 'Grayscale' }
+                          ]}
+                        />
+                      </InputRow>
+                      <InputRow label="Blend Mode">
+                        <StudioSelect
+                          value={layer.blendMode || 'normal'}
+                          onChange={(e) => onUpdate(layer.id, { blendMode: e.target.value })}
+                          options={[
+                              { value: 'normal', label: 'Normal' },
+                              { value: 'screen', label: 'Screen' },
+                              { value: 'multiply', label: 'Multiply' },
+                              { value: 'overlay', label: 'Overlay' }
+                          ]}
+                        />
+                      </InputRow>
+                   </div>
+                   
+                   {/* ADJUSTMENTS */}
+                   <div className="pt-2">
+                       <AdjustmentSlider 
+                          icon={Sun} label="Brightness" unit="%" 
+                          value={layer.brightness ?? 100} min={0} max={200}
+                          onChange={(e) => onUpdate(layer.id, { brightness: Number(e.target.value) })}
+                       />
+                       <AdjustmentSlider 
+                          icon={CircleDashed} label="Contrast" unit="%" 
+                          value={layer.contrast ?? 100} min={0} max={200}
+                          onChange={(e) => onUpdate(layer.id, { contrast: Number(e.target.value) })}
+                       />
+                       <AdjustmentSlider 
+                          icon={Droplet} label="Blur" unit="px" 
+                          value={layer.blur ?? 0} min={0} max={20}
+                          onChange={(e) => onUpdate(layer.id, { blur: Number(e.target.value) })}
+                       />
+                   </div>
                </div>
            )}
         </div>

@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Type, Image as ImageIcon, Sparkles, Layers, 
     Settings, Download, ChevronRight, Maximize2, 
@@ -12,14 +12,16 @@ import {
     Copy, Search, Layout,
     ArrowUp, ArrowDown,
     Save,
-    BringToFront, SendToBack
+    BringToFront, SendToBack,
+    HelpCircle
 } from 'lucide-react';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import html2canvas from 'html2canvas';
 import { SmartImage } from './studio/SmartImage';
 import { LayerProperties } from './studio/LayerProperties';
-import { CanvasProperties } from './studio/CanvasProperties'; // Imported
+import { CanvasProperties } from './studio/CanvasProperties';
+import { ShortcutsHelp } from './studio/ShortcutsHelp';
 import { generateImage } from '../services/gemini';
 
 // --- HISTORY SYSTEM HOOK ---
@@ -104,7 +106,8 @@ const INITIAL_LAYERS = [
     lockPosition: true, 
     opacity: 1, 
     visible: true, 
-    rotation: 0 // New
+    rotation: 0,
+    brightness: 100, contrast: 100, blur: 0
   },
   {
     id: 'card-title',
@@ -142,7 +145,8 @@ const INITIAL_LAYERS = [
     lockPosition: false,
     opacity: 1,
     visible: true,
-    rotation: 0
+    rotation: 0,
+    brightness: 100, contrast: 100, blur: 0
   }
 ];
 
@@ -153,6 +157,7 @@ export default function Studio() {
     const [selectedTool, setSelectedTool] = useState('select');
     const [statusMessage, setStatusMessage] = useState(null); 
     const [snapToGrid, setSnapToGrid] = useState(false); // Snap Toggle
+    const [showShortcuts, setShowShortcuts] = useState(false); // Shortcuts Help
     
     // Canvas Viewport
     const [zoom, setZoom] = useState(1);
@@ -440,6 +445,7 @@ export default function Studio() {
             opacity: 1, 
             visible: true, 
             rotation: 0,
+            brightness: 100, contrast: 100, blur: 0,
             aiPromptTemplate: type === 'AI_FRAME' ? "A render of {subject}" : undefined,
             filterType: 'none',
             blendMode: 'normal'
@@ -861,6 +867,11 @@ export default function Studio() {
                 if (e.type === 'keydown') setIsSpacePressed(true);
                 if (e.type === 'keyup') setIsSpacePressed(false);
             }
+
+            // Shortcuts Help (?)
+            if (e.key === '?' && !editingTextId) {
+                setShowShortcuts(prev => !prev);
+            }
         };
         
         window.addEventListener('keydown', handleKey);
@@ -975,6 +986,20 @@ export default function Studio() {
     return (
         <div className="min-h-screen bg-[#020202] text-white font-montreal flex flex-col overflow-hidden selection:bg-[#E3E3FD] selection:text-black" onClick={() => setContextMenu(null)}>
             
+            {/* Shortcuts Modal */}
+            <AnimatePresence>
+                {showShortcuts && (
+                    <motion.div 
+                        initial={{ opacity: 0 }} 
+                        animate={{ opacity: 1 }} 
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[100]"
+                    >
+                        <ShortcutsHelp onClose={() => setShowShortcuts(false)} />
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             {/* Top Bar */}
             <header className="h-12 border-b border-white/10 flex items-center justify-between px-4 bg-[#050505] relative z-20">
                 <div className="flex items-center gap-6">
@@ -1005,6 +1030,8 @@ export default function Studio() {
                         <IconButton icon={Undo} onClick={() => setLayers(undo())} disabled={!canUndo} title="Undo (Ctrl+Z)" />
                         <IconButton icon={Redo} onClick={() => setLayers(redo())} disabled={!canRedo} title="Redo (Ctrl+Shift+Z)" />
                     </div>
+                    <div className="h-4 w-px bg-white/10"></div>
+                    <IconButton icon={HelpCircle} onClick={() => setShowShortcuts(true)} title="Keyboard Shortcuts (?)" />
                     <div className="h-4 w-px bg-white/10"></div>
                     <div className="flex items-center gap-2 bg-[#0A0A0A] border border-white/10 p-1 rounded-[2px]">
                         <button 
@@ -1187,7 +1214,8 @@ export default function Studio() {
                                                 borderRadius: layer.borderRadius ? `${layer.borderRadius}px` : '0px',
                                                 mixBlendMode: layer.blendMode || 'normal',
                                                 opacity: layer.opacity !== undefined ? layer.opacity : 1,
-                                                transform: `rotate(${layer.rotation || 0}deg)`, // New: Rotation
+                                                transform: `rotate(${layer.rotation || 0}deg)`, 
+                                                filter: `brightness(${layer.brightness !== undefined ? layer.brightness : 100}%) contrast(${layer.contrast !== undefined ? layer.contrast : 100}%) blur(${layer.blur || 0}px)`,
                                                 whiteSpace: layer.type === 'TEXT' ? 'nowrap' : 'normal'
                                             }}
                                         >
