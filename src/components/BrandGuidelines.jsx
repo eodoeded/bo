@@ -33,9 +33,9 @@ const Node = ({ title, inputs = [], outputs = [], children, x, y, delay = 0, wid
         {type === "minimal" ? (
            <div className="relative group cursor-pointer">
               {/* Square "Glow" */}
-              <div className="absolute -inset-4 bg-[#ccff00]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"></div>
+              <div className="absolute -inset-4 bg-[#E3E3FD]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"></div>
               
-              <div className="relative bg-[#0A0A0A] border border-white/10 px-4 py-2 flex items-center justify-center shadow-xl backdrop-blur-md hover:border-[#ccff00]/50 transition-colors">
+              <div className="relative bg-[#0A0A0A] border border-white/10 px-4 py-2 flex items-center justify-center shadow-xl backdrop-blur-md hover:border-[#E3E3FD]/50 transition-colors">
                  {/* Tech Corners */}
                  <div className="absolute top-0 left-0 w-1 h-1 border-t border-l border-white/50"></div>
                  <div className="absolute bottom-0 right-0 w-1 h-1 border-b border-r border-white/50"></div>
@@ -44,33 +44,33 @@ const Node = ({ title, inputs = [], outputs = [], children, x, y, delay = 0, wid
               
               {/* Ports - Squared */}
               {inputs.map((_, i) => (
-                <div key={`in-${i}`} className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#0A0A0A] border border-[#ccff00]/50" />
+                <div key={`in-${i}`} className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#0A0A0A] border border-[#E3E3FD]/50" />
               ))}
               {outputs.map((_, i) => (
-                <div key={`out-${i}`} className="absolute -right-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#0A0A0A] border border-[#ccff00]/50" />
+                <div key={`out-${i}`} className="absolute -right-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#0A0A0A] border border-[#E3E3FD]/50" />
               ))}
            </div>
         ) : (
-          <div className="bg-[#050505]/95 border border-white/10 p-3 shadow-2xl backdrop-blur-md hover:border-[#ccff00]/30 transition-colors group relative">
+          <div className="bg-[#050505]/95 border border-white/10 p-3 shadow-2xl backdrop-blur-md hover:border-[#E3E3FD]/30 transition-colors group relative">
             {/* Technical Decor */}
-            <div className="absolute top-0 left-0 w-1.5 h-1.5 border-t border-l border-white/30 group-hover:border-[#ccff00] transition-colors"></div>
-            <div className="absolute top-0 right-0 w-1.5 h-1.5 border-t border-r border-white/30 group-hover:border-[#ccff00] transition-colors"></div>
-            <div className="absolute bottom-0 left-0 w-1.5 h-1.5 border-b border-l border-white/30 group-hover:border-[#ccff00] transition-colors"></div>
-            <div className="absolute bottom-0 right-0 w-1.5 h-1.5 border-b border-r border-white/30 group-hover:border-[#ccff00] transition-colors"></div>
+            <div className="absolute top-0 left-0 w-1.5 h-1.5 border-t border-l border-white/30 group-hover:border-[#E3E3FD] transition-colors"></div>
+            <div className="absolute top-0 right-0 w-1.5 h-1.5 border-t border-r border-white/30 group-hover:border-[#E3E3FD] transition-colors"></div>
+            <div className="absolute bottom-0 left-0 w-1.5 h-1.5 border-b border-l border-white/30 group-hover:border-[#E3E3FD] transition-colors"></div>
+            <div className="absolute bottom-0 right-0 w-1.5 h-1.5 border-b border-r border-white/30 group-hover:border-[#E3E3FD] transition-colors"></div>
     
             <div className="flex justify-between items-center mb-3 pb-2 border-b border-white/5">
-              <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest group-hover:text-[#ccff00] transition-colors">{title}</span>
+              <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest group-hover:text-[#E3E3FD] transition-colors">{title}</span>
               <div className={`w-1 h-1 ${status === 'active' ? 'bg-[#E3E3FD] animate-pulse shadow-[0_0_8px_#E3E3FD]' : 'bg-white/10'}`}></div>
             </div>
             {children}
             
             {/* Input Ports - Rectangular - Adjusted vertical pos to match connections */}
             {inputs.map((_, i) => (
-              <div key={`in-${i}`} className="absolute -left-[5px] top-[32px] w-1.5 h-2 bg-[#050505] border border-white/30 hover:border-[#ccff00] transition-colors" />
+              <div key={`in-${i}`} className="absolute -left-[5px] top-[32px] w-1.5 h-2 bg-[#050505] border border-white/30 hover:border-[#E3E3FD] transition-colors" />
             ))}
             {/* Output Ports - Rectangular - Adjusted vertical pos to match connections */}
             {outputs.map((_, i) => (
-              <div key={`out-${i}`} className="absolute -right-[5px] top-[32px] w-1.5 h-2 bg-[#050505] border border-white/30 hover:border-[#ccff00] transition-colors" />
+              <div key={`out-${i}`} className="absolute -right-[5px] top-[32px] w-1.5 h-2 bg-[#050505] border border-white/30 hover:border-[#E3E3FD] transition-colors" />
             ))}
           </div>
         )}
@@ -97,14 +97,14 @@ const Connection = ({ start, end, delay, dashed = false, active = false }) => {
       />
       
       {/* Circuit joints */}
-      <rect x={start.x - 1.5} y={start.y - 1.5} width="3" height="3" fill="#ccff00" fillOpacity="0.8" />
-      <rect x={end.x - 1.5} y={end.y - 1.5} width="3" height="3" fill="#ccff00" fillOpacity="0.8" />
+      <rect x={start.x - 1.5} y={start.y - 1.5} width="3" height="3" fill="#E3E3FD" fillOpacity="0.8" />
+      <rect x={end.x - 1.5} y={end.y - 1.5} width="3" height="3" fill="#E3E3FD" fillOpacity="0.8" />
 
       {(active || !dashed) && (
         <motion.path
             d={path}
             fill="none"
-            stroke="#ccff00" // Acid Green
+            stroke="#E3E3FD" // Acid Green
             strokeWidth="1.5"
             strokeLinecap="square"
             initial={{ pathLength: 0, pathOffset: 0, opacity: 0 }}
@@ -129,11 +129,11 @@ const Connection = ({ start, end, delay, dashed = false, active = false }) => {
 const SectionHeader = ({ title, number }) => (
     <div className="flex items-end justify-between mb-16 border-b border-white/10 pb-6 group cursor-crosshair">
         <div className="flex items-center gap-4">
-            <div className="w-1.5 h-1.5 bg-[#ccff00] group-hover:rotate-45 transition-transform duration-300 shadow-[0_0_8px_#ccff00]"></div>
+            <div className="w-1.5 h-1.5 bg-[#E3E3FD] group-hover:rotate-45 transition-transform duration-300 shadow-[0_0_8px_#E3E3FD]"></div>
             <h2 className="font-montreal font-medium text-3xl tracking-tight text-white group-hover:translate-x-2 transition-transform duration-300">{title}</h2>
         </div>
         <div className="flex items-center gap-2">
-            <span className="font-mono text-[10px] text-white/30 tracking-widest group-hover:text-[#ccff00] transition-colors">/ {number}</span>
+            <span className="font-mono text-[10px] text-white/30 tracking-widest group-hover:text-[#E3E3FD] transition-colors">/ {number}</span>
         </div>
     </div>
 );
@@ -162,7 +162,7 @@ export default function BrandGuidelines() {
   };
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white selection:bg-[#ccff00] selection:text-black font-montreal overflow-x-hidden">
+    <div className="min-h-screen bg-[#020202] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal overflow-x-hidden">
       
       {/* Background Grid - "Weird" glitchy pattern */}
       <div className="fixed inset-0 pointer-events-none opacity-[0.04]" style={{ 
@@ -180,8 +180,8 @@ export default function BrandGuidelines() {
             <span className="font-mono text-[10px] uppercase tracking-widest group-hover:text-[#E3E3FD] transition-colors">[ BACK ]</span>
         </Link>
         <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 hover:border-[#ccff00]/50 transition-colors">
-                <span className="w-1 h-1 bg-[#ccff00] animate-pulse shadow-[0_0_8px_#ccff00]"></span>
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 hover:border-[#E3E3FD]/50 transition-colors">
+                <span className="w-1 h-1 bg-[#E3E3FD] animate-pulse shadow-[0_0_8px_#E3E3FD]"></span>
                 <span className="font-mono text-[10px] text-white/60 uppercase tracking-widest">System V2.2</span>
             </div>
         </div>
@@ -192,7 +192,7 @@ export default function BrandGuidelines() {
         
         {/* Title Centered (Reverted Preference) */}
         <div className="absolute bottom-12 left-6 md:left-12 max-w-xl z-20 pointer-events-none">
-            <Badge className="mb-4 text-[#ccff00] border-[#ccff00]/20 bg-[#ccff00]/5">System_OS v2.2</Badge>
+            <Badge className="mb-4 text-[#E3E3FD] border-[#E3E3FD]/20 bg-[#E3E3FD]/5">System_OS v2.2</Badge>
             <h1 className="font-montreal font-medium text-6xl md:text-8xl tracking-tight mb-6 text-white leading-[0.9]">
                 Visual<br/><span className="text-[#E3E3FD]">System</span>
             </h1>
@@ -213,7 +213,7 @@ export default function BrandGuidelines() {
                             </div>
                             <div className="flex gap-1">
                                 <div className="h-0.5 w-full bg-white/10 overflow-hidden">
-                                    <motion.div className="h-full bg-[#ccff00]" animate={{x:['0%','100%']}} transition={{duration:1.5, repeat:Infinity, ease:"linear"}} />
+                                    <motion.div className="h-full bg-[#E3E3FD]" animate={{x:['0%','100%']}} transition={{duration:1.5, repeat:Infinity, ease:"linear"}} />
                                 </div>
                             </div>
                         </div>
@@ -340,21 +340,21 @@ export default function BrandGuidelines() {
                 {/* Display Type */}
                 <div className="border-b border-white/5 pb-16">
                     <div className="flex items-center gap-4 mb-6">
-                         <span className="font-mono text-[9px] text-[#ccff00] tracking-widest uppercase">Primary Display</span>
+                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Primary Display</span>
                          <div className="h-px flex-1 bg-white/10"></div>
                     </div>
                     
-                    <div className="text-[120px] leading-[0.85] font-montreal font-medium tracking-tight mb-12 text-white hover:text-[#ccff00] transition-colors duration-500 cursor-default">
+                    <div className="text-[120px] leading-[0.85] font-montreal font-medium tracking-tight mb-12 text-white hover:text-[#E3E3FD] transition-colors duration-500 cursor-default">
                         Aa Bb Cc<br/>123 456
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div className="p-8 border border-white/10 bg-white/[0.02] relative group hover:bg-white/[0.04] transition-colors min-h-[200px] flex flex-col justify-between hover:border-[#ccff00]/50">
+                        <div className="p-8 border border-white/10 bg-white/[0.02] relative group hover:bg-white/[0.04] transition-colors min-h-[200px] flex flex-col justify-between hover:border-[#E3E3FD]/50">
                             <Corner className="top-0 left-0 border-t border-l" />
                             <Corner className="bottom-0 right-0 border-b border-r" />
                             <span className="text-4xl mb-2 block">Regular</span>
                             <span className="font-mono text-xs text-white/40">400 — Body / Subheads</span>
                         </div>
-                        <div className="p-8 border border-white/10 bg-white/[0.02] relative group hover:bg-white/[0.04] transition-colors min-h-[200px] flex flex-col justify-between hover:border-[#ccff00]/50">
+                        <div className="p-8 border border-white/10 bg-white/[0.02] relative group hover:bg-white/[0.04] transition-colors min-h-[200px] flex flex-col justify-between hover:border-[#E3E3FD]/50">
                             <Corner className="top-0 left-0 border-t border-l" />
                             <Corner className="bottom-0 right-0 border-b border-r" />
                             <span className="text-4xl font-medium mb-2 block">Medium</span>
@@ -365,7 +365,7 @@ export default function BrandGuidelines() {
 
                 {/* Scale */}
                 <div>
-                    <span className="font-mono text-[9px] text-[#ccff00] tracking-widest mb-12 block uppercase">Hierarchy Scale</span>
+                    <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest mb-12 block uppercase">Hierarchy Scale</span>
                     <div className="space-y-12">
                         {[
                             { role: 'Display XL', size: 'text-6xl md:text-8xl', sample: 'Visual Intelligence' },
@@ -374,8 +374,8 @@ export default function BrandGuidelines() {
                             { role: 'Body L', size: 'text-xl', sample: 'The studio controls the prompt structure and safety layers.' },
                             { role: 'Caption', size: 'text-sm font-mono uppercase tracking-widest', sample: 'System_Operational_v2' },
                         ].map((type, i) => (
-                            <div key={i} className="group grid grid-cols-12 items-baseline border-b border-white/5 pb-8 hover:border-[#ccff00]/30 transition-colors cursor-crosshair">
-                                <div className="col-span-12 md:col-span-3 font-mono text-xs text-white/30 group-hover:text-[#ccff00] transition-colors mb-2 md:mb-0">{type.role}</div>
+                            <div key={i} className="group grid grid-cols-12 items-baseline border-b border-white/5 pb-8 hover:border-[#E3E3FD]/30 transition-colors cursor-crosshair">
+                                <div className="col-span-12 md:col-span-3 font-mono text-xs text-white/30 group-hover:text-[#E3E3FD] transition-colors mb-2 md:mb-0">{type.role}</div>
                                 <div className={`col-span-12 md:col-span-9 font-montreal ${type.size} text-white leading-none`}>{type.sample}</div>
                             </div>
                         ))}
@@ -384,7 +384,7 @@ export default function BrandGuidelines() {
             </div>
         </section>
 
-        {/* ... (Other sections follow same pattern, applying new accent color #ccff00 where appropriate) ... */}
+        {/* ... (Other sections follow same pattern, applying new accent color #E3E3FD where appropriate) ... */}
         {/* I'll abbreviate the middle sections to focus on key changes, but in a real 'write' I must include everything. I will keep the structure intact. */}
         
         {/* 02. Node Architecture */}
@@ -432,26 +432,26 @@ export default function BrandGuidelines() {
                         A modular design system for automated brand governance. Empowering studios to create custom tools for their clients.
                     </p>
                     <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 bg-[#ccff00] rounded-full animate-pulse"></div>
-                        <span className="font-mono text-[10px] text-[#ccff00] uppercase tracking-widest">All Systems Operational</span>
+                        <div className="w-2 h-2 bg-[#E3E3FD] rounded-full animate-pulse"></div>
+                        <span className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">All Systems Operational</span>
                     </div>
                 </div>
                 
                 <div className="col-span-1 md:col-span-3 md:col-start-8 space-y-6">
-                     <h4 className="font-mono text-[10px] text-[#ccff00] uppercase tracking-widest">Platform</h4>
+                     <h4 className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">Platform</h4>
                      <ul className="space-y-3 font-mono text-xs text-white/60">
                         {/* Links removed */}
                     </ul>
                 </div>
 
                 <div className="col-span-1 md:col-span-2 space-y-6">
-                    <h4 className="font-mono text-[10px] text-[#ccff00] uppercase tracking-widest">Connect</h4>
+                    <h4 className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">Connect</h4>
                     <div className="flex flex-col gap-3">
                         <a href="https://www.linkedin.com/company/108913089/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-white/60 hover:text-white transition-colors group">
-                            <span className="font-mono text-xs text-[#ccff00] group-hover:text-white transition-colors">[ LINKEDIN ]</span>
+                            <span className="font-mono text-xs text-[#E3E3FD] group-hover:text-white transition-colors">[ LINKEDIN ]</span>
                         </a>
                          <a href="mailto:brandedobjects@gmail.com" className="flex items-center gap-3 text-white/60 hover:text-white transition-colors group">
-                            <span className="font-mono text-xs text-[#ccff00] group-hover:text-white transition-colors">[ EMAIL ]</span>
+                            <span className="font-mono text-xs text-[#E3E3FD] group-hover:text-white transition-colors">[ EMAIL ]</span>
                         </a>
                     </div>
                 </div>

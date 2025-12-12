@@ -139,7 +139,7 @@ export default function WaitlistHero() {
   };
 
   return (
-    <section className="relative w-full h-screen min-h-[600px] md:min-h-[800px] overflow-hidden bg-[#020202]">
+    <section className="relative w-full min-h-screen md:h-screen flex flex-col md:block overflow-hidden bg-[#020202]">
       
       {/* Background Grid */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.02]" style={{ 
@@ -155,171 +155,172 @@ export default function WaitlistHero() {
           LATENCY: 12ms <br/> SECURE_CONNECTION
       </div>
 
-      {/* Node Graph Layer */}
-      <div ref={containerRef} className="absolute inset-0 w-full h-full z-10 touch-none">
-          
-          <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none" style={{zIndex: 10}}>
-               {/* 
-                  Unique Style: "Energy Pulse"
-                  - Base wire is static and dim
-                  - Pulse travels along the wire
-               */}
+      {/* Node Graph Layer - Relative on Mobile (Top Half), Absolute on Desktop */}
+      <div className="relative w-full h-[50vh] md:absolute md:inset-0 md:h-full z-10 touch-none order-1 md:order-none bg-[#020202] md:bg-transparent">
+          <div ref={containerRef} className="absolute inset-0 w-full h-full">
+            <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none" style={{zIndex: 10}}>
+                {/* 
+                    Unique Style: "Energy Pulse"
+                    - Base wire is static and dim
+                    - Pulse travels along the wire
+                */}
 
-               {/* Path 1: Studio -> Core */}
-               <motion.path
-                  d={`M ${nodes.studio.x} ${nodes.studio.y} 
-                      L ${(nodes.studio.x + nodes.core.x) / 2} ${nodes.studio.y} 
-                      L ${(nodes.studio.x + nodes.core.x) / 2} ${nodes.core.y} 
-                      L ${nodes.core.x} ${nodes.core.y}`}
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="0.1"
-                  strokeOpacity="0.15"
-                  vectorEffect="non-scaling-stroke"
-                />
-                
-                {/* Pulse Animation */}
+                {/* Path 1: Studio -> Core */}
                 <motion.path
-                  d={`M ${nodes.studio.x} ${nodes.studio.y} 
-                      L ${(nodes.studio.x + nodes.core.x) / 2} ${nodes.studio.y} 
-                      L ${(nodes.studio.x + nodes.core.x) / 2} ${nodes.core.y} 
-                      L ${nodes.core.x} ${nodes.core.y}`}
-                  fill="none"
-                  stroke="#E3E3FD"
-                  strokeWidth="0.3"
-                  vectorEffect="non-scaling-stroke"
-                  initial={{ pathLength: 0, pathOffset: 0, opacity: 0 }}
-                  animate={{ 
-                      pathLength: [0, 0.3, 0], // Grows then shrinks
-                      pathOffset: [0, 1, 1],   // Moves from start to end
-                      opacity: [0, 1, 0] 
-                  }}
-                  transition={{ 
-                      duration: 3, 
-                      ease: "easeInOut", 
-                      repeat: Infinity,
-                      repeatDelay: 0.2
-                  }}
-                />
+                    d={`M ${nodes.studio.x} ${nodes.studio.y} 
+                        L ${(nodes.studio.x + nodes.core.x) / 2} ${nodes.studio.y} 
+                        L ${(nodes.studio.x + nodes.core.x) / 2} ${nodes.core.y} 
+                        L ${nodes.core.x} ${nodes.core.y}`}
+                    fill="none"
+                    stroke="white"
+                    strokeWidth="0.1"
+                    strokeOpacity="0.15"
+                    vectorEffect="non-scaling-stroke"
+                    />
+                    
+                    {/* Pulse Animation */}
+                    <motion.path
+                    d={`M ${nodes.studio.x} ${nodes.studio.y} 
+                        L ${(nodes.studio.x + nodes.core.x) / 2} ${nodes.studio.y} 
+                        L ${(nodes.studio.x + nodes.core.x) / 2} ${nodes.core.y} 
+                        L ${nodes.core.x} ${nodes.core.y}`}
+                    fill="none"
+                    stroke="#E3E3FD"
+                    strokeWidth="0.3"
+                    vectorEffect="non-scaling-stroke"
+                    initial={{ pathLength: 0, pathOffset: 0, opacity: 0 }}
+                    animate={{ 
+                        pathLength: [0, 0.3, 0], // Grows then shrinks
+                        pathOffset: [0, 1, 1],   // Moves from start to end
+                        opacity: [0, 1, 0] 
+                    }}
+                    transition={{ 
+                        duration: 3, 
+                        ease: "easeInOut", 
+                        repeat: Infinity,
+                        repeatDelay: 0.2
+                    }}
+                    />
 
-               {/* Path 2: Core -> Output */}
-               <motion.path
-                  d={`M ${nodes.core.x} ${nodes.core.y} 
-                      L ${(nodes.core.x + nodes.output.x) / 2} ${nodes.core.y} 
-                      L ${(nodes.core.x + nodes.output.x) / 2} ${nodes.output.y} 
-                      L ${nodes.output.x} ${nodes.output.y}`}
-                  fill="none"
-                  stroke="white"
-                  strokeWidth="0.1"
-                  strokeOpacity="0.15"
-                  vectorEffect="non-scaling-stroke"
-                />
-                
-                {/* Pulse Animation */}
+                {/* Path 2: Core -> Output */}
                 <motion.path
-                  d={`M ${nodes.core.x} ${nodes.core.y} 
-                      L ${(nodes.core.x + nodes.output.x) / 2} ${nodes.core.y} 
-                      L ${(nodes.core.x + nodes.output.x) / 2} ${nodes.output.y} 
-                      L ${nodes.output.x} ${nodes.output.y}`}
-                  fill="none"
-                  stroke="#E3E3FD"
-                  strokeWidth="0.3"
-                  vectorEffect="non-scaling-stroke"
-                  initial={{ pathLength: 0, pathOffset: 0, opacity: 0 }}
-                  animate={{ 
-                      pathLength: [0, 0.3, 0], 
-                      pathOffset: [0, 1, 1],
-                      opacity: [0, 1, 0] 
-                  }}
-                  transition={{ 
-                      duration: 3, 
-                      ease: "easeInOut", 
-                      repeat: Infinity,
-                      repeatDelay: 0.2,
-                      delay: 1.5 // Offset timing
-                  }}
-                />
-          </svg>
+                    d={`M ${nodes.core.x} ${nodes.core.y} 
+                        L ${(nodes.core.x + nodes.output.x) / 2} ${nodes.core.y} 
+                        L ${(nodes.core.x + nodes.output.x) / 2} ${nodes.output.y} 
+                        L ${nodes.output.x} ${nodes.output.y}`}
+                    fill="none"
+                    stroke="white"
+                    strokeWidth="0.1"
+                    strokeOpacity="0.15"
+                    vectorEffect="non-scaling-stroke"
+                    />
+                    
+                    {/* Pulse Animation */}
+                    <motion.path
+                    d={`M ${nodes.core.x} ${nodes.core.y} 
+                        L ${(nodes.core.x + nodes.output.x) / 2} ${nodes.core.y} 
+                        L ${(nodes.core.x + nodes.output.x) / 2} ${nodes.output.y} 
+                        L ${nodes.output.x} ${nodes.output.y}`}
+                    fill="none"
+                    stroke="#E3E3FD"
+                    strokeWidth="0.3"
+                    vectorEffect="non-scaling-stroke"
+                    initial={{ pathLength: 0, pathOffset: 0, opacity: 0 }}
+                    animate={{ 
+                        pathLength: [0, 0.3, 0], 
+                        pathOffset: [0, 1, 1],
+                        opacity: [0, 1, 0] 
+                    }}
+                    transition={{ 
+                        duration: 3, 
+                        ease: "easeInOut", 
+                        repeat: Infinity,
+                        repeatDelay: 0.2,
+                        delay: 1.5 // Offset timing
+                    }}
+                    />
+            </svg>
 
-          {/* Nodes */}
-          <Node 
-            id="studio" 
-            title="Design_Studio" 
-            x={nodes.studio.x} 
-            y={nodes.studio.y} 
-            onDragStart={handleDragStart} 
-            isDragging={draggingId === 'studio'}
-            width="w-28 md:w-48"
-          >
-                <div className="flex items-center gap-2 md:gap-3 text-white/60">
-                    <Database size={12} className="md:w-[14px] md:h-[14px]" />
-                    <span className="font-mono text-[7px] md:text-[9px]">ASSETS_LOADED</span>
-                </div>
-                <div className="flex items-center gap-2 md:gap-3 text-white/60">
-                    <Lock size={12} className="text-[#E3E3FD] md:w-[14px] md:h-[14px]"/>
-                    <span className="font-mono text-[7px] md:text-[9px] text-[#E3E3FD]">RULES_LOCKED</span>
-                </div>
-          </Node>
-
-          <Node 
-            id="core" 
-            title="Branded_Objects" 
-            x={nodes.core.x} 
-            y={nodes.core.y} 
-            onDragStart={handleDragStart} 
-            isDragging={draggingId === 'core'}
-            width="w-40 md:w-64"
-          >
-                {/* Spot Mini - Base Only */}
-                <div className="h-28 md:h-48 w-full relative flex items-center justify-center overflow-hidden bg-[#0A0A0A] border border-white/10 mb-2 shadow-inner pointer-events-none">
-                     <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05]"></div>
-                    <motion.div
-                        className="relative z-0"
-                        animate={{ y: [0, -4, 0] }}
-                        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                    >
-                        <img src={bottomComp} alt="Bottom" className="w-[80px] md:w-[140px] object-contain opacity-100" />
-                    </motion.div>
-                </div>
-                <div className="flex justify-between items-center px-1">
-                    <span className="font-mono text-[6px] md:text-[8px] text-white/40">GENERATING_ASSET_ID_8492</span>
-                    <div className="flex gap-0.5">
-                        {[1,2,3,4,5].map(i => (
-                            <div key={i} className="w-0.5 h-1.5 bg-[#E3E3FD]" style={{opacity: 0.2 + (i*0.15)}}></div>
-                        ))}
+            {/* Nodes */}
+            <Node 
+                id="studio" 
+                title="Design_Studio" 
+                x={nodes.studio.x} 
+                y={nodes.studio.y} 
+                onDragStart={handleDragStart} 
+                isDragging={draggingId === 'studio'}
+                width="w-28 md:w-48"
+            >
+                    <div className="flex items-center gap-2 md:gap-3 text-white/60">
+                        <Database size={12} className="md:w-[14px] md:h-[14px]" />
+                        <span className="font-mono text-[7px] md:text-[9px]">ASSETS_LOADED</span>
                     </div>
-                </div>
-          </Node>
+                    <div className="flex items-center gap-2 md:gap-3 text-white/60">
+                        <Lock size={12} className="text-[#E3E3FD] md:w-[14px] md:h-[14px]"/>
+                        <span className="font-mono text-[7px] md:text-[9px] text-[#E3E3FD]">RULES_LOCKED</span>
+                    </div>
+            </Node>
 
-          <Node 
-            id="output" 
-            title="Client_Output" 
-            x={nodes.output.x} 
-            y={nodes.output.y} 
-            onDragStart={handleDragStart} 
-            isDragging={draggingId === 'output'}
-            width="w-28 md:w-48"
-          >
-                <div className="flex items-center gap-2 md:gap-3 text-white/60">
-                    <Layout size={12} className="md:w-[14px] md:h-[14px]" />
-                    <span className="font-mono text-[7px] md:text-[9px]">RENDER_COMPLETE</span>
-                </div>
-                <div className="flex items-center gap-2 md:gap-3 text-white/60">
-                    <Zap size={12} className="text-[#E3E3FD] md:w-[14px] md:h-[14px]"/>
-                    <span className="font-mono text-[7px] md:text-[9px]">INSTANT_DELIVERY</span>
-                </div>
-          </Node>
+            <Node 
+                id="core" 
+                title="Branded_Objects" 
+                x={nodes.core.x} 
+                y={nodes.core.y} 
+                onDragStart={handleDragStart} 
+                isDragging={draggingId === 'core'}
+                width="w-40 md:w-64"
+            >
+                    {/* Spot Mini - Base Only */}
+                    <div className="h-28 md:h-48 w-full relative flex items-center justify-center overflow-hidden bg-[#0A0A0A] border border-white/10 mb-2 shadow-inner pointer-events-none">
+                        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05]"></div>
+                        <motion.div
+                            className="relative z-0"
+                            animate={{ y: [0, -4, 0] }}
+                            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                        >
+                            <img src={bottomComp} alt="Bottom" className="w-[80px] md:w-[140px] object-contain opacity-100" />
+                        </motion.div>
+                    </div>
+                    <div className="flex justify-between items-center px-1">
+                        <span className="font-mono text-[6px] md:text-[8px] text-white/40">GENERATING_ASSET_ID_8492</span>
+                        <div className="flex gap-0.5">
+                            {[1,2,3,4,5].map(i => (
+                                <div key={i} className="w-0.5 h-1.5 bg-[#E3E3FD]" style={{opacity: 0.2 + (i*0.15)}}></div>
+                            ))}
+                        </div>
+                    </div>
+            </Node>
+
+            <Node 
+                id="output" 
+                title="Client_Output" 
+                x={nodes.output.x} 
+                y={nodes.output.y} 
+                onDragStart={handleDragStart} 
+                isDragging={draggingId === 'output'}
+                width="w-28 md:w-48"
+            >
+                    <div className="flex items-center gap-2 md:gap-3 text-white/60">
+                        <Layout size={12} className="md:w-[14px] md:h-[14px]" />
+                        <span className="font-mono text-[7px] md:text-[9px]">RENDER_COMPLETE</span>
+                    </div>
+                    <div className="flex items-center gap-2 md:gap-3 text-white/60">
+                        <Zap size={12} className="text-[#E3E3FD] md:w-[14px] md:h-[14px]"/>
+                        <span className="font-mono text-[7px] md:text-[9px]">INSTANT_DELIVERY</span>
+                    </div>
+            </Node>
+          </div>
       </div>
 
-      {/* Text Content - Anchored Bottom Left */}
-      <div className="absolute bottom-12 md:bottom-20 left-6 md:left-12 z-30 max-w-xl pointer-events-none">
+      {/* Text Content - Relative on Mobile (Bottom Half), Absolute on Desktop */}
+      <div className="relative md:absolute md:bottom-20 left-0 md:left-12 z-30 w-full md:max-w-xl px-6 pb-12 pt-6 md:pt-0 md:pb-0 pointer-events-none order-2 md:order-none bg-[#020202] md:bg-transparent">
         <div className="flex flex-col items-start text-left pointer-events-auto">
             <div className="flex items-center gap-3 mb-6">
                 <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">Early Access Protocol</span>
             </div>
             
             <motion.h1
-                className="font-montreal font-medium text-white text-5xl md:text-7xl leading-[0.9] tracking-tight mb-8"
+                className="font-montreal font-medium text-white text-4xl md:text-7xl leading-[0.9] tracking-tight mb-8"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
@@ -338,7 +339,7 @@ export default function WaitlistHero() {
             </motion.p>
             
             <motion.form 
-                className="flex flex-col sm:flex-row w-full max-w-[420px] relative group"
+                className="flex flex-col sm:flex-row w-full max-w-full md:max-w-[420px] relative group"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.8 }}

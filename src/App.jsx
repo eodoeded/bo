@@ -7,6 +7,7 @@ import WaitlistBenefits from './components/WaitlistBenefits'
 import WaitlistFeatures from './components/WaitlistFeatures'
 import WaitlistFooter from './components/WaitlistFooter'
 import BrandGuidelines from './components/BrandGuidelines'
+import Studio from './components/Studio'
 
 function LandingPage() {
   return (
@@ -28,6 +29,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/brandguidelines" element={<BrandGuidelines />} />
+        <Route path="/studio" element={<Studio />} />
       </Routes>
     </>
   )
