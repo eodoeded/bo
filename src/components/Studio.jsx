@@ -107,7 +107,9 @@ const INITIAL_LAYERS = [
     opacity: 1, 
     visible: true, 
     rotation: 0,
-    brightness: 100, contrast: 100, blur: 0
+    brightness: 100, contrast: 100, blur: 0,
+    flipX: false, flipY: false,
+    shadow: false, shadowColor: '#000000', shadowBlur: 10, shadowX: 0, shadowY: 4
   },
   {
     id: 'card-title',
@@ -127,7 +129,9 @@ const INITIAL_LAYERS = [
     fontWeight: 'normal',
     fontStyle: 'normal',
     textDecoration: 'none',
-    textTransform: 'none'
+    textTransform: 'none',
+    flipX: false, flipY: false,
+    shadow: false, shadowColor: '#000000', shadowBlur: 10, shadowX: 0, shadowY: 4
   },
   {
     id: 'ai-frame',
@@ -146,7 +150,9 @@ const INITIAL_LAYERS = [
     opacity: 1,
     visible: true,
     rotation: 0,
-    brightness: 100, contrast: 100, blur: 0
+    brightness: 100, contrast: 100, blur: 0,
+    flipX: false, flipY: false,
+    shadow: false, shadowColor: '#000000', shadowBlur: 10, shadowX: 0, shadowY: 4
   }
 ];
 
@@ -446,6 +452,8 @@ export default function Studio() {
             visible: true, 
             rotation: 0,
             brightness: 100, contrast: 100, blur: 0,
+            flipX: false, flipY: false,
+            shadow: false, shadowColor: '#000000', shadowBlur: 10, shadowX: 0, shadowY: 4,
             aiPromptTemplate: type === 'AI_FRAME' ? "A render of {subject}" : undefined,
             filterType: 'none',
             blendMode: 'normal'
@@ -1214,8 +1222,9 @@ export default function Studio() {
                                                 borderRadius: layer.borderRadius ? `${layer.borderRadius}px` : '0px',
                                                 mixBlendMode: layer.blendMode || 'normal',
                                                 opacity: layer.opacity !== undefined ? layer.opacity : 1,
-                                                transform: `rotate(${layer.rotation || 0}deg)`, 
+                                                transform: `rotate(${layer.rotation || 0}deg) scaleX(${layer.flipX ? -1 : 1}) scaleY(${layer.flipY ? -1 : 1})`, 
                                                 filter: `brightness(${layer.brightness !== undefined ? layer.brightness : 100}%) contrast(${layer.contrast !== undefined ? layer.contrast : 100}%) blur(${layer.blur || 0}px)`,
+                                                boxShadow: layer.shadow ? `${layer.shadowX || 0}px ${layer.shadowY || 4}px ${layer.shadowBlur || 10}px ${layer.shadowColor || '#000000'}` : 'none',
                                                 whiteSpace: layer.type === 'TEXT' ? 'nowrap' : 'normal'
                                             }}
                                         >
