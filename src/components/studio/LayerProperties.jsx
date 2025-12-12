@@ -1,8 +1,12 @@
 import React from 'react';
-import { Lock, Unlock, Trash2, Check, Sliders, ChevronRight } from 'lucide-react';
+import { 
+    Lock, Unlock, Trash2, Check, Sliders, ChevronRight,
+    AlignLeft, AlignCenter, AlignRight, AlignJustify,
+    AlignStartVertical, AlignCenterVertical, AlignEndVertical
+} from 'lucide-react';
 
-const InputRow = ({ label, children }) => (
-  <div className="mb-4">
+const InputRow = ({ label, children, className = "" }) => (
+  <div className={`mb-4 ${className}`}>
     <label className="font-mono text-[8px] text-white/30 uppercase tracking-widest block mb-1">{label}</label>
     {children}
   </div>
@@ -30,6 +34,16 @@ const StudioSelect = ({ value, onChange, options }) => (
         </select>
         <ChevronRight size={10} className="absolute right-2 top-1/2 -translate-y-1/2 text-white/40 rotate-90 pointer-events-none" />
     </div>
+);
+
+const IconButton = ({ icon: Icon, onClick, title }) => (
+    <button 
+        onClick={onClick}
+        title={title}
+        className="p-1.5 hover:bg-white/10 text-white/60 hover:text-white transition-colors rounded-[1px]"
+    >
+        <Icon size={14} />
+    </button>
 );
 
 export const LayerProperties = ({ 
@@ -78,9 +92,31 @@ export const LayerProperties = ({
         )}
       </div>
 
+      {/* ALIGNMENT TOOLS (NEW) */}
+      {isStudio && (
+          <div className="grid grid-cols-2 gap-4 pb-6 border-b border-white/10">
+              <div>
+                  <span className="font-mono text-[8px] text-white/30 uppercase tracking-widest block mb-2">Align</span>
+                  <div className="flex items-center justify-between bg-[#0A0A0A] border border-white/10 p-1">
+                      <IconButton icon={AlignLeft} title="Align Left" onClick={() => onUpdate(layer.id, { x: 0 })} />
+                      <IconButton icon={AlignCenter} title="Align Center" onClick={() => onUpdate(layer.id, { x: (380 - layer.width) / 2 })} />
+                      <IconButton icon={AlignRight} title="Align Right" onClick={() => onUpdate(layer.id, { x: 380 - layer.width })} />
+                  </div>
+              </div>
+              <div>
+                  <span className="font-mono text-[8px] text-white/30 uppercase tracking-widest block mb-2">Distribute</span>
+                  <div className="flex items-center justify-between bg-[#0A0A0A] border border-white/10 p-1">
+                      <IconButton icon={AlignStartVertical} title="Align Top" onClick={() => onUpdate(layer.id, { y: 0 })} />
+                      <IconButton icon={AlignCenterVertical} title="Align Middle" onClick={() => onUpdate(layer.id, { y: (500 - layer.height) / 2 })} />
+                      <IconButton icon={AlignEndVertical} title="Align Bottom" onClick={() => onUpdate(layer.id, { y: 500 - layer.height })} />
+                  </div>
+              </div>
+          </div>
+      )}
+
       {/* TEXT CONTROLS */}
       {layer.type === 'TEXT' && (
-        <div>
+        <div className="pt-2">
           <InputRow label="Content">
             <StudioInput
               value={layer.text || ''}
@@ -143,7 +179,7 @@ export const LayerProperties = ({
 
       {/* AI LAYER CONTROLS */}
       {layer.type === 'AI_FRAME' && (
-        <div>
+        <div className="pt-2">
           {isStudio ? (
             <>
               <InputRow label="Prompt Template">
@@ -168,7 +204,7 @@ export const LayerProperties = ({
 
       {/* IMAGE LAYER CONTROLS */}
       {layer.type === 'IMAGE' && isStudio && (
-        <InputRow label="Source URL">
+        <InputRow label="Source URL" className="pt-2">
             <StudioInput
               value={layer.src || ''}
               onChange={(e) => onUpdate(layer.id, { src: e.target.value })}

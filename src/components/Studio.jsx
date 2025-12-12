@@ -9,7 +9,8 @@ import {
     Check, Lock, Unlock, Trash2, ArrowLeft,
     CornerRightDown,
     Plus, Upload,
-    Copy, Search, Layout
+    Copy, Search, Layout,
+    ArrowUp, ArrowDown
 } from 'lucide-react';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
@@ -63,12 +64,36 @@ const IconButton = ({ icon: Icon, active, onClick, disabled, title }) => (
     </button>
 );
 
-const Ruler = ({ orientation = 'horizontal', zoom = 1, pan = {x:0, y:0}, length = 100 }) => (
-    <div className={`absolute bg-[#050505] border-white/10 z-10 pointer-events-none ${orientation === 'horizontal' ? 'top-0 left-0 right-0 h-6 border-b flex items-end' : 'top-0 left-0 bottom-0 w-6 border-r flex flex-col items-end'}`}>
-        {/* Simple visual ruler - in real app would use canvas/svg for performance with pan/zoom */}
-        <div className="w-full h-full opacity-30"></div>
-    </div>
-);
+const Ruler = ({ orientation = 'horizontal', zoom = 1, pan = {x:0, y:0}, length = 100 }) => {
+    // Generate simple tick marks based on zoom
+    const ticks = Array.from({ length: 50 }); // Viewport dependent in real app
+    
+    return (
+        <div className={`absolute bg-[#050505] border-white/10 z-10 pointer-events-none overflow-hidden ${orientation === 'horizontal' ? 'top-0 left-0 right-0 h-6 border-b flex items-end' : 'top-0 left-0 bottom-0 w-6 border-r flex flex-col items-end'}`}>
+            {ticks.map((_, i) => {
+                const step = 100 * zoom; // Visual step
+                const value = Math.round(i * 100);
+                // Adjust position based on pan (simplified)
+                // In a robust implementation, we'd render a canvas or use virtualization
+                
+                return (
+                    <div 
+                        key={i} 
+                        className={`absolute bg-white/20 ${orientation === 'horizontal' ? 'w-px h-2' : 'h-px w-2'}`}
+                        style={{
+                            [orientation === 'horizontal' ? 'left' : 'top']: (i * 100 * zoom) + (orientation === 'horizontal' ? pan.x : pan.y) % (100 * zoom) // Modulo for infinite feel pattern
+                        }}
+                    >
+                        <span className="absolute top-[-14px] left-[2px] font-mono text-[7px] text-white/40">
+                            {/* Placeholder numbers */}
+                            {value}
+                        </span>
+                    </div>
+                )
+            })}
+        </div>
+    );
+};
 
 // --- INITIAL DATA ---
 const INITIAL_LAYERS = [
@@ -148,6 +173,7 @@ export default function Studio() {
     const [resizeHandle, setResizeHandle] = useState(null);
     const [isPanning, setIsPanning] = useState(false);
     const [editingTextId, setEditingTextId] = useState(null);
+    const [contextMenu, setContextMenu] = useState(null); // { x, y }
 
     // Helpers
     const selectedLayer = layers.find(l => l.id === selectedLayerId);
@@ -160,6 +186,7 @@ export default function Studio() {
     const deleteLayer = (id) => {
         setLayers(layers.filter(l => l.id !== id));
         if (selectedLayerId === id) setSelectedLayerId(null);
+        setContextMenu(null);
     };
 
     const duplicateLayer = (id) => {
@@ -174,6 +201,22 @@ export default function Studio() {
         };
         setLayers([...layers, newLayer]);
         setSelectedLayerId(newLayer.id);
+        setContextMenu(null);
+    };
+
+    const reorderLayer = (id, direction) => {
+        const index = layers.findIndex(l => l.id === id);
+        if (index === -1) return;
+        
+        const newLayers = [...layers];
+        if (direction === 'up' && index < layers.length - 1) {
+            [newLayers[index], newLayers[index + 1]] = [newLayers[index + 1], newLayers[index]];
+        } else if (direction === 'down' && index > 0) {
+            [newLayers[index], newLayers[index - 1]] = [newLayers[index - 1], newLayers[index]];
+        }
+        // Normalize Z-Index
+        newLayers.forEach((l, i) => l.zIndex = i);
+        setLayers(newLayers);
     };
 
     const addLayer = (type) => {
@@ -204,30 +247,34 @@ export default function Studio() {
         const files = Array.from(e.target.files);
         if (files.length === 0) return;
 
-        const newLayers = [];
-        let offset = 0;
-
+        // Note: For actual bulk upload async handling, simpler to just add individually in this loop
+        // React state updates will batch or last one wins if not careful with functional updates
+        // Here we use functional update inside the loop context correctly? No, closure issue.
+        // Better: Process all files then update state once or use recursion.
+        // Simplified: Just take the first one or assume rapid updates work.
+        // Let's implement a simple single file for now to be safe, or functional update.
+        
         files.forEach((file, index) => {
             const reader = new FileReader();
             reader.onload = (event) => {
-                const newLayer = {
-                    id: `img-${Math.random().toString(36).substr(2, 5)}`,
-                    type: 'IMAGE',
-                    x: 50 + offset, y: 50 + offset,
-                    width: 200, height: 200,
-                    zIndex: layers.length + 1 + index,
-                    src: event.target.result,
-                    locked: false,
-                    allowContentChange: true,
-                    filterType: 'none',
-                    blendMode: 'normal'
-                };
-                // Adding one by one for simplicity in this async loop logic for the prototype
-                setLayers(prev => [...prev, newLayer]);
-                if (index === 0) setSelectedLayerId(newLayer.id);
+                setLayers(prev => {
+                    const newLayer = {
+                        id: `img-${Math.random().toString(36).substr(2, 5)}`,
+                        type: 'IMAGE',
+                        x: 50 + (index * 20), 
+                        y: 50 + (index * 20),
+                        width: 200, height: 200,
+                        zIndex: prev.length + 1,
+                        src: event.target.result,
+                        locked: false,
+                        allowContentChange: true,
+                        filterType: 'none',
+                        blendMode: 'normal'
+                    };
+                    return [...prev, newLayer];
+                });
             };
             reader.readAsDataURL(file);
-            offset += 20;
         });
     };
 
@@ -237,28 +284,14 @@ export default function Studio() {
         if (!viewportRef.current) return { x: 0, y: 0 };
         const rect = viewportRef.current.getBoundingClientRect();
         
-        // Mouse relative to viewport container (top-left)
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
-
-        // Apply Inverse Transform to get World Space (unzoomed/unpanned pixels relative to center)
-        // Transform origin is "center" (50% 50%) of viewport
         const cx = rect.width / 2;
         const cy = rect.height / 2;
 
-        // 1. Untranslate Pan
-        // Visual Position = Center + (WorldPos * Zoom) + Pan
-        // WorldPos * Zoom = VisualPos - Center - Pan
-        // WorldPos = (VisualPos - Center - Pan) / Zoom
-        
         const worldX = (mouseX - cx - pan.x) / zoom;
         const worldY = (mouseY - cy - pan.y) / zoom;
 
-        // 2. Map World Space to Canvas Local Space
-        // We position the canvas rect such that its center is at World(0,0)
-        // So Canvas TopLeft is at World(-W/2, -H/2)
-        // CanvasLocalX = WorldX - (-W/2) = WorldX + W/2
-        
         const canvasX = worldX + (canvasConfig.width / 2);
         const canvasY = worldY + (canvasConfig.height / 2);
         
@@ -266,16 +299,17 @@ export default function Studio() {
     };
 
     const handleMouseDown = (e, layer = null, handle = null) => {
-        if (editingTextId) return; // Don't drag if editing text
+        if (e.button === 2) return; // Right click handled by context menu
+        if (editingTextId) return; 
 
-        // Middle Mouse or Space (held) -> Pan
+        setContextMenu(null); // Close context menu
+
         if (e.button === 1 || e.target === viewportRef.current) {
             setIsPanning(true);
             setDragStart({ x: e.clientX, y: e.clientY });
             return;
         }
 
-        // Layer Interaction
         if (layer) {
             e.stopPropagation();
             
@@ -289,9 +323,7 @@ export default function Studio() {
             setIsDragging(true);
             
             const pt = getCanvasPoint(e);
-            // Store the initial click point in Canvas Space
-            // We'll use delta from this point
-            setDragStart({ x: e.clientX, y: e.clientY }); // Screen space for delta calc is often smoother for resize
+            setDragStart({ x: e.clientX, y: e.clientY });
             
             if (handle) {
                 setIsResizing(true);
@@ -315,18 +347,14 @@ export default function Studio() {
         }
 
         if (isDragging && selectedLayerId && initialLayerState) {
-             // Calculate Delta in Screen Pixels
              const dxScreen = e.clientX - dragStart.x;
              const dyScreen = e.clientY - dragStart.y;
-
-             // Convert Delta to Canvas Units (divide by zoom)
              const dx = dxScreen / zoom;
              const dy = dyScreen / zoom;
              
-             if (isResizing && resizeHandle) {
+             if (isResizing && resizeHandle && initialLayerState) {
                  const newProps = { ...initialLayerState };
 
-                 // Pivot Logic
                  if (resizeHandle.includes('e')) newProps.width = Math.max(10, initialLayerState.width + dx);
                  if (resizeHandle.includes('s')) newProps.height = Math.max(10, initialLayerState.height + dy);
                  if (resizeHandle.includes('w')) {
@@ -338,11 +366,9 @@ export default function Studio() {
                      newProps.y = initialLayerState.y + dy;
                  }
                  
-                 // Transient update
                  const tempLayers = layers.map(l => l.id === selectedLayerId ? { ...l, ...newProps } : l);
                  setLayers(tempLayers); 
-             } else {
-                 // Moving
+             } else if (initialLayerState) {
                  const tempLayers = layers.map(l => l.id === selectedLayerId ? { 
                      ...l, 
                      x: initialLayerState.x + dx, 
@@ -369,6 +395,11 @@ export default function Studio() {
         } else {
             setPan(p => ({ x: p.x - e.deltaX, y: p.y - e.deltaY }));
         }
+    };
+
+    const handleContextMenu = (e) => {
+        e.preventDefault();
+        setContextMenu({ x: e.clientX, y: e.clientY });
     };
 
     const handleDoubleClick = (e, layer) => {
@@ -406,7 +437,7 @@ export default function Studio() {
     // Hotkeys
     useEffect(() => {
         const handleKeyDown = (e) => {
-            if (editingTextId) return; // Disable hotkeys while editing text
+            if (editingTextId) return; 
 
             // Delete
             if (e.key === 'Delete' || e.key === 'Backspace') {
@@ -423,6 +454,10 @@ export default function Studio() {
                 e.preventDefault();
                 if (selectedLayerId) duplicateLayer(selectedLayerId);
             }
+            // Layer Order ([ ])
+            if (selectedLayerId && e.key === '[') reorderLayer(selectedLayerId, 'down');
+            if (selectedLayerId && e.key === ']') reorderLayer(selectedLayerId, 'up');
+
             // Nudge
             if (selectedLayerId && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
                 e.preventDefault();
@@ -445,10 +480,10 @@ export default function Studio() {
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [selectedLayerId, mode, canUndo, canRedo, editingTextId, layers]); // Added layers dep for nudge
+    }, [selectedLayerId, mode, canUndo, canRedo, editingTextId, layers]);
 
     return (
-        <div className="min-h-screen bg-[#020202] text-white font-montreal flex flex-col overflow-hidden selection:bg-[#E3E3FD] selection:text-black">
+        <div className="min-h-screen bg-[#020202] text-white font-montreal flex flex-col overflow-hidden selection:bg-[#E3E3FD] selection:text-black" onClick={() => setContextMenu(null)}>
             
             {/* Top Bar */}
             <header className="h-12 border-b border-white/10 flex items-center justify-between px-4 bg-[#050505] relative z-20">
@@ -528,9 +563,13 @@ export default function Studio() {
                             </div>
                         ) : (
                             <div className="p-2 space-y-1">
-                                {layers.slice().reverse().map((layer) => (
+                                {layers.slice().reverse().map((layer, index) => (
                                     !layer.hidden && (
-                                        <div key={layer.id} onClick={() => setSelectedLayerId(layer.id)} className={`flex items-center gap-3 p-3 border ${selectedLayerId === layer.id ? 'border-[#E3E3FD] bg-[#E3E3FD]/5' : 'border-transparent hover:bg-white/5'} transition-colors rounded-sm cursor-pointer group`}>
+                                        <div key={layer.id} className={`flex items-center gap-3 p-3 border ${selectedLayerId === layer.id ? 'border-[#E3E3FD] bg-[#E3E3FD]/5' : 'border-transparent hover:bg-white/5'} transition-colors rounded-sm cursor-pointer group`} onClick={() => setSelectedLayerId(layer.id)}>
+                                            <div className="flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <button onClick={(e) => { e.stopPropagation(); reorderLayer(layer.id, 'up'); }} className="hover:text-[#E3E3FD]"><ArrowUp size={8} /></button>
+                                                <button onClick={(e) => { e.stopPropagation(); reorderLayer(layer.id, 'down'); }} className="hover:text-[#E3E3FD]"><ArrowDown size={8} /></button>
+                                            </div>
                                             <Layers size={14} className={selectedLayerId === layer.id ? 'text-[#E3E3FD]' : 'text-white/40 group-hover:text-white'} />
                                             <span className={`font-mono text-[10px] uppercase tracking-widest ${selectedLayerId === layer.id ? 'text-white' : 'text-white/60 group-hover:text-white'}`}>{layer.type} - {layer.id.slice(-4)}</span>
                                             {selectedLayerId === layer.id && <div className="ml-auto w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"></div>}
@@ -562,8 +601,13 @@ export default function Studio() {
                         onWheel={handleWheel}
                         ref={viewportRef}
                         onMouseDown={handleMouseDown}
+                        onContextMenu={handleContextMenu}
                         style={{ cursor: isPanning ? 'grabbing' : (selectedTool === 'pan' ? 'grab' : 'default') }}
                     >
+                        {/* Rulers */}
+                        <Ruler orientation="horizontal" zoom={zoom} pan={pan} />
+                        <Ruler orientation="vertical" zoom={zoom} pan={pan} />
+
                         {/* Infinite Grid */}
                         <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ 
                             backgroundImage: 'radial-gradient(circle, #E3E3FD 1px, transparent 1px)', 
@@ -717,6 +761,28 @@ export default function Studio() {
                                 ))}
                             </div>
                         </div>
+
+                        {/* Context Menu */}
+                        {contextMenu && selectedLayerId && (
+                            <div 
+                                className="absolute bg-[#050505] border border-white/10 shadow-2xl z-50 w-48 flex flex-col p-1"
+                                style={{ top: contextMenu.y, left: contextMenu.x }}
+                            >
+                                <button onClick={() => { duplicateLayer(selectedLayerId); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group">
+                                    <span>Duplicate</span> <span className="text-white/40 group-hover:text-black/40">Ctrl+D</span>
+                                </button>
+                                <button onClick={() => { reorderLayer(selectedLayerId, 'up'); setContextMenu(null); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group">
+                                    <span>Bring Forward</span> <span className="text-white/40 group-hover:text-black/40">]</span>
+                                </button>
+                                <button onClick={() => { reorderLayer(selectedLayerId, 'down'); setContextMenu(null); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group">
+                                    <span>Send Backward</span> <span className="text-white/40 group-hover:text-black/40">[</span>
+                                </button>
+                                <div className="h-px bg-white/10 my-1"></div>
+                                <button onClick={() => deleteLayer(selectedLayerId)} className="text-left px-3 py-2 text-[10px] font-mono text-red-400 hover:bg-red-900/20 uppercase tracking-widest flex items-center justify-between">
+                                    <span>Delete</span> <span>Del</span>
+                                </button>
+                            </div>
+                        )}
 
                         {/* Zoom Controls Overlay */}
                         <div className="absolute bottom-6 left-6 font-mono text-[9px] text-white/20 uppercase tracking-widest pointer-events-none">
