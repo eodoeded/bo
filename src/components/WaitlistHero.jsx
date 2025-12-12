@@ -1,4 +1,4 @@
-import { motion, useAnimation } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
 import { Database, Layout, ArrowRight, Lock, Scan, Zap } from 'lucide-react';
 import bottomComp from "../assets/bottom-comp.png";
@@ -61,6 +61,8 @@ export default function WaitlistHero() {
   // Dragging Logic
   const containerRef = useRef(null);
   const [draggingId, setDraggingId] = useState(null);
+  
+  // Initial Positions (Percentages)
   const [nodes, setNodes] = useState({
       studio: { x: 20, y: 30 },
       core: { x: 50, y: 55 },
@@ -158,33 +160,59 @@ export default function WaitlistHero() {
       {/* Node Graph Layer */}
       <div ref={containerRef} className="absolute inset-0 w-full h-full z-10 touch-none">
           
-          {/* Connecting Lines */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none hidden md:block" style={{zIndex: 10}}>
-               {/* 
-                  Drawing curves that start and end exactly at node centers. 
-                  Because the nodes are opaque and on top (z-20), the lines appear to emerge from the ports 
-                  IF the entry angle is horizontal.
-               */}
+          {/* Connecting Lines - SVG Scaling Fix */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none hidden md:block" viewBox="0 0 100 100" preserveAspectRatio="none" style={{zIndex: 10}}>
+               <defs>
+                   {/* Gradient for the line */}
+                   <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                       <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.1" />
+                       <stop offset="50%" stopColor="#FFFFFF" stopOpacity="0.6" />
+                       <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.1" />
+                   </linearGradient>
+               </defs>
+
+               {/* Studio -> Core */}
                <motion.path
-                  d={`M ${nodes.studio.x}% ${nodes.studio.y}% C ${nodes.studio.x + 15}% ${nodes.studio.y}%, ${nodes.core.x - 15}% ${nodes.core.y}%, ${nodes.core.x}% ${nodes.core.y}%`}
+                  d={`M ${nodes.studio.x} ${nodes.studio.y} C ${nodes.studio.x + 15} ${nodes.studio.y}, ${nodes.core.x - 15} ${nodes.core.y}, ${nodes.core.x} ${nodes.core.y}`}
                   fill="none"
-                  stroke="white"
-                  strokeWidth="1.5"
-                  strokeOpacity="0.4"
+                  stroke="url(#lineGradient)"
+                  strokeWidth="0.2"
+                  vectorEffect="non-scaling-stroke"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
                   transition={{ duration: 1.5, delay: 0.5 }}
                 />
+                
+                {/* Moving Data Packet - Studio to Core */}
+                <motion.circle r="0.3" fill="#E3E3FD">
+                    <motion.animateMotion 
+                        dur="3s" 
+                        repeatCount="indefinite"
+                        path={`M ${nodes.studio.x} ${nodes.studio.y} C ${nodes.studio.x + 15} ${nodes.studio.y}, ${nodes.core.x - 15} ${nodes.core.y}, ${nodes.core.x} ${nodes.core.y}`}
+                    />
+                </motion.circle>
+
+                {/* Core -> Output */}
                 <motion.path
-                  d={`M ${nodes.core.x}% ${nodes.core.y}% C ${nodes.core.x + 15}% ${nodes.core.y}%, ${nodes.output.x - 15}% ${nodes.output.y}%, ${nodes.output.x}% ${nodes.output.y}%`}
+                  d={`M ${nodes.core.x} ${nodes.core.y} C ${nodes.core.x + 15} ${nodes.core.y}, ${nodes.output.x - 15} ${nodes.output.y}, ${nodes.output.x} ${nodes.output.y}`}
                   fill="none"
-                  stroke="white"
-                  strokeWidth="1.5"
-                  strokeOpacity="0.4"
+                  stroke="url(#lineGradient)"
+                  strokeWidth="0.2"
+                  vectorEffect="non-scaling-stroke"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
                   transition={{ duration: 1.5, delay: 0.7 }}
                 />
+
+                {/* Moving Data Packet - Core to Output */}
+                <motion.circle r="0.3" fill="#E3E3FD">
+                    <motion.animateMotion 
+                        dur="3s" 
+                        begin="1.5s"
+                        repeatCount="indefinite"
+                        path={`M ${nodes.core.x} ${nodes.core.y} C ${nodes.core.x + 15} ${nodes.core.y}, ${nodes.output.x - 15} ${nodes.output.y}, ${nodes.output.x} ${nodes.output.y}`}
+                    />
+                </motion.circle>
           </svg>
 
           {/* Nodes */}
@@ -226,7 +254,6 @@ export default function WaitlistHero() {
                     >
                         <img src={bottomComp} alt="Bottom" className="w-[140px] object-contain opacity-100" />
                     </motion.div>
-                    {/* Top part removed as requested */}
                 </div>
                 <div className="flex justify-between items-center px-1">
                     <span className="font-mono text-[8px] text-white/40">GENERATING_ASSET_ID_8492</span>
