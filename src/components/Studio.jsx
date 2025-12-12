@@ -10,10 +10,12 @@ import {
     CornerRightDown,
     Plus, Upload,
     Copy, Search, Layout,
-    ArrowUp, ArrowDown
+    ArrowUp, ArrowDown,
+    Save
 } from 'lucide-react';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import html2canvas from 'html2canvas';
 import { SmartImage } from './studio/SmartImage';
 import { LayerProperties } from './studio/LayerProperties';
 import { generateImage } from '../services/gemini';
@@ -64,28 +66,22 @@ const IconButton = ({ icon: Icon, active, onClick, disabled, title }) => (
     </button>
 );
 
-const Ruler = ({ orientation = 'horizontal', zoom = 1, pan = {x:0, y:0}, length = 100 }) => {
-    // Generate simple tick marks based on zoom
-    const ticks = Array.from({ length: 50 }); // Viewport dependent in real app
-    
+const Ruler = ({ orientation = 'horizontal', zoom = 1, pan = {x:0, y:0} }) => {
+    const ticks = Array.from({ length: 50 });
     return (
         <div className={`absolute bg-[#050505] border-white/10 z-10 pointer-events-none overflow-hidden ${orientation === 'horizontal' ? 'top-0 left-0 right-0 h-6 border-b flex items-end' : 'top-0 left-0 bottom-0 w-6 border-r flex flex-col items-end'}`}>
             {ticks.map((_, i) => {
-                const step = 100 * zoom; // Visual step
+                const step = 100 * zoom; 
                 const value = Math.round(i * 100);
-                // Adjust position based on pan (simplified)
-                // In a robust implementation, we'd render a canvas or use virtualization
-                
                 return (
                     <div 
                         key={i} 
                         className={`absolute bg-white/20 ${orientation === 'horizontal' ? 'w-px h-2' : 'h-px w-2'}`}
                         style={{
-                            [orientation === 'horizontal' ? 'left' : 'top']: (i * 100 * zoom) + (orientation === 'horizontal' ? pan.x : pan.y) % (100 * zoom) // Modulo for infinite feel pattern
+                            [orientation === 'horizontal' ? 'left' : 'top']: (i * 100 * zoom) + (orientation === 'horizontal' ? pan.x : pan.y) % (100 * zoom)
                         }}
                     >
                         <span className="absolute top-[-14px] left-[2px] font-mono text-[7px] text-white/40">
-                            {/* Placeholder numbers */}
                             {value}
                         </span>
                     </div>
@@ -97,13 +93,6 @@ const Ruler = ({ orientation = 'horizontal', zoom = 1, pan = {x:0, y:0}, length 
 
 // --- INITIAL DATA ---
 const INITIAL_LAYERS = [
-  {
-    id: 'frame-bg',
-    type: 'TEXT',
-    x: 0, y: 0, width: 0, height: 0, zIndex: 0, locked: true, allowContentChange: false,
-    text: '', 
-    hidden: true
-  },
   {
     id: 'brand-logo',
     type: 'IMAGE',
@@ -144,12 +133,15 @@ export default function Studio() {
     // App State
     const [mode, setMode] = useState('STUDIO'); // STUDIO | CLIENT
     const [activeTab, setActiveTab] = useState('components');
-    const [selectedTool, setSelectedTool] = useState('select'); // select
+    const [selectedTool, setSelectedTool] = useState('select');
+    const [statusMessage, setStatusMessage] = useState(null); // For toasts
     
-    // Canvas Viewport State
+    // Canvas Viewport
     const [zoom, setZoom] = useState(1);
     const [pan, setPan] = useState({ x: 0, y: 0 });
     const viewportRef = useRef(null);
+    const canvasContentRef = useRef(null);
+    const fileInputRef = useRef(null);
     
     // History & Layers
     const [layers, setLayers, undo, redo, canUndo, canRedo] = useHistory(INITIAL_LAYERS);
@@ -173,11 +165,16 @@ export default function Studio() {
     const [resizeHandle, setResizeHandle] = useState(null);
     const [isPanning, setIsPanning] = useState(false);
     const [editingTextId, setEditingTextId] = useState(null);
-    const [contextMenu, setContextMenu] = useState(null); // { x, y }
+    const [contextMenu, setContextMenu] = useState(null);
 
     // Helpers
     const selectedLayer = layers.find(l => l.id === selectedLayerId);
     
+    const showToast = (msg) => {
+        setStatusMessage(msg);
+        setTimeout(() => setStatusMessage(null), 2000);
+    };
+
     const updateLayer = (id, updates) => {
         const newLayers = layers.map(l => l.id === id ? { ...l, ...updates } : l);
         setLayers(newLayers);
@@ -219,16 +216,16 @@ export default function Studio() {
         setLayers(newLayers);
     };
 
-    const addLayer = (type) => {
+    const addLayer = (type, src = null) => {
         const newLayer = {
             id: `layer-${Math.random().toString(36).substr(2, 5)}`,
             type,
-            x: 20, y: 20,
-            width: type === 'TEXT' ? 200 : 150,
-            height: type === 'TEXT' ? 40 : 150,
+            x: 50, y: 50,
+            width: type === 'TEXT' ? 200 : 200,
+            height: type === 'TEXT' ? 40 : 200,
             zIndex: layers.length + 1,
             text: type === 'TEXT' ? "LABEL" : undefined,
-            src: type === 'IMAGE' ? "https://picsum.photos/150/150" : undefined,
+            src: type === 'IMAGE' ? (src || "https://picsum.photos/150/150") : undefined,
             color: "#ffffff",
             fontSize: 16,
             fontFamily: "Inter",
@@ -243,40 +240,88 @@ export default function Studio() {
         setSelectedLayerId(newLayer.id);
     };
 
+    // --- ACTIONS ---
+
+    const handleUploadClick = () => {
+        fileInputRef.current?.click();
+    };
+
     const handleFileUpload = (e) => {
         const files = Array.from(e.target.files);
         if (files.length === 0) return;
 
-        // Note: For actual bulk upload async handling, simpler to just add individually in this loop
-        // React state updates will batch or last one wins if not careful with functional updates
-        // Here we use functional update inside the loop context correctly? No, closure issue.
-        // Better: Process all files then update state once or use recursion.
-        // Simplified: Just take the first one or assume rapid updates work.
-        // Let's implement a simple single file for now to be safe, or functional update.
-        
         files.forEach((file, index) => {
             const reader = new FileReader();
             reader.onload = (event) => {
-                setLayers(prev => {
-                    const newLayer = {
+                setLayers(prev => [
+                    ...prev,
+                    {
                         id: `img-${Math.random().toString(36).substr(2, 5)}`,
                         type: 'IMAGE',
                         x: 50 + (index * 20), 
                         y: 50 + (index * 20),
                         width: 200, height: 200,
-                        zIndex: prev.length + 1,
+                        zIndex: prev.length + 1 + index,
                         src: event.target.result,
                         locked: false,
                         allowContentChange: true,
                         filterType: 'none',
                         blendMode: 'normal'
-                    };
-                    return [...prev, newLayer];
-                });
+                    }
+                ]);
             };
             reader.readAsDataURL(file);
         });
+        showToast(`Uploaded ${files.length} Image(s)`);
     };
+
+    const handleExport = async () => {
+        if (!canvasContentRef.current) return;
+        showToast("Exporting...");
+        try {
+            const canvas = await html2canvas(canvasContentRef.current, {
+                backgroundColor: null,
+                scale: 2, // High res
+                logging: false,
+                useCORS: true // Allow cross-origin images if enabled on server
+            });
+            const link = document.createElement('a');
+            link.download = `brandforge-artifact-${Date.now()}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            showToast("Export Complete");
+        } catch (err) {
+            console.error(err);
+            showToast("Export Failed");
+        }
+    };
+
+    const handlePublish = () => {
+        // Mock Publish
+        showToast("Project Published Successfully");
+    };
+
+    // --- PASTE SUPPORT ---
+    useEffect(() => {
+        const handlePaste = (e) => {
+            const items = e.clipboardData?.items;
+            if (!items) return;
+
+            for (const item of items) {
+                if (item.type.indexOf('image') !== -1) {
+                    const blob = item.getAsFile();
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        addLayer('IMAGE', event.target.result);
+                        showToast("Image Pasted");
+                    };
+                    reader.readAsDataURL(blob);
+                }
+            }
+        };
+        window.addEventListener('paste', handlePaste);
+        return () => window.removeEventListener('paste', handlePaste);
+    }, [layers]); // Dep on layers so addLayer works with current state logic if needed
 
     // --- INTERACTION HANDLERS ---
 
@@ -299,17 +344,19 @@ export default function Studio() {
     };
 
     const handleMouseDown = (e, layer = null, handle = null) => {
-        if (e.button === 2) return; // Right click handled by context menu
+        if (e.button === 2) return; 
         if (editingTextId) return; 
 
-        setContextMenu(null); // Close context menu
+        setContextMenu(null);
 
-        if (e.button === 1 || e.target === viewportRef.current) {
+        // Pan Logic
+        if (e.button === 1 || e.target === viewportRef.current || selectedTool === 'pan') {
             setIsPanning(true);
             setDragStart({ x: e.clientX, y: e.clientY });
             return;
         }
 
+        // Selection / Drag Logic
         if (layer) {
             e.stopPropagation();
             
@@ -322,7 +369,7 @@ export default function Studio() {
             setSelectedLayerId(layer.id);
             setIsDragging(true);
             
-            const pt = getCanvasPoint(e);
+            // For dragging, we use screen coords delta
             setDragStart({ x: e.clientX, y: e.clientY });
             
             if (handle) {
@@ -349,10 +396,11 @@ export default function Studio() {
         if (isDragging && selectedLayerId && initialLayerState) {
              const dxScreen = e.clientX - dragStart.x;
              const dyScreen = e.clientY - dragStart.y;
+             // Convert screen delta to canvas units
              const dx = dxScreen / zoom;
              const dy = dyScreen / zoom;
              
-             if (isResizing && resizeHandle && initialLayerState) {
+             if (isResizing && resizeHandle) {
                  const newProps = { ...initialLayerState };
 
                  if (resizeHandle.includes('e')) newProps.width = Math.max(10, initialLayerState.width + dx);
@@ -366,9 +414,13 @@ export default function Studio() {
                      newProps.y = initialLayerState.y + dy;
                  }
                  
+                 // Transient update (no history yet)
+                 // We directly mutate the state array for performance? No, React state immutable.
+                 // We map.
                  const tempLayers = layers.map(l => l.id === selectedLayerId ? { ...l, ...newProps } : l);
                  setLayers(tempLayers); 
-             } else if (initialLayerState) {
+             } else {
+                 // Moving
                  const tempLayers = layers.map(l => l.id === selectedLayerId ? { 
                      ...l, 
                      x: initialLayerState.x + dx, 
@@ -454,7 +506,7 @@ export default function Studio() {
                 e.preventDefault();
                 if (selectedLayerId) duplicateLayer(selectedLayerId);
             }
-            // Layer Order ([ ])
+            // Layer Order
             if (selectedLayerId && e.key === '[') reorderLayer(selectedLayerId, 'down');
             if (selectedLayerId && e.key === ']') reorderLayer(selectedLayerId, 'up');
 
@@ -499,6 +551,18 @@ export default function Studio() {
                 </div>
                 
                 <div className="flex items-center gap-4">
+                     {/* Status Toast */}
+                     {statusMessage && (
+                         <motion.div 
+                            initial={{ opacity: 0, y: -10 }} 
+                            animate={{ opacity: 1, y: 0 }}
+                            className="flex items-center gap-2 px-3 py-1 bg-[#E3E3FD] text-black font-mono text-[9px] uppercase tracking-widest rounded-[1px]"
+                         >
+                             <Check size={10} />
+                             {statusMessage}
+                         </motion.div>
+                     )}
+
                      <div className="flex items-center gap-1 bg-[#0A0A0A] border border-white/5 p-1 rounded-[2px]">
                         <IconButton icon={Undo} onClick={() => setLayers(undo())} disabled={!canUndo} title="Undo (Ctrl+Z)" />
                         <IconButton icon={Redo} onClick={() => setLayers(redo())} disabled={!canRedo} title="Redo (Ctrl+Shift+Z)" />
@@ -519,7 +583,11 @@ export default function Studio() {
                         </button>
                     </div>
                     <div className="h-4 w-px bg-white/10"></div>
-                    <button className="px-4 py-1.5 bg-[#E3E3FD] text-black font-mono text-[10px] uppercase tracking-widest rounded-[1px] hover:bg-white transition-colors font-semibold">
+                    <button 
+                        onClick={handlePublish}
+                        className="px-4 py-1.5 bg-[#E3E3FD] text-black font-mono text-[10px] uppercase tracking-widest rounded-[1px] hover:bg-white transition-colors font-semibold flex items-center gap-2"
+                    >
+                        <Save size={12} />
                         Publish
                     </button>
                 </div>
@@ -541,12 +609,21 @@ export default function Studio() {
                                 <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-4">Explore Components</span>
                                 <div className="grid grid-cols-3 gap-2">
                                     <button onClick={() => addLayer('TEXT')} className="flex flex-col items-center justify-center p-3 border border-white/10 hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group"><Type size={16} className="text-white/60 group-hover:text-[#E3E3FD]" /><span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">Text</span></button>
-                                    <label className="flex flex-col items-center justify-center p-3 border border-white/10 hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group cursor-pointer relative">
+                                    
+                                    <button onClick={handleUploadClick} className="flex flex-col items-center justify-center p-3 border border-white/10 hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group cursor-pointer relative">
                                         <ImageIcon size={16} className="text-white/60 group-hover:text-[#E3E3FD]" />
                                         <span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">Image</span>
                                         <div className="absolute top-1 right-1"><Plus size={8} className="text-[#E3E3FD]" /></div>
-                                        <input type="file" multiple className="hidden" accept="image/*" onChange={handleFileUpload} />
-                                    </label>
+                                    </button>
+                                    <input 
+                                        type="file" 
+                                        multiple 
+                                        className="hidden" 
+                                        accept="image/*" 
+                                        ref={fileInputRef}
+                                        onChange={handleFileUpload} 
+                                    />
+
                                     <button onClick={() => addLayer('AI_FRAME')} className="flex flex-col items-center justify-center p-3 border border-white/10 hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group"><Sparkles size={16} className="text-white/60 group-hover:text-[#E3E3FD]" /><span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">AI Gen</span></button>
                                 </div>
                                 <div className="p-4 border border-white/10 bg-[#0A0A0A]">
@@ -584,7 +661,7 @@ export default function Studio() {
                 {/* Center: Canvas Area */}
                 <main className="col-span-7 bg-[#020202] relative flex flex-col overflow-hidden">
                     
-                    {/* Simplified Toolbar */}
+                    {/* Toolbar */}
                     <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 bg-[#050505] border border-white/10 p-1 flex items-center gap-1 rounded-[2px] shadow-xl">
                         <IconButton icon={MousePointer} active={selectedTool === 'select'} onClick={() => setSelectedTool('select')} title="Pointer (V)" />
                         <div className="w-px h-4 bg-white/10 mx-1"></div>
@@ -604,11 +681,9 @@ export default function Studio() {
                         onContextMenu={handleContextMenu}
                         style={{ cursor: isPanning ? 'grabbing' : (selectedTool === 'pan' ? 'grab' : 'default') }}
                     >
-                        {/* Rulers */}
                         <Ruler orientation="horizontal" zoom={zoom} pan={pan} />
                         <Ruler orientation="vertical" zoom={zoom} pan={pan} />
 
-                        {/* Infinite Grid */}
                         <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ 
                             backgroundImage: 'radial-gradient(circle, #E3E3FD 1px, transparent 1px)', 
                             backgroundSize: `${20 * zoom}px ${20 * zoom}px`,
@@ -627,6 +702,7 @@ export default function Studio() {
                             }}
                         >
                             <div 
+                                ref={canvasContentRef}
                                 style={{
                                     width: canvasConfig.width,
                                     height: canvasConfig.height,
@@ -647,14 +723,14 @@ export default function Studio() {
                                                 width: layer.width,
                                                 height: layer.type === 'TEXT' ? 'auto' : layer.height,
                                                 zIndex: layer.zIndex,
-                                                cursor: (mode === 'CLIENT' && layer.locked) ? 'default' : 'default', // Cursors handled by overlay/hover logic
+                                                cursor: (mode === 'CLIENT' && layer.locked) ? 'default' : 'default',
                                                 border: layer.borderWidth ? `${layer.borderWidth}px solid ${layer.borderColor}` : 'none',
                                                 borderRadius: layer.borderRadius ? `${layer.borderRadius}px` : '0px',
                                                 mixBlendMode: layer.blendMode || 'normal',
                                                 whiteSpace: layer.type === 'TEXT' ? 'nowrap' : 'normal'
                                             }}
                                         >
-                                            {/* Hover Outline (Figma-esque) */}
+                                            {/* Hover Outline */}
                                             {selectedLayerId !== layer.id && mode === 'STUDIO' && (
                                                 <div className="absolute inset-0 border border-[#E3E3FD] opacity-0 group-hover:opacity-30 pointer-events-none transition-opacity"></div>
                                             )}
@@ -819,7 +895,10 @@ export default function Studio() {
                         )}
                     </div>
                     <div className="p-4 border-t border-white/10">
-                        <button className="w-full py-3 border border-white/20 hover:border-[#E3E3FD] hover:text-[#E3E3FD] transition-all group flex items-center justify-center gap-2 bg-white/5">
+                        <button 
+                            onClick={handleExport}
+                            className="w-full py-3 border border-white/20 hover:border-[#E3E3FD] hover:text-[#E3E3FD] transition-all group flex items-center justify-center gap-2 bg-white/5"
+                        >
                             <Download size={14} className="group-hover:animate-bounce" />
                             <span className="font-mono text-[10px] uppercase tracking-[0.2em]">Export Artifact</span>
                         </button>
