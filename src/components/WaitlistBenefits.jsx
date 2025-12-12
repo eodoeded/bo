@@ -45,7 +45,7 @@ export default function WaitlistBenefits() {
                 </div>
                 
                 <h3 className="font-mono text-sm text-[#E3E3FD] uppercase tracking-widest mb-3">01 // Revenue</h3>
-                <h4 className="font-montreal font-medium text-2xl text-white mb-4">Productized Service</h4>
+                <h4 className="font-montreal font-medium text-2xl text-white mb-4">Productised Service</h4>
                 <p className="text-white/50 font-montreal text-sm leading-relaxed">
                     Don't just bill for hours. Sell the tool as a subscription. Create recurring revenue streams from a single setup.
                 </p>

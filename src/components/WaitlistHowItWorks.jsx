@@ -10,7 +10,7 @@ const steps = [
     number: "01",
     title: "CONFIGURE",
     description: "Define the boundaries.",
-    detail: "Lock fonts, colors, and layout. Expose only what's safe."
+    detail: "Lock fonts, colours, and layout. Expose only what's safe."
   },
   {
     number: "02",

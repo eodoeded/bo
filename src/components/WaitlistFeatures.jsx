@@ -6,10 +6,10 @@ const Corner = ({ className = "" }) => (
 );
 
 const specs = [
-    { label: "GEN_CORE", value: "v1.4 (Stable)", icon: Cpu },
-    { label: "ASSET_LOCK", value: "Active / Strict", icon: Lock },
-    { label: "FORMATS", value: "PNG, JPG, SVG", icon: Image },
-    { label: "TYPOGRAPHY", value: "Custom Font Support", icon: Type },
+    { label: "AI GENERATION", value: "Image & Text", icon: Cpu },
+    { label: "LOCKING SYSTEM", value: "Strict Control", icon: Lock },
+    { label: "FILE SUPPORT", value: "PNG, JPG, SVG", icon: Image },
+    { label: "TYPOGRAPHY", value: "Custom Fonts", icon: Type },
     { label: "LAYERS", value: "Smart Composition", icon: Layers },
     { label: "EXPORT", value: "Instant / Batch", icon: Share2 },
 ];
@@ -24,21 +24,21 @@ export default function WaitlistFeatures() {
              <div>
                 <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-4">Specifications</span>
                 <h2 className="font-montreal font-medium text-white text-4xl md:text-5xl tracking-tight leading-[0.9]">
-                    System<br/>Kernel.
+                    Platform<br/>Specifications.
                 </h2>
             </div>
             <div className="font-mono text-[10px] text-white/30 uppercase tracking-widest mt-8 md:mt-0">
-                Build_2025.1.0_RC
+                System_v1.0
             </div>
         </div>
 
         {/* Technical Data Sheet Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-px bg-white/10 border border-white/10">
             
-            {/* Left: Capability Manifest */}
+            {/* Left: Features List */}
             <div className="bg-[#050505] p-12 relative">
                 <Corner className="top-0 left-0 border-t border-l" />
-                <h3 className="font-mono text-sm text-white/40 uppercase tracking-widest mb-8">Capabilities Manifest</h3>
+                <h3 className="font-mono text-sm text-white/40 uppercase tracking-widest mb-8">Features</h3>
                 
                 <div className="space-y-6">
                     {specs.map((spec, i) => (
@@ -65,12 +65,21 @@ export default function WaitlistFeatures() {
                 <Corner className="bottom-0 right-0 border-b border-r" />
                 
                 <div>
-                    <h3 className="font-mono text-sm text-white/40 uppercase tracking-widest mb-8">Architecture Overview</h3>
+                    <h3 className="font-mono text-sm text-white/40 uppercase tracking-widest mb-8">System Logic</h3>
                     <p className="font-montreal text-lg text-white/60 leading-relaxed mb-8">
-                        The platform operates on a decentralized asset logic. Studios upload rulesets; clients interact only with safe parameters. The rendering engine ensures pixel-perfect compliance with the master brand guidelines, regardless of user input.
+                        The platform operates on a strict logic system. Studios upload the design rules and assets, whilst clients interact only with the safe parameters you define.
                     </p>
+                    <div className="p-6 border border-[#E3E3FD]/20 bg-[#E3E3FD]/5 mb-8">
+                        <div className="flex items-center gap-2 mb-2">
+                            <Lock size={12} className="text-[#E3E3FD]" />
+                            <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">AI Safety Lock</span>
+                        </div>
+                        <p className="font-montreal text-sm text-white/80 leading-relaxed">
+                            Crucially, you can lock the AI prompt structure. The client fills in the subject, but the style, lighting, and composition remain completely under your control.
+                        </p>
+                    </div>
                     <p className="font-montreal text-lg text-white/60 leading-relaxed">
-                        Designed for high-throughput environments where consistency cannot be compromised by human error or speed requirements.
+                        Designed for high-volume output where brand consistency cannot be compromised by human error.
                     </p>
                 </div>
 
