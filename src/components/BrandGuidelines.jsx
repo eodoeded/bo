@@ -1,6 +1,7 @@
-import { motion } from 'framer-motion';
-import { ArrowLeft, Box, Layout, Type, MousePointer, CreditCard, Layers, Grid as GridIcon, Database, Cpu, Activity, User, Mail, Send } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, Box, Layout, Type, MousePointer, CreditCard, Layers, Grid as GridIcon, Database, Cpu, Activity, User, Mail, Send, ChevronDown, Check, AlertCircle, Terminal, BarChart2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 const Node = ({ title, inputs = [], outputs = [], children, x, y, delay = 0, width = "w-32", type = "default", status }) => (
   <motion.div 
@@ -366,6 +367,236 @@ export default function BrandGuidelines() {
                             </button>
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        {/* 04. Buttons & Actions */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12">
+            <div className="md:col-span-4 sticky top-32 h-fit">
+                <SectionHeader title="Actions" number="04" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed">
+                   Primary, secondary, and tertiary actions designed for clear hierarchy. Hover states introduce subtle scale and color shifts.
+                </p>
+            </div>
+            
+            <div className="md:col-span-8 space-y-12">
+                 <div className="p-12 border border-white/10 rounded-2xl bg-white/[0.01] grid gap-12">
+                    {/* Primary Row */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                        <div className="space-y-4">
+                            <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block">Primary</span>
+                            <button className="w-full bg-white text-black px-6 py-3 rounded-full font-medium hover:bg-[#E3E3FD] transition-all hover:scale-105 active:scale-95">
+                                Join Waitlist
+                            </button>
+                        </div>
+                        <div className="space-y-4">
+                            <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block">With Icon</span>
+                            <button className="w-full bg-white text-black px-6 py-3 rounded-full font-medium hover:bg-[#E3E3FD] transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-2 group">
+                                <span>Proceed</span>
+                                <ArrowLeft size={16} className="rotate-180 group-hover:translate-x-1 transition-transform"/>
+                            </button>
+                        </div>
+                        <div className="space-y-4">
+                            <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block">Loading</span>
+                            <button className="w-full bg-[#E3E3FD] text-black px-6 py-3 rounded-full font-medium flex items-center justify-center gap-2 cursor-wait opacity-80">
+                                <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin"></div>
+                                <span>Processing</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Secondary Row */}
+                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                        <div className="space-y-4">
+                            <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block">Secondary</span>
+                            <button className="w-full bg-transparent border border-white/20 text-white px-6 py-3 rounded-full font-medium hover:bg-white hover:text-black transition-all hover:scale-105 active:scale-95">
+                                Documentation
+                            </button>
+                        </div>
+                        <div className="space-y-4">
+                            <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block">Minimal</span>
+                            <button className="w-full bg-white/5 text-white px-6 py-3 rounded-full font-medium hover:bg-white/10 transition-all hover:scale-105 active:scale-95 backdrop-blur-md">
+                                Cancel
+                            </button>
+                        </div>
+                        <div className="space-y-4">
+                            <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block">Icon Only</span>
+                             <div className="flex gap-4">
+                                <button className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all hover:rotate-90">
+                                    <GridIcon size={18} />
+                                </button>
+                                 <button className="w-12 h-12 rounded-full bg-[#E3E3FD] flex items-center justify-center text-black hover:scale-110 transition-transform">
+                                    <Send size={18} />
+                                </button>
+                             </div>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+        </section>
+
+        {/* 05. Accordions & Data */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12">
+             <div className="md:col-span-4 sticky top-32 h-fit">
+                <SectionHeader title="Expansion" number="05" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed">
+                   Progressive disclosure elements for dense technical information.
+                </p>
+            </div>
+            
+            <div className="md:col-span-8 space-y-8">
+                 {/* Stylized Accordion */}
+                <div className="border-t border-white/10">
+                    {[
+                        { title: "System Architecture", id: "01", content: "The platform uses a distributed node-based architecture allowing for real-time processing of high-fidelity assets." },
+                        { title: "Security Protocols", id: "02", content: "End-to-end encryption with double-ratchet algorithms ensures complete data integrity during transmission." },
+                        { title: "API Limits", id: "03", content: "Default rate limits are set to 1000 requests per minute for standard tiers, scalable upon request." }
+                    ].map((item, i) => {
+                         const [isOpen, setIsOpen] = useState(false);
+                         return (
+                            <div key={i} className="border-b border-white/10">
+                                <button 
+                                    onClick={() => setIsOpen(!isOpen)}
+                                    className="w-full py-6 flex items-center justify-between group text-left"
+                                >
+                                    <div className="flex items-baseline gap-6">
+                                        <span className="font-mono text-[10px] text-[#E3E3FD] tracking-widest">/ {item.id}</span>
+                                        <span className="font-montreal text-xl text-white group-hover:text-[#E3E3FD] transition-colors">{item.title}</span>
+                                    </div>
+                                    <ChevronDown size={18} className={`text-white/40 transition-transform duration-300 ${isOpen ? 'rotate-180 text-white' : ''}`} />
+                                </button>
+                                <AnimatePresence>
+                                    {isOpen && (
+                                        <motion.div 
+                                            initial={{ height: 0, opacity: 0 }}
+                                            animate={{ height: "auto", opacity: 1 }}
+                                            exit={{ height: 0, opacity: 0 }}
+                                            className="overflow-hidden"
+                                        >
+                                            <p className="pb-8 pl-12 font-montreal text-white/60 leading-relaxed max-w-2xl">
+                                                {item.content}
+                                            </p>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </div>
+                         );
+                    })}
+                </div>
+            </div>
+        </section>
+
+        {/* 06. Visualizations */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12">
+             <div className="md:col-span-4 sticky top-32 h-fit">
+                <SectionHeader title="Data Viz" number="06" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed">
+                   Minimalist charts and indicators for monitoring system health and usage metrics.
+                </p>
+            </div>
+
+            <div className="md:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Bar Chart Mockup */}
+                <div className="p-8 border border-white/10 rounded-2xl bg-[#0A0A0A] relative overflow-hidden group">
+                     <div className="flex justify-between items-center mb-8">
+                        <span className="font-mono text-[10px] text-white/40 uppercase tracking-widest">Throughput</span>
+                        <BarChart2 size={16} className="text-[#E3E3FD]" />
+                     </div>
+                     <div className="flex items-end gap-2 h-32">
+                        {[40, 65, 45, 80, 55, 90, 70, 85, 60, 75, 50, 95].map((h, i) => (
+                            <div key={i} className="flex-1 bg-white/10 rounded-t-[2px] group-hover:bg-[#E3E3FD]/20 transition-colors duration-500 relative overflow-hidden">
+                                <motion.div 
+                                    className="absolute bottom-0 left-0 w-full bg-[#E3E3FD]"
+                                    initial={{ height: 0 }}
+                                    whileInView={{ height: `${h}%` }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 1, delay: i * 0.05 }}
+                                />
+                            </div>
+                        ))}
+                     </div>
+                     <div className="flex justify-between mt-4 font-mono text-[9px] text-white/30 uppercase tracking-widest">
+                        <span>00:00</span>
+                        <span>12:00</span>
+                        <span>24:00</span>
+                     </div>
+                </div>
+
+                {/* Circular Progress & Status */}
+                <div className="space-y-8">
+                     <div className="p-6 border border-white/10 rounded-2xl bg-[#0A0A0A] flex items-center gap-6">
+                        <div className="relative w-16 h-16 flex items-center justify-center">
+                            <svg className="w-full h-full -rotate-90">
+                                <circle cx="32" cy="32" r="28" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="4" />
+                                <circle cx="32" cy="32" r="28" fill="none" stroke="#E3E3FD" strokeWidth="4" strokeDasharray="176" strokeDashoffset="44" strokeLinecap="round" />
+                            </svg>
+                            <span className="absolute font-mono text-xs text-white">75%</span>
+                        </div>
+                        <div>
+                            <span className="font-medium text-white block mb-1">Storage Used</span>
+                            <span className="text-xs text-white/40">150GB / 200GB</span>
+                        </div>
+                     </div>
+
+                     <div className="p-6 border border-white/10 rounded-2xl bg-[#0A0A0A] flex items-center justify-between">
+                         <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center border border-red-500/20">
+                                <AlertCircle size={18} className="text-red-400" />
+                            </div>
+                            <div>
+                                <span className="font-medium text-white block text-sm">Error Rate</span>
+                                <span className="text-xs text-white/40 font-mono">CRITICAL_ALERT</span>
+                            </div>
+                         </div>
+                         <span className="font-mono text-red-400 text-xs tracking-widest">+2.4%</span>
+                     </div>
+                </div>
+            </div>
+        </section>
+
+        {/* 07. Modal & Dialog */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12">
+             <div className="md:col-span-4 sticky top-32 h-fit">
+                <SectionHeader title="Overlays" number="07" />
+                 <p className="font-montreal text-white/60 text-lg leading-relaxed">
+                   Focused states for critical decisions or complex configuration.
+                </p>
+            </div>
+
+            <div className="md:col-span-8">
+                <div className="relative border border-white/10 rounded-2xl bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-[#050505] p-12 overflow-hidden min-h-[400px] flex items-center justify-center">
+                     {/* Modal Mockup */}
+                     <div className="relative w-full max-w-md bg-[#0F0F0F] border border-white/10 rounded-xl shadow-2xl overflow-hidden transform scale-100">
+                        {/* Modal Header */}
+                        <div className="px-6 py-4 border-b border-white/10 flex justify-between items-center bg-[#111]">
+                            <span className="font-mono text-[10px] uppercase tracking-widest text-white/60">Confirm Action</span>
+                            <div className="flex gap-2">
+                                <div className="w-2 h-2 rounded-full bg-white/20"></div>
+                                <div className="w-2 h-2 rounded-full bg-white/20"></div>
+                            </div>
+                        </div>
+                        {/* Modal Body */}
+                        <div className="p-8">
+                            <div className="w-12 h-12 rounded-full bg-[#E3E3FD]/10 flex items-center justify-center mb-6">
+                                <Terminal size={24} className="text-[#E3E3FD]" />
+                            </div>
+                            <h4 className="text-xl font-medium text-white mb-2">Deploy to Production?</h4>
+                            <p className="text-sm text-white/50 leading-relaxed mb-8">
+                                This will update the live instance. All active user sessions will be preserved, but latency may increase momentarily.
+                            </p>
+                            <div className="flex gap-3">
+                                <button className="flex-1 bg-[#E3E3FD] text-black py-3 rounded-lg font-medium text-sm hover:bg-white transition-colors">
+                                    Deploy Now
+                                </button>
+                                <button className="flex-1 bg-transparent border border-white/10 text-white py-3 rounded-lg font-medium text-sm hover:bg-white/5 transition-colors">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                        {/* Decorative scanline */}
+                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#E3E3FD]/50 to-transparent opacity-20"></div>
+                     </div>
                 </div>
             </div>
         </section>
