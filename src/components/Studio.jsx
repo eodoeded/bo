@@ -8,7 +8,8 @@ import {
     Bold, Italic, Underline, MoreHorizontal,
     Check, Lock, Unlock, Trash2, ArrowLeft,
     CornerRightDown,
-    Plus, Upload
+    Plus, Upload,
+    Copy, Search, Layout
 } from 'lucide-react';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
@@ -62,18 +63,10 @@ const IconButton = ({ icon: Icon, active, onClick, disabled, title }) => (
     </button>
 );
 
-const Ruler = ({ orientation = 'horizontal', zoom = 1, offset = 0 }) => (
+const Ruler = ({ orientation = 'horizontal', zoom = 1, pan = {x:0, y:0}, length = 100 }) => (
     <div className={`absolute bg-[#050505] border-white/10 z-10 pointer-events-none ${orientation === 'horizontal' ? 'top-0 left-0 right-0 h-6 border-b flex items-end' : 'top-0 left-0 bottom-0 w-6 border-r flex flex-col items-end'}`}>
-        {Array.from({ length: orientation === 'horizontal' ? 50 : 30 }).map((_, i) => (
-            <div 
-                key={i} 
-                className={`bg-white/20 ${orientation === 'horizontal' ? 'w-px h-full mr-4' : 'h-px w-full mb-4'} ${i % 5 === 0 ? 'bg-white/40' : ''}`}
-                style={{ 
-                    height: orientation === 'horizontal' ? (i % 5 === 0 ? '100%' : '30%') : undefined,
-                    width: orientation === 'vertical' ? (i % 5 === 0 ? '100%' : '30%') : undefined
-                }}
-            />
-        ))}
+        {/* Simple visual ruler - in real app would use canvas/svg for performance with pan/zoom */}
+        <div className="w-full h-full opacity-30"></div>
     </div>
 );
 
@@ -126,7 +119,7 @@ export default function Studio() {
     // App State
     const [mode, setMode] = useState('STUDIO'); // STUDIO | CLIENT
     const [activeTab, setActiveTab] = useState('components');
-    const [selectedTool, setSelectedTool] = useState('select'); // select | pan | zoom
+    const [selectedTool, setSelectedTool] = useState('select'); // select
     
     // Canvas Viewport State
     const [zoom, setZoom] = useState(1);
@@ -153,24 +146,34 @@ export default function Studio() {
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
     const [initialLayerState, setInitialLayerState] = useState(null);
     const [resizeHandle, setResizeHandle] = useState(null);
+    const [isPanning, setIsPanning] = useState(false);
+    const [editingTextId, setEditingTextId] = useState(null);
 
     // Helpers
     const selectedLayer = layers.find(l => l.id === selectedLayerId);
     
     const updateLayer = (id, updates) => {
-        // Create new layers array with update
         const newLayers = layers.map(l => l.id === id ? { ...l, ...updates } : l);
         setLayers(newLayers);
-    };
-
-    const updateLayerHistory = (id, updates) => {
-        // Same as updateLayer but commits to history (used on drag end)
-        updateLayer(id, updates);
     };
 
     const deleteLayer = (id) => {
         setLayers(layers.filter(l => l.id !== id));
         if (selectedLayerId === id) setSelectedLayerId(null);
+    };
+
+    const duplicateLayer = (id) => {
+        const layer = layers.find(l => l.id === id);
+        if (!layer) return;
+        const newLayer = {
+            ...layer,
+            id: `copy-${Math.random().toString(36).substr(2, 5)}`,
+            x: layer.x + 20,
+            y: layer.y + 20,
+            zIndex: layers.length + 1
+        };
+        setLayers([...layers, newLayer]);
+        setSelectedLayerId(newLayer.id);
     };
 
     const addLayer = (type) => {
@@ -198,14 +201,13 @@ export default function Studio() {
     };
 
     const handleFileUpload = (e) => {
-        // Bulk Upload Support
         const files = Array.from(e.target.files);
         if (files.length === 0) return;
 
-        const newLayers = [...layers];
+        const newLayers = [];
         let offset = 0;
 
-        files.forEach(file => {
+        files.forEach((file, index) => {
             const reader = new FileReader();
             reader.onload = (event) => {
                 const newLayer = {
@@ -213,17 +215,16 @@ export default function Studio() {
                     type: 'IMAGE',
                     x: 50 + offset, y: 50 + offset,
                     width: 200, height: 200,
-                    zIndex: newLayers.length + 1,
+                    zIndex: layers.length + 1 + index,
                     src: event.target.result,
                     locked: false,
                     allowContentChange: true,
                     filterType: 'none',
                     blendMode: 'normal'
                 };
-                // We need to use functional state updates if multiple readers finish async
-                // For simplicity here, assume sequential-ish or just add one by one
+                // Adding one by one for simplicity in this async loop logic for the prototype
                 setLayers(prev => [...prev, newLayer]);
-                if (files.length === 1) setSelectedLayerId(newLayer.id);
+                if (index === 0) setSelectedLayerId(newLayer.id);
             };
             reader.readAsDataURL(file);
             offset += 20;
@@ -236,60 +237,61 @@ export default function Studio() {
         if (!viewportRef.current) return { x: 0, y: 0 };
         const rect = viewportRef.current.getBoundingClientRect();
         
-        // Relative to viewport container
+        // Mouse relative to viewport container (top-left)
         const mouseX = e.clientX - rect.left;
         const mouseY = e.clientY - rect.top;
 
-        // Viewport Center
+        // Apply Inverse Transform to get World Space (unzoomed/unpanned pixels relative to center)
+        // Transform origin is "center" (50% 50%) of viewport
         const cx = rect.width / 2;
         const cy = rect.height / 2;
 
-        // Apply Inverse Transform
         // 1. Untranslate Pan
-        const untranslatedX = mouseX - pan.x;
-        const untranslatedY = mouseY - pan.y;
+        // Visual Position = Center + (WorldPos * Zoom) + Pan
+        // WorldPos * Zoom = VisualPos - Center - Pan
+        // WorldPos = (VisualPos - Center - Pan) / Zoom
+        
+        const worldX = (mouseX - cx - pan.x) / zoom;
+        const worldY = (mouseY - cy - pan.y) / zoom;
 
-        // 2. Unscale Zoom (around center)
-        // Coords relative to center
-        const relX = (untranslatedX - cx) / zoom;
-        const relY = (untranslatedY - cy) / zoom;
-
-        // 3. Map to Canvas Coordinates
-        // Canvas is centered at (0,0) of this relative space
-        // So top-left of canvas is at -W/2, -H/2
-        const canvasX = relX + (canvasConfig.width / 2);
-        const canvasY = relY + (canvasConfig.height / 2);
+        // 2. Map World Space to Canvas Local Space
+        // We position the canvas rect such that its center is at World(0,0)
+        // So Canvas TopLeft is at World(-W/2, -H/2)
+        // CanvasLocalX = WorldX - (-W/2) = WorldX + W/2
+        
+        const canvasX = worldX + (canvasConfig.width / 2);
+        const canvasY = worldY + (canvasConfig.height / 2);
         
         return { x: canvasX, y: canvasY };
     };
 
     const handleMouseDown = (e, layer = null, handle = null) => {
-        e.stopPropagation();
-        
-        // Middle Mouse or Space+Click or Hand Tool -> Pan
-        if (selectedTool === 'pan' || e.button === 1 || e.target === viewportRef.current) {
-            setIsDragging(true);
+        if (editingTextId) return; // Don't drag if editing text
+
+        // Middle Mouse or Space (held) -> Pan
+        if (e.button === 1 || e.target === viewportRef.current) {
+            setIsPanning(true);
             setDragStart({ x: e.clientX, y: e.clientY });
-            setInitialLayerState('pan'); 
             return;
         }
 
         // Layer Interaction
         if (layer) {
-            // Check Lock State (Granular)
+            e.stopPropagation();
+            
             if (mode === 'CLIENT' && layer.locked) return;
-            // In Studio, if locked, we can select but maybe not move (Figma behavior)
-            // For now, if locked in Studio, allow select but prevent move
             if (mode === 'STUDIO' && layer.locked) {
                 setSelectedLayerId(layer.id);
-                return; // Select only
+                return; 
             }
 
             setSelectedLayerId(layer.id);
             setIsDragging(true);
             
             const pt = getCanvasPoint(e);
-            setDragStart({ x: pt.x, y: pt.y });
+            // Store the initial click point in Canvas Space
+            // We'll use delta from this point
+            setDragStart({ x: e.clientX, y: e.clientY }); // Screen space for delta calc is often smoother for resize
             
             if (handle) {
                 setIsResizing(true);
@@ -304,10 +306,7 @@ export default function Studio() {
     };
 
     const handleMouseMove = (e) => {
-        if (!isDragging) return;
-
-        // Panning
-        if (initialLayerState === 'pan') {
+        if (isPanning) {
             const dx = e.clientX - dragStart.x;
             const dy = e.clientY - dragStart.y;
             setPan(prev => ({ x: prev.x + dx, y: prev.y + dy }));
@@ -315,49 +314,35 @@ export default function Studio() {
             return;
         }
 
-        // Moving / Resizing
-        if (selectedLayerId && selectedTool === 'select') {
-             const pt = getCanvasPoint(e);
+        if (isDragging && selectedLayerId && initialLayerState) {
+             // Calculate Delta in Screen Pixels
+             const dxScreen = e.clientX - dragStart.x;
+             const dyScreen = e.clientY - dragStart.y;
+
+             // Convert Delta to Canvas Units (divide by zoom)
+             const dx = dxScreen / zoom;
+             const dy = dyScreen / zoom;
              
-             if (isResizing && resizeHandle && initialLayerState) {
-                 const dx = pt.x - dragStart.x;
-                 const dy = pt.y - dragStart.y;
-                 
+             if (isResizing && resizeHandle) {
                  const newProps = { ...initialLayerState };
 
-                 // Basic Resize Logic (Bottom-Right)
-                 // TODO: Expand for all corners properly with pivot
-                 if (resizeHandle === 'se') {
-                     newProps.width = Math.max(10, initialLayerState.width + dx);
-                     newProps.height = Math.max(10, initialLayerState.height + dy);
-                 } else if (resizeHandle === 'sw') {
+                 // Pivot Logic
+                 if (resizeHandle.includes('e')) newProps.width = Math.max(10, initialLayerState.width + dx);
+                 if (resizeHandle.includes('s')) newProps.height = Math.max(10, initialLayerState.height + dy);
+                 if (resizeHandle.includes('w')) {
                      newProps.width = Math.max(10, initialLayerState.width - dx);
                      newProps.x = initialLayerState.x + dx;
-                     newProps.height = Math.max(10, initialLayerState.height + dy);
-                 } else if (resizeHandle === 'ne') {
-                     newProps.width = Math.max(10, initialLayerState.width + dx);
-                     newProps.height = Math.max(10, initialLayerState.height - dy);
-                     newProps.y = initialLayerState.y + dy;
-                 } else if (resizeHandle === 'nw') {
-                     newProps.width = Math.max(10, initialLayerState.width - dx);
-                     newProps.x = initialLayerState.x + dx;
+                 }
+                 if (resizeHandle.includes('n')) {
                      newProps.height = Math.max(10, initialLayerState.height - dy);
                      newProps.y = initialLayerState.y + dy;
                  }
                  
-                 // Update transiently (don't push history yet)
-                 // We need a way to update without history commit until mouse up
-                 // For now, simple update
+                 // Transient update
                  const tempLayers = layers.map(l => l.id === selectedLayerId ? { ...l, ...newProps } : l);
-                 // We bypass setLayers history for smooth drag, but this implementation 
-                 // requires refactoring useHistory to support transient updates.
-                 // For MVP, we just update.
                  setLayers(tempLayers); 
-             } else if (initialLayerState) {
+             } else {
                  // Moving
-                 const dx = pt.x - dragStart.x;
-                 const dy = pt.y - dragStart.y;
-                 
                  const tempLayers = layers.map(l => l.id === selectedLayerId ? { 
                      ...l, 
                      x: initialLayerState.x + dx, 
@@ -369,9 +354,9 @@ export default function Studio() {
     };
 
     const handleMouseUp = () => {
-        // Here we should commit history if we dragged
         setIsDragging(false);
         setIsResizing(false);
+        setIsPanning(false);
         setResizeHandle(null);
         setInitialLayerState(null);
     };
@@ -386,18 +371,26 @@ export default function Studio() {
         }
     };
 
+    const handleDoubleClick = (e, layer) => {
+        e.stopPropagation();
+        if (layer && layer.type === 'TEXT' && mode === 'STUDIO' && !layer.locked) {
+            setEditingTextId(layer.id);
+        }
+    };
+
+    const handleTextBlur = () => {
+        setEditingTextId(null);
+    };
+
     const handleGenerate = async () => {
         if (!clientSubject.trim()) return;
-        
         const aiLayer = layers.find(l => l.type === 'AI_FRAME' && l.allowContentChange);
         if (!aiLayer || !aiLayer.aiPromptTemplate) {
             setGenerationError("NO_ACTIVE_AI_FRAME");
             return;
         }
-
         setIsGenerating(true);
         setGenerationError(null);
-
         try {
             const prompt = aiLayer.aiPromptTemplate.replace('{subject}', clientSubject);
             const base64Image = await generateImage(prompt);
@@ -413,27 +406,46 @@ export default function Studio() {
     // Hotkeys
     useEffect(() => {
         const handleKeyDown = (e) => {
+            if (editingTextId) return; // Disable hotkeys while editing text
+
             // Delete
             if (e.key === 'Delete' || e.key === 'Backspace') {
-                if (selectedLayerId && mode === 'STUDIO') {
-                    deleteLayer(selectedLayerId);
-                }
+                if (selectedLayerId && mode === 'STUDIO') deleteLayer(selectedLayerId);
             }
             // Undo/Redo
             if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
-                if (e.shiftKey) {
-                    if (canRedo) setLayers(redo());
-                } else {
-                    if (canUndo) setLayers(undo());
+                e.preventDefault();
+                if (e.shiftKey) { if (canRedo) setLayers(redo()); } 
+                else { if (canUndo) setLayers(undo()); }
+            }
+            // Duplicate
+            if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+                e.preventDefault();
+                if (selectedLayerId) duplicateLayer(selectedLayerId);
+            }
+            // Nudge
+            if (selectedLayerId && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                e.preventDefault();
+                const step = e.shiftKey ? 10 : 1;
+                const layer = layers.find(l => l.id === selectedLayerId);
+                if (layer) {
+                    const updates = {};
+                    if (e.key === 'ArrowUp') updates.y = layer.y - step;
+                    if (e.key === 'ArrowDown') updates.y = layer.y + step;
+                    if (e.key === 'ArrowLeft') updates.x = layer.x - step;
+                    if (e.key === 'ArrowRight') updates.x = layer.x + step;
+                    updateLayer(selectedLayerId, updates);
                 }
             }
-            // Tools
-            if (e.key === 'v') setSelectedTool('select');
-            if (e.key === 'h') setSelectedTool('pan');
+            // Reset Zoom
+            if (e.shiftKey && e.key === '1') {
+                setZoom(1);
+                setPan({x:0, y:0});
+            }
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [selectedLayerId, mode, canUndo, canRedo]);
+    }, [selectedLayerId, mode, canUndo, canRedo, editingTextId, layers]); // Added layers dep for nudge
 
     return (
         <div className="min-h-screen bg-[#020202] text-white font-montreal flex flex-col overflow-hidden selection:bg-[#E3E3FD] selection:text-black">
@@ -481,21 +493,11 @@ export default function Studio() {
             {/* Main Workspace */}
             <div className="flex-1 grid grid-cols-12 h-[calc(100vh-3rem)]">
                 
-                {/* Left Panel: Components & Layers */}
+                {/* Left Panel */}
                 <aside className="col-span-2 border-r border-white/10 bg-[#050505] flex flex-col">
                     <div className="grid grid-cols-2 border-b border-white/10">
-                        <button 
-                            onClick={() => setActiveTab('components')}
-                            className={`py-3 font-mono text-[9px] uppercase tracking-widest transition-colors ${activeTab === 'components' ? 'text-[#E3E3FD] border-b border-[#E3E3FD] bg-[#E3E3FD]/5' : 'text-white/40 hover:text-white'}`}
-                        >
-                            Components
-                        </button>
-                        <button 
-                            onClick={() => setActiveTab('layers')}
-                            className={`py-3 font-mono text-[9px] uppercase tracking-widest transition-colors ${activeTab === 'layers' ? 'text-[#E3E3FD] border-b border-[#E3E3FD] bg-[#E3E3FD]/5' : 'text-white/40 hover:text-white'}`}
-                        >
-                            Layers
-                        </button>
+                        <button onClick={() => setActiveTab('components')} className={`py-3 font-mono text-[9px] uppercase tracking-widest transition-colors ${activeTab === 'components' ? 'text-[#E3E3FD] border-b border-[#E3E3FD] bg-[#E3E3FD]/5' : 'text-white/40 hover:text-white'}`}>Components</button>
+                        <button onClick={() => setActiveTab('layers')} className={`py-3 font-mono text-[9px] uppercase tracking-widest transition-colors ${activeTab === 'layers' ? 'text-[#E3E3FD] border-b border-[#E3E3FD] bg-[#E3E3FD]/5' : 'text-white/40 hover:text-white'}`}>Layers</button>
                     </div>
 
                     <div className="flex-1 overflow-y-auto custom-scrollbar">
@@ -503,55 +505,24 @@ export default function Studio() {
                             <div className="p-4 space-y-6">
                                 <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-4">Explore Components</span>
                                 <div className="grid grid-cols-3 gap-2">
-                                    <button onClick={() => addLayer('TEXT')} className="flex flex-col items-center justify-center p-3 border border-white/10 hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group">
-                                        <Type size={16} className="text-white/60 group-hover:text-[#E3E3FD]" />
-                                        <span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">Text</span>
-                                    </button>
+                                    <button onClick={() => addLayer('TEXT')} className="flex flex-col items-center justify-center p-3 border border-white/10 hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group"><Type size={16} className="text-white/60 group-hover:text-[#E3E3FD]" /><span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">Text</span></button>
                                     <label className="flex flex-col items-center justify-center p-3 border border-white/10 hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group cursor-pointer relative">
                                         <ImageIcon size={16} className="text-white/60 group-hover:text-[#E3E3FD]" />
                                         <span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">Image</span>
                                         <div className="absolute top-1 right-1"><Plus size={8} className="text-[#E3E3FD]" /></div>
                                         <input type="file" multiple className="hidden" accept="image/*" onChange={handleFileUpload} />
                                     </label>
-                                    <button onClick={() => addLayer('AI_FRAME')} className="flex flex-col items-center justify-center p-3 border border-white/10 hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group">
-                                        <Sparkles size={16} className="text-white/60 group-hover:text-[#E3E3FD]" />
-                                        <span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">AI Gen</span>
-                                    </button>
+                                    <button onClick={() => addLayer('AI_FRAME')} className="flex flex-col items-center justify-center p-3 border border-white/10 hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group"><Sparkles size={16} className="text-white/60 group-hover:text-[#E3E3FD]" /><span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">AI Gen</span></button>
                                 </div>
-
                                 <div className="p-4 border border-white/10 bg-[#0A0A0A]">
                                     <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-2">Canvas Spec</span>
                                     <div className="grid grid-cols-2 gap-2 mb-2">
-                                         <div className="bg-[#050505] border border-white/10 px-2 py-1.5 flex justify-between items-center">
-                                            <span className="font-mono text-[9px] text-white/40">W</span>
-                                            <input 
-                                                type="number" 
-                                                value={canvasConfig.width}
-                                                onChange={(e) => setCanvasConfig({...canvasConfig, width: Number(e.target.value)})}
-                                                className="w-12 bg-transparent text-right font-mono text-[9px] text-[#E3E3FD] focus:outline-none"
-                                            />
-                                         </div>
-                                         <div className="bg-[#050505] border border-white/10 px-2 py-1.5 flex justify-between items-center">
-                                            <span className="font-mono text-[9px] text-white/40">H</span>
-                                            <input 
-                                                type="number" 
-                                                value={canvasConfig.height}
-                                                onChange={(e) => setCanvasConfig({...canvasConfig, height: Number(e.target.value)})}
-                                                className="w-12 bg-transparent text-right font-mono text-[9px] text-[#E3E3FD] focus:outline-none"
-                                            />
-                                         </div>
+                                         <div className="bg-[#050505] border border-white/10 px-2 py-1.5 flex justify-between items-center"><span className="font-mono text-[9px] text-white/40">W</span><input type="number" value={canvasConfig.width} onChange={(e) => setCanvasConfig({...canvasConfig, width: Number(e.target.value)})} className="w-12 bg-transparent text-right font-mono text-[9px] text-[#E3E3FD] focus:outline-none" /></div>
+                                         <div className="bg-[#050505] border border-white/10 px-2 py-1.5 flex justify-between items-center"><span className="font-mono text-[9px] text-white/40">H</span><input type="number" value={canvasConfig.height} onChange={(e) => setCanvasConfig({...canvasConfig, height: Number(e.target.value)})} className="w-12 bg-transparent text-right font-mono text-[9px] text-[#E3E3FD] focus:outline-none" /></div>
                                     </div>
                                     <div className="w-full bg-[#050505] border border-white/10 px-2 py-1.5 flex justify-between items-center">
                                         <span className="font-mono text-[9px] text-white/40">BG</span>
-                                        <div className="flex items-center gap-2">
-                                            <input 
-                                                type="color" 
-                                                value={canvasConfig.backgroundColor}
-                                                onChange={(e) => setCanvasConfig({...canvasConfig, backgroundColor: e.target.value})}
-                                                className="w-4 h-4 rounded-full bg-transparent border-0 p-0"
-                                            />
-                                            <span className="font-mono text-[9px] text-white/60">{canvasConfig.backgroundColor}</span>
-                                        </div>
+                                        <div className="flex items-center gap-2"><input type="color" value={canvasConfig.backgroundColor} onChange={(e) => setCanvasConfig({...canvasConfig, backgroundColor: e.target.value})} className="w-4 h-4 rounded-full bg-transparent border-0 p-0" /><span className="font-mono text-[9px] text-white/60">{canvasConfig.backgroundColor}</span></div>
                                     </div>
                                 </div>
                             </div>
@@ -559,15 +530,9 @@ export default function Studio() {
                             <div className="p-2 space-y-1">
                                 {layers.slice().reverse().map((layer) => (
                                     !layer.hidden && (
-                                        <div 
-                                            key={layer.id} 
-                                            onClick={() => setSelectedLayerId(layer.id)}
-                                            className={`flex items-center gap-3 p-3 border ${selectedLayerId === layer.id ? 'border-[#E3E3FD] bg-[#E3E3FD]/5' : 'border-transparent hover:bg-white/5'} transition-colors rounded-sm cursor-pointer group`}
-                                        >
+                                        <div key={layer.id} onClick={() => setSelectedLayerId(layer.id)} className={`flex items-center gap-3 p-3 border ${selectedLayerId === layer.id ? 'border-[#E3E3FD] bg-[#E3E3FD]/5' : 'border-transparent hover:bg-white/5'} transition-colors rounded-sm cursor-pointer group`}>
                                             <Layers size={14} className={selectedLayerId === layer.id ? 'text-[#E3E3FD]' : 'text-white/40 group-hover:text-white'} />
-                                            <span className={`font-mono text-[10px] uppercase tracking-widest ${selectedLayerId === layer.id ? 'text-white' : 'text-white/60 group-hover:text-white'}`}>
-                                                {layer.type} - {layer.id.slice(-4)}
-                                            </span>
+                                            <span className={`font-mono text-[10px] uppercase tracking-widest ${selectedLayerId === layer.id ? 'text-white' : 'text-white/60 group-hover:text-white'}`}>{layer.type} - {layer.id.slice(-4)}</span>
                                             {selectedLayerId === layer.id && <div className="ml-auto w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"></div>}
                                         </div>
                                     )
@@ -580,10 +545,9 @@ export default function Studio() {
                 {/* Center: Canvas Area */}
                 <main className="col-span-7 bg-[#020202] relative flex flex-col overflow-hidden">
                     
-                    {/* Toolbar */}
+                    {/* Simplified Toolbar */}
                     <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 bg-[#050505] border border-white/10 p-1 flex items-center gap-1 rounded-[2px] shadow-xl">
-                        <IconButton icon={MousePointer} active={selectedTool === 'select'} onClick={() => setSelectedTool('select')} title="Select (V)" />
-                        <IconButton icon={Hand} active={selectedTool === 'pan'} onClick={() => setSelectedTool('pan')} title="Pan (H)" />
+                        <IconButton icon={MousePointer} active={selectedTool === 'select'} onClick={() => setSelectedTool('select')} title="Pointer (V)" />
                         <div className="w-px h-4 bg-white/10 mx-1"></div>
                         <IconButton icon={ZoomOut} onClick={() => setZoom(z => Math.max(0.1, z - 0.1))} title="Zoom Out" />
                         <span className="font-mono text-[9px] text-white/60 px-2 w-10 text-center">{Math.round(zoom * 100)}%</span>
@@ -592,15 +556,16 @@ export default function Studio() {
 
                     {/* Canvas Wrapper */}
                     <div 
-                        className="flex-1 relative overflow-hidden bg-[#080808] cursor-crosshair"
+                        className="flex-1 relative overflow-hidden bg-[#080808] cursor-default"
                         onMouseMove={handleMouseMove}
                         onMouseUp={handleMouseUp}
                         onWheel={handleWheel}
                         ref={viewportRef}
-                        onMouseDown={(e) => handleMouseDown(e)}
-                        style={{ cursor: selectedTool === 'pan' ? 'grab' : 'default' }}
+                        onMouseDown={handleMouseDown}
+                        style={{ cursor: isPanning ? 'grabbing' : (selectedTool === 'pan' ? 'grab' : 'default') }}
                     >
-                        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ 
+                        {/* Infinite Grid */}
+                        <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ 
                             backgroundImage: 'radial-gradient(circle, #E3E3FD 1px, transparent 1px)', 
                             backgroundSize: `${20 * zoom}px ${20 * zoom}px`,
                             backgroundPosition: `${pan.x}px ${pan.y}px`
@@ -630,31 +595,60 @@ export default function Studio() {
                                         <div
                                             key={layer.id}
                                             onMouseDown={(e) => handleMouseDown(e, layer)}
-                                            className="absolute"
+                                            onDoubleClick={(e) => handleDoubleClick(e, layer)}
+                                            className="absolute group"
                                             style={{
                                                 left: layer.x,
                                                 top: layer.y,
                                                 width: layer.width,
                                                 height: layer.type === 'TEXT' ? 'auto' : layer.height,
                                                 zIndex: layer.zIndex,
-                                                cursor: (mode === 'CLIENT' && layer.locked) ? 'default' : (selectedTool === 'select' ? 'move' : (selectedTool === 'pan' ? 'grab' : 'default')),
+                                                cursor: (mode === 'CLIENT' && layer.locked) ? 'default' : 'default', // Cursors handled by overlay/hover logic
                                                 border: layer.borderWidth ? `${layer.borderWidth}px solid ${layer.borderColor}` : 'none',
                                                 borderRadius: layer.borderRadius ? `${layer.borderRadius}px` : '0px',
                                                 mixBlendMode: layer.blendMode || 'normal',
                                                 whiteSpace: layer.type === 'TEXT' ? 'nowrap' : 'normal'
                                             }}
                                         >
+                                            {/* Hover Outline (Figma-esque) */}
+                                            {selectedLayerId !== layer.id && mode === 'STUDIO' && (
+                                                <div className="absolute inset-0 border border-[#E3E3FD] opacity-0 group-hover:opacity-30 pointer-events-none transition-opacity"></div>
+                                            )}
+
                                             {/* Content Rendering */}
                                             {layer.type === 'TEXT' && (
-                                                <div style={{
-                                                    color: layer.color,
-                                                    fontSize: `${layer.fontSize}px`,
-                                                    fontFamily: layer.fontFamily,
-                                                    textAlign: layer.textAlign,
-                                                    lineHeight: 1.2
-                                                }}>
-                                                    {layer.text || 'Text Layer'}
-                                                </div>
+                                                editingTextId === layer.id ? (
+                                                    <input
+                                                        autoFocus
+                                                        value={layer.text}
+                                                        onChange={(e) => updateLayer(layer.id, { text: e.target.value })}
+                                                        onBlur={handleTextBlur}
+                                                        onKeyDown={(e) => { if(e.key === 'Enter') handleTextBlur(); e.stopPropagation(); }}
+                                                        style={{
+                                                            color: layer.color,
+                                                            fontSize: `${layer.fontSize}px`,
+                                                            fontFamily: layer.fontFamily,
+                                                            textAlign: layer.textAlign,
+                                                            lineHeight: 1.2,
+                                                            background: 'transparent',
+                                                            border: 'none',
+                                                            outline: 'none',
+                                                            width: '100%',
+                                                            padding: 0,
+                                                            margin: 0
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <div style={{
+                                                        color: layer.color,
+                                                        fontSize: `${layer.fontSize}px`,
+                                                        fontFamily: layer.fontFamily,
+                                                        textAlign: layer.textAlign,
+                                                        lineHeight: 1.2
+                                                    }}>
+                                                        {layer.text || 'Text Layer'}
+                                                    </div>
+                                                )
                                             )}
 
                                             {layer.type === 'IMAGE' && (
@@ -698,7 +692,7 @@ export default function Studio() {
                                             {selectedLayerId === layer.id && mode === 'STUDIO' && (
                                                 <>
                                                     <div className="absolute -inset-[1px] border border-[#E3E3FD] pointer-events-none z-50">
-                                                        <div className="absolute -top-6 left-0 bg-[#E3E3FD] px-1.5 py-0.5 flex items-center gap-2">
+                                                        <div className="absolute -top-6 left-0 bg-[#E3E3FD] px-1.5 py-0.5 flex items-center gap-2 pointer-events-auto">
                                                             <span className="font-mono text-[9px] text-black uppercase tracking-widest font-bold">{layer.id}</span>
                                                         </div>
                                                     </div>
@@ -707,7 +701,7 @@ export default function Studio() {
                                                         <div 
                                                             key={h}
                                                             onMouseDown={(e) => handleMouseDown(e, layer, h)}
-                                                            className={`absolute w-2 h-2 bg-[#E3E3FD] border border-black z-50 cursor-${h}-resize`}
+                                                            className={`absolute w-2 h-2 bg-white border border-[#E3E3FD] z-50 cursor-${h}-resize`}
                                                             style={{
                                                                 top: h[0] === 'n' ? -4 : 'auto',
                                                                 bottom: h[0] === 's' ? -4 : 'auto',
@@ -731,7 +725,7 @@ export default function Studio() {
                     </div>
                 </main>
 
-                {/* Right Panel: Specifications */}
+                {/* Right Panel */}
                 <aside className="col-span-3 border-l border-white/10 bg-[#050505] flex flex-col">
                     <div className="p-4 border-b border-white/10 flex justify-between items-center">
                         <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">Specifications</span>
@@ -740,59 +734,24 @@ export default function Studio() {
 
                     <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-8">
                         {selectedLayer ? (
-                            <LayerProperties 
-                                layer={selectedLayer}
-                                mode={mode}
-                                onUpdate={updateLayer}
-                                onDelete={deleteLayer}
-                            />
+                            <LayerProperties layer={selectedLayer} mode={mode} onUpdate={updateLayer} onDelete={deleteLayer} />
                         ) : (
                             <div className="h-full flex flex-col items-center justify-center text-white/20">
                                 <MousePointer size={24} strokeWidth={1} className="mb-2" />
                                 <span className="font-mono text-[10px] uppercase tracking-widest">Select an element</span>
                             </div>
                         )}
-
-                        {/* CLIENT GENERATOR PANEL */}
                         {mode === 'CLIENT' && (
                             <div className="pt-6 border-t border-white/10 mt-auto">
-                                <h2 className="font-mono text-[9px] font-bold text-[#E3E3FD] uppercase tracking-widest mb-4 flex items-center gap-2">
-                                    <Sparkles size={12} /> Generator Protocol
-                                </h2>
-                                
+                                <h2 className="font-mono text-[9px] font-bold text-[#E3E3FD] uppercase tracking-widest mb-4 flex items-center gap-2"><Sparkles size={12} /> Generator Protocol</h2>
                                 <div className="space-y-4">
-                                   <div>
-                                     <label className="block font-mono text-[8px] text-white/40 uppercase tracking-widest mb-1.5">Subject Input</label>
-                                     <input 
-                                       type="text"
-                                       value={clientSubject}
-                                       onChange={(e) => setClientSubject(e.target.value)}
-                                       placeholder="Enter subject..."
-                                       className="w-full bg-[#0A0A0A] border border-white/10 p-2 text-xs text-white focus:border-[#E3E3FD] focus:outline-none font-mono placeholder-white/20"
-                                     />
-                                   </div>
-
-                                   <button
-                                     onClick={handleGenerate}
-                                     disabled={isGenerating || !clientSubject}
-                                     className={`w-full py-3 font-mono text-[9px] font-bold uppercase tracking-widest transition-all
-                                       ${isGenerating 
-                                         ? 'bg-white/10 text-white/40 cursor-wait' 
-                                         : 'bg-[#E3E3FD] text-black hover:bg-white'}`}
-                                   >
-                                     {isGenerating ? 'INITIALIZING...' : 'EXECUTE GENERATION'}
-                                   </button>
-
-                                   {generationError && (
-                                      <div className="p-2 border border-red-900/50 bg-red-900/10 text-red-400 text-[9px] font-mono">
-                                         ERROR: {generationError}
-                                      </div>
-                                   )}
+                                   <div><label className="block font-mono text-[8px] text-white/40 uppercase tracking-widest mb-1.5">Subject Input</label><input type="text" value={clientSubject} onChange={(e) => setClientSubject(e.target.value)} placeholder="Enter subject..." className="w-full bg-[#0A0A0A] border border-white/10 p-2 text-xs text-white focus:border-[#E3E3FD] focus:outline-none font-mono placeholder-white/20" /></div>
+                                   <button onClick={handleGenerate} disabled={isGenerating || !clientSubject} className={`w-full py-3 font-mono text-[9px] font-bold uppercase tracking-widest transition-all ${isGenerating ? 'bg-white/10 text-white/40 cursor-wait' : 'bg-[#E3E3FD] text-black hover:bg-white'}`}>{isGenerating ? 'INITIALIZING...' : 'EXECUTE GENERATION'}</button>
+                                   {generationError && <div className="p-2 border border-red-900/50 bg-red-900/10 text-red-400 text-[9px] font-mono">ERROR: {generationError}</div>}
                                 </div>
                             </div>
                         )}
                     </div>
-
                     <div className="p-4 border-t border-white/10">
                         <button className="w-full py-3 border border-white/20 hover:border-[#E3E3FD] hover:text-[#E3E3FD] transition-all group flex items-center justify-center gap-2 bg-white/5">
                             <Download size={14} className="group-hover:animate-bounce" />
