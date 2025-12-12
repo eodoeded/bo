@@ -158,14 +158,14 @@ export default function WaitlistHero() {
       {/* Node Graph Layer */}
       <div ref={containerRef} className="absolute inset-0 w-full h-full z-10 touch-none">
           
-          {/* Connecting Lines - Rectilinear Style Fixed */}
-          {/* viewBox="0 0 100 100" establishes a coordinate system from 0 to 100 on both axes. */}
-          {/* preserveAspectRatio="none" ensures it stretches to fill the container regardless of aspect ratio. */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none hidden md:block" viewBox="0 0 100 100" preserveAspectRatio="none" style={{zIndex: 10}}>
                {/* 
-                  Rectilinear Logic using 0-100 coordinates directly:
-                  Start -> Horizontal to Mid X -> Vertical to End Y -> Horizontal to End X
+                  Unique Style: "Energy Pulse"
+                  - Base wire is static and dim
+                  - Pulse travels along the wire
                */}
+
+               {/* Path 1: Studio -> Core */}
                <motion.path
                   d={`M ${nodes.studio.x} ${nodes.studio.y} 
                       L ${(nodes.studio.x + nodes.core.x) / 2} ${nodes.studio.y} 
@@ -173,11 +173,12 @@ export default function WaitlistHero() {
                       L ${nodes.core.x} ${nodes.core.y}`}
                   fill="none"
                   stroke="white"
-                  strokeWidth="0.15"
-                  vectorEffect="non-scaling-stroke" 
-                  strokeOpacity="0.2"
+                  strokeWidth="0.1"
+                  strokeOpacity="0.15"
+                  vectorEffect="non-scaling-stroke"
                 />
-                {/* Animated overlay line */}
+                
+                {/* Pulse Animation */}
                 <motion.path
                   d={`M ${nodes.studio.x} ${nodes.studio.y} 
                       L ${(nodes.studio.x + nodes.core.x) / 2} ${nodes.studio.y} 
@@ -185,25 +186,36 @@ export default function WaitlistHero() {
                       L ${nodes.core.x} ${nodes.core.y}`}
                   fill="none"
                   stroke="#E3E3FD"
-                  strokeWidth="0.15"
+                  strokeWidth="0.3"
                   vectorEffect="non-scaling-stroke"
-                  initial={{ pathLength: 0, opacity: 0 }}
-                  animate={{ pathLength: 1, opacity: 1 }}
-                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 1, ease: "linear" }}
+                  initial={{ pathLength: 0, pathOffset: 0, opacity: 0 }}
+                  animate={{ 
+                      pathLength: [0, 0.3, 0], // Grows then shrinks
+                      pathOffset: [0, 1, 1],   // Moves from start to end
+                      opacity: [0, 1, 0] 
+                  }}
+                  transition={{ 
+                      duration: 3, 
+                      ease: "easeInOut", 
+                      repeat: Infinity,
+                      repeatDelay: 0.2
+                  }}
                 />
 
-                <motion.path
+               {/* Path 2: Core -> Output */}
+               <motion.path
                   d={`M ${nodes.core.x} ${nodes.core.y} 
                       L ${(nodes.core.x + nodes.output.x) / 2} ${nodes.core.y} 
                       L ${(nodes.core.x + nodes.output.x) / 2} ${nodes.output.y} 
                       L ${nodes.output.x} ${nodes.output.y}`}
                   fill="none"
                   stroke="white"
-                  strokeWidth="0.15"
+                  strokeWidth="0.1"
+                  strokeOpacity="0.15"
                   vectorEffect="non-scaling-stroke"
-                  strokeOpacity="0.2"
                 />
-                {/* Animated overlay line */}
+                
+                {/* Pulse Animation */}
                 <motion.path
                   d={`M ${nodes.core.x} ${nodes.core.y} 
                       L ${(nodes.core.x + nodes.output.x) / 2} ${nodes.core.y} 
@@ -211,11 +223,21 @@ export default function WaitlistHero() {
                       L ${nodes.output.x} ${nodes.output.y}`}
                   fill="none"
                   stroke="#E3E3FD"
-                  strokeWidth="0.15"
+                  strokeWidth="0.3"
                   vectorEffect="non-scaling-stroke"
-                  initial={{ pathLength: 0, opacity: 0 }}
-                  animate={{ pathLength: 1, opacity: 1 }}
-                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 1, ease: "linear", delay: 1 }}
+                  initial={{ pathLength: 0, pathOffset: 0, opacity: 0 }}
+                  animate={{ 
+                      pathLength: [0, 0.3, 0], 
+                      pathOffset: [0, 1, 1],
+                      opacity: [0, 1, 0] 
+                  }}
+                  transition={{ 
+                      duration: 3, 
+                      ease: "easeInOut", 
+                      repeat: Infinity,
+                      repeatDelay: 0.2,
+                      delay: 1.5 // Offset timing
+                  }}
                 />
           </svg>
 
