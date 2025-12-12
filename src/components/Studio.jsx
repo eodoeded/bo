@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { 
     Type, Image as ImageIcon, Sparkles, Layers, 
     Settings, Download, ChevronRight, Maximize2, 
-    Move, Sliders, Box, Grid, Monitor, Eye,
+    Move, Sliders, Box, Grid, Monitor, Eye, EyeOff,
     MousePointer, ZoomIn, ZoomOut, Undo, Redo,
     AlignLeft, AlignCenter, AlignRight,
     Bold, Italic, Underline, MoreHorizontal,
@@ -100,7 +100,9 @@ const INITIAL_LAYERS = [
     src: "https://cdn-icons-png.flaticon.com/512/7510/7510065.png",
     locked: false, 
     allowContentChange: false,
-    lockPosition: true, // Granular Lock test
+    lockPosition: true, 
+    opacity: 1, // New
+    visible: true, // New
   },
   {
     id: 'card-title',
@@ -114,6 +116,12 @@ const INITIAL_LAYERS = [
     locked: false,
     allowContentChange: true,
     lockPosition: false,
+    opacity: 1,
+    visible: true,
+    fontWeight: 'normal', // New
+    fontStyle: 'normal',
+    textDecoration: 'none',
+    textTransform: 'none'
   },
   {
     id: 'ai-frame',
@@ -129,6 +137,8 @@ const INITIAL_LAYERS = [
     filterType: 'dither',
     blendMode: 'screen',
     lockPosition: false,
+    opacity: 1,
+    visible: true,
   }
 ];
 
@@ -136,7 +146,7 @@ export default function Studio() {
     // App State
     const [mode, setMode] = useState('STUDIO'); // STUDIO | CLIENT
     const [activeTab, setActiveTab] = useState('components');
-    const [selectedTool, setSelectedTool] = useState('select'); // select | pan
+    const [selectedTool, setSelectedTool] = useState('select');
     const [statusMessage, setStatusMessage] = useState(null); 
     
     // Canvas Viewport
@@ -173,11 +183,11 @@ export default function Studio() {
     const [contextMenu, setContextMenu] = useState(null);
     const [selectionBox, setSelectionBox] = useState(null); 
     const [isAltPressed, setIsAltPressed] = useState(false);
-    const [isSpacePressed, setIsSpacePressed] = useState(false); // Spacebar toggle
+    const [isSpacePressed, setIsSpacePressed] = useState(false); 
 
     // Helpers
     const selectedLayers = layers.filter(l => selectedLayerIds.includes(l.id));
-    const primarySelectedLayer = selectedLayers.length > 0 ? selectedLayers[selectedLayers.length - 1] : null; // Last selected is primary
+    const primarySelectedLayer = selectedLayers.length > 0 ? selectedLayers[selectedLayers.length - 1] : null; 
     
     const showToast = (msg) => {
         setStatusMessage(msg);
@@ -185,13 +195,10 @@ export default function Studio() {
     };
 
     const updateLayer = (id, updates) => {
-        // Multi-Property Edit Logic
-        // If the ID being updated is part of the selection, apply updates to ALL selected layers
         if (selectedLayerIds.includes(id) && selectedLayerIds.length > 1) {
             const newLayers = layers.map(l => selectedLayerIds.includes(l.id) ? { ...l, ...updates } : l);
             setLayers(newLayers);
         } else {
-            // Standard single update
             const newLayers = layers.map(l => l.id === id ? { ...l, ...updates } : l);
             setLayers(newLayers);
         }
@@ -212,6 +219,13 @@ export default function Studio() {
         if (selectedLayerIds.length === 0) return;
         setLayers(layers.filter(l => !selectedLayerIds.includes(l.id)));
         setSelectedLayerIds([]);
+    };
+
+    const toggleVisibility = (id) => {
+        const layer = layers.find(l => l.id === id);
+        if (layer) {
+            updateLayer(id, { visible: !layer.visible });
+        }
     };
 
     const duplicateLayer = (id) => {
@@ -251,7 +265,6 @@ export default function Studio() {
         setSelectedLayerIds(newIds);
     };
 
-    // New internal Copy/Paste
     const copySelectedLayers = () => {
         if (selectedLayerIds.length === 0) return;
         const items = layers.filter(l => selectedLayerIds.includes(l.id));
@@ -268,7 +281,7 @@ export default function Studio() {
              const newLayer = {
                  ...item,
                  id: `paste-${Math.random().toString(36).substr(2, 5)}`,
-                 x: item.x + 20, // Offset paste
+                 x: item.x + 20, 
                  y: item.y + 20,
                  zIndex: newLayers.length + 1
              };
@@ -287,7 +300,7 @@ export default function Studio() {
         const layer = layers.find(l => l.id === targetId);
         if (!layer) return;
         
-        const newLockedState = !layer.lockPosition; // Toggle based on primary
+        const newLockedState = !layer.lockPosition; 
         
         const newLayers = layers.map(l => ids.includes(l.id) ? { ...l, lockPosition: newLockedState } : l);
         setLayers(newLayers);
@@ -308,7 +321,6 @@ export default function Studio() {
         setLayers(newLayers);
     };
     
-    // Multi-Select Reorder
     const reorderSelectedLayers = (direction) => {
         if (selectedLayerIds.length === 0) return;
         
@@ -338,7 +350,6 @@ export default function Studio() {
     const alignSelectedLayers = (alignment) => {
         if (selectedLayerIds.length === 0) return;
 
-        // If single selection, align to canvas
         if (selectedLayerIds.length === 1) {
              const layer = layers.find(l => l.id === selectedLayerIds[0]);
              if (!layer) return;
@@ -355,7 +366,6 @@ export default function Studio() {
              return;
         }
 
-        // Multi selection: Align to selection bounding box
         const selectedItems = layers.filter(l => selectedLayerIds.includes(l.id));
         const minX = Math.min(...selectedItems.map(l => l.x));
         const maxX = Math.max(...selectedItems.map(l => l.x + l.width));
@@ -394,7 +404,9 @@ export default function Studio() {
             textAlign: "left",
             locked: false,
             allowContentChange: true,
-            lockPosition: false, // Default
+            lockPosition: false, 
+            opacity: 1, // New
+            visible: true, // New
             aiPromptTemplate: type === 'AI_FRAME' ? "A render of {subject}" : undefined,
             filterType: 'none',
             blendMode: 'normal'
@@ -1038,12 +1050,15 @@ export default function Studio() {
                                                 }
                                             }}
                                         >
-                                            <div className="flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                <button onClick={(e) => { e.stopPropagation(); reorderLayer(layer.id, 'up'); }} className="hover:text-[#E3E3FD]"><ArrowUp size={8} /></button>
-                                                <button onClick={(e) => { e.stopPropagation(); reorderLayer(layer.id, 'down'); }} className="hover:text-[#E3E3FD]"><ArrowDown size={8} /></button>
+                                            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <button onClick={(e) => { e.stopPropagation(); toggleVisibility(layer.id); }} className="hover:text-[#E3E3FD]">
+                                                    {layer.visible ? <Eye size={10} /> : <EyeOff size={10} className="text-white/40" />}
+                                                </button>
                                             </div>
                                             <Layers size={14} className={selectedLayerIds.includes(layer.id) ? 'text-[#E3E3FD]' : 'text-white/40 group-hover:text-white'} />
-                                            <span className={`font-mono text-[10px] uppercase tracking-widest ${selectedLayerIds.includes(layer.id) ? 'text-white' : 'text-white/60 group-hover:text-white'}`}>{layer.type} - {layer.id.slice(-4)}</span>
+                                            <span className={`font-mono text-[10px] uppercase tracking-widest ${selectedLayerIds.includes(layer.id) ? 'text-white' : 'text-white/60 group-hover:text-white'} ${!layer.visible ? 'opacity-50 line-through' : ''}`}>
+                                                {layer.type} - {layer.id.slice(-4)}
+                                            </span>
                                             {selectedLayerIds.includes(layer.id) && <div className="ml-auto w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"></div>}
                                         </div>
                                     )
@@ -1121,7 +1136,7 @@ export default function Studio() {
                                 className={`relative shadow-2xl transition-shadow duration-300 ${isSelecting ? 'canvas-bg' : ''}`}
                             >
                                 {layers.map(layer => (
-                                    !layer.hidden && (
+                                    !layer.hidden && layer.visible !== false && (
                                         <div
                                             key={layer.id}
                                             onMouseDown={(e) => handleMouseDown(e, layer)}
@@ -1137,6 +1152,7 @@ export default function Studio() {
                                                 border: layer.borderWidth ? `${layer.borderWidth}px solid ${layer.borderColor}` : 'none',
                                                 borderRadius: layer.borderRadius ? `${layer.borderRadius}px` : '0px',
                                                 mixBlendMode: layer.blendMode || 'normal',
+                                                opacity: layer.opacity !== undefined ? layer.opacity : 1,
                                                 whiteSpace: layer.type === 'TEXT' ? 'nowrap' : 'normal'
                                             }}
                                         >
@@ -1165,6 +1181,10 @@ export default function Studio() {
                                                             fontSize: `${layer.fontSize}px`,
                                                             fontFamily: layer.fontFamily,
                                                             textAlign: layer.textAlign,
+                                                            fontWeight: layer.fontWeight || 'normal',
+                                                            fontStyle: layer.fontStyle || 'normal',
+                                                            textDecoration: layer.textDecoration || 'none',
+                                                            textTransform: layer.textTransform || 'none',
                                                             lineHeight: 1.2,
                                                             background: 'transparent',
                                                             border: 'none',
@@ -1183,6 +1203,10 @@ export default function Studio() {
                                                         fontSize: `${layer.fontSize}px`,
                                                         fontFamily: layer.fontFamily,
                                                         textAlign: layer.textAlign,
+                                                        fontWeight: layer.fontWeight || 'normal',
+                                                        fontStyle: layer.fontStyle || 'normal',
+                                                        textDecoration: layer.textDecoration || 'none',
+                                                        textTransform: layer.textTransform || 'none',
                                                         lineHeight: 1.2,
                                                         whiteSpace: 'pre-wrap'
                                                     }}>

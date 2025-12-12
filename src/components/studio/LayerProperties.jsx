@@ -1,5 +1,5 @@
 import React from 'react';
-import { Lock, Unlock, Trash2, Check, Sliders, ChevronRight, AlignLeft, AlignCenter, AlignRight, AlignVerticalDistributeCenter, AlignHorizontalDistributeCenter, AlignJustify, AlignEndVertical } from 'lucide-react';
+import { Lock, Unlock, Trash2, Check, Sliders, ChevronRight, AlignLeft, AlignCenter, AlignRight, AlignVerticalDistributeCenter, AlignHorizontalDistributeCenter, AlignJustify, AlignEndVertical, Bold, Italic, Underline, Type } from 'lucide-react';
 
 const InputRow = ({ label, children }) => (
   <div className="mb-4">
@@ -149,6 +149,41 @@ export const LayerProperties = ({
                     />
                   </InputRow>
               </div>
+
+              {/* Text Styles */}
+              <div className="mb-4">
+                  <label className="font-mono text-[8px] text-white/30 uppercase tracking-widest block mb-1">Style</label>
+                  <div className="flex gap-1">
+                      <button 
+                        onClick={() => onUpdate(layer.id, { fontWeight: layer.fontWeight === 'bold' ? 'normal' : 'bold' })}
+                        className={`p-2 border ${layer.fontWeight === 'bold' ? 'bg-white/10 text-white border-white/20' : 'border-transparent text-white/40 hover:text-white'} transition-colors rounded-[1px]`}
+                        title="Bold"
+                      >
+                          <Bold size={14} />
+                      </button>
+                      <button 
+                        onClick={() => onUpdate(layer.id, { fontStyle: layer.fontStyle === 'italic' ? 'normal' : 'italic' })}
+                        className={`p-2 border ${layer.fontStyle === 'italic' ? 'bg-white/10 text-white border-white/20' : 'border-transparent text-white/40 hover:text-white'} transition-colors rounded-[1px]`}
+                        title="Italic"
+                      >
+                          <Italic size={14} />
+                      </button>
+                      <button 
+                        onClick={() => onUpdate(layer.id, { textDecoration: layer.textDecoration === 'underline' ? 'none' : 'underline' })}
+                        className={`p-2 border ${layer.textDecoration === 'underline' ? 'bg-white/10 text-white border-white/20' : 'border-transparent text-white/40 hover:text-white'} transition-colors rounded-[1px]`}
+                        title="Underline"
+                      >
+                          <Underline size={14} />
+                      </button>
+                      <button 
+                        onClick={() => onUpdate(layer.id, { textTransform: layer.textTransform === 'uppercase' ? 'none' : 'uppercase' })}
+                        className={`p-2 border ${layer.textTransform === 'uppercase' ? 'bg-white/10 text-white border-white/20' : 'border-transparent text-white/40 hover:text-white'} transition-colors rounded-[1px]`}
+                        title="Uppercase"
+                      >
+                          <Type size={14} />
+                      </button>
+                  </div>
+              </div>
             </>
           )}
         </div>
@@ -189,36 +224,53 @@ export const LayerProperties = ({
         </InputRow>
       )}
       
-      {/* PROCESSING UNIT (FILTERS) */}
-      {(layer.type === 'IMAGE' || layer.type === 'AI_FRAME') && isStudio && (
+      {/* PROCESSING UNIT (FILTERS) & OPACITY */}
+      {isStudio && (
         <div className="pt-4 border-t border-white/10">
-           <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest block mb-4">Processing Unit</span>
-           <div className="grid grid-cols-2 gap-3 mb-3">
-              <InputRow label="Filter">
-                <StudioSelect
-                  value={layer.filterType || 'none'}
-                  onChange={(e) => onUpdate(layer.id, { filterType: e.target.value })}
-                  options={[
-                      { value: 'none', label: 'Passthrough' },
-                      { value: 'dither', label: 'Dither (1-bit)' },
-                      { value: 'threshold', label: 'Threshold' },
-                      { value: 'grayscale', label: 'Grayscale' }
-                  ]}
-                />
-              </InputRow>
-              <InputRow label="Blend Mode">
-                <StudioSelect
-                  value={layer.blendMode || 'normal'}
-                  onChange={(e) => onUpdate(layer.id, { blendMode: e.target.value })}
-                  options={[
-                      { value: 'normal', label: 'Normal' },
-                      { value: 'screen', label: 'Screen' },
-                      { value: 'multiply', label: 'Multiply' },
-                      { value: 'overlay', label: 'Overlay' }
-                  ]}
-                />
-              </InputRow>
+           <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest block mb-4">Appearance</span>
+           
+           <div className="mb-4">
+               <div className="flex justify-between mb-1">
+                   <label className="font-mono text-[8px] text-white/30 uppercase tracking-widest">Opacity</label>
+                   <span className="font-mono text-[8px] text-white/60">{Math.round((layer.opacity !== undefined ? layer.opacity : 1) * 100)}%</span>
+               </div>
+               <input 
+                   type="range" 
+                   min="0" max="1" step="0.01"
+                   value={layer.opacity !== undefined ? layer.opacity : 1}
+                   onChange={(e) => onUpdate(layer.id, { opacity: parseFloat(e.target.value) })}
+                   className="w-full h-1 bg-white/10 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-[#E3E3FD] [&::-webkit-slider-thumb]:rounded-full"
+               />
            </div>
+
+           {(layer.type === 'IMAGE' || layer.type === 'AI_FRAME') && (
+               <div className="grid grid-cols-2 gap-3 mb-3">
+                  <InputRow label="Filter">
+                    <StudioSelect
+                      value={layer.filterType || 'none'}
+                      onChange={(e) => onUpdate(layer.id, { filterType: e.target.value })}
+                      options={[
+                          { value: 'none', label: 'Passthrough' },
+                          { value: 'dither', label: 'Dither (1-bit)' },
+                          { value: 'threshold', label: 'Threshold' },
+                          { value: 'grayscale', label: 'Grayscale' }
+                      ]}
+                    />
+                  </InputRow>
+                  <InputRow label="Blend Mode">
+                    <StudioSelect
+                      value={layer.blendMode || 'normal'}
+                      onChange={(e) => onUpdate(layer.id, { blendMode: e.target.value })}
+                      options={[
+                          { value: 'normal', label: 'Normal' },
+                          { value: 'screen', label: 'Screen' },
+                          { value: 'multiply', label: 'Multiply' },
+                          { value: 'overlay', label: 'Overlay' }
+                      ]}
+                    />
+                  </InputRow>
+               </div>
+           )}
         </div>
       )}
 
