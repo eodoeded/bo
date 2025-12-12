@@ -45,7 +45,8 @@ export const LayerProperties = ({
   layer, 
   mode, 
   onUpdate, 
-  onDelete 
+  onDelete,
+  onAlign // New prop
 }) => {
   const isStudio = mode === 'STUDIO';
   
@@ -59,11 +60,7 @@ export const LayerProperties = ({
   }
 
   const handleAlign = (alignment) => {
-    // This logic needs to be implemented in Studio.jsx to access other layers and canvas dimensions
-    // For now, we'll just log or show a toast
-    console.log(`Aligning layer ${layer.id} to ${alignment}`);
-    // In a full implementation, this would call a function passed from Studio.jsx
-    // e.g., onAlign(layer.id, alignment);
+      if (onAlign) onAlign(alignment);
   };
 
   return (

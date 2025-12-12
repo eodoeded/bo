@@ -97,7 +97,7 @@ const INITIAL_LAYERS = [
     type: 'IMAGE',
     x: 160, y: 30, width: 40, height: 40, zIndex: 11,
     src: "https://cdn-icons-png.flaticon.com/512/7510/7510065.png",
-    locked: false, // Changed to false for immediate drag interaction
+    locked: false, 
     allowContentChange: false,
   },
   {
@@ -109,14 +109,14 @@ const INITIAL_LAYERS = [
     fontSize: 32,
     fontFamily: "Cinzel",
     textAlign: "center",
-    locked: false, // Changed to false
+    locked: false,
     allowContentChange: true,
   },
   {
     id: 'ai-frame',
     type: 'AI_FRAME',
     x: 40, y: 80, width: 300, height: 350, zIndex: 5,
-    locked: false, // Changed to false
+    locked: false,
     allowContentChange: true,
     aiPromptTemplate: "A mystical tarot card illustration of {subject}, high contrast, black and white ink drawing, woodcut style, esoteric symbols, white background, clean lines",
     src: "https://picsum.photos/270/350",
@@ -159,18 +159,19 @@ export default function Studio() {
     // Interaction State
     const [isDragging, setIsDragging] = useState(false);
     const [isResizing, setIsResizing] = useState(false);
-    const [isSelecting, setIsSelecting] = useState(false); // Marquee selection
+    const [isSelecting, setIsSelecting] = useState(false); 
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
     const [initialLayerStates, setInitialLayerStates] = useState({}); // Map of ID -> {x,y,w,h}
     const [resizeHandle, setResizeHandle] = useState(null);
     const [isPanning, setIsPanning] = useState(false);
     const [editingTextId, setEditingTextId] = useState(null);
     const [contextMenu, setContextMenu] = useState(null);
-    const [selectionBox, setSelectionBox] = useState(null); // {x, y, w, h} in CANVAS coordinates
+    const [selectionBox, setSelectionBox] = useState(null); 
+    const [isAltPressed, setIsAltPressed] = useState(false);
 
     // Helpers
     const selectedLayers = layers.filter(l => selectedLayerIds.includes(l.id));
-    const primarySelectedLayer = selectedLayers.length === 1 ? selectedLayers[0] : null; // For Properties panel
+    const primarySelectedLayer = selectedLayers.length === 1 ? selectedLayers[0] : null; 
     
     const showToast = (msg) => {
         setStatusMessage(msg);
@@ -182,7 +183,6 @@ export default function Studio() {
         setLayers(newLayers);
     };
 
-    // Update multiple layers at once (e.g. dragging)
     const updateLayers = (updatesMap) => {
         const newLayers = layers.map(l => updatesMap[l.id] ? { ...l, ...updatesMap[l.id] } : l);
         setLayers(newLayers);
@@ -211,7 +211,7 @@ export default function Studio() {
             zIndex: layers.length + 1
         };
         setLayers([...layers, newLayer]);
-        setSelectedLayerIds([newLayer.id]); // Select the copy
+        setSelectedLayerIds([newLayer.id]); 
         setContextMenu(null);
     };
 
@@ -247,9 +247,52 @@ export default function Studio() {
         } else if (direction === 'down' && index > 0) {
             [newLayers[index], newLayers[index - 1]] = [newLayers[index - 1], newLayers[index]];
         }
-        // Normalize Z-Index
         newLayers.forEach((l, i) => l.zIndex = i);
         setLayers(newLayers);
+    };
+
+    // ALIGNMENT LOGIC
+    const alignSelectedLayers = (alignment) => {
+        if (selectedLayerIds.length === 0) return;
+
+        // If single selection, align to canvas
+        if (selectedLayerIds.length === 1) {
+             const layer = layers.find(l => l.id === selectedLayerIds[0]);
+             if (!layer) return;
+             const updates = {};
+             
+             if (alignment === 'left') updates.x = 0;
+             if (alignment === 'center') updates.x = (canvasConfig.width - layer.width) / 2;
+             if (alignment === 'right') updates.x = canvasConfig.width - layer.width;
+             if (alignment === 'top') updates.y = 0;
+             if (alignment === 'middle') updates.y = (canvasConfig.height - layer.height) / 2;
+             if (alignment === 'bottom') updates.y = canvasConfig.height - layer.height;
+             
+             updateLayer(layer.id, updates);
+             return;
+        }
+
+        // Multi selection: Align to selection bounding box
+        const selectedItems = layers.filter(l => selectedLayerIds.includes(l.id));
+        const minX = Math.min(...selectedItems.map(l => l.x));
+        const maxX = Math.max(...selectedItems.map(l => l.x + l.width));
+        const minY = Math.min(...selectedItems.map(l => l.y));
+        const maxY = Math.max(...selectedItems.map(l => l.y + l.height));
+        const midX = (minX + maxX) / 2;
+        const midY = (minY + maxY) / 2;
+
+        const updates = {};
+        selectedItems.forEach(l => {
+             const u = {};
+             if (alignment === 'left') u.x = minX;
+             if (alignment === 'center') u.x = midX - (l.width / 2);
+             if (alignment === 'right') u.x = maxX - l.width;
+             if (alignment === 'top') u.y = minY;
+             if (alignment === 'middle') u.y = midY - (l.height / 2);
+             if (alignment === 'bottom') u.y = maxY - l.height;
+             updates[l.id] = u;
+        });
+        updateLayers(updates);
     };
 
     const addLayer = (type, src = null) => {
@@ -286,7 +329,7 @@ export default function Studio() {
         const newZoom = Math.min(scaleX, scaleY, 1);
         
         setZoom(newZoom);
-        setPan({ x: 0, y: 0 }); // Center
+        setPan({ x: 0, y: 0 }); 
     };
 
     // --- ACTIONS ---
@@ -301,8 +344,7 @@ export default function Studio() {
     const handleFileUpload = (e) => {
         const files = Array.from(e.target.files);
         if (files.length === 0) return;
-
-        setLayers(prev => { return prev; }); // Placeholder update
+        setLayers(prev => { return prev; }); 
 
         files.forEach((file, idx) => {
             const reader = new FileReader();
@@ -421,6 +463,44 @@ export default function Studio() {
             
             if (mode === 'CLIENT' && layer.locked) return;
             
+            // Alt + Drag Duplicate Logic
+            if (e.altKey) {
+                // If not already selected, select only this one. 
+                // Then duplicate whatever is selected.
+                let idsToDup = selectedLayerIds;
+                if (!idsToDup.includes(layer.id)) {
+                    idsToDup = [layer.id];
+                }
+                
+                // Duplicate in state immediately
+                const newLayers = [...layers];
+                const newIds = [];
+                const newInitialStates = {};
+                
+                idsToDup.forEach(id => {
+                    const l = layers.find(item => item.id === id);
+                    if (l) {
+                        const newLayer = {
+                            ...l,
+                            id: `copy-${Math.random().toString(36).substr(2, 5)}`,
+                            zIndex: newLayers.length + 1
+                        };
+                        newLayers.push(newLayer);
+                        newIds.push(newLayer.id);
+                        newInitialStates[newLayer.id] = { x: newLayer.x, y: newLayer.y, width: newLayer.width, height: newLayer.height };
+                    }
+                });
+                
+                setLayers(newLayers);
+                setSelectedLayerIds(newIds);
+                setInitialLayerStates(newInitialStates);
+                
+                // Start dragging the COPIES
+                setIsDragging(true);
+                setDragStart({ x: e.clientX, y: e.clientY });
+                return;
+            }
+
             // Multi-select Logic
             let newSelectedIds = [...selectedLayerIds];
             if (e.shiftKey) {
@@ -430,7 +510,6 @@ export default function Studio() {
                     newSelectedIds.push(layer.id);
                 }
             } else {
-                // If clicking an already selected item, don't deselect others yet (allows dragging group)
                 if (!newSelectedIds.includes(layer.id)) {
                     newSelectedIds = [layer.id];
                 }
@@ -439,7 +518,6 @@ export default function Studio() {
 
             // Start Dragging
             if (mode === 'STUDIO' && layer.locked) {
-                // Can select but not drag locked items in Studio
                 return;
             }
 
@@ -457,19 +535,14 @@ export default function Studio() {
             if (handle) {
                 setIsResizing(true);
                 setResizeHandle(handle);
-                // For resize, we only support single layer resizing for now to keep it simple
-                // If multiple selected, we only resize the one clicked if it was the handle
-                 // But typically you resize the bounding box of selection. 
-                 // MVP: Only resize the primary selection (last clicked) or the specific one.
-                 // We'll stick to resizing the layer that owns the handle.
-                 setInitialLayerStates({ [layer.id]: { x: layer.x, y: layer.y, width: layer.width, height: layer.height } });
+                setInitialLayerStates({ [layer.id]: { x: layer.x, y: layer.y, width: layer.width, height: layer.height } });
             }
         } else {
             // Background Click -> Start Marquee
             if (e.target === viewportRef.current || e.target === canvasContentRef.current || e.target.classList.contains('canvas-bg')) {
-                if (!e.shiftKey) setSelectedLayerIds([]); // Clear selection if no shift
+                if (!e.shiftKey) setSelectedLayerIds([]); 
                 setIsSelecting(true);
-                setDragStart(point); // Store canvas coordinates
+                setDragStart(point); 
                 setSelectionBox({ x: point.x, y: point.y, w: 0, h: 0 });
             }
         }
@@ -504,8 +577,6 @@ export default function Studio() {
              const dy = dyScreen / zoom;
              
              if (isResizing && resizeHandle) {
-                 // Resizing (Single Layer for now)
-                 // Find the layer being resized (it's the single key in initialLayerStates)
                  const layerId = Object.keys(initialLayerStates)[0];
                  const initialState = initialLayerStates[layerId];
                  const newProps = { ...initialState };
@@ -540,10 +611,8 @@ export default function Studio() {
 
     const handleMouseUp = () => {
         if (isSelecting && selectionBox) {
-            // Calculate Intersection
             const selected = [];
             layers.forEach(l => {
-                // Check AABB intersection
                 if (
                     l.x < selectionBox.x + selectionBox.w &&
                     l.x + l.width > selectionBox.x &&
@@ -555,12 +624,6 @@ export default function Studio() {
                     }
                 }
             });
-            
-            // If shift held, merge. Else replace.
-            // Note: We handled shift start in MouseDown, but marquee is a new action.
-            // Usually Marquee adds to selection if Shift is held?
-            // For now, let's just set the selection to what was in the box.
-            // (Or merge if we want advanced behavior later)
             setSelectedLayerIds(prev => [...new Set([...prev, ...selected])]); 
         }
 
@@ -608,6 +671,17 @@ export default function Studio() {
         viewport.addEventListener('wheel', onWheel, { passive: false });
         return () => viewport.removeEventListener('wheel', onWheel);
     }, [zoom, pan]); 
+
+    // Alt Key Listener
+    useEffect(() => {
+        const handleKey = (e) => setIsAltPressed(e.altKey);
+        window.addEventListener('keydown', handleKey);
+        window.addEventListener('keyup', handleKey);
+        return () => {
+            window.removeEventListener('keydown', handleKey);
+            window.removeEventListener('keyup', handleKey);
+        };
+    }, []);
 
     const handleContextMenu = (e) => {
         e.preventDefault();
@@ -1011,7 +1085,7 @@ export default function Studio() {
                                                             <span className="font-mono text-[9px] text-black uppercase tracking-widest font-bold">{layer.id}</span>
                                                         </div>
                                                     </div>
-                                                    {/* Resize Handles - Only show for primary selection or iterate all? For now, stick to primary/single for resize */}
+                                                    {/* Resize Handles - Only show for primary selection */}
                                                     {selectedLayerIds.length === 1 && ['nw', 'ne', 'sw', 'se'].map(h => (
                                                         <div 
                                                             key={h}
@@ -1075,11 +1149,28 @@ export default function Studio() {
 
                     <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-8">
                         {selectedLayerIds.length === 1 && primarySelectedLayer ? (
-                            <LayerProperties layer={primarySelectedLayer} mode={mode} onUpdate={updateLayer} onDelete={deleteLayer} />
+                            <LayerProperties 
+                                layer={primarySelectedLayer} 
+                                mode={mode} 
+                                onUpdate={updateLayer} 
+                                onDelete={deleteLayer}
+                                onAlign={alignSelectedLayers} 
+                            />
                         ) : selectedLayerIds.length > 1 ? (
                             <div className="h-full flex flex-col items-center justify-center text-white/20">
                                 <Layers size={24} strokeWidth={1} className="mb-2" />
                                 <span className="font-mono text-[10px] uppercase tracking-widest">{selectedLayerIds.length} Elements Selected</span>
+                                <div className="mt-6 w-full px-6">
+                                     <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-4 text-center">Align Selection</span>
+                                     <div className="grid grid-cols-6 gap-1">
+                                        <button onClick={() => alignSelectedLayers('left')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignLeft size={14} /></button>
+                                        <button onClick={() => alignSelectedLayers('center')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignCenter size={14} /></button>
+                                        <button onClick={() => alignSelectedLayers('right')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignRight size={14} /></button>
+                                        <button onClick={() => alignSelectedLayers('top')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignLeft size={14} className="rotate-90" /></button>
+                                        <button onClick={() => alignSelectedLayers('middle')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignCenter size={14} className="rotate-90" /></button>
+                                        <button onClick={() => alignSelectedLayers('bottom')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignRight size={14} className="rotate-90" /></button>
+                                    </div>
+                                </div>
                             </div>
                         ) : (
                             <div className="h-full flex flex-col items-center justify-center text-white/20">
