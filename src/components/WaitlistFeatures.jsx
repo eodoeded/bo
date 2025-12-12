@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 
 const features = [
-    "AI IMAGE GENERATOR (NANO BANANA)",
+    "AI IMAGE GENERATOR",
     "BACKGROUND REMOVAL",
     "TEXT LAYERS",
     "COLOUR LAYERS",

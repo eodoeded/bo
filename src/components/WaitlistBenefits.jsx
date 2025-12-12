@@ -33,7 +33,7 @@ export default function WaitlistBenefits() {
                     Reclaim your <br/><span className="text-[#E3E3FD]/40">creative time.</span>
                 </h2>
                 <p className="font-montreal text-white/60 text-[16px] md:text-[18px] leading-relaxed max-w-sm">
-                    Studios waste 15–25 hours every month making small, repetitive assets. BrandForge handles the entropy.
+                    Studios waste 15–25 hours every month making small, repetitive assets. Branded Objects handles the entropy.
                 </p>
             </motion.div>
 

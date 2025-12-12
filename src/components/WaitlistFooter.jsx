@@ -1,6 +1,16 @@
-import { Linkedin, Mail } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function WaitlistFooter() {
+    const scrollToTop = () => {
+        const emailInput = document.querySelector('input[type="email"]');
+        if (emailInput) {
+            emailInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(() => emailInput.focus(), 500);
+        } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
+
     return (
         <footer className="w-full border-t border-white/10 bg-[#020202] relative z-10">
             <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-20">
@@ -16,21 +26,20 @@ export default function WaitlistFooter() {
                         </div>
                     </div>
                     
-                    {/* Empty spacer cols or additional links if needed */}
                     <div className="col-span-1 md:col-span-3 md:col-start-8 space-y-6">
                          <h4 className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">Platform</h4>
                          <ul className="space-y-3 font-mono text-xs text-white/60">
                             <li className="hover:text-white cursor-pointer transition-colors flex items-center gap-2 group">
                                 <span className="w-1 h-1 bg-white/20 group-hover:bg-[#E3E3FD] transition-colors"></span>
-                                Login
+                                <Link to="/brandguidelines" className="hover:text-white transition-colors">System Guidelines</Link>
                             </li>
-                            <li className="hover:text-white cursor-pointer transition-colors flex items-center gap-2 group">
+                            <li onClick={scrollToTop} className="hover:text-white cursor-pointer transition-colors flex items-center gap-2 group">
                                 <span className="w-1 h-1 bg-white/20 group-hover:bg-[#E3E3FD] transition-colors"></span>
                                 Request Access
                             </li>
                         </ul>
                     </div>
-    
+
                     <div className="col-span-1 md:col-span-2 space-y-6">
                         <h4 className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">Connect</h4>
                         <div className="flex flex-col gap-3">
@@ -43,15 +52,14 @@ export default function WaitlistFooter() {
                         </div>
                     </div>
                 </div>
-    
+
                 <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/5">
                     <span className="font-mono text-[10px] text-white/30 uppercase tracking-widest">© 2025 Branded Objects Systems</span>
                     <div className="flex gap-8 mt-4 md:mt-0">
-                        <span className="font-mono text-[10px] text-white/30 uppercase tracking-widest hover:text-white cursor-pointer transition-colors">Privacy Policy</span>
-                        <span className="font-mono text-[10px] text-white/30 uppercase tracking-widest hover:text-white cursor-pointer transition-colors">Terms of Service</span>
+                        {/* Legal links removed per request for simplicity/functionality */}
                     </div>
                 </div>
             </div>
-          </footer>
+        </footer>
     )
 }

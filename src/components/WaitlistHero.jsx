@@ -108,9 +108,8 @@ export default function WaitlistHero() {
         
         {/* Left Column: Text & Form */}
         <div className="flex flex-col items-start text-left z-20 mb-12 lg:mb-0 lg:-mt-20">
+            {/* Simplified Header - Removed complex badge stack */}
             <div className="flex items-center gap-3 mb-8">
-                <Badge className="border-[#E3E3FD]/20 text-[#E3E3FD] bg-[#E3E3FD]/5">System v1.0</Badge>
-                <div className="h-px w-8 bg-white/10"></div>
                 <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">Early Access Protocol</span>
             </div>
             
@@ -120,7 +119,7 @@ export default function WaitlistHero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
             >
-                Automated <br/><span className="text-[#E3E3FD]">Brand Governance.</span>
+                Client-Safe <br/><span className="text-[#E3E3FD]">Design Tools.</span>
             </motion.h1>
 
             <motion.p
@@ -129,8 +128,8 @@ export default function WaitlistHero() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1, duration: 0.8 }}
             >
-                Empower clients to generate on-brand assets without breaking the design system. 
-                Studios define the logic. Clients fill the blanks.
+                Empower clients to generate on-brand assets. <br/>
+                You define the logic. They fill the blanks.
             </motion.p>
             
             <motion.form 
@@ -208,7 +207,7 @@ export default function WaitlistHero() {
                 </Node>
 
                 {/* System Core with Spot Mini */}
-                <Node title="BrandForge_Core" x={160} y={80} delay={0.6} width="w-48">
+                <Node title="Branded_Objects" x={160} y={80} delay={0.6} width="w-48">
                     <div className="h-40 w-full relative flex items-center justify-center overflow-hidden bg-[#0A0A0A] border border-white/10 mb-2 shadow-inner">
                          {/* Spot Mini Animation */}
                          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05]"></div>
