@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Box, Layout, Type, MousePointer, CreditCard, Layers, Grid as GridIcon, Database, Cpu, Activity, User, Mail, Send, ChevronDown, Check, AlertCircle, Terminal, BarChart2, CornerDownRight, Zap, Move } from 'lucide-react';
+import { ArrowLeft, Box, Layout, Type, MousePointer, CreditCard, Layers, Grid as GridIcon, Database, Cpu, Activity, User, Mail, Send, ChevronDown, Check, AlertCircle, Terminal, BarChart2, CornerDownRight, Zap, Move, Eye, Code, Command } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import upComp from "../assets/up-comp.png";
@@ -163,103 +163,97 @@ export default function BrandGuidelines() {
 
       {/* Hero: Advanced Node System */}
       <section className="relative h-[90vh] w-full flex items-center justify-center overflow-hidden bg-[#020202]">
-        <div className="relative w-[1000px] h-[600px] scale-90 md:scale-100">
-            {/* Input Layer */}
-            {/* Data_Ingest (x:50, y:250) -> Width: w-40 (160px) -> Right Edge: 210. Vertical Center: ~290 (250+40) */}
-            <Node title="Data_Ingest" outputs={[1]} x={50} y={250} delay={0.2} width="w-40" status="active">
-                <div className="space-y-3">
-                    <div className="flex items-center gap-3 p-2 bg-white/5 border border-white/5">
-                        <Database size={14} className="text-white/40"/>
-                        <span className="font-mono text-[10px] text-white/60">JSON_STREAM</span>
-                    </div>
-                    <div className="flex gap-1">
-                        <div className="h-0.5 w-full bg-white/10 overflow-hidden">
-                            <motion.div className="h-full bg-[#E3E3FD]" animate={{x:['0%','100%']}} transition={{duration:1.5, repeat:Infinity, ease:"linear"}} />
-                        </div>
-                    </div>
-                </div>
-            </Node>
-
-            {/* Processing Layer */}
-            {/* Neural_Core (x:350, y:150) -> Left Edge: 350. Vertical Center: ~190 (150+40) -> Right Edge: 542 (350+192) */}
-            <Node title="Neural_Core" inputs={[1]} outputs={[1, 1]} x={350} y={150} delay={0.4} width="w-48">
-                <div className="space-y-2">
-                    <div className="flex justify-between items-center text-[10px] font-mono text-white/40">
-                        <span>LATENCY</span>
-                        <span className="text-[#E3E3FD]">12ms</span>
-                    </div>
-                    <div className="grid grid-cols-5 gap-1 h-6">
-                        {[...Array(10)].map((_,i) => (
-                            <motion.div 
-                                key={i}
-                                className="bg-[#E3E3FD]/20 border border-[#E3E3FD]/10"
-                                animate={{opacity:[0.2, 1, 0.2]}}
-                                transition={{duration:Math.random()*2 + 1, repeat:Infinity}}
-                            />
-                        ))}
-                    </div>
-                </div>
-            </Node>
-
-            {/* Logic_Gate (x:350, y:400) -> Left Edge: 350. Vertical Center: ~440 (400+40) */}
-            <Node title="Logic_Gate" inputs={[1]} outputs={[1]} x={350} y={400} delay={0.5} width="w-40">
-                 <div className="p-2 bg-white/5 border border-white/5">
-                    <div className="flex justify-between items-center mb-2">
-                        <Activity size={12} className="text-white/40"/>
-                        <span className="font-mono text-[9px] text-[#E3E3FD]">OPTIMAL</span>
-                    </div>
-                    <div className="h-6 w-full flex items-end gap-[2px]">
-                        {[40, 70, 30, 80, 50, 90, 60].map((h, i) => (
-                            <motion.div key={i} className="flex-1 bg-white/20" animate={{height: [`${h}%`, `${Math.random()*80+20}%`]}} transition={{duration:2, repeat:Infinity}} />
-                        ))}
-                    </div>
-                 </div>
-            </Node>
-
-            {/* Output Layer */}
-            {/* Renderer (x:700, y:250) -> Left Edge: 700. Vertical Center: ~270 (250+20) -> Right Edge: ~830 */}
-            <Node type="minimal" inputs={[1, 1]} outputs={[1]} x={700} y={250} delay={0.7}>
-                <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-[#E3E3FD]/10 flex items-center justify-center text-[#E3E3FD] border border-[#E3E3FD]/20">
-                        <Cpu size={16} />
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="font-montreal font-medium text-sm text-white">Renderer</span>
-                        <span className="font-mono text-[9px] text-white/40">v2.4.0-stable</span>
-                    </div>
-                </div>
-            </Node>
-
-            {/* Final */}
-            {/* Deployment (x:900, y:250) -> Left Edge: 900. Vertical Center: ~260 */}
-            <Node type="minimal" inputs={[1]} x={900} y={250} delay={0.9}>
-                <span className="font-mono text-[10px] tracking-[0.2em] text-[#E3E3FD] uppercase">Deployment</span>
-            </Node>
-
-            {/* Connections - Precisely Tuned */}
-            {/* Data_Ingest (210, 285) -> Neural_Core (350, 185) */}
-            <Connection start={{x: 210, y: 285}} end={{x: 350, y: 185}} delay={0.5} active={true} />
-            {/* Data_Ingest (210, 285) -> Logic_Gate (350, 435) */}
-            <Connection start={{x: 210, y: 285}} end={{x: 350, y: 435}} delay={0.6} active={true} />
-            
-            {/* Neural_Core (542, 185) -> Renderer (700, 275) */}
-            <Connection start={{x: 542, y: 185}} end={{x: 700, y: 275}} delay={0.8} active={true} />
-            {/* Logic_Gate (510, 435) -> Renderer (700, 275) */}
-            <Connection start={{x: 510, y: 435}} end={{x: 700, y: 275}} delay={0.9} dashed={true} />
-            
-            {/* Renderer (830, 275) -> Deployment (900, 275) */}
-            <Connection start={{x: 830, y: 275}} end={{x: 900, y: 275}} delay={1.1} active={true} />
-
-        </div>
         
-        <div className="absolute bottom-12 left-6 md:left-12 max-w-md z-20">
+        {/* Title Top-Left */}
+        <div className="absolute top-32 left-6 md:left-12 max-w-xl z-20 pointer-events-none">
             <Badge className="mb-4 text-[#E3E3FD] border-[#E3E3FD]/20 bg-[#E3E3FD]/5">System_OS v2.2</Badge>
             <h1 className="font-montreal font-medium text-6xl md:text-8xl tracking-tight mb-6 text-white leading-[0.9]">
                 Visual<br/><span className="text-[#E3E3FD]">System</span>
             </h1>
-            <p className="font-montreal text-white/60 text-lg leading-relaxed">
+            <p className="font-montreal text-white/60 text-lg leading-relaxed max-w-md">
                 A modular design language built for precision, scalability, and automated brand governance.
             </p>
+        </div>
+
+        {/* Centered Node Graph */}
+        <div className="relative w-full h-full flex items-center justify-center scale-90 md:scale-100 translate-y-12 md:translate-x-24">
+            <div className="relative w-[1000px] h-[600px]">
+                {/* Input Layer */}
+                <Node title="Data_Ingest" outputs={[1]} x={50} y={250} delay={0.2} width="w-40" status="active">
+                    <div className="space-y-3">
+                        <div className="flex items-center gap-3 p-2 bg-white/5 border border-white/5">
+                            <Database size={14} className="text-white/40"/>
+                            <span className="font-mono text-[10px] text-white/60">JSON_STREAM</span>
+                        </div>
+                        <div className="flex gap-1">
+                            <div className="h-0.5 w-full bg-white/10 overflow-hidden">
+                                <motion.div className="h-full bg-[#E3E3FD]" animate={{x:['0%','100%']}} transition={{duration:1.5, repeat:Infinity, ease:"linear"}} />
+                            </div>
+                        </div>
+                    </div>
+                </Node>
+
+                {/* Processing Layer */}
+                <Node title="Neural_Core" inputs={[1]} outputs={[1, 1]} x={350} y={150} delay={0.4} width="w-48">
+                    <div className="space-y-2">
+                        <div className="flex justify-between items-center text-[10px] font-mono text-white/40">
+                            <span>LATENCY</span>
+                            <span className="text-[#E3E3FD]">12ms</span>
+                        </div>
+                        <div className="grid grid-cols-5 gap-1 h-6">
+                            {[...Array(10)].map((_,i) => (
+                                <motion.div 
+                                    key={i}
+                                    className="bg-[#E3E3FD]/20 border border-[#E3E3FD]/10"
+                                    animate={{opacity:[0.2, 1, 0.2]}}
+                                    transition={{duration:Math.random()*2 + 1, repeat:Infinity}}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                </Node>
+
+                <Node title="Logic_Gate" inputs={[1]} outputs={[1]} x={350} y={400} delay={0.5} width="w-40">
+                     <div className="p-2 bg-white/5 border border-white/5">
+                        <div className="flex justify-between items-center mb-2">
+                            <Activity size={12} className="text-white/40"/>
+                            <span className="font-mono text-[9px] text-[#E3E3FD]">OPTIMAL</span>
+                        </div>
+                        <div className="h-6 w-full flex items-end gap-[2px]">
+                            {[40, 70, 30, 80, 50, 90, 60].map((h, i) => (
+                                <motion.div key={i} className="flex-1 bg-white/20" animate={{height: [`${h}%`, `${Math.random()*80+20}%`]}} transition={{duration:2, repeat:Infinity}} />
+                            ))}
+                        </div>
+                     </div>
+                </Node>
+
+                {/* Output Layer */}
+                <Node type="minimal" inputs={[1, 1]} outputs={[1]} x={700} y={250} delay={0.7}>
+                    <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-[#E3E3FD]/10 flex items-center justify-center text-[#E3E3FD] border border-[#E3E3FD]/20">
+                            <Cpu size={16} />
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="font-montreal font-medium text-sm text-white">Renderer</span>
+                            <span className="font-mono text-[9px] text-white/40">v2.4.0-stable</span>
+                        </div>
+                    </div>
+                </Node>
+
+                {/* Final */}
+                <Node type="minimal" inputs={[1]} x={900} y={250} delay={0.9}>
+                    <span className="font-mono text-[10px] tracking-[0.2em] text-[#E3E3FD] uppercase">Deployment</span>
+                </Node>
+
+                {/* Connections */}
+                <Connection start={{x: 210, y: 285}} end={{x: 350, y: 185}} delay={0.5} active={true} />
+                <Connection start={{x: 210, y: 285}} end={{x: 350, y: 435}} delay={0.6} active={true} />
+                
+                <Connection start={{x: 542, y: 185}} end={{x: 700, y: 275}} delay={0.8} active={true} />
+                <Connection start={{x: 510, y: 435}} end={{x: 700, y: 275}} delay={0.9} dashed={true} />
+                
+                <Connection start={{x: 830, y: 275}} end={{x: 900, y: 275}} delay={1.1} active={true} />
+            </div>
         </div>
       </section>
 
@@ -267,7 +261,7 @@ export default function BrandGuidelines() {
       <div className="max-w-[1400px] mx-auto py-32 px-6 md:px-12 space-y-48 relative z-10">
         
         {/* 01. Typography */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div className="md:col-span-4 sticky top-32 h-fit">
                 <SectionHeader title="Typography" number="01" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
@@ -287,20 +281,20 @@ export default function BrandGuidelines() {
                          <div className="h-px flex-1 bg-white/10"></div>
                     </div>
                     
-                    <div className="text-[120px] leading-[0.85] font-montreal font-medium tracking-tight mb-8">
+                    <div className="text-[120px] leading-[0.85] font-montreal font-medium tracking-tight mb-12">
                         Aa Bb Cc<br/>123 456
                     </div>
-                    <div className="grid grid-cols-2 gap-8">
-                        <div className="p-6 border border-white/10 bg-white/[0.02] relative group hover:bg-white/[0.04] transition-colors">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="p-8 border border-white/10 bg-white/[0.02] relative group hover:bg-white/[0.04] transition-colors min-h-[200px] flex flex-col justify-between">
                             <Corner className="top-0 left-0 border-t border-l" />
                             <Corner className="bottom-0 right-0 border-b border-r" />
-                            <span className="text-2xl mb-2 block">Regular</span>
+                            <span className="text-4xl mb-2 block">Regular</span>
                             <span className="font-mono text-xs text-white/40">400 — Body / Subheads</span>
                         </div>
-                        <div className="p-6 border border-white/10 bg-white/[0.02] relative group hover:bg-white/[0.04] transition-colors">
+                        <div className="p-8 border border-white/10 bg-white/[0.02] relative group hover:bg-white/[0.04] transition-colors min-h-[200px] flex flex-col justify-between">
                             <Corner className="top-0 left-0 border-t border-l" />
                             <Corner className="bottom-0 right-0 border-b border-r" />
-                            <span className="text-2xl font-medium mb-2 block">Medium</span>
+                            <span className="text-4xl font-medium mb-2 block">Medium</span>
                             <span className="font-mono text-xs text-white/40">500 — Headlines / UI</span>
                         </div>
                     </div>
@@ -308,18 +302,18 @@ export default function BrandGuidelines() {
 
                 {/* Scale */}
                 <div>
-                    <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest mb-8 block uppercase">Hierarchy Scale</span>
-                    <div className="space-y-8">
+                    <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest mb-12 block uppercase">Hierarchy Scale</span>
+                    <div className="space-y-12">
                         {[
-                            { role: 'Display XL', size: 'text-8xl', sample: 'Visual Intelligence' },
-                            { role: 'Heading L', size: 'text-6xl', sample: 'System Architecture' },
-                            { role: 'Heading M', size: 'text-4xl', sample: 'Modular Components' },
+                            { role: 'Display XL', size: 'text-6xl md:text-8xl', sample: 'Visual Intelligence' },
+                            { role: 'Heading L', size: 'text-5xl md:text-6xl', sample: 'System Architecture' },
+                            { role: 'Heading M', size: 'text-3xl md:text-4xl', sample: 'Modular Components' },
                             { role: 'Body L', size: 'text-xl', sample: 'The studio controls the prompt structure and safety layers.' },
                             { role: 'Caption', size: 'text-sm font-mono uppercase tracking-widest', sample: 'System_Operational_v2' },
                         ].map((type, i) => (
-                            <div key={i} className="group grid grid-cols-12 items-baseline border-b border-white/5 pb-6 hover:border-white/20 transition-colors cursor-crosshair">
-                                <div className="col-span-3 font-mono text-xs text-white/30 group-hover:text-[#E3E3FD] transition-colors">{type.role}</div>
-                                <div className={`col-span-9 font-montreal ${type.size} text-white`}>{type.sample}</div>
+                            <div key={i} className="group grid grid-cols-12 items-baseline border-b border-white/5 pb-8 hover:border-white/20 transition-colors cursor-crosshair">
+                                <div className="col-span-12 md:col-span-3 font-mono text-xs text-white/30 group-hover:text-[#E3E3FD] transition-colors mb-2 md:mb-0">{type.role}</div>
+                                <div className={`col-span-12 md:col-span-9 font-montreal ${type.size} text-white leading-none`}>{type.sample}</div>
                             </div>
                         ))}
                     </div>
@@ -328,7 +322,7 @@ export default function BrandGuidelines() {
         </section>
 
         {/* 02. Interface & Cards */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div className="md:col-span-4 sticky top-32 h-fit">
                 <SectionHeader title="Interface" number="02" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed">
@@ -355,7 +349,7 @@ export default function BrandGuidelines() {
                     <p className="text-white/50 text-lg max-w-md">Nodes can be connected to create complex logic flows without code.</p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* Stats Card */}
                     <div className="p-8 bg-[#0A0A0A] border border-white/10 flex flex-col justify-between h-64 hover:bg-[#0F0F0F] transition-colors relative">
                         <Corner className="top-0 right-0 border-t border-r w-3 h-3 border-white/20" />
@@ -388,7 +382,7 @@ export default function BrandGuidelines() {
         </section>
 
         {/* 03. Forms & Inputs */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div className="md:col-span-4 sticky top-32 h-fit">
                 <SectionHeader title="Contact Forms" number="03" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed">
@@ -409,7 +403,7 @@ export default function BrandGuidelines() {
                             </div>
                             <input type="text" placeholder="John Doe" className="w-full bg-[#050505] border border-white/10 p-4 text-white placeholder:text-white/20 focus:outline-none focus:border-[#E3E3FD] focus:bg-[#E3E3FD]/5 transition-all font-mono text-sm rounded-sm" />
                         </div>
-                        <div className="grid grid-cols-2 gap-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div className="space-y-3">
                                 <label className="font-mono text-xs text-white/40 uppercase tracking-widest">Email</label>
                                 <div className="relative">
@@ -447,7 +441,7 @@ export default function BrandGuidelines() {
         </section>
 
         {/* 04. Buttons & Actions */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div className="md:col-span-4 sticky top-32 h-fit">
                 <SectionHeader title="Actions" number="04" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed">
@@ -515,7 +509,7 @@ export default function BrandGuidelines() {
         </section>
 
         {/* 05. Accordions & Data */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
              <div className="md:col-span-4 sticky top-32 h-fit">
                 <SectionHeader title="Expansion" number="05" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed">
@@ -566,7 +560,7 @@ export default function BrandGuidelines() {
         </section>
 
         {/* 06. Visualizations */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
              <div className="md:col-span-4 sticky top-32 h-fit">
                 <SectionHeader title="Data Viz" number="06" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed">
@@ -637,7 +631,7 @@ export default function BrandGuidelines() {
         </section>
 
         {/* 07. Modal & Dialog */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
              <div className="md:col-span-4 sticky top-32 h-fit">
                 <SectionHeader title="Overlays" number="07" />
                  <p className="font-montreal text-white/60 text-lg leading-relaxed">
@@ -683,7 +677,7 @@ export default function BrandGuidelines() {
         </section>
 
         {/* 08. Motion & 3D (New Section) */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div className="md:col-span-4 sticky top-32 h-fit">
                 <SectionHeader title="Motion" number="08" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed">
@@ -727,7 +721,7 @@ export default function BrandGuidelines() {
         </section>
 
         {/* 09. Grid System (New Section) */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
              <div className="md:col-span-4 sticky top-32 h-fit">
                 <SectionHeader title="Grid" number="09" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed">
