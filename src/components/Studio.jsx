@@ -150,6 +150,7 @@ export default function Studio() {
         height: 500,
         backgroundColor: '#1C3A96'
     });
+    const [clipboard, setClipboard] = useState([]); // For internal copy/paste
 
     // Client State
     const [clientSubject, setClientSubject] = useState("");
@@ -237,6 +238,36 @@ export default function Studio() {
         setSelectedLayerIds(newIds);
     };
 
+    // New internal Copy/Paste
+    const copySelectedLayers = () => {
+        if (selectedLayerIds.length === 0) return;
+        const items = layers.filter(l => selectedLayerIds.includes(l.id));
+        setClipboard(items);
+        showToast(`Copied ${items.length} Elements`);
+    };
+
+    const pasteLayers = () => {
+        if (clipboard.length === 0) return;
+        const newLayers = [...layers];
+        const newIds = [];
+        
+        clipboard.forEach(item => {
+             const newLayer = {
+                 ...item,
+                 id: `paste-${Math.random().toString(36).substr(2, 5)}`,
+                 x: item.x + 20, // Offset paste
+                 y: item.y + 20,
+                 zIndex: newLayers.length + 1
+             };
+             newLayers.push(newLayer);
+             newIds.push(newLayer.id);
+        });
+        
+        setLayers(newLayers);
+        setSelectedLayerIds(newIds);
+        showToast(`Pasted ${clipboard.length} Elements`);
+    };
+
     const reorderLayer = (id, direction) => {
         const index = layers.findIndex(l => l.id === id);
         if (index === -1) return;
@@ -247,6 +278,42 @@ export default function Studio() {
         } else if (direction === 'down' && index > 0) {
             [newLayers[index], newLayers[index - 1]] = [newLayers[index - 1], newLayers[index]];
         }
+        newLayers.forEach((l, i) => l.zIndex = i);
+        setLayers(newLayers);
+    };
+    
+    // Multi-Select Reorder
+    const reorderSelectedLayers = (direction) => {
+        if (selectedLayerIds.length === 0) return;
+        // This is complex with multi-select (preserving relative order). 
+        // Simple approach: Shift each selected item up/down one slot if possible.
+        // Better for Figma feel: Bring To Front / Send To Back usually moves to extreme.
+        // Cmd + [ moves backward one step.
+        
+        let newLayers = [...layers];
+        
+        // Sort selected IDs by their current index to handle moving correctly
+        const selectedIndices = selectedLayerIds.map(id => layers.findIndex(l => l.id === id)).sort((a,b) => a - b);
+        
+        if (direction === 'down') { // Backward
+             // Iterate from bottom up
+             for (const idx of selectedIndices) {
+                 if (idx > 0 && !selectedLayerIds.includes(newLayers[idx - 1].id)) {
+                     // Swap with element below
+                     [newLayers[idx], newLayers[idx - 1]] = [newLayers[idx - 1], newLayers[idx]];
+                 }
+             }
+        } else if (direction === 'up') { // Forward
+             // Iterate from top down
+             for (let i = selectedIndices.length - 1; i >= 0; i--) {
+                 const idx = selectedIndices[i];
+                 if (idx < newLayers.length - 1 && !selectedLayerIds.includes(newLayers[idx + 1].id)) {
+                     // Swap with element above
+                     [newLayers[idx], newLayers[idx + 1]] = [newLayers[idx + 1], newLayers[idx]];
+                 }
+             }
+        }
+        
         newLayers.forEach((l, i) => l.zIndex = i);
         setLayers(newLayers);
     };
@@ -465,14 +532,11 @@ export default function Studio() {
             
             // Alt + Drag Duplicate Logic
             if (e.altKey) {
-                // If not already selected, select only this one. 
-                // Then duplicate whatever is selected.
                 let idsToDup = selectedLayerIds;
                 if (!idsToDup.includes(layer.id)) {
                     idsToDup = [layer.id];
                 }
                 
-                // Duplicate in state immediately
                 const newLayers = [...layers];
                 const newIds = [];
                 const newInitialStates = {};
@@ -495,7 +559,6 @@ export default function Studio() {
                 setSelectedLayerIds(newIds);
                 setInitialLayerStates(newInitialStates);
                 
-                // Start dragging the COPIES
                 setIsDragging(true);
                 setDragStart({ x: e.clientX, y: e.clientY });
                 return;
@@ -524,7 +587,6 @@ export default function Studio() {
             setIsDragging(true);
             setDragStart({ x: e.clientX, y: e.clientY });
             
-            // Store initial state for all selected layers
             const initialStates = {};
             newSelectedIds.forEach(id => {
                 const l = layers.find(item => item.id === id);
@@ -581,16 +643,34 @@ export default function Studio() {
                  const initialState = initialLayerStates[layerId];
                  const newProps = { ...initialState };
 
-                 if (resizeHandle.includes('e')) newProps.width = Math.max(10, initialState.width + dx);
-                 if (resizeHandle.includes('s')) newProps.height = Math.max(10, initialState.height + dy);
-                 if (resizeHandle.includes('w')) {
-                     newProps.width = Math.max(10, initialState.width - dx);
-                     newProps.x = initialState.x + dx;
+                 // Aspect Ratio Lock (Shift key)
+                 const aspectRatio = initialState.width / initialState.height;
+                 
+                 let newW = initialState.width;
+                 let newH = initialState.height;
+
+                 if (resizeHandle.includes('e')) newW = Math.max(10, initialState.width + dx);
+                 if (resizeHandle.includes('w')) newW = Math.max(10, initialState.width - dx);
+                 if (resizeHandle.includes('s')) newH = Math.max(10, initialState.height + dy);
+                 if (resizeHandle.includes('n')) newH = Math.max(10, initialState.height - dy);
+                 
+                 if (e.shiftKey) {
+                     // Simple implementation: Use the larger dimension change to drive aspect ratio
+                     // Or just prioritize width.
+                     if (resizeHandle.includes('e') || resizeHandle.includes('w')) {
+                         newH = newW / aspectRatio;
+                     } else {
+                         newW = newH * aspectRatio;
+                     }
                  }
-                 if (resizeHandle.includes('n')) {
-                     newProps.height = Math.max(10, initialState.height - dy);
-                     newProps.y = initialState.y + dy;
-                 }
+                 
+                 newProps.width = newW;
+                 newProps.height = newH;
+                 
+                 // Adjust Position based on Handle anchor
+                 if (resizeHandle.includes('w')) newProps.x = initialState.x + (initialState.width - newW);
+                 if (resizeHandle.includes('n')) newProps.y = initialState.y + (initialState.height - newH);
+
                  updateLayer(layerId, newProps);
              } else {
                  // Moving (Multi Layer)
@@ -725,6 +805,17 @@ export default function Studio() {
         const handleKeyDown = (e) => {
             if (editingTextId) return; 
 
+            // Copy
+            if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
+                e.preventDefault();
+                copySelectedLayers();
+            }
+            // Paste
+            if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
+                e.preventDefault();
+                pasteLayers();
+            }
+
             // Delete
             if (e.key === 'Delete' || e.key === 'Backspace') {
                 if (selectedLayerIds.length > 0 && mode === 'STUDIO') deleteSelectedLayers();
@@ -740,6 +831,12 @@ export default function Studio() {
                 e.preventDefault();
                 if (selectedLayerIds.length > 0) duplicateSelectedLayers();
             }
+            // Layer Reordering (Z-Index)
+            if (selectedLayerIds.length > 0) {
+                 if (e.key === '[') reorderSelectedLayers('down');
+                 if (e.key === ']') reorderSelectedLayers('up');
+            }
+
             // Zoom Fit
             if (e.shiftKey && e.key === '1') {
                 zoomToFit();
@@ -765,7 +862,7 @@ export default function Studio() {
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [selectedLayerIds, mode, canUndo, canRedo, editingTextId, layers, zoom, pan]);
+    }, [selectedLayerIds, mode, canUndo, canRedo, editingTextId, layers, zoom, pan, clipboard]);
 
     return (
         <div className="min-h-screen bg-[#020202] text-white font-montreal flex flex-col overflow-hidden selection:bg-[#E3E3FD] selection:text-black" onClick={() => setContextMenu(null)}>
