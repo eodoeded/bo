@@ -31,8 +31,6 @@ export default function Header() {
             <Link to="/" className="group flex items-center gap-3" onClick={() => window.scrollTo(0,0)}>
                 <span className="font-mono text-sm tracking-widest text-white group-hover:text-[#E3E3FD] transition-colors uppercase">[ BRANDED OBJECTS ]</span>
             </Link>
-
-            {/* Desktop Nav */}
             <nav className="hidden md:flex items-center gap-8">
                 <button onClick={() => scrollToSection('process')} className="font-mono text-[11px] text-white/60 hover:text-white uppercase tracking-widest transition-colors">Process</button>
                 <button onClick={() => scrollToSection('value')} className="font-mono text-[11px] text-white/60 hover:text-white uppercase tracking-widest transition-colors">Value</button>
@@ -49,7 +47,7 @@ export default function Header() {
             
             <button 
                 onClick={focusEmail}
-                className="bg-white text-black px-5 py-2.5 font-mono font-medium text-[11px] uppercase tracking-widest hover:bg-[#E3E3FD] transition-colors border border-transparent"
+                className="bg-white text-black px-5 py-2.5 font-mono font-semibold text-[11px] uppercase tracking-widest hover:bg-[#E3E3FD] transition-colors border border-transparent"
             >
                 Request Access
             </button>

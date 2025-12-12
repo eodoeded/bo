@@ -158,7 +158,7 @@ export default function WaitlistHero() {
                     />
                     <button 
                         type="submit"
-                        className="bg-white text-black px-8 py-4 font-mono font-medium text-[11px] tracking-[0.2em] hover:bg-[#E3E3FD] transition-colors whitespace-nowrap uppercase border border-transparent flex items-center gap-2 group/btn"
+                        className="bg-white text-black px-8 py-4 font-mono font-semibold text-[11px] tracking-[0.2em] hover:bg-[#E3E3FD] transition-colors whitespace-nowrap uppercase border border-transparent flex items-center gap-2 group/btn"
                     >
                         Request Access
                         <ArrowRight size={12} className="group-hover/btn:translate-x-0.5 transition-transform" />

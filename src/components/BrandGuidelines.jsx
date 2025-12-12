@@ -696,13 +696,13 @@ export default function BrandGuidelines() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
                         <div className="space-y-4">
                             <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block">Primary</span>
-                            <button className="w-full bg-white text-black px-6 py-3 font-mono text-[10px] uppercase tracking-[0.2em] hover:bg-[#E3E3FD] transition-all active:translate-y-0.5 rounded-sm">
+                            <button className="w-full bg-white text-black px-6 py-3 font-mono font-semibold text-[11px] uppercase tracking-[0.2em] hover:bg-[#E3E3FD] transition-all active:translate-y-0.5 rounded-sm">
                                 Join Waitlist
                             </button>
                         </div>
                         <div className="space-y-4">
                             <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block">With Icon</span>
-                            <button className="w-full bg-white text-black px-6 py-3 font-mono text-[10px] uppercase tracking-[0.2em] hover:bg-[#E3E3FD] transition-all active:translate-y-0.5 flex items-center justify-center gap-3 group rounded-sm">
+                            <button className="w-full bg-white text-black px-6 py-3 font-mono font-semibold text-[11px] uppercase tracking-[0.2em] hover:bg-[#E3E3FD] transition-all active:translate-y-0.5 flex items-center justify-center gap-3 group rounded-sm">
                                 <span>Proceed</span>
                                 <ArrowLeft size={14} className="rotate-180 group-hover:translate-x-1 transition-transform"/>
                             </button>
