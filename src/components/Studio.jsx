@@ -97,7 +97,7 @@ const INITIAL_LAYERS = [
     type: 'IMAGE',
     x: 160, y: 30, width: 40, height: 40, zIndex: 11,
     src: "https://cdn-icons-png.flaticon.com/512/7510/7510065.png",
-    locked: true,
+    locked: false, // Changed to false for immediate drag interaction
     allowContentChange: false,
   },
   {
@@ -109,14 +109,14 @@ const INITIAL_LAYERS = [
     fontSize: 32,
     fontFamily: "Cinzel",
     textAlign: "center",
-    locked: true,
+    locked: false, // Changed to false
     allowContentChange: true,
   },
   {
     id: 'ai-frame',
     type: 'AI_FRAME',
     x: 40, y: 80, width: 300, height: 350, zIndex: 5,
-    locked: true,
+    locked: false, // Changed to false
     allowContentChange: true,
     aiPromptTemplate: "A mystical tarot card illustration of {subject}, high contrast, black and white ink drawing, woodcut style, esoteric symbols, white background, clean lines",
     src: "https://picsum.photos/270/350",
@@ -133,7 +133,7 @@ export default function Studio() {
     const [mode, setMode] = useState('STUDIO'); // STUDIO | CLIENT
     const [activeTab, setActiveTab] = useState('components');
     const [selectedTool, setSelectedTool] = useState('select');
-    const [statusMessage, setStatusMessage] = useState(null); // For toasts
+    const [statusMessage, setStatusMessage] = useState(null); 
     
     // Canvas Viewport
     const [zoom, setZoom] = useState(1);
@@ -144,7 +144,7 @@ export default function Studio() {
     
     // History & Layers
     const [layers, setLayers, undo, redo, canUndo, canRedo] = useHistory(INITIAL_LAYERS);
-    const [selectedLayerId, setSelectedLayerId] = useState(null);
+    const [selectedLayerIds, setSelectedLayerIds] = useState([]); // Array of IDs
     const [canvasConfig, setCanvasConfig] = useState({
         width: 380,
         height: 500,
@@ -159,15 +159,18 @@ export default function Studio() {
     // Interaction State
     const [isDragging, setIsDragging] = useState(false);
     const [isResizing, setIsResizing] = useState(false);
+    const [isSelecting, setIsSelecting] = useState(false); // Marquee selection
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-    const [initialLayerState, setInitialLayerState] = useState(null);
+    const [initialLayerStates, setInitialLayerStates] = useState({}); // Map of ID -> {x,y,w,h}
     const [resizeHandle, setResizeHandle] = useState(null);
     const [isPanning, setIsPanning] = useState(false);
     const [editingTextId, setEditingTextId] = useState(null);
     const [contextMenu, setContextMenu] = useState(null);
+    const [selectionBox, setSelectionBox] = useState(null); // {x, y, w, h} in CANVAS coordinates
 
     // Helpers
-    const selectedLayer = layers.find(l => l.id === selectedLayerId);
+    const selectedLayers = layers.filter(l => selectedLayerIds.includes(l.id));
+    const primarySelectedLayer = selectedLayers.length === 1 ? selectedLayers[0] : null; // For Properties panel
     
     const showToast = (msg) => {
         setStatusMessage(msg);
@@ -179,10 +182,22 @@ export default function Studio() {
         setLayers(newLayers);
     };
 
+    // Update multiple layers at once (e.g. dragging)
+    const updateLayers = (updatesMap) => {
+        const newLayers = layers.map(l => updatesMap[l.id] ? { ...l, ...updatesMap[l.id] } : l);
+        setLayers(newLayers);
+    };
+
     const deleteLayer = (id) => {
         setLayers(layers.filter(l => l.id !== id));
-        if (selectedLayerId === id) setSelectedLayerId(null);
+        setSelectedLayerIds(prev => prev.filter(pid => pid !== id));
         setContextMenu(null);
+    };
+
+    const deleteSelectedLayers = () => {
+        if (selectedLayerIds.length === 0) return;
+        setLayers(layers.filter(l => !selectedLayerIds.includes(l.id)));
+        setSelectedLayerIds([]);
     };
 
     const duplicateLayer = (id) => {
@@ -196,8 +211,30 @@ export default function Studio() {
             zIndex: layers.length + 1
         };
         setLayers([...layers, newLayer]);
-        setSelectedLayerId(newLayer.id);
+        setSelectedLayerIds([newLayer.id]); // Select the copy
         setContextMenu(null);
+    };
+
+    const duplicateSelectedLayers = () => {
+        if (selectedLayerIds.length === 0) return;
+        const newLayers = [...layers];
+        const newIds = [];
+        selectedLayerIds.forEach(id => {
+            const layer = layers.find(l => l.id === id);
+            if (layer) {
+                const newLayer = {
+                    ...layer,
+                    id: `copy-${Math.random().toString(36).substr(2, 5)}`,
+                    x: layer.x + 20,
+                    y: layer.y + 20,
+                    zIndex: newLayers.length + 1
+                };
+                newLayers.push(newLayer);
+                newIds.push(newLayer.id);
+            }
+        });
+        setLayers(newLayers);
+        setSelectedLayerIds(newIds);
     };
 
     const reorderLayer = (id, direction) => {
@@ -236,7 +273,7 @@ export default function Studio() {
             blendMode: 'normal'
         };
         setLayers([...layers, newLayer]);
-        setSelectedLayerId(newLayer.id);
+        setSelectedLayerIds([newLayer.id]);
     };
 
     const zoomToFit = () => {
@@ -246,7 +283,7 @@ export default function Studio() {
         
         const scaleX = (rect.width - margin * 2) / canvasConfig.width;
         const scaleY = (rect.height - margin * 2) / canvasConfig.height;
-        const newZoom = Math.min(scaleX, scaleY, 1); // Don't zoom in more than 100% automatically
+        const newZoom = Math.min(scaleX, scaleY, 1);
         
         setZoom(newZoom);
         setPan({ x: 0, y: 0 }); // Center
@@ -256,7 +293,7 @@ export default function Studio() {
 
     const handleUploadClick = () => {
         if (fileInputRef.current) {
-            fileInputRef.current.value = ''; // Reset to allow same file selection
+            fileInputRef.current.value = ''; 
             fileInputRef.current.click();
         }
     };
@@ -265,15 +302,8 @@ export default function Studio() {
         const files = Array.from(e.target.files);
         if (files.length === 0) return;
 
-        // Use functional update to ensure we have latest state
-        setLayers(prev => {
-            // This is tricky inside a synchronous event handler with async file reading
-            // Correct approach: Read first, then update.
-            // For now, we will rely on side-effects for this specific user flow which is acceptable for prototypes
-            return prev; 
-        });
+        setLayers(prev => { return prev; }); // Placeholder update
 
-        // Simple loop for now
         files.forEach((file, idx) => {
             const reader = new FileReader();
             reader.onload = (ev) => {
@@ -281,7 +311,6 @@ export default function Studio() {
             }
             reader.readAsDataURL(file);
         });
-        
         showToast(`Uploading...`);
     };
 
@@ -308,9 +337,9 @@ export default function Studio() {
         try {
             const canvas = await html2canvas(canvasContentRef.current, {
                 backgroundColor: null,
-                scale: 2, // High res
+                scale: 2,
                 logging: false,
-                useCORS: true // Allow cross-origin images if enabled on server
+                useCORS: true
             });
             const link = document.createElement('a');
             link.download = `brandforge-artifact-${Date.now()}.png`;
@@ -324,14 +353,13 @@ export default function Studio() {
     };
 
     const handlePublish = () => {
-        // Mock Publish
         showToast("Project Published Successfully");
     };
 
     // --- PASTE SUPPORT ---
     useEffect(() => {
         const handlePaste = (e) => {
-            if (editingTextId) return; // Don't intercept paste when editing text
+            if (editingTextId) return;
 
             const items = e.clipboardData?.items;
             if (!items) return;
@@ -354,12 +382,12 @@ export default function Studio() {
 
     // --- INTERACTION HANDLERS ---
 
-    const getCanvasPoint = (e) => {
+    const getCanvasPoint = (clientX, clientY) => {
         if (!viewportRef.current) return { x: 0, y: 0 };
         const rect = viewportRef.current.getBoundingClientRect();
         
-        const mouseX = e.clientX - rect.left;
-        const mouseY = e.clientY - rect.top;
+        const mouseX = clientX - rect.left;
+        const mouseY = clientY - rect.top;
         const cx = rect.width / 2;
         const cy = rect.height / 2;
 
@@ -385,35 +413,64 @@ export default function Studio() {
             return;
         }
 
-        // Selection / Drag Logic
+        const point = getCanvasPoint(e.clientX, e.clientY);
+
+        // Layer Click
         if (layer) {
             e.stopPropagation();
             
             if (mode === 'CLIENT' && layer.locked) return;
-            // Allow selection of locked layers in Studio, but not move
+            
+            // Multi-select Logic
+            let newSelectedIds = [...selectedLayerIds];
+            if (e.shiftKey) {
+                if (newSelectedIds.includes(layer.id)) {
+                    newSelectedIds = newSelectedIds.filter(id => id !== layer.id);
+                } else {
+                    newSelectedIds.push(layer.id);
+                }
+            } else {
+                // If clicking an already selected item, don't deselect others yet (allows dragging group)
+                if (!newSelectedIds.includes(layer.id)) {
+                    newSelectedIds = [layer.id];
+                }
+            }
+            setSelectedLayerIds(newSelectedIds);
+
+            // Start Dragging
             if (mode === 'STUDIO' && layer.locked) {
-                setSelectedLayerId(layer.id);
-                // We don't start dragging here
-                return; 
+                // Can select but not drag locked items in Studio
+                return;
             }
 
-            setSelectedLayerId(layer.id);
             setIsDragging(true);
-            
-            // For dragging, we use screen coords delta
             setDragStart({ x: e.clientX, y: e.clientY });
             
+            // Store initial state for all selected layers
+            const initialStates = {};
+            newSelectedIds.forEach(id => {
+                const l = layers.find(item => item.id === id);
+                if (l) initialStates[id] = { x: l.x, y: l.y, width: l.width, height: l.height };
+            });
+            setInitialLayerStates(initialStates);
+
             if (handle) {
                 setIsResizing(true);
                 setResizeHandle(handle);
-                setInitialLayerState({ ...layer });
-            } else {
-                setInitialLayerState({ x: layer.x, y: layer.y });
+                // For resize, we only support single layer resizing for now to keep it simple
+                // If multiple selected, we only resize the one clicked if it was the handle
+                 // But typically you resize the bounding box of selection. 
+                 // MVP: Only resize the primary selection (last clicked) or the specific one.
+                 // We'll stick to resizing the layer that owns the handle.
+                 setInitialLayerStates({ [layer.id]: { x: layer.x, y: layer.y, width: layer.width, height: layer.height } });
             }
         } else {
-            // Clicked empty space = Deselect
-            if (e.target === viewportRef.current) {
-                setSelectedLayerId(null);
+            // Background Click -> Start Marquee
+            if (e.target === viewportRef.current || e.target === canvasContentRef.current || e.target.classList.contains('canvas-bg')) {
+                if (!e.shiftKey) setSelectedLayerIds([]); // Clear selection if no shift
+                setIsSelecting(true);
+                setDragStart(point); // Store canvas coordinates
+                setSelectionBox({ x: point.x, y: point.y, w: 0, h: 0 });
             }
         }
     };
@@ -427,47 +484,93 @@ export default function Studio() {
             return;
         }
 
-        if (isDragging && selectedLayerId && initialLayerState) {
+        const currentCanvasPoint = getCanvasPoint(e.clientX, e.clientY);
+
+        // Marquee Selection
+        if (isSelecting) {
+            const x = Math.min(dragStart.x, currentCanvasPoint.x);
+            const y = Math.min(dragStart.y, currentCanvasPoint.y);
+            const w = Math.abs(currentCanvasPoint.x - dragStart.x);
+            const h = Math.abs(currentCanvasPoint.y - dragStart.y);
+            setSelectionBox({ x, y, w, h });
+            return;
+        }
+
+        // Dragging & Resizing
+        if (isDragging && Object.keys(initialLayerStates).length > 0) {
              const dxScreen = e.clientX - dragStart.x;
              const dyScreen = e.clientY - dragStart.y;
-             // Convert screen delta to canvas units
              const dx = dxScreen / zoom;
              const dy = dyScreen / zoom;
              
              if (isResizing && resizeHandle) {
-                 const newProps = { ...initialLayerState };
+                 // Resizing (Single Layer for now)
+                 // Find the layer being resized (it's the single key in initialLayerStates)
+                 const layerId = Object.keys(initialLayerStates)[0];
+                 const initialState = initialLayerStates[layerId];
+                 const newProps = { ...initialState };
 
-                 if (resizeHandle.includes('e')) newProps.width = Math.max(10, initialLayerState.width + dx);
-                 if (resizeHandle.includes('s')) newProps.height = Math.max(10, initialLayerState.height + dy);
+                 if (resizeHandle.includes('e')) newProps.width = Math.max(10, initialState.width + dx);
+                 if (resizeHandle.includes('s')) newProps.height = Math.max(10, initialState.height + dy);
                  if (resizeHandle.includes('w')) {
-                     newProps.width = Math.max(10, initialLayerState.width - dx);
-                     newProps.x = initialLayerState.x + dx;
+                     newProps.width = Math.max(10, initialState.width - dx);
+                     newProps.x = initialState.x + dx;
                  }
                  if (resizeHandle.includes('n')) {
-                     newProps.height = Math.max(10, initialLayerState.height - dy);
-                     newProps.y = initialLayerState.y + dy;
+                     newProps.height = Math.max(10, initialState.height - dy);
+                     newProps.y = initialState.y + dy;
                  }
-                 
-                 const tempLayers = layers.map(l => l.id === selectedLayerId ? { ...l, ...newProps } : l);
-                 setLayers(tempLayers); 
+                 updateLayer(layerId, newProps);
              } else {
-                 // Moving
-                 const tempLayers = layers.map(l => l.id === selectedLayerId ? { 
-                     ...l, 
-                     x: initialLayerState.x + dx, 
-                     y: initialLayerState.y + dy 
-                 } : l);
-                 setLayers(tempLayers);
+                 // Moving (Multi Layer)
+                 const updates = {};
+                 selectedLayerIds.forEach(id => {
+                     const init = initialLayerStates[id];
+                     if (init) {
+                         updates[id] = {
+                             x: init.x + dx,
+                             y: init.y + dy
+                         };
+                     }
+                 });
+                 updateLayers(updates);
              }
         }
     };
 
     const handleMouseUp = () => {
+        if (isSelecting && selectionBox) {
+            // Calculate Intersection
+            const selected = [];
+            layers.forEach(l => {
+                // Check AABB intersection
+                if (
+                    l.x < selectionBox.x + selectionBox.w &&
+                    l.x + l.width > selectionBox.x &&
+                    l.y < selectionBox.y + selectionBox.h &&
+                    l.y + l.height > selectionBox.y
+                ) {
+                    if (!l.hidden && (!l.locked || mode === 'STUDIO')) {
+                         selected.push(l.id);
+                    }
+                }
+            });
+            
+            // If shift held, merge. Else replace.
+            // Note: We handled shift start in MouseDown, but marquee is a new action.
+            // Usually Marquee adds to selection if Shift is held?
+            // For now, let's just set the selection to what was in the box.
+            // (Or merge if we want advanced behavior later)
+            setSelectedLayerIds(prev => [...new Set([...prev, ...selected])]); 
+        }
+
         setIsDragging(false);
         setIsResizing(false);
         setIsPanning(false);
+        setIsSelecting(false);
         setResizeHandle(null);
-        setInitialLayerState(null);
+        setInitialLayerStates({});
+        setSelectionBox(null);
     };
 
     // Zoom to Point Logic
@@ -550,7 +653,7 @@ export default function Studio() {
 
             // Delete
             if (e.key === 'Delete' || e.key === 'Backspace') {
-                if (selectedLayerId && mode === 'STUDIO') deleteLayer(selectedLayerId);
+                if (selectedLayerIds.length > 0 && mode === 'STUDIO') deleteSelectedLayers();
             }
             // Undo/Redo
             if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
@@ -561,30 +664,34 @@ export default function Studio() {
             // Duplicate
             if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
                 e.preventDefault();
-                if (selectedLayerId) duplicateLayer(selectedLayerId);
+                if (selectedLayerIds.length > 0) duplicateSelectedLayers();
             }
             // Zoom Fit
             if (e.shiftKey && e.key === '1') {
                 zoomToFit();
             }
             // Nudge
-            if (selectedLayerId && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+            if (selectedLayerIds.length > 0 && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
                 e.preventDefault();
                 const step = e.shiftKey ? 10 : 1;
-                const layer = layers.find(l => l.id === selectedLayerId);
-                if (layer) {
-                    const updates = {};
-                    if (e.key === 'ArrowUp') updates.y = layer.y - step;
-                    if (e.key === 'ArrowDown') updates.y = layer.y + step;
-                    if (e.key === 'ArrowLeft') updates.x = layer.x - step;
-                    if (e.key === 'ArrowRight') updates.x = layer.x + step;
-                    updateLayer(selectedLayerId, updates);
-                }
+                const updates = {};
+                
+                selectedLayerIds.forEach(id => {
+                    const layer = layers.find(l => l.id === id);
+                    if (layer) {
+                        updates[id] = { ...layer };
+                        if (e.key === 'ArrowUp') updates[id].y -= step;
+                        if (e.key === 'ArrowDown') updates[id].y += step;
+                        if (e.key === 'ArrowLeft') updates[id].x -= step;
+                        if (e.key === 'ArrowRight') updates[id].x += step;
+                    }
+                });
+                updateLayers(updates);
             }
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [selectedLayerId, mode, canUndo, canRedo, editingTextId, layers, zoom, pan]);
+    }, [selectedLayerIds, mode, canUndo, canRedo, editingTextId, layers, zoom, pan]);
 
     return (
         <div className="min-h-screen bg-[#020202] text-white font-montreal flex flex-col overflow-hidden selection:bg-[#E3E3FD] selection:text-black" onClick={() => setContextMenu(null)}>
@@ -622,13 +729,13 @@ export default function Studio() {
                     <div className="h-4 w-px bg-white/10"></div>
                     <div className="flex items-center gap-2 bg-[#0A0A0A] border border-white/10 p-1 rounded-[2px]">
                         <button 
-                            onClick={() => { setMode('STUDIO'); setSelectedLayerId(null); }}
+                            onClick={() => { setMode('STUDIO'); setSelectedLayerIds([]); }}
                             className={`px-3 py-1 font-mono text-[9px] uppercase tracking-widest rounded-[1px] transition-colors ${mode === 'STUDIO' ? 'bg-[#E3E3FD] text-black' : 'text-white/40 hover:text-white'}`}
                         >
                             Studio
                         </button>
                         <button 
-                            onClick={() => { setMode('CLIENT'); setSelectedLayerId(null); }}
+                            onClick={() => { setMode('CLIENT'); setSelectedLayerIds([]); }}
                             className={`px-3 py-1 font-mono text-[9px] uppercase tracking-widest rounded-[1px] transition-colors ${mode === 'CLIENT' ? 'bg-[#E3E3FD] text-black' : 'text-white/40 hover:text-white'}`}
                         >
                             Client
@@ -694,14 +801,25 @@ export default function Studio() {
                             <div className="p-2 space-y-1">
                                 {layers.slice().reverse().map((layer, index) => (
                                     !layer.hidden && (
-                                        <div key={layer.id} className={`flex items-center gap-3 p-3 border ${selectedLayerId === layer.id ? 'border-[#E3E3FD] bg-[#E3E3FD]/5' : 'border-transparent hover:bg-white/5'} transition-colors rounded-sm cursor-pointer group`} onClick={() => setSelectedLayerId(layer.id)}>
+                                        <div 
+                                            key={layer.id} 
+                                            className={`flex items-center gap-3 p-3 border ${selectedLayerIds.includes(layer.id) ? 'border-[#E3E3FD] bg-[#E3E3FD]/5' : 'border-transparent hover:bg-white/5'} transition-colors rounded-sm cursor-pointer group`} 
+                                            onClick={(e) => {
+                                                if(e.shiftKey) {
+                                                    const newIds = selectedLayerIds.includes(layer.id) ? selectedLayerIds.filter(i => i !== layer.id) : [...selectedLayerIds, layer.id];
+                                                    setSelectedLayerIds(newIds);
+                                                } else {
+                                                    setSelectedLayerIds([layer.id]);
+                                                }
+                                            }}
+                                        >
                                             <div className="flex flex-col gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                                                 <button onClick={(e) => { e.stopPropagation(); reorderLayer(layer.id, 'up'); }} className="hover:text-[#E3E3FD]"><ArrowUp size={8} /></button>
                                                 <button onClick={(e) => { e.stopPropagation(); reorderLayer(layer.id, 'down'); }} className="hover:text-[#E3E3FD]"><ArrowDown size={8} /></button>
                                             </div>
-                                            <Layers size={14} className={selectedLayerId === layer.id ? 'text-[#E3E3FD]' : 'text-white/40 group-hover:text-white'} />
-                                            <span className={`font-mono text-[10px] uppercase tracking-widest ${selectedLayerId === layer.id ? 'text-white' : 'text-white/60 group-hover:text-white'}`}>{layer.type} - {layer.id.slice(-4)}</span>
-                                            {selectedLayerId === layer.id && <div className="ml-auto w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"></div>}
+                                            <Layers size={14} className={selectedLayerIds.includes(layer.id) ? 'text-[#E3E3FD]' : 'text-white/40 group-hover:text-white'} />
+                                            <span className={`font-mono text-[10px] uppercase tracking-widest ${selectedLayerIds.includes(layer.id) ? 'text-white' : 'text-white/60 group-hover:text-white'}`}>{layer.type} - {layer.id.slice(-4)}</span>
+                                            {selectedLayerIds.includes(layer.id) && <div className="ml-auto w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"></div>}
                                         </div>
                                     )
                                 ))}
@@ -728,7 +846,6 @@ export default function Studio() {
                         className="flex-1 relative overflow-hidden bg-[#080808] cursor-default"
                         onMouseMove={handleMouseMove}
                         onMouseUp={handleMouseUp}
-                        // onWheel={handleWheel} // Removed in favor of ref-based non-passive listener
                         ref={viewportRef}
                         onMouseDown={handleMouseDown}
                         onContextMenu={handleContextMenu}
@@ -756,6 +873,19 @@ export default function Studio() {
                                 marginTop: -canvasConfig.height / 2
                             }}
                         >
+                             {/* Marquee Box */}
+                             {selectionBox && (
+                                <div 
+                                    className="absolute border border-[#E3E3FD] bg-[#E3E3FD]/10 z-[100] pointer-events-none"
+                                    style={{
+                                        left: selectionBox.x,
+                                        top: selectionBox.y,
+                                        width: selectionBox.w,
+                                        height: selectionBox.h
+                                    }}
+                                />
+                             )}
+
                             <div 
                                 ref={canvasContentRef}
                                 style={{
@@ -763,7 +893,7 @@ export default function Studio() {
                                     height: canvasConfig.height,
                                     backgroundColor: canvasConfig.backgroundColor
                                 }}
-                                className="relative shadow-2xl transition-shadow duration-300"
+                                className={`relative shadow-2xl transition-shadow duration-300 ${isSelecting ? 'canvas-bg' : ''}`}
                             >
                                 {layers.map(layer => (
                                     !layer.hidden && (
@@ -786,7 +916,7 @@ export default function Studio() {
                                             }}
                                         >
                                             {/* Hover Outline */}
-                                            {selectedLayerId !== layer.id && mode === 'STUDIO' && (
+                                            {!selectedLayerIds.includes(layer.id) && mode === 'STUDIO' && (
                                                 <div className="absolute inset-0 border border-[#E3E3FD] opacity-0 group-hover:opacity-30 pointer-events-none transition-opacity"></div>
                                             )}
 
@@ -874,15 +1004,15 @@ export default function Studio() {
                                             )}
 
                                             {/* Selection Outline & Handles */}
-                                            {selectedLayerId === layer.id && mode === 'STUDIO' && (
+                                            {selectedLayerIds.includes(layer.id) && mode === 'STUDIO' && (
                                                 <>
                                                     <div className="absolute -inset-[1px] border border-[#E3E3FD] pointer-events-none z-50">
                                                         <div className="absolute -top-6 left-0 bg-[#E3E3FD] px-1.5 py-0.5 flex items-center gap-2 pointer-events-auto">
                                                             <span className="font-mono text-[9px] text-black uppercase tracking-widest font-bold">{layer.id}</span>
                                                         </div>
                                                     </div>
-                                                    {/* Resize Handles */}
-                                                    {['nw', 'ne', 'sw', 'se'].map(h => (
+                                                    {/* Resize Handles - Only show for primary selection or iterate all? For now, stick to primary/single for resize */}
+                                                    {selectedLayerIds.length === 1 && ['nw', 'ne', 'sw', 'se'].map(h => (
                                                         <div 
                                                             key={h}
                                                             onMouseDown={(e) => handleMouseDown(e, layer, h)}
@@ -904,22 +1034,26 @@ export default function Studio() {
                         </div>
 
                         {/* Context Menu */}
-                        {contextMenu && selectedLayerId && (
+                        {contextMenu && selectedLayerIds.length > 0 && (
                             <div 
                                 className="absolute bg-[#050505] border border-white/10 shadow-2xl z-50 w-48 flex flex-col p-1"
                                 style={{ top: contextMenu.y, left: contextMenu.x }}
                             >
-                                <button onClick={() => { duplicateLayer(selectedLayerId); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group">
+                                <button onClick={() => { duplicateSelectedLayers(); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group">
                                     <span>Duplicate</span> <span className="text-white/40 group-hover:text-black/40">Ctrl+D</span>
                                 </button>
-                                <button onClick={() => { reorderLayer(selectedLayerId, 'up'); setContextMenu(null); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group">
-                                    <span>Bring Forward</span> <span className="text-white/40 group-hover:text-black/40">]</span>
-                                </button>
-                                <button onClick={() => { reorderLayer(selectedLayerId, 'down'); setContextMenu(null); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group">
-                                    <span>Send Backward</span> <span className="text-white/40 group-hover:text-black/40">[</span>
-                                </button>
+                                {selectedLayerIds.length === 1 && (
+                                    <>
+                                        <button onClick={() => { reorderLayer(selectedLayerIds[0], 'up'); setContextMenu(null); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group">
+                                            <span>Bring Forward</span> <span className="text-white/40 group-hover:text-black/40">]</span>
+                                        </button>
+                                        <button onClick={() => { reorderLayer(selectedLayerIds[0], 'down'); setContextMenu(null); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group">
+                                            <span>Send Backward</span> <span className="text-white/40 group-hover:text-black/40">[</span>
+                                        </button>
+                                    </>
+                                )}
                                 <div className="h-px bg-white/10 my-1"></div>
-                                <button onClick={() => deleteLayer(selectedLayerId)} className="text-left px-3 py-2 text-[10px] font-mono text-red-400 hover:bg-red-900/20 uppercase tracking-widest flex items-center justify-between">
+                                <button onClick={() => deleteSelectedLayers()} className="text-left px-3 py-2 text-[10px] font-mono text-red-400 hover:bg-red-900/20 uppercase tracking-widest flex items-center justify-between">
                                     <span>Delete</span> <span>Del</span>
                                 </button>
                             </div>
@@ -927,7 +1061,7 @@ export default function Studio() {
 
                         {/* Zoom Controls Overlay */}
                         <div className="absolute bottom-6 left-6 font-mono text-[9px] text-white/20 uppercase tracking-widest pointer-events-none">
-                            VP: {canvasConfig.width}x{canvasConfig.height} // ZOOM: {Math.round(zoom * 100)}% // PAN: {Math.round(pan.x)},{Math.round(pan.y)}
+                            VP: {canvasConfig.width}x{canvasConfig.height} // ZOOM: {Math.round(zoom * 100)}% // PAN: {Math.round(pan.x)},{Math.round(pan.y)} // SEL: {selectedLayerIds.length}
                         </div>
                     </div>
                 </main>
@@ -940,8 +1074,13 @@ export default function Studio() {
                     </div>
 
                     <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-8">
-                        {selectedLayer ? (
-                            <LayerProperties layer={selectedLayer} mode={mode} onUpdate={updateLayer} onDelete={deleteLayer} />
+                        {selectedLayerIds.length === 1 && primarySelectedLayer ? (
+                            <LayerProperties layer={primarySelectedLayer} mode={mode} onUpdate={updateLayer} onDelete={deleteLayer} />
+                        ) : selectedLayerIds.length > 1 ? (
+                            <div className="h-full flex flex-col items-center justify-center text-white/20">
+                                <Layers size={24} strokeWidth={1} className="mb-2" />
+                                <span className="font-mono text-[10px] uppercase tracking-widest">{selectedLayerIds.length} Elements Selected</span>
+                            </div>
                         ) : (
                             <div className="h-full flex flex-col items-center justify-center text-white/20">
                                 <MousePointer size={24} strokeWidth={1} className="mb-2" />
