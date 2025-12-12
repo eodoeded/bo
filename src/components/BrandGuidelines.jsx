@@ -1,16 +1,18 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Box, Layout, Type, MousePointer, CreditCard, Layers, Grid as GridIcon, Database, Cpu, Activity, User, Mail, Send, ChevronDown, Check, AlertCircle, Terminal, BarChart2, CornerDownRight, Zap } from 'lucide-react';
+import { ArrowLeft, Box, Layout, Type, MousePointer, CreditCard, Layers, Grid as GridIcon, Database, Cpu, Activity, User, Mail, Send, ChevronDown, Check, AlertCircle, Terminal, BarChart2, CornerDownRight, Zap, Move } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import upComp from "../assets/up-comp.png";
+import bottomComp from "../assets/bottom-comp.png";
 
 // Decorative Corner Component
 const Corner = ({ className = "" }) => (
-    <div className={`absolute w-2 h-2 border-white/30 ${className}`} />
+    <div className={`absolute w-1.5 h-1.5 border-white/40 ${className}`} />
 );
 
 // Tiny Technical Badge
-const Badge = ({ children, className = "", color = "text-white/40" }) => (
-    <span className={`font-mono text-[9px] uppercase tracking-widest border border-white/10 px-1.5 py-0.5 rounded-[2px] ${color} ${className}`}>
+const Badge = ({ children, className = "", color = "text-[#E3E3FD]" }) => (
+    <span className={`font-mono text-[9px] uppercase tracking-widest border border-white/10 px-1.5 py-0.5 rounded-[1px] bg-white/[0.02] ${color} ${className}`}>
         {children}
     </span>
 );
@@ -30,40 +32,40 @@ const Node = ({ title, inputs = [], outputs = [], children, x, y, delay = 0, wid
           
           <div className="relative bg-[#0A0A0A] border border-white/10 px-4 py-2 flex items-center justify-center shadow-xl backdrop-blur-md hover:border-[#E3E3FD]/50 transition-colors">
              {/* Tech Corners */}
-             <div className="absolute top-0 left-0 w-1.5 h-1.5 border-t border-l border-white/30"></div>
-             <div className="absolute bottom-0 right-0 w-1.5 h-1.5 border-b border-r border-white/30"></div>
+             <div className="absolute top-0 left-0 w-1 h-1 border-t border-l border-white/50"></div>
+             <div className="absolute bottom-0 right-0 w-1 h-1 border-b border-r border-white/50"></div>
              {children}
           </div>
           
           {/* Ports - Squared */}
           {inputs.map((_, i) => (
-            <div key={`in-${i}`} className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-[#0A0A0A] border border-[#E3E3FD]/50 rotate-45" />
+            <div key={`in-${i}`} className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#0A0A0A] border border-[#E3E3FD]/50" />
           ))}
           {outputs.map((_, i) => (
-            <div key={`out-${i}`} className="absolute -right-1.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-[#0A0A0A] border border-[#E3E3FD]/50 rotate-45" />
+            <div key={`out-${i}`} className="absolute -right-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#0A0A0A] border border-[#E3E3FD]/50" />
           ))}
        </div>
     ) : (
-      <div className="bg-[#050505]/95 border border-white/10 p-4 shadow-2xl backdrop-blur-md hover:border-white/30 transition-colors group relative">
+      <div className="bg-[#050505]/95 border border-white/10 p-3 shadow-2xl backdrop-blur-md hover:border-white/30 transition-colors group relative">
         {/* Technical Decor */}
-        <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/20"></div>
-        <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-white/20"></div>
-        <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-white/20"></div>
-        <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-white/20"></div>
+        <div className="absolute top-0 left-0 w-1.5 h-1.5 border-t border-l border-white/30"></div>
+        <div className="absolute top-0 right-0 w-1.5 h-1.5 border-t border-r border-white/30"></div>
+        <div className="absolute bottom-0 left-0 w-1.5 h-1.5 border-b border-l border-white/30"></div>
+        <div className="absolute bottom-0 right-0 w-1.5 h-1.5 border-b border-r border-white/30"></div>
 
-        <div className="flex justify-between items-center mb-4 pb-2 border-b border-white/5">
+        <div className="flex justify-between items-center mb-3 pb-2 border-b border-white/5">
           <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest group-hover:text-white/60 transition-colors">{title}</span>
-          <div className={`w-1.5 h-1.5 ${status === 'active' ? 'bg-[#E3E3FD] animate-pulse shadow-[0_0_8px_#E3E3FD]' : 'bg-white/20'}`}></div>
+          <div className={`w-1 h-1 ${status === 'active' ? 'bg-[#E3E3FD] animate-pulse shadow-[0_0_8px_#E3E3FD]' : 'bg-white/10'}`}></div>
         </div>
         {children}
         
         {/* Input Ports - Rectangular */}
         {inputs.map((_, i) => (
-          <div key={`in-${i}`} className="absolute -left-1 top-8 w-2 h-3 bg-[#050505] border border-white/20 hover:border-[#E3E3FD] transition-colors" />
+          <div key={`in-${i}`} className="absolute -left-[5px] top-8 w-1.5 h-2 bg-[#050505] border border-white/30 hover:border-[#E3E3FD] transition-colors" />
         ))}
         {/* Output Ports - Rectangular */}
         {outputs.map((_, i) => (
-          <div key={`out-${i}`} className="absolute -right-1 top-8 w-2 h-3 bg-[#050505] border border-white/20 hover:border-[#E3E3FD] transition-colors" />
+          <div key={`out-${i}`} className="absolute -right-[5px] top-8 w-1.5 h-2 bg-[#050505] border border-white/30 hover:border-[#E3E3FD] transition-colors" />
         ))}
       </div>
     )}
@@ -71,9 +73,9 @@ const Node = ({ title, inputs = [], outputs = [], children, x, y, delay = 0, wid
 );
 
 const Connection = ({ start, end, delay, dashed = false, active = false }) => {
-  // Squared / Circuit-like Path Logic
+  // Squared / Circuit-like Path Logic with offset for correct alignment
+  // Adjusting connection points to align with the new centered ports
   const midX = (start.x + end.x) / 2;
-  // M start -> L midX startY -> L midX endY -> L end
   const path = `M ${start.x} ${start.y} L ${midX} ${start.y} L ${midX} ${end.y} L ${end.x} ${end.y}`;
 
   return (
@@ -83,29 +85,27 @@ const Connection = ({ start, end, delay, dashed = false, active = false }) => {
         fill="none"
         stroke="#ffffff"
         strokeWidth="0.5"
-        strokeOpacity={dashed ? "0.1" : "0.15"}
-        strokeDasharray={dashed ? "4 4" : "none"}
+        strokeOpacity={dashed ? "0.1" : "0.1"}
+        strokeDasharray={dashed ? "2 2" : "none"}
         initial={{ pathLength: 0, opacity: 0 }}
         animate={{ pathLength: 1, opacity: 1 }}
         transition={{ duration: 1.2, delay, ease: "easeInOut" }}
       />
       
       {/* Circuit joints */}
-      <circle cx={start.x} cy={start.y} r="1.5" fill="#fff" fillOpacity="0.2" />
-      <circle cx={end.x} cy={end.y} r="1.5" fill="#fff" fillOpacity="0.2" />
-      <circle cx={(start.x + end.x) / 2} cy={start.y} r="1.5" fill="#fff" fillOpacity="0.1" />
-      <circle cx={(start.x + end.x) / 2} cy={end.y} r="1.5" fill="#fff" fillOpacity="0.1" />
+      <rect x={start.x - 1} y={start.y - 1} width="2" height="2" fill="#fff" fillOpacity="0.4" />
+      <rect x={end.x - 1} y={end.y - 1} width="2" height="2" fill="#fff" fillOpacity="0.4" />
 
       {(active || !dashed) && (
         <motion.path
             d={path}
             fill="none"
             stroke="#E3E3FD"
-            strokeWidth="1.5"
+            strokeWidth="1"
             strokeLinecap="square"
             initial={{ pathLength: 0, pathOffset: 0, opacity: 0 }}
             animate={{ 
-                pathLength: [0, 0.15, 0], 
+                pathLength: [0, 0.3, 0], 
                 pathOffset: [0, 1, 1],
                 opacity: [0, 1, 0]
             }}
@@ -123,48 +123,49 @@ const Connection = ({ start, end, delay, dashed = false, active = false }) => {
 };
 
 const SectionHeader = ({ title, number }) => (
-    <div className="flex items-end justify-between mb-16 border-b border-white/10 pb-6">
+    <div className="flex items-end justify-between mb-16 border-b border-white/10 pb-6 group">
         <div className="flex items-center gap-4">
-            <div className="w-2 h-2 bg-[#E3E3FD]"></div>
+            <div className="w-1.5 h-1.5 bg-[#E3E3FD] group-hover:scale-150 transition-transform duration-500"></div>
             <h2 className="font-montreal font-medium text-3xl tracking-tight text-white">{title}</h2>
         </div>
         <div className="flex items-center gap-2">
-            <span className="h-px w-8 bg-white/10"></span>
-            <span className="font-mono text-[10px] text-white/30 tracking-widest">/ {number}</span>
+            <span className="font-mono text-[10px] text-white/30 tracking-widest group-hover:text-[#E3E3FD] transition-colors">/ {number}</span>
         </div>
     </div>
 );
 
 export default function BrandGuidelines() {
   return (
-    <div className="min-h-screen bg-[#020202] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal">
+    <div className="min-h-screen bg-[#020202] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal overflow-x-hidden">
       
-      {/* Background Grid */}
-      <div className="fixed inset-0 pointer-events-none opacity-[0.03]" style={{ 
-          backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)', 
-          backgroundSize: '40px 40px' 
+      {/* Background Grid - "Weird" glitchy pattern */}
+      <div className="fixed inset-0 pointer-events-none opacity-[0.04]" style={{ 
+          backgroundImage: 'linear-gradient(rgba(227, 227, 253, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(227, 227, 253, 0.1) 1px, transparent 1px)', 
+          backgroundSize: '20px 20px' 
       }}></div>
+      <div className="fixed inset-0 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03]"></div>
 
       {/* Nav */}
       <nav className="fixed top-0 left-0 w-full p-6 z-50 flex justify-between items-center bg-[#020202]/90 backdrop-blur-md border-b border-white/5">
         <Link to="/" className="flex items-center gap-3 text-white/50 hover:text-white transition-colors group">
-            <div className="w-8 h-8 bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-white/30 transition-colors">
+            <div className="w-8 h-8 bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-[#E3E3FD] group-hover:text-[#E3E3FD] transition-colors">
                 <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
             </div>
-            <span className="font-mono text-[10px] uppercase tracking-widest">[ BACK ]</span>
+            <span className="font-mono text-[10px] uppercase tracking-widest group-hover:text-[#E3E3FD] transition-colors">[ BACK ]</span>
         </Link>
         <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10">
-                <span className="w-1.5 h-1.5 bg-[#E3E3FD] animate-pulse shadow-[0_0_8px_#E3E3FD]"></span>
-                <span className="font-mono text-[10px] text-white/60 uppercase tracking-widest">System V2.1</span>
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 hover:border-[#E3E3FD]/50 transition-colors">
+                <span className="w-1 h-1 bg-[#E3E3FD] animate-pulse shadow-[0_0_8px_#E3E3FD]"></span>
+                <span className="font-mono text-[10px] text-white/60 uppercase tracking-widest">System V2.2</span>
             </div>
         </div>
       </nav>
 
       {/* Hero: Advanced Node System */}
       <section className="relative h-[90vh] w-full flex items-center justify-center overflow-hidden bg-[#020202]">
-        <div className="relative w-[1000px] h-[600px]">
+        <div className="relative w-[1000px] h-[600px] scale-90 md:scale-100">
             {/* Input Layer */}
+            {/* Data_Ingest (x:50, y:250) -> Width: w-40 (160px) -> Right Edge: 210. Vertical Center: ~290 (250+40) */}
             <Node title="Data_Ingest" outputs={[1]} x={50} y={250} delay={0.2} width="w-40" status="active">
                 <div className="space-y-3">
                     <div className="flex items-center gap-3 p-2 bg-white/5 border border-white/5">
@@ -172,7 +173,7 @@ export default function BrandGuidelines() {
                         <span className="font-mono text-[10px] text-white/60">JSON_STREAM</span>
                     </div>
                     <div className="flex gap-1">
-                        <div className="h-1 w-full bg-white/10 overflow-hidden">
+                        <div className="h-0.5 w-full bg-white/10 overflow-hidden">
                             <motion.div className="h-full bg-[#E3E3FD]" animate={{x:['0%','100%']}} transition={{duration:1.5, repeat:Infinity, ease:"linear"}} />
                         </div>
                     </div>
@@ -180,13 +181,14 @@ export default function BrandGuidelines() {
             </Node>
 
             {/* Processing Layer */}
+            {/* Neural_Core (x:350, y:150) -> Left Edge: 350. Vertical Center: ~190 (150+40) -> Right Edge: 542 (350+192) */}
             <Node title="Neural_Core" inputs={[1]} outputs={[1, 1]} x={350} y={150} delay={0.4} width="w-48">
                 <div className="space-y-2">
                     <div className="flex justify-between items-center text-[10px] font-mono text-white/40">
                         <span>LATENCY</span>
                         <span className="text-[#E3E3FD]">12ms</span>
                     </div>
-                    <div className="grid grid-cols-5 gap-1 h-8">
+                    <div className="grid grid-cols-5 gap-1 h-6">
                         {[...Array(10)].map((_,i) => (
                             <motion.div 
                                 key={i}
@@ -199,21 +201,23 @@ export default function BrandGuidelines() {
                 </div>
             </Node>
 
+            {/* Logic_Gate (x:350, y:400) -> Left Edge: 350. Vertical Center: ~440 (400+40) */}
             <Node title="Logic_Gate" inputs={[1]} outputs={[1]} x={350} y={400} delay={0.5} width="w-40">
                  <div className="p-2 bg-white/5 border border-white/5">
                     <div className="flex justify-between items-center mb-2">
                         <Activity size={12} className="text-white/40"/>
-                            <span className="font-mono text-[9px] text-[#E3E3FD]">OPTIMAL</span>
-                        </div>
-                        <div className="h-8 w-full flex items-end gap-[2px]">
-                            {[40, 70, 30, 80, 50, 90, 60].map((h, i) => (
-                                <motion.div key={i} className="flex-1 bg-white/20" animate={{height: [`${h}%`, `${Math.random()*80+20}%`]}} transition={{duration:2, repeat:Infinity}} />
-                            ))}
-                        </div>
-                     </div>
-                </Node>
+                        <span className="font-mono text-[9px] text-[#E3E3FD]">OPTIMAL</span>
+                    </div>
+                    <div className="h-6 w-full flex items-end gap-[2px]">
+                        {[40, 70, 30, 80, 50, 90, 60].map((h, i) => (
+                            <motion.div key={i} className="flex-1 bg-white/20" animate={{height: [`${h}%`, `${Math.random()*80+20}%`]}} transition={{duration:2, repeat:Infinity}} />
+                        ))}
+                    </div>
+                 </div>
+            </Node>
 
             {/* Output Layer */}
+            {/* Renderer (x:700, y:250) -> Left Edge: 700. Vertical Center: ~270 (250+20) -> Right Edge: ~830 */}
             <Node type="minimal" inputs={[1, 1]} outputs={[1]} x={700} y={250} delay={0.7}>
                 <div className="flex items-center gap-3">
                     <div className="w-8 h-8 bg-[#E3E3FD]/10 flex items-center justify-center text-[#E3E3FD] border border-[#E3E3FD]/20">
@@ -227,23 +231,29 @@ export default function BrandGuidelines() {
             </Node>
 
             {/* Final */}
+            {/* Deployment (x:900, y:250) -> Left Edge: 900. Vertical Center: ~260 */}
             <Node type="minimal" inputs={[1]} x={900} y={250} delay={0.9}>
                 <span className="font-mono text-[10px] tracking-[0.2em] text-[#E3E3FD] uppercase">Deployment</span>
             </Node>
 
-            {/* Connections */}
-            <Connection start={{x: 210, y: 280}} end={{x: 345, y: 180}} delay={0.5} active={true} />
-            <Connection start={{x: 210, y: 280}} end={{x: 345, y: 430}} delay={0.6} active={true} />
+            {/* Connections - Precisely Tuned */}
+            {/* Data_Ingest (210, 285) -> Neural_Core (350, 185) */}
+            <Connection start={{x: 210, y: 285}} end={{x: 350, y: 185}} delay={0.5} active={true} />
+            {/* Data_Ingest (210, 285) -> Logic_Gate (350, 435) */}
+            <Connection start={{x: 210, y: 285}} end={{x: 350, y: 435}} delay={0.6} active={true} />
             
-            <Connection start={{x: 545, y: 180}} end={{x: 695, y: 265}} delay={0.8} active={true} />
-            <Connection start={{x: 515, y: 430}} end={{x: 695, y: 265}} delay={0.9} dashed={true} />
+            {/* Neural_Core (542, 185) -> Renderer (700, 275) */}
+            <Connection start={{x: 542, y: 185}} end={{x: 700, y: 275}} delay={0.8} active={true} />
+            {/* Logic_Gate (510, 435) -> Renderer (700, 275) */}
+            <Connection start={{x: 510, y: 435}} end={{x: 700, y: 275}} delay={0.9} dashed={true} />
             
-            <Connection start={{x: 855, y: 265}} end={{x: 895, y: 265}} delay={1.1} active={true} />
+            {/* Renderer (830, 275) -> Deployment (900, 275) */}
+            <Connection start={{x: 830, y: 275}} end={{x: 900, y: 275}} delay={1.1} active={true} />
 
         </div>
         
         <div className="absolute bottom-12 left-6 md:left-12 max-w-md z-20">
-            <Badge className="mb-4 bg-white text-black border-none">System_OS v2.1</Badge>
+            <Badge className="mb-4 text-[#E3E3FD] border-[#E3E3FD]/20 bg-[#E3E3FD]/5">System_OS v2.2</Badge>
             <h1 className="font-montreal font-medium text-6xl md:text-8xl tracking-tight mb-6 text-white leading-[0.9]">
                 Visual<br/><span className="text-[#E3E3FD]">System</span>
             </h1>
@@ -261,7 +271,7 @@ export default function BrandGuidelines() {
             <div className="md:col-span-4 sticky top-32 h-fit">
                 <SectionHeader title="Typography" number="01" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
-                    PP Neue Montreal serves as the primary typeface—a versatile grotesque sans serif that balances neutrality with character. SF Mono provides technical contrast.
+                    PP Neue Montreal serves as the primary typeface—a versatile grotesque sans serif. SF Mono provides technical contrast.
                 </p>
                 <div className="flex gap-4">
                     <Badge>.otf</Badge>
@@ -281,13 +291,13 @@ export default function BrandGuidelines() {
                         Aa Bb Cc<br/>123 456
                     </div>
                     <div className="grid grid-cols-2 gap-8">
-                        <div className="p-6 border border-white/10 bg-white/[0.02] relative group">
+                        <div className="p-6 border border-white/10 bg-white/[0.02] relative group hover:bg-white/[0.04] transition-colors">
                             <Corner className="top-0 left-0 border-t border-l" />
                             <Corner className="bottom-0 right-0 border-b border-r" />
                             <span className="text-2xl mb-2 block">Regular</span>
                             <span className="font-mono text-xs text-white/40">400 — Body / Subheads</span>
                         </div>
-                        <div className="p-6 border border-white/10 bg-white/[0.02] relative group">
+                        <div className="p-6 border border-white/10 bg-white/[0.02] relative group hover:bg-white/[0.04] transition-colors">
                             <Corner className="top-0 left-0 border-t border-l" />
                             <Corner className="bottom-0 right-0 border-b border-r" />
                             <span className="text-2xl font-medium mb-2 block">Medium</span>
@@ -669,6 +679,78 @@ export default function BrandGuidelines() {
                         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#E3E3FD]/50 to-transparent opacity-20"></div>
                      </div>
                 </div>
+            </div>
+        </section>
+
+        {/* 08. Motion & 3D (New Section) */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12">
+            <div className="md:col-span-4 sticky top-32 h-fit">
+                <SectionHeader title="Motion" number="08" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed">
+                   The brand utilizes floating, component-based 3D motion to communicate modularity and assembly.
+                </p>
+            </div>
+
+            <div className="md:col-span-8">
+                <div className="relative border border-white/10 bg-[#0A0A0A] h-[500px] w-full overflow-hidden flex items-center justify-center">
+                    {/* Grid Background */}
+                    <div className="absolute inset-0 opacity-20" style={{ 
+                        backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)', 
+                        backgroundSize: '40px 40px' 
+                    }}></div>
+                    
+                    {/* Spot Mini Animation Recreated */}
+                    <div className="relative w-full h-full flex items-center justify-center scale-125">
+                         <motion.div
+                            className="relative z-0"
+                            animate={{ y: [0, -8, 0] }}
+                            transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.0 }}
+                        >
+                            <img src={bottomComp} alt="Bottom" className="w-[320px] object-contain" />
+                        </motion.div>
+                        <motion.div
+                            className="absolute -top-14"
+                            animate={{ y: [0, -10, 0] }}
+                            transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
+                            style={{ zIndex: 2 }}
+                        >
+                            <img src={upComp} alt="Top" className="w-[170px] object-contain" />
+                        </motion.div>
+                    </div>
+                    
+                    {/* Tech Overlay */}
+                    <div className="absolute bottom-6 left-6 font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest border border-[#E3E3FD]/30 px-2 py-1 bg-[#E3E3FD]/5">
+                        Figure 1.A: Assembly Animation
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {/* 09. Grid System (New Section) */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12">
+             <div className="md:col-span-4 sticky top-32 h-fit">
+                <SectionHeader title="Grid" number="09" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed">
+                   A flexible 12-column grid system that allows for asymmetrical balance and white space utilization.
+                </p>
+            </div>
+            
+            <div className="md:col-span-8">
+                 <div className="grid grid-cols-12 gap-4 h-64 border border-white/10 p-4 bg-[#050505]">
+                    {[...Array(12)].map((_, i) => (
+                        <div key={i} className="bg-[#E3E3FD]/10 border border-[#E3E3FD]/10 h-full flex items-end justify-center pb-2">
+                             <span className="font-mono text-[9px] text-white/20">{i+1}</span>
+                        </div>
+                    ))}
+                    
+                    {/* Floating Elements on Grid */}
+                    <div className="absolute col-span-4 h-32 bg-[#E3E3FD]/20 border border-[#E3E3FD] top-20 left-20 flex items-center justify-center backdrop-blur-sm">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest">4 COL</span>
+                    </div>
+                    <div className="absolute col-span-2 h-16 bg-white/10 border border-white top-40 right-40 flex items-center justify-center backdrop-blur-sm">
+                         <span className="font-mono text-[9px] text-white tracking-widest">2 COL</span>
+                    </div>
+                 </div>
             </div>
         </section>
 
