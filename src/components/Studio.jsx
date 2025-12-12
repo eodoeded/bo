@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Type, Image as ImageIcon, Sparkles, Layers, 
     Settings, Download, ChevronRight, Maximize2, 
@@ -20,8 +20,8 @@ import { Link } from 'react-router-dom';
 import html2canvas from 'html2canvas';
 import { SmartImage } from './studio/SmartImage';
 import { LayerProperties } from './studio/LayerProperties';
-import { CanvasProperties } from './studio/CanvasProperties'; 
-import { ShortcutsHelp } from './studio/ShortcutsHelp'; // New
+import { CanvasProperties } from './studio/CanvasProperties';
+import { ShortcutsHelp } from './studio/ShortcutsHelp';
 import { generateImage } from '../services/gemini';
 
 // --- HISTORY SYSTEM HOOK ---
@@ -70,16 +70,19 @@ const IconButton = ({ icon: Icon, active, onClick, disabled, title }) => (
     </button>
 );
 
-const Ruler = ({ orientation = 'horizontal', zoom = 1, pan = {x:0, y:0} }) => {
+const Ruler = ({ orientation = 'horizontal', zoom = 1, pan = {x:0, y:0}, onDragStart }) => {
     const ticks = Array.from({ length: 50 });
     return (
-        <div className={`absolute bg-[#050505] border-white/10 z-10 pointer-events-none overflow-hidden ${orientation === 'horizontal' ? 'top-0 left-0 right-0 h-6 border-b flex items-end' : 'top-0 left-0 bottom-0 w-6 border-r flex flex-col items-end'}`}>
+        <div 
+            onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); onDragStart && onDragStart(orientation, e); }}
+            className={`absolute bg-[#050505] border-white/10 z-10 overflow-hidden hover:bg-white/5 transition-colors cursor-crosshair ${orientation === 'horizontal' ? 'top-0 left-0 right-0 h-6 border-b flex items-end' : 'top-0 left-0 bottom-0 w-6 border-r flex flex-col items-end'}`}
+        >
             {ticks.map((_, i) => {
                 const value = Math.round(i * 100);
                 return (
                     <div 
                         key={i} 
-                        className={`absolute bg-white/20 ${orientation === 'horizontal' ? 'w-px h-2' : 'h-px w-2'}`}
+                        className={`absolute bg-white/20 pointer-events-none ${orientation === 'horizontal' ? 'w-px h-2' : 'h-px w-2'}`}
                         style={{
                             [orientation === 'horizontal' ? 'left' : 'top']: (i * 100 * zoom) + (orientation === 'horizontal' ? pan.x : pan.y) % (100 * zoom)
                         }}
@@ -107,9 +110,9 @@ const INITIAL_LAYERS = [
     opacity: 1, 
     visible: true, 
     rotation: 0,
-    brightness: 100,
-    contrast: 100,
-    blur: 0
+    brightness: 100, contrast: 100, blur: 0,
+    flipX: false, flipY: false,
+    shadow: false, shadowColor: '#000000', shadowBlur: 10, shadowX: 0, shadowY: 4
   },
   {
     id: 'card-title',
@@ -129,7 +132,9 @@ const INITIAL_LAYERS = [
     fontWeight: 'normal',
     fontStyle: 'normal',
     textDecoration: 'none',
-    textTransform: 'none'
+    textTransform: 'none',
+    flipX: false, flipY: false,
+    shadow: false, shadowColor: '#000000', shadowBlur: 10, shadowX: 0, shadowY: 4
   },
   {
     id: 'ai-frame',
@@ -148,9 +153,9 @@ const INITIAL_LAYERS = [
     opacity: 1,
     visible: true,
     rotation: 0,
-    brightness: 100,
-    contrast: 100,
-    blur: 0
+    brightness: 100, contrast: 100, blur: 0,
+    flipX: false, flipY: false,
+    shadow: false, shadowColor: '#000000', shadowBlur: 10, shadowX: 0, shadowY: 4
   }
 ];
 
@@ -161,7 +166,9 @@ export default function Studio() {
     const [selectedTool, setSelectedTool] = useState('select');
     const [statusMessage, setStatusMessage] = useState(null); 
     const [snapToGrid, setSnapToGrid] = useState(false); // Snap Toggle
-    const [showShortcuts, setShowShortcuts] = useState(false); // New
+    const [showShortcuts, setShowShortcuts] = useState(false); // Shortcuts Help
+    const [guides, setGuides] = useState([]); // Ruler Guides
+    const [draggedGuideId, setDraggedGuideId] = useState(null); // Current dragged guide
     
     // Canvas Viewport
     const [zoom, setZoom] = useState(1);
@@ -449,9 +456,9 @@ export default function Studio() {
             opacity: 1, 
             visible: true, 
             rotation: 0,
-            brightness: 100,
-            contrast: 100,
-            blur: 0,
+            brightness: 100, contrast: 100, blur: 0,
+            flipX: false, flipY: false,
+            shadow: false, shadowColor: '#000000', shadowBlur: 10, shadowX: 0, shadowY: 4,
             aiPromptTemplate: type === 'AI_FRAME' ? "A render of {subject}" : undefined,
             filterType: 'none',
             blendMode: 'normal'
@@ -613,6 +620,16 @@ export default function Studio() {
         return { x: canvasX, y: canvasY };
     };
 
+    const handleRulerDragStart = (orientation, e) => {
+        const id = `guide-${Date.now()}`;
+        const point = getCanvasPoint(e.clientX, e.clientY);
+        const type = orientation === 'horizontal' ? 'h' : 'v'; // Dragging from top makes horizontal guide
+        const pos = type === 'h' ? point.y : point.x;
+        
+        setGuides(prev => [...prev, { id, type, pos }]);
+        setDraggedGuideId(id);
+    };
+
     const handleMouseDown = (e, layer = null, handle = null) => {
         if (e.button === 2) return; 
         if (editingTextId) return; 
@@ -726,6 +743,17 @@ export default function Studio() {
 
         const currentCanvasPoint = getCanvasPoint(e.clientX, e.clientY);
 
+        // Guide Dragging
+        if (draggedGuideId) {
+            setGuides(prev => prev.map(g => {
+                if (g.id === draggedGuideId) {
+                    return { ...g, pos: g.type === 'h' ? currentCanvasPoint.y : currentCanvasPoint.x };
+                }
+                return g;
+            }));
+            return;
+        }
+
         // Marquee Selection
         if (isSelecting) {
             const x = Math.min(dragStart.x, currentCanvasPoint.x);
@@ -750,6 +778,50 @@ export default function Studio() {
              if (snapToGrid) {
                  dx = Math.round(rawDx / 10) * 10;
                  dy = Math.round(rawDy / 10) * 10;
+             }
+
+             // Snap to Guides
+             if (guides.length > 0 && !isResizing && selectedLayerIds.length > 0) {
+                 const activeId = selectedLayerIds[selectedLayerIds.length - 1]; // Use primary selection
+                 const initial = initialLayerStates[activeId];
+                 
+                 if (initial) {
+                     // Vertical Guides (Snap X)
+                     const vGuides = guides.filter(g => g.type === 'v');
+                     let bestDx = dx;
+                     let minDistX = 10 / zoom; // Threshold
+                     
+                     vGuides.forEach(g => {
+                         // Snap Left
+                         const distLeft = Math.abs(g.pos - (initial.x + dx));
+                         if (distLeft < minDistX) { bestDx = g.pos - initial.x; minDistX = distLeft; }
+                         // Snap Center
+                         const distCenter = Math.abs(g.pos - (initial.x + initial.width/2 + dx));
+                         if (distCenter < minDistX) { bestDx = g.pos - (initial.x + initial.width/2); minDistX = distCenter; }
+                         // Snap Right
+                         const distRight = Math.abs(g.pos - (initial.x + initial.width + dx));
+                         if (distRight < minDistX) { bestDx = g.pos - (initial.x + initial.width); minDistX = distRight; }
+                     });
+                     dx = bestDx;
+
+                     // Horizontal Guides (Snap Y)
+                     const hGuides = guides.filter(g => g.type === 'h');
+                     let bestDy = dy;
+                     let minDistY = 10 / zoom;
+                     
+                     hGuides.forEach(g => {
+                         // Snap Top
+                         const distTop = Math.abs(g.pos - (initial.y + dy));
+                         if (distTop < minDistY) { bestDy = g.pos - initial.y; minDistY = distTop; }
+                         // Snap Middle
+                         const distMiddle = Math.abs(g.pos - (initial.y + initial.height/2 + dy));
+                         if (distMiddle < minDistY) { bestDy = g.pos - (initial.y + initial.height/2); minDistY = distMiddle; }
+                         // Snap Bottom
+                         const distBottom = Math.abs(g.pos - (initial.y + initial.height + dy));
+                         if (distBottom < minDistY) { bestDy = g.pos - (initial.y + initial.height); minDistY = distBottom; }
+                     });
+                     dy = bestDy;
+                 }
              }
              
              if (isResizing && resizeHandle) {
@@ -802,6 +874,8 @@ export default function Studio() {
     };
 
     const handleMouseUp = () => {
+        setDraggedGuideId(null); // Stop dragging guide
+
         if (isSelecting && selectionBox) {
             const selected = [];
             layers.forEach(l => {
@@ -873,6 +947,11 @@ export default function Studio() {
                 if (e.type === 'keydown') setIsSpacePressed(true);
                 if (e.type === 'keyup') setIsSpacePressed(false);
             }
+
+            // Shortcuts Help (?)
+            if (e.key === '?' && !editingTextId) {
+                setShowShortcuts(prev => !prev);
+            }
         };
         
         window.addEventListener('keydown', handleKey);
@@ -924,10 +1003,6 @@ export default function Studio() {
     useEffect(() => {
         const handleKeyDown = (e) => {
             if (editingTextId) return; 
-            
-            if (e.key === '?') {
-                 setShowShortcuts(prev => !prev);
-            }
 
             // Copy
             if ((e.ctrlKey || e.metaKey) && e.key === 'c') {
@@ -991,8 +1066,20 @@ export default function Studio() {
     return (
         <div className="min-h-screen bg-[#020202] text-white font-montreal flex flex-col overflow-hidden selection:bg-[#E3E3FD] selection:text-black" onClick={() => setContextMenu(null)}>
             
-            {showShortcuts && <ShortcutsHelp onClose={() => setShowShortcuts(false)} />}
-            
+            {/* Shortcuts Modal */}
+            <AnimatePresence>
+                {showShortcuts && (
+                    <motion.div 
+                        initial={{ opacity: 0 }} 
+                        animate={{ opacity: 1 }} 
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[100]"
+                    >
+                        <ShortcutsHelp onClose={() => setShowShortcuts(false)} />
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             {/* Top Bar */}
             <header className="h-12 border-b border-white/10 flex items-center justify-between px-4 bg-[#050505] relative z-20">
                 <div className="flex items-center gap-6">
@@ -1023,6 +1110,8 @@ export default function Studio() {
                         <IconButton icon={Undo} onClick={() => setLayers(undo())} disabled={!canUndo} title="Undo (Ctrl+Z)" />
                         <IconButton icon={Redo} onClick={() => setLayers(redo())} disabled={!canRedo} title="Redo (Ctrl+Shift+Z)" />
                     </div>
+                    <div className="h-4 w-px bg-white/10"></div>
+                    <IconButton icon={HelpCircle} onClick={() => setShowShortcuts(true)} title="Keyboard Shortcuts (?)" />
                     <div className="h-4 w-px bg-white/10"></div>
                     <div className="flex items-center gap-2 bg-[#0A0A0A] border border-white/10 p-1 rounded-[2px]">
                         <button 
@@ -1131,8 +1220,6 @@ export default function Studio() {
                         <IconButton icon={ZoomOut} onClick={() => setZoom(z => Math.max(0.1, z - 0.1))} title="Zoom Out" />
                         <span className="font-mono text-[9px] text-white/60 px-2 w-10 text-center">{Math.round(zoom * 100)}%</span>
                         <IconButton icon={ZoomIn} onClick={() => setZoom(z => Math.min(5, z + 0.1))} title="Zoom In" />
-                        <div className="w-px h-4 bg-white/10 mx-1"></div>
-                        <IconButton icon={HelpCircle} onClick={() => setShowShortcuts(true)} title="Shortcuts (?)" />
                     </div>
 
                     {/* Canvas Wrapper */}
@@ -1147,8 +1234,8 @@ export default function Studio() {
                         onDragOver={(e) => e.preventDefault()}
                         style={{ cursor: isPanning ? 'grabbing' : (isSpacePressed ? 'grab' : (selectedTool === 'select' ? 'default' : 'default')) }}
                     >
-                        <Ruler orientation="horizontal" zoom={zoom} pan={pan} />
-                        <Ruler orientation="vertical" zoom={zoom} pan={pan} />
+                        <Ruler orientation="horizontal" zoom={zoom} pan={pan} onDragStart={handleRulerDragStart} />
+                        <Ruler orientation="vertical" zoom={zoom} pan={pan} onDragStart={handleRulerDragStart} />
 
                         <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ 
                             backgroundImage: 'radial-gradient(circle, #E3E3FD 1px, transparent 1px)', 
@@ -1180,6 +1267,19 @@ export default function Studio() {
                                 />
                              )}
 
+                             {/* Guides */}
+                             {guides.map(g => (
+                                <div 
+                                    key={g.id}
+                                    className={`absolute bg-[#E3E3FD] pointer-events-none z-[60] ${g.type === 'h' ? 'h-px w-full' : 'w-px h-full'}`}
+                                    style={{
+                                        [g.type === 'h' ? 'top' : 'left']: g.pos,
+                                        opacity: 0.5,
+                                        boxShadow: '0 0 2px rgba(0,0,0,0.5)'
+                                    }}
+                                />
+                             ))}
+
                             <div 
                                 ref={canvasContentRef}
                                 style={{
@@ -1207,8 +1307,9 @@ export default function Studio() {
                                                 borderRadius: layer.borderRadius ? `${layer.borderRadius}px` : '0px',
                                                 mixBlendMode: layer.blendMode || 'normal',
                                                 opacity: layer.opacity !== undefined ? layer.opacity : 1,
-                                                transform: `rotate(${layer.rotation || 0}deg)`,
-                                                filter: `brightness(${layer.brightness !== undefined ? layer.brightness : 100}%) contrast(${layer.contrast !== undefined ? layer.contrast : 100}%) blur(${layer.blur !== undefined ? layer.blur : 0}px)`,
+                                                transform: `rotate(${layer.rotation || 0}deg) scaleX(${layer.flipX ? -1 : 1}) scaleY(${layer.flipY ? -1 : 1})`, 
+                                                filter: `brightness(${layer.brightness !== undefined ? layer.brightness : 100}%) contrast(${layer.contrast !== undefined ? layer.contrast : 100}%) blur(${layer.blur || 0}px)`,
+                                                boxShadow: layer.shadow ? `${layer.shadowX || 0}px ${layer.shadowY || 4}px ${layer.shadowBlur || 10}px ${layer.shadowColor || '#000000'}` : 'none',
                                                 whiteSpace: layer.type === 'TEXT' ? 'nowrap' : 'normal'
                                             }}
                                         >
