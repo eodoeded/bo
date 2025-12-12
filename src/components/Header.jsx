@@ -29,10 +29,7 @@ export default function Header() {
         {/* Brand / Logo - Left */}
         <div className="flex items-center">
             <Link to="/" className="group flex items-center gap-3" onClick={() => window.scrollTo(0,0)}>
-                <div className="w-8 h-8 bg-white text-black flex items-center justify-center font-mono font-bold text-xs tracking-tighter hover:bg-[#E3E3FD] transition-colors">
-                    BO
-                </div>
-                <span className="font-mono text-sm tracking-widest text-white group-hover:text-[#E3E3FD] transition-colors uppercase hidden sm:block">[ BRANDED OBJECTS ]</span>
+                <span className="font-mono text-sm tracking-widest text-white group-hover:text-[#E3E3FD] transition-colors uppercase">[ BRANDED OBJECTS ]</span>
             </Link>
         </div>
 

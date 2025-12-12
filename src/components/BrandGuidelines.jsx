@@ -1144,7 +1144,7 @@ export default function BrandGuidelines() {
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-20">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-20">
                 <div className="col-span-1 md:col-span-5">
-                    <h3 className="font-montreal font-medium text-2xl text-white mb-6">Branded Objects</h3>
+                    <h3 className="font-mono text-lg tracking-widest text-white mb-6 uppercase">[ BRANDED OBJECTS ]</h3>
                     <p className="font-montreal text-white/60 text-sm max-w-md leading-relaxed mb-8">
                         A modular design system for automated brand governance. Empowering studios to create custom tools for their clients.
                     </p>
