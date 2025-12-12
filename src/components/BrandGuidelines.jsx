@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Box, Layout, Type, MousePointer, CreditCard, Layers, Grid as GridIcon, Database, Cpu, Activity, User, Mail, Send, ChevronDown, Check, AlertCircle, Terminal, BarChart2, CornerDownRight, Zap, Move, Eye, Code, Command, Github, Twitter, Disc } from 'lucide-react';
+import { ArrowLeft, Box, Layout, Type, MousePointer, CreditCard, Layers, Grid as GridIcon, Database, Cpu, Activity, User, Mail, Send, ChevronDown, Check, AlertCircle, Terminal, BarChart2, CornerDownRight, Zap, Move, Eye, Code, Command, Github, Twitter, Disc, Lock, Unlock, Edit3, Image as ImageIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import upComp from "../assets/up-comp.png";
@@ -349,10 +349,177 @@ export default function BrandGuidelines() {
             </div>
         </section>
 
-        {/* 02. Interface & Cards */}
+        {/* 02. Node Architecture (New Section) */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div className="md:col-span-4 sticky top-32 h-fit">
-                <SectionHeader title="Interface" number="02" />
+                <SectionHeader title="Architecture" number="02" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed">
+                    The fundamental building blocks of the logic system. Nodes represent distinct functional units with standardized inputs and outputs.
+                </p>
+            </div>
+
+            <div className="md:col-span-8 space-y-12">
+                <div className="relative p-12 border border-white/10 bg-[#0A0A0A] flex items-center justify-center min-h-[400px]">
+                    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03]"></div>
+                    <Corner className="top-0 left-0 border-t border-l" />
+                    <Corner className="bottom-0 right-0 border-b border-r" />
+                    
+                    {/* Exploded Node View */}
+                    <div className="relative">
+                        {/* Labels */}
+                        <div className="absolute -top-8 left-0 font-mono text-[9px] text-white/40 tracking-widest uppercase">Header / Status</div>
+                        <div className="absolute top-1/2 -left-24 font-mono text-[9px] text-white/40 tracking-widest uppercase text-right w-20">Input<br/>Ports</div>
+                        <div className="absolute top-1/2 -right-24 font-mono text-[9px] text-white/40 tracking-widest uppercase w-20">Output<br/>Ports</div>
+                        <div className="absolute -bottom-8 left-0 font-mono text-[9px] text-white/40 tracking-widest uppercase">Content Area</div>
+
+                        {/* The Node */}
+                        <div className="w-64 bg-[#050505] border border-white/20 p-4 relative shadow-2xl">
+                            {/* Lines to labels */}
+                            <div className="absolute -top-4 left-4 w-px h-4 bg-white/20"></div>
+                            <div className="absolute top-10 -left-4 w-4 h-px bg-white/20"></div>
+                            <div className="absolute top-10 -right-4 w-4 h-px bg-white/20"></div>
+                            <div className="absolute -bottom-4 left-1/2 w-px h-4 bg-white/20"></div>
+
+                            <div className="flex justify-between items-center mb-4 pb-2 border-b border-white/10">
+                                <span className="font-mono text-[10px] text-white/60 uppercase tracking-widest">Image_Processor</span>
+                                <div className="w-1.5 h-1.5 bg-[#E3E3FD] animate-pulse"></div>
+                            </div>
+                            <div className="space-y-3">
+                                <div className="h-2 w-full bg-white/5 rounded-sm"></div>
+                                <div className="h-2 w-2/3 bg-white/5 rounded-sm"></div>
+                                <div className="flex gap-2 mt-4">
+                                    <span className="px-2 py-1 bg-white/5 text-[9px] font-mono text-white/40 rounded-sm">v2.1</span>
+                                    <span className="px-2 py-1 bg-white/5 text-[9px] font-mono text-white/40 rounded-sm">32ms</span>
+                                </div>
+                            </div>
+                            
+                            {/* Ports */}
+                            <div className="absolute -left-[5px] top-10 w-1.5 h-2 bg-[#050505] border border-[#E3E3FD] shadow-[0_0_8px_rgba(227,227,253,0.3)]"></div>
+                            <div className="absolute -right-[5px] top-10 w-1.5 h-2 bg-[#050505] border border-[#E3E3FD] shadow-[0_0_8px_rgba(227,227,253,0.3)]"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="p-6 border border-white/10 bg-white/[0.02]">
+                        <h4 className="font-mono text-xs text-white mb-2 uppercase tracking-widest">Standard</h4>
+                        <p className="font-montreal text-sm text-white/50">Full functionality with visual feedback and controls.</p>
+                    </div>
+                    <div className="p-6 border border-white/10 bg-white/[0.02]">
+                        <h4 className="font-mono text-xs text-white mb-2 uppercase tracking-widest">Minimal</h4>
+                        <p className="font-montreal text-sm text-white/50">Condensed state for pass-through or simple logic.</p>
+                    </div>
+                    <div className="p-6 border border-white/10 bg-white/[0.02]">
+                        <h4 className="font-mono text-xs text-white mb-2 uppercase tracking-widest">Locked</h4>
+                        <p className="font-montreal text-sm text-white/50">Restricted access node for brand safety.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {/* 03. Asset Governance (New Section) */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+            <div className="md:col-span-4 sticky top-32 h-fit">
+                <SectionHeader title="Governance" number="03" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed">
+                    The locking system allows designers to freeze critical brand assets while exposing safe parameters for client customization.
+                </p>
+            </div>
+
+            <div className="md:col-span-8 space-y-12">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    {/* Node Configuration Side */}
+                    <div className="space-y-6">
+                        <div className="flex items-center gap-3 mb-2">
+                            <span className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">Configuration</span>
+                            <div className="h-px flex-1 bg-white/10"></div>
+                        </div>
+                        
+                        <div className="bg-[#0A0A0A] border border-white/10 p-6 relative">
+                            <Corner className="top-0 left-0 border-t border-l" />
+                            <Corner className="bottom-0 right-0 border-b border-r" />
+                            
+                            <div className="flex justify-between items-center mb-6">
+                                <span className="font-mono text-[10px] text-white/60 uppercase tracking-widest">IG_Story_Template</span>
+                                <div className="px-2 py-1 bg-white/10 rounded-sm font-mono text-[9px] text-white/60">LOCKED_MODE</div>
+                            </div>
+
+                            <div className="space-y-4">
+                                {/* Locked Param */}
+                                <div className="flex items-center justify-between p-3 bg-white/5 border border-white/5">
+                                    <div className="flex items-center gap-3">
+                                        <ImageIcon size={14} className="text-white/40"/>
+                                        <span className="font-mono text-[10px] text-white/60">BACKGROUND_IMG</span>
+                                    </div>
+                                    <Lock size={12} className="text-[#E3E3FD]"/>
+                                </div>
+
+                                {/* Locked Param */}
+                                <div className="flex items-center justify-between p-3 bg-white/5 border border-white/5">
+                                    <div className="flex items-center gap-3">
+                                        <Move size={14} className="text-white/40"/>
+                                        <span className="font-mono text-[10px] text-white/60">LOGO_POSITION</span>
+                                    </div>
+                                    <Lock size={12} className="text-[#E3E3FD]"/>
+                                </div>
+
+                                {/* Unlocked Param */}
+                                <div className="flex items-center justify-between p-3 bg-[#E3E3FD]/5 border border-[#E3E3FD]/20">
+                                    <div className="flex items-center gap-3">
+                                        <Type size={14} className="text-white"/>
+                                        <span className="font-mono text-[10px] text-white">HEADLINE_TEXT</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <span className="font-mono text-[9px] text-[#E3E3FD] uppercase">Editable</span>
+                                        <Edit3 size={12} className="text-[#E3E3FD]"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Output Preview Side */}
+                    <div className="space-y-6">
+                        <div className="flex items-center gap-3 mb-2">
+                            <span className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">Client Output</span>
+                            <div className="h-px flex-1 bg-white/10"></div>
+                        </div>
+
+                        <div className="relative aspect-[9/16] bg-[#111] border border-white/10 p-6 flex flex-col justify-between overflow-hidden group">
+                            {/* Background Image Placeholder */}
+                            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 z-10"></div>
+                            <div className="absolute inset-0 opacity-30 bg-[url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop')] bg-cover bg-center transition-transform duration-700 group-hover:scale-105"></div>
+                            
+                            {/* Logo (Locked Position) */}
+                            <div className="relative z-20 w-8 h-8 border border-white/20 rounded-full flex items-center justify-center backdrop-blur-md">
+                                <div className="w-4 h-4 bg-white rounded-full"></div>
+                            </div>
+
+                            {/* Headline (Editable) */}
+                            <div className="relative z-20">
+                                <div className="font-montreal text-2xl leading-tight text-white mb-2">
+                                    Summer<br/>Collection
+                                </div>
+                                <div className="h-1 w-12 bg-[#E3E3FD]"></div>
+                            </div>
+
+                            {/* Lock Overlay Indicator */}
+                            <div className="absolute top-4 right-4 z-30 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <div className="flex items-center gap-2 px-2 py-1 bg-black/50 backdrop-blur-md border border-white/10 rounded-sm">
+                                    <Lock size={10} className="text-[#E3E3FD]"/>
+                                    <span className="font-mono text-[9px] text-white">ASSETS_SECURE</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {/* 04. Interface & Cards */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+            <div className="md:col-span-4 sticky top-32 h-fit">
+                <SectionHeader title="Interface" number="04" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed">
                     Modular components designed for data density. Strict squared corners and technical markers define the container language.
                 </p>
@@ -409,10 +576,10 @@ export default function BrandGuidelines() {
             </div>
         </section>
 
-        {/* 03. Forms & Inputs */}
+        {/* 05. Forms & Inputs */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div className="md:col-span-4 sticky top-32 h-fit">
-                <SectionHeader title="Contact Forms" number="03" />
+                <SectionHeader title="Contact Forms" number="05" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed">
                     Input fields designed for focus and validation. Minimalist structure with clear active states.
                 </p>
@@ -468,10 +635,10 @@ export default function BrandGuidelines() {
             </div>
         </section>
 
-        {/* 04. Buttons & Actions */}
+        {/* 06. Buttons & Actions */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div className="md:col-span-4 sticky top-32 h-fit">
-                <SectionHeader title="Actions" number="04" />
+                <SectionHeader title="Actions" number="06" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed">
                    Primary, secondary, and tertiary actions designed for clear hierarchy. Hover states introduce subtle scale and color shifts.
                 </p>
@@ -536,10 +703,10 @@ export default function BrandGuidelines() {
             </div>
         </section>
 
-        {/* 05. Accordions & Data */}
+        {/* 07. Accordions & Data */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
              <div className="md:col-span-4 sticky top-32 h-fit">
-                <SectionHeader title="Expansion" number="05" />
+                <SectionHeader title="Expansion" number="07" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed">
                    Progressive disclosure elements for dense technical information.
                 </p>
@@ -587,10 +754,10 @@ export default function BrandGuidelines() {
             </div>
         </section>
 
-        {/* 06. Visualizations */}
+        {/* 08. Visualizations */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
              <div className="md:col-span-4 sticky top-32 h-fit">
-                <SectionHeader title="Data Viz" number="06" />
+                <SectionHeader title="Data Viz" number="08" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed">
                    Minimalist charts and indicators for monitoring system health and usage metrics.
                 </p>
@@ -658,10 +825,10 @@ export default function BrandGuidelines() {
             </div>
         </section>
 
-        {/* 07. Modal & Dialog */}
+        {/* 09. Modal & Dialog */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
              <div className="md:col-span-4 sticky top-32 h-fit">
-                <SectionHeader title="Overlays" number="07" />
+                <SectionHeader title="Overlays" number="09" />
                  <p className="font-montreal text-white/60 text-lg leading-relaxed">
                    Focused states for critical decisions or complex configuration.
                 </p>
@@ -704,10 +871,10 @@ export default function BrandGuidelines() {
             </div>
         </section>
 
-        {/* 08. Motion & 3D (New Section) */}
+        {/* 10. Motion & 3D */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div className="md:col-span-4 sticky top-32 h-fit">
-                <SectionHeader title="Motion" number="08" />
+                <SectionHeader title="Motion" number="10" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed">
                    The brand utilizes floating, component-based 3D motion to communicate modularity and assembly.
                 </p>
@@ -748,10 +915,10 @@ export default function BrandGuidelines() {
             </div>
         </section>
 
-        {/* 09. Grid System (New Section) */}
+        {/* 11. Grid System */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
              <div className="md:col-span-4 sticky top-32 h-fit">
-                <SectionHeader title="Grid" number="09" />
+                <SectionHeader title="Grid" number="11" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed">
                    A flexible 12-column grid system that allows for asymmetrical balance and white space utilization.
                 </p>
