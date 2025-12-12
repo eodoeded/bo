@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { Database, Cpu, Layout, ArrowRight, Lock, Sparkles } from 'lucide-react';
+import upComp from "../assets/up-comp.png";
+import bottomComp from "../assets/bottom-comp.png";
 
-// Shared Components (Internal to keep self-contained for now)
+// Shared Components
 const Corner = ({ className = "" }) => (
     <div className={`absolute w-1.5 h-1.5 border-white/40 ${className}`} />
 );
@@ -13,15 +15,14 @@ const Badge = ({ children, className = "", color = "text-[#E3E3FD]" }) => (
     </span>
 );
 
-const Node = ({ title, icon: Icon, children, x, y, delay = 0 }) => (
+const Node = ({ title, icon: Icon, children, x, y, delay = 0, width = "w-48" }) => (
   <motion.div 
     initial={{ opacity: 0, scale: 0.9 }}
     animate={{ opacity: 1, scale: 1 }}
     transition={{ duration: 0.5, delay }}
-    className="absolute z-10 bg-[#050505] border border-white/10 p-4 w-48 shadow-2xl backdrop-blur-md"
+    className={`absolute z-10 bg-[#050505] border border-white/10 p-4 ${width} shadow-2xl backdrop-blur-md`}
     style={{ left: x, top: y }}
   >
-    {/* Tech Corners */}
     <Corner className="top-0 left-0 border-t border-l" />
     <Corner className="bottom-0 right-0 border-b border-r" />
 
@@ -29,7 +30,7 @@ const Node = ({ title, icon: Icon, children, x, y, delay = 0 }) => (
       <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">{title}</span>
       <div className="w-1 h-1 bg-[#E3E3FD] animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
     </div>
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 relative z-10">
         {children}
     </div>
     
@@ -40,7 +41,6 @@ const Node = ({ title, icon: Icon, children, x, y, delay = 0 }) => (
 );
 
 const Connection = ({ start, end, delay }) => {
-    // Simple rectilinear path
     const midX = (start.x + end.x) / 2;
     const path = `M ${start.x} ${start.y} L ${midX} ${start.y} L ${midX} ${end.y} L ${end.x} ${end.y}`;
   
@@ -74,14 +74,11 @@ export default function WaitlistHero() {
   const handleJoin = (e) => {
     e.preventDefault();
     if (!email) return;
-    
     setStatus('success');
     const emailBody = email; 
     setEmail('');
-    
     const subject = encodeURIComponent("Join Waitlist - Branded Objects");
     const body = encodeURIComponent(`Please add ${emailBody} to the Branded Objects waitlist.`);
-    
     setTimeout(() => {
         window.location.href = `mailto:brandedobjects@gmail.com?subject=${subject}&body=${body}`;
         setTimeout(() => setStatus('idle'), 2000);
@@ -89,7 +86,7 @@ export default function WaitlistHero() {
   };
 
   return (
-    <section className="relative w-full min-h-screen flex flex-col items-center pt-32 pb-20 px-6 overflow-hidden bg-[#020202]">
+    <section className="relative w-full h-screen min-h-[700px] flex flex-col pt-24 pb-0 px-6 overflow-hidden bg-[#020202]">
       
       {/* Background Grid */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.04]" style={{ 
@@ -97,117 +94,146 @@ export default function WaitlistHero() {
           backgroundSize: '20px 20px' 
       }}></div>
 
-      {/* Hero Content */}
-      <div className="relative z-20 flex flex-col items-center text-center max-w-4xl mx-auto mb-20">
-        <Badge className="mb-6">System v1.0 — Early Access</Badge>
-        <motion.h1
-          className="font-montreal font-medium text-white text-5xl md:text-7xl leading-[0.95] tracking-tight mb-8"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          Automated <span className="text-[#E3E3FD]">Brand</span><br/>Governance.
-        </motion.h1>
-
-        <motion.p
-          className="font-montreal text-white/60 text-lg md:text-xl max-w-2xl mb-12 leading-relaxed"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1, duration: 0.8 }}
-        >
-          Empower clients to generate on-brand assets without breaking the design system. 
-          Studios build the logic. Clients fill the blanks.
-        </motion.p>
+      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 h-full items-center">
         
-        {/* Email Form */}
-        <motion.form 
-          className="flex flex-col sm:flex-row w-full max-w-[480px] relative group"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.8 }}
-          onSubmit={handleJoin}
-        >
-          <div className="absolute -inset-[1px] bg-[#E3E3FD]/20 opacity-0 group-hover:opacity-100 transition duration-500 blur-sm"></div>
-          <div className="relative flex flex-col sm:flex-row w-full bg-[#050505] border border-white/10 p-1">
-            <Corner className="top-0 left-0 border-t border-l" />
-            <Corner className="bottom-0 right-0 border-b border-r" />
-            
-            <input 
-                type="email" 
-                placeholder="studio@agency.com" 
-                className="flex-1 bg-transparent text-white px-6 py-4 font-mono text-xs focus:outline-none placeholder:text-white/20 tracking-wider"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
-            <button 
-                type="submit"
-                className="bg-white text-black px-8 py-4 font-mono text-[10px] tracking-[0.2em] hover:bg-[#E3E3FD] transition-colors whitespace-nowrap uppercase border border-transparent"
+        {/* Left Column: Text & Form */}
+        <div className="flex flex-col items-start text-left z-20 mb-12 lg:mb-0">
+            <Badge className="mb-6">System v1.0 — Early Access</Badge>
+            <motion.h1
+            className="font-montreal font-medium text-white text-5xl md:text-7xl leading-[0.95] tracking-tight mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
             >
-                Request Access
-            </button>
-          </div>
-        </motion.form>
-         {status === 'success' && (
-            <motion.p 
-                initial={{ opacity: 0 }} 
-                animate={{ opacity: 1 }} 
-                className="mt-4 font-mono text-[10px] text-[#E3E3FD] tracking-widest uppercase flex items-center gap-2"
+            Automated <span className="text-[#E3E3FD]">Brand</span><br/>Governance.
+            </motion.h1>
+
+            <motion.p
+            className="font-montreal text-white/60 text-lg md:text-xl max-w-xl mb-12 leading-relaxed"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.8 }}
             >
-                <div className="w-1.5 h-1.5 bg-[#E3E3FD] animate-pulse rounded-full"></div>
-                Redirecting to secure client...
+            Empower clients to generate on-brand assets without breaking the design system. 
+            Studios build the logic. Clients fill the blanks.
             </motion.p>
-        )}
-      </div>
+            
+            <motion.form 
+            className="flex flex-col sm:flex-row w-full max-w-[440px] relative group"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+            onSubmit={handleJoin}
+            >
+            <div className="absolute -inset-[1px] bg-[#E3E3FD]/20 opacity-0 group-hover:opacity-100 transition duration-500 blur-sm"></div>
+            <div className="relative flex flex-col sm:flex-row w-full bg-[#050505] border border-white/10 p-1">
+                <Corner className="top-0 left-0 border-t border-l" />
+                <Corner className="bottom-0 right-0 border-b border-r" />
+                
+                <input 
+                    type="email" 
+                    placeholder="studio@agency.com" 
+                    className="flex-1 bg-transparent text-white px-6 py-4 font-mono text-xs focus:outline-none placeholder:text-white/20 tracking-wider"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <button 
+                    type="submit"
+                    className="bg-white text-black px-8 py-4 font-mono text-[10px] tracking-[0.2em] hover:bg-[#E3E3FD] transition-colors whitespace-nowrap uppercase border border-transparent"
+                >
+                    Request Access
+                </button>
+            </div>
+            </motion.form>
+             {status === 'success' && (
+                <motion.p 
+                    initial={{ opacity: 0 }} 
+                    animate={{ opacity: 1 }} 
+                    className="mt-4 font-mono text-[10px] text-[#E3E3FD] tracking-widest uppercase flex items-center gap-2"
+                >
+                    <div className="w-1.5 h-1.5 bg-[#E3E3FD] animate-pulse rounded-full"></div>
+                    Redirecting to secure client...
+                </motion.p>
+            )}
+        </div>
 
-      {/* Visual System Graph */}
-      <div className="relative w-full max-w-5xl h-[300px] hidden md:block opacity-80">
-         <div className="absolute inset-0 flex justify-center scale-90">
-             {/* Studio Input */}
-             <Node title="Design_Studio" x="10%" y="40%" delay={0.4}>
-                <div className="flex items-center gap-3 text-white/60">
-                    <Database size={14} />
-                    <span className="font-mono text-[9px]">ASSET_LIBRARY</span>
-                </div>
-                <div className="flex items-center gap-3 text-white/60">
-                    <Lock size={14} className="text-[#E3E3FD]"/>
-                    <span className="font-mono text-[9px] text-[#E3E3FD]">LOCK_RULES</span>
-                </div>
-             </Node>
+        {/* Right Column: Node Graph with Spot Mini */}
+        <div className="relative h-[400px] lg:h-[600px] w-full flex items-center justify-center">
+            <div className="relative w-[500px] h-[400px] scale-75 lg:scale-100">
+                {/* 
+                    Coordinates relative to 500x400 container.
+                    Studio (Left): x=0, y=150. Width=160 (w-40). Right Port: x=160-5=155. y=150+32=182
+                    Core (Center): x=200, y=100. Width=200. Left Port: x=200-5=195. y=100+100(mid)=200. Right Port: x=400-5=395.
+                    Output (Right): x=440, y=150. Width=160. Left Port: x=440-5=435.
+                */}
 
-             {/* System Core */}
-             <Node title="BrandForge_Core" x="42%" y="40%" delay={0.6}>
-                 <div className="flex items-center gap-3 text-white/60">
-                    <Cpu size={14} />
-                    <span className="font-mono text-[9px]">GENERATION</span>
-                </div>
-                 <div className="w-full bg-white/10 h-1 mt-1 overflow-hidden">
-                    <motion.div className="h-full bg-[#E3E3FD]" animate={{ x: ['-100%', '100%'] }} transition={{ duration: 1.5, repeat: Infinity }} />
-                 </div>
-             </Node>
+                {/* Studio Input */}
+                <Node title="Design_Studio" x={0} y={150} delay={0.4} width="w-40">
+                    <div className="flex items-center gap-3 text-white/60">
+                        <Database size={14} />
+                        <span className="font-mono text-[9px]">ASSETS</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-white/60">
+                        <Lock size={14} className="text-[#E3E3FD]"/>
+                        <span className="font-mono text-[9px] text-[#E3E3FD]">RULES</span>
+                    </div>
+                </Node>
 
-             {/* Client Output */}
-             <Node title="Client_Output" x="74%" y="40%" delay={0.8}>
-                 <div className="flex items-center gap-3 text-white/60">
-                    <Layout size={14} />
-                    <span className="font-mono text-[9px]">SOCIAL_POST</span>
-                </div>
-                <div className="flex items-center gap-3 text-white/60">
-                    <Sparkles size={14} className="text-[#E3E3FD]"/>
-                    <span className="font-mono text-[9px]">ON_BRAND</span>
-                </div>
-             </Node>
+                {/* System Core with Spot Mini */}
+                <Node title="BrandForge_Core" x={200} y={50} delay={0.6} width="w-48">
+                    <div className="h-40 w-full relative flex items-center justify-center overflow-hidden bg-white/[0.02] border border-white/5 mb-2">
+                         {/* Spot Mini Animation */}
+                        <motion.div
+                            className="relative z-0"
+                            animate={{ y: [0, -4, 0] }}
+                            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                        >
+                            <img src={bottomComp} alt="Bottom" className="w-[100px] object-contain opacity-90 mix-blend-screen" />
+                        </motion.div>
+                        <motion.div
+                            className="absolute top-8"
+                            animate={{ y: [0, -6, 0] }}
+                            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
+                            style={{ zIndex: 2 }}
+                        >
+                            <img src={upComp} alt="Top" className="w-[50px] object-contain opacity-90 mix-blend-screen" />
+                        </motion.div>
+                    </div>
+                    <div className="flex justify-between items-center px-1">
+                        <span className="font-mono text-[8px] text-white/40">GENERATING</span>
+                        <div className="flex gap-0.5">
+                            {[1,2,3].map(i => (
+                                <div key={i} className="w-0.5 h-1.5 bg-[#E3E3FD] animate-pulse" style={{animationDelay: `${i*0.1}s`}}></div>
+                            ))}
+                        </div>
+                    </div>
+                </Node>
 
-             {/* Connections */}
-             {/* 
-                Studio (10% + 192px width approx). 
-                Center calc approx for 1000px width container:
-                10% = 100px. Width 192. Right Port ~292px.
-                42% = 420px. Left Port ~420px.
-             */}
-             <Connection start={{x: 292, y: 150}} end={{x: 420, y: 150}} delay={0.5} />
-             <Connection start={{x: 612, y: 150}} end={{x: 740, y: 150}} delay={0.7} />
+                {/* Client Output */}
+                <Node title="Client_Output" x={440} y={150} delay={0.8} width="w-40">
+                    <div className="flex items-center gap-3 text-white/60">
+                        <Layout size={14} />
+                        <span className="font-mono text-[9px]">RESULT</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-white/60">
+                        <Sparkles size={14} className="text-[#E3E3FD]"/>
+                        <span className="font-mono text-[9px]">SAFE</span>
+                    </div>
+                </Node>
 
-         </div>
+                {/* Connections */}
+                {/* 
+                    Studio (0, 150) -> Out: 155, 184 (150+34 approx for port center)
+                    Core (200, 50) -> In: 195, 150 (50+100 for center vert)
+                    Core (200, 50) -> Out: 395, 150
+                    Output (440, 150) -> In: 435, 184
+                */}
+                <Connection start={{x: 155, y: 184}} end={{x: 195, y: 150}} delay={0.5} />
+                <Connection start={{x: 395, y: 150}} end={{x: 435, y: 184}} delay={0.7} />
+
+            </div>
+        </div>
+
       </div>
 
     </section>

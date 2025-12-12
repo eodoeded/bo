@@ -1102,7 +1102,7 @@ export default function BrandGuidelines() {
                         {/* Option 2: Technical Monogram (New) */}
                         <div className="group">
                              <div className="w-32 h-32 bg-[#0A0A0A] border border-white/10 flex items-center justify-center relative text-white">
-                                <span className="font-mono text-xl tracking-[0.2em] group-hover:text-[#E3E3FD] transition-colors">[ B ]</span>
+                                <span className="font-mono text-xl tracking-[0.2em] group-hover:text-[#E3E3FD] transition-colors">[ BO ]</span>
                              </div>
                              <div className="flex justify-between items-center mt-3 w-32">
                                 <span className="font-mono text-[9px] text-white/40">Tech Mono</span>
@@ -1144,17 +1144,15 @@ export default function BrandGuidelines() {
                         </li>
                     </ul>
                 </div>
-
+    
                 <div className="col-span-1 md:col-span-2 space-y-6">
                     <h4 className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">Connect</h4>
                     <div className="flex flex-col gap-3">
                         <a href="https://www.linkedin.com/company/108913089/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-white/60 hover:text-white transition-colors group">
-                            <Linkedin size={14} className="group-hover:text-[#E3E3FD] transition-colors"/>
-                            <span className="font-mono text-xs">LinkedIn</span>
+                            <span className="font-mono text-xs text-[#E3E3FD] group-hover:text-white transition-colors">[ LINKEDIN ]</span>
                         </a>
                          <a href="mailto:brandedobjects@gmail.com" className="flex items-center gap-3 text-white/60 hover:text-white transition-colors group">
-                            <Mail size={14} className="group-hover:text-[#E3E3FD] transition-colors"/>
-                            <span className="font-mono text-xs">Email</span>
+                            <span className="font-mono text-xs text-[#E3E3FD] group-hover:text-white transition-colors">[ EMAIL ]</span>
                         </a>
                     </div>
                 </div>

@@ -35,12 +35,10 @@ export default function WaitlistFooter() {
                         <h4 className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">Connect</h4>
                         <div className="flex flex-col gap-3">
                             <a href="https://www.linkedin.com/company/108913089/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-white/60 hover:text-white transition-colors group">
-                                <Linkedin size={14} className="group-hover:text-[#E3E3FD] transition-colors"/>
-                                <span className="font-mono text-xs">LinkedIn</span>
+                                <span className="font-mono text-xs text-[#E3E3FD] group-hover:text-white transition-colors">[ LINKEDIN ]</span>
                             </a>
                              <a href="mailto:brandedobjects@gmail.com" className="flex items-center gap-3 text-white/60 hover:text-white transition-colors group">
-                                <Mail size={14} className="group-hover:text-[#E3E3FD] transition-colors"/>
-                                <span className="font-mono text-xs">Email</span>
+                                <span className="font-mono text-xs text-[#E3E3FD] group-hover:text-white transition-colors">[ EMAIL ]</span>
                             </a>
                         </div>
                     </div>
