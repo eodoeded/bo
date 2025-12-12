@@ -91,16 +91,16 @@ export default function WaitlistHero() {
     <section className="relative w-full h-screen min-h-[700px] flex flex-col pt-32 pb-0 px-6 overflow-hidden bg-[#020202]">
       
       {/* Background Grid */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ 
+      <div className="absolute inset-0 pointer-events-none opacity-[0.02]" style={{ 
           backgroundImage: 'linear-gradient(rgba(227, 227, 253, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(227, 227, 253, 0.1) 1px, transparent 1px)', 
-          backgroundSize: '20px 20px' 
+          backgroundSize: '40px 40px' 
       }}></div>
 
-      {/* Decorative Floating Elements */}
-      <div className="absolute top-24 left-6 md:left-12 font-mono text-[9px] text-white/20 uppercase tracking-widest hidden md:block">
+      {/* Decorative Floating Elements (Subtler) */}
+      <div className="absolute top-32 left-6 md:left-12 font-mono text-[9px] text-white/10 uppercase tracking-widest hidden md:block">
           SYS_READY <br/> 37.7749° N, 122.4194° W
       </div>
-      <div className="absolute bottom-12 right-6 md:right-12 font-mono text-[9px] text-white/20 uppercase tracking-widest hidden md:block text-right">
+      <div className="absolute bottom-12 right-6 md:right-12 font-mono text-[9px] text-white/10 uppercase tracking-widest hidden md:block text-right">
           LATENCY: 12ms <br/> SECURE_CONNECTION
       </div>
 
