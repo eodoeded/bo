@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import { useState, useRef, useEffect } from 'react';
-import { Database, Layout, ArrowRight, Lock, Scan, Zap, AlertTriangle } from 'lucide-react';
+import { useState } from 'react';
+import { Database, Layout, ArrowRight, Lock, Scan, Zap } from 'lucide-react';
 import upComp from "../assets/up-comp.png";
 import bottomComp from "../assets/bottom-comp.png";
 
@@ -9,110 +9,45 @@ const Corner = ({ className = "" }) => (
     <div className={`absolute w-1.5 h-1.5 border-white/40 ${className}`} />
 );
 
-// Node component with manual drag logic
-const Node = ({ id, title, children, x, y, onDragStart, width = "w-48" }) => {
-  return (
-    <motion.div 
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5 }}
-      className={`absolute z-20 bg-[#050505] border border-white/10 p-4 ${width} shadow-[0_0_30px_rgba(0,0,0,0.5)] backdrop-blur-md group hover:border-[#E3E3FD]/50 transition-colors hidden md:block cursor-grab active:cursor-grabbing`}
-      style={{ 
-          left: `${x}%`, 
-          top: `${y}%`,
-          transform: 'translate(-50%, -50%)'
-      }}
-      onPointerDown={(e) => onDragStart(e, id)}
-    >
-      <Corner className="top-0 left-0 border-t border-l group-hover:border-[#ccff00] transition-colors duration-300" />
-      <Corner className="bottom-0 right-0 border-b border-r group-hover:border-[#ccff00] transition-colors duration-300" />
+// Node component with centered positioning logic (Static)
+const Node = ({ title, children, x, y, delay = 0, width = "w-48" }) => (
+  <motion.div 
+    initial={{ opacity: 0, scale: 0.9 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ duration: 0.5, delay }}
+    className={`absolute z-20 bg-[#050505] border border-white/10 p-4 ${width} shadow-2xl backdrop-blur-md group hover:border-white/30 transition-colors hidden md:block`}
+    style={{ 
+        left: `${x}%`, 
+        top: `${y}%`,
+        transform: 'translate(-50%, -50%)' // Center the node on the coordinates
+    }}
+  >
+    <Corner className="top-0 left-0 border-t border-l group-hover:border-white transition-colors" />
+    <Corner className="bottom-0 right-0 border-b border-r group-hover:border-white transition-colors" />
 
-      {/* Glitch decoration */}
-      <div className="absolute -top-1 left-4 w-8 h-0.5 bg-[#ccff00] opacity-0 group-hover:opacity-100 transition-opacity"></div>
-
-      <div className="flex justify-between items-center mb-3 pb-2 border-b border-white/5">
-        <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest group-hover:text-[#ccff00] transition-colors">{title}</span>
-        <div className="w-1.5 h-1.5 bg-[#E3E3FD] animate-pulse shadow-[0_0_8px_#E3E3FD] group-hover:bg-[#ccff00] group-hover:shadow-[0_0_8px_#ccff00] transition-colors"></div>
-      </div>
-      <div className="flex flex-col gap-2 relative z-10">
-          {children}
-      </div>
-      
-      {/* Ports */}
-      <div className="absolute -left-[5px] top-1/2 -translate-y-1/2 w-1.5 h-2 bg-[#050505] border border-white/30 group-hover:border-[#ccff00] transition-colors" />
-      <div className="absolute -right-[5px] top-1/2 -translate-y-1/2 w-1.5 h-2 bg-[#050505] border border-white/30 group-hover:border-[#ccff00] transition-colors" />
-    </motion.div>
-  );
-};
+    <div className="flex justify-between items-center mb-3 pb-2 border-b border-white/5">
+      <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest group-hover:text-white transition-colors">{title}</span>
+      <div className="w-1 h-1 bg-[#E3E3FD] animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
+    </div>
+    <div className="flex flex-col gap-2 relative z-10">
+        {children}
+    </div>
+    
+    {/* Ports - Centered vertically on sides */}
+    <div className="absolute -left-[5px] top-1/2 -translate-y-1/2 w-1.5 h-2 bg-[#050505] border border-white/30 group-hover:border-[#E3E3FD] transition-colors" />
+    <div className="absolute -right-[5px] top-1/2 -translate-y-1/2 w-1.5 h-2 bg-[#050505] border border-white/30 group-hover:border-[#E3E3FD] transition-colors" />
+  </motion.div>
+);
 
 export default function WaitlistHero() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState('idle');
-  
-  // Container ref for drag calculations
-  const containerRef = useRef(null);
-  
-  // Dragging state
-  const [draggingId, setDraggingId] = useState(null);
 
   // Node Positions (0-100 percentages)
-  const [nodes, setNodes] = useState({
+  const nodes = {
       studio: { x: 25, y: 35 },
       core: { x: 50, y: 55 },
       output: { x: 75, y: 35 }
-  });
-
-  const handleDragStart = (e, id) => {
-      e.preventDefault(); // Prevent text selection
-      setDraggingId(id);
-      
-      const container = containerRef.current;
-      if (!container) return;
-
-      const { width, height, left, top } = container.getBoundingClientRect();
-      
-      // Calculate initial offset from the center of the node to the cursor
-      // Current node position in pixels
-      const nodeX = (nodes[id].x / 100) * width;
-      const nodeY = (nodes[id].y / 100) * height;
-      
-      // Mouse position relative to container
-      const mouseX = e.clientX - left;
-      const mouseY = e.clientY - top;
-      
-      const offsetX = mouseX - nodeX;
-      const offsetY = mouseY - nodeY;
-
-      const onPointerMove = (moveEvent) => {
-          const newMouseX = moveEvent.clientX - left;
-          const newMouseY = moveEvent.clientY - top;
-          
-          // New node position in pixels
-          let newNodeX = newMouseX - offsetX;
-          let newNodeY = newMouseY - offsetY;
-          
-          // Clamp to container bounds (optional, but good for UI)
-          newNodeX = Math.max(0, Math.min(width, newNodeX));
-          newNodeY = Math.max(0, Math.min(height, newNodeY));
-
-          // Convert back to percentage
-          setNodes(prev => ({
-              ...prev,
-              [id]: {
-                  x: (newNodeX / width) * 100,
-                  y: (newNodeY / height) * 100
-              }
-          }));
-      };
-
-      const onPointerUp = () => {
-          setDraggingId(null);
-          window.removeEventListener('pointermove', onPointerMove);
-          window.removeEventListener('pointerup', onPointerUp);
-      };
-
-      window.addEventListener('pointermove', onPointerMove);
-      window.addEventListener('pointerup', onPointerUp);
   };
 
   const handleJoin = async (e) => {
@@ -146,24 +81,22 @@ export default function WaitlistHero() {
   return (
     <section className="relative w-full h-screen min-h-[800px] overflow-hidden bg-[#020202]">
       
-      {/* Weird/Unique Background Elements */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ 
-          backgroundImage: 'linear-gradient(rgba(204, 255, 0, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(227, 227, 253, 0.1) 1px, transparent 1px)', 
+      {/* Background Grid */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.02]" style={{ 
+          backgroundImage: 'linear-gradient(rgba(227, 227, 253, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(227, 227, 253, 0.1) 1px, transparent 1px)', 
           backgroundSize: '40px 40px' 
       }}></div>
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-b from-[#ccff00]/5 to-transparent blur-[100px] pointer-events-none mix-blend-screen"></div>
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-gradient-to-t from-[#E3E3FD]/5 to-transparent blur-[100px] pointer-events-none mix-blend-screen"></div>
 
       {/* Decorative Floating Elements */}
-      <div className="absolute top-32 left-6 md:left-12 font-mono text-[9px] text-white/20 uppercase tracking-widest hidden md:block">
-          <span className="text-[#ccff00] mr-2">●</span>SYS_READY <br/> 37.7749° N, 122.4194° W
+      <div className="absolute top-32 left-6 md:left-12 font-mono text-[9px] text-white/10 uppercase tracking-widest hidden md:block">
+          SYS_READY <br/> 37.7749° N, 122.4194° W
       </div>
-      <div className="absolute top-32 right-6 md:right-12 font-mono text-[9px] text-white/20 uppercase tracking-widest hidden md:block text-right">
-          LATENCY: 12ms <br/> SECURE_CONNECTION <span className="text-[#E3E3FD] ml-2">●</span>
+      <div className="absolute top-32 right-6 md:right-12 font-mono text-[9px] text-white/10 uppercase tracking-widest hidden md:block text-right">
+          LATENCY: 12ms <br/> SECURE_CONNECTION
       </div>
 
       {/* Node Graph Layer - Full Screen */}
-      <div ref={containerRef} className="absolute inset-0 w-full h-full z-10 touch-none">
+      <div className="absolute inset-0 w-full h-full z-10">
           
           {/* Connecting Lines - SVG that scales exactly with container */}
           <svg className="absolute inset-0 w-full h-full pointer-events-none hidden md:block" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -171,10 +104,10 @@ export default function WaitlistHero() {
                <motion.path
                   d={`M ${nodes.studio.x} ${nodes.studio.y} C ${nodes.studio.x + 10} ${nodes.studio.y}, ${nodes.core.x - 10} ${nodes.core.y}, ${nodes.core.x} ${nodes.core.y}`}
                   fill="none"
-                  stroke="#E3E3FD"
-                  strokeWidth="0.15"
-                  strokeOpacity="0.2"
-                  vectorEffect="non-scaling-stroke"
+                  stroke="#FFFFFF" // White as requested
+                  strokeWidth="0.15" // Thinner because viewBox is 100x100
+                  strokeOpacity="0.6" // Increased visibility
+                  vectorEffect="non-scaling-stroke" // Keeps line width consistent despite non-uniform scaling
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
                   transition={{ duration: 1.5, delay: 0.5 }}
@@ -183,9 +116,9 @@ export default function WaitlistHero() {
                 <motion.path
                   d={`M ${nodes.core.x} ${nodes.core.y} C ${nodes.core.x + 10} ${nodes.core.y}, ${nodes.output.x - 10} ${nodes.output.y}, ${nodes.output.x} ${nodes.output.y}`}
                   fill="none"
-                  stroke="#E3E3FD"
+                  stroke="#FFFFFF" // White as requested
                   strokeWidth="0.15"
-                  strokeOpacity="0.2"
+                  strokeOpacity="0.6"
                   vectorEffect="non-scaling-stroke"
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
@@ -194,7 +127,8 @@ export default function WaitlistHero() {
           </svg>
 
           {/* Nodes */}
-          <Node id="studio" title="Design_Studio" x={nodes.studio.x} y={nodes.studio.y} onDragStart={handleDragStart} width="w-48">
+          {/* Studio - Top Leftish */}
+          <Node title="Design_Studio" x={nodes.studio.x} y={nodes.studio.y} delay={0.4} width="w-48">
                 <div className="flex items-center gap-3 text-white/60">
                     <Database size={14} />
                     <span className="font-mono text-[9px]">ASSETS_LOADED</span>
@@ -205,8 +139,9 @@ export default function WaitlistHero() {
                 </div>
           </Node>
 
-          <Node id="core" title="Branded_Objects" x={nodes.core.x} y={nodes.core.y} onDragStart={handleDragStart} width="w-64">
-                <div className="h-48 w-full relative flex items-center justify-center overflow-hidden bg-[#0A0A0A] border border-white/10 mb-2 shadow-inner group-hover:border-[#ccff00]/20 transition-colors">
+          {/* System Core - Center */}
+          <Node title="Branded_Objects" x={nodes.core.x} y={nodes.core.y} delay={0.6} width="w-64">
+                <div className="h-48 w-full relative flex items-center justify-center overflow-hidden bg-[#0A0A0A] border border-white/10 mb-2 shadow-inner">
                      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05]"></div>
                     <motion.div
                         className="relative z-0"
@@ -228,13 +163,14 @@ export default function WaitlistHero() {
                     <span className="font-mono text-[8px] text-white/40">GENERATING_ASSET_ID_8492</span>
                     <div className="flex gap-0.5">
                         {[1,2,3,4,5].map(i => (
-                            <div key={i} className="w-0.5 h-1.5 bg-[#ccff00]" style={{opacity: 0.2 + (i*0.15)}}></div>
+                            <div key={i} className="w-0.5 h-1.5 bg-[#E3E3FD]" style={{opacity: 0.2 + (i*0.15)}}></div>
                         ))}
                     </div>
                 </div>
           </Node>
 
-          <Node id="output" title="Client_Output" x={nodes.output.x} y={nodes.output.y} onDragStart={handleDragStart} width="w-48">
+          {/* Output - Top Rightish */}
+          <Node title="Client_Output" x={nodes.output.x} y={nodes.output.y} delay={0.8} width="w-48">
                 <div className="flex items-center gap-3 text-white/60">
                     <Layout size={14} />
                     <span className="font-mono text-[9px]">RENDER_COMPLETE</span>
@@ -247,10 +183,10 @@ export default function WaitlistHero() {
       </div>
 
       {/* Text Content - Anchored Bottom Left */}
-      <div className="absolute bottom-12 md:bottom-20 left-6 md:left-12 z-30 max-w-xl pointer-events-none">
-        <div className="flex flex-col items-start text-left pointer-events-auto">
+      <div className="absolute bottom-12 md:bottom-20 left-6 md:left-12 z-30 max-w-xl">
+        <div className="flex flex-col items-start text-left">
             <div className="flex items-center gap-3 mb-6">
-                <span className="font-mono text-[9px] text-[#ccff00] uppercase tracking-widest border border-[#ccff00]/20 px-2 py-1 bg-[#ccff00]/5">Early Access Protocol</span>
+                <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">Early Access Protocol</span>
             </div>
             
             <motion.h1
@@ -279,7 +215,7 @@ export default function WaitlistHero() {
                 transition={{ delay: 0.2, duration: 0.8 }}
                 onSubmit={handleJoin}
             >
-                <div className="absolute -inset-[1px] bg-gradient-to-r from-[#E3E3FD]/20 to-[#ccff00]/20 opacity-0 group-hover:opacity-100 transition duration-500 blur-sm"></div>
+                <div className="absolute -inset-[1px] bg-gradient-to-r from-[#E3E3FD]/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 blur-sm"></div>
                 <div className="relative flex flex-col sm:flex-row w-full bg-[#050505] border border-white/10 p-1">
                     <Corner className="top-0 left-0 border-t border-l" />
                     <Corner className="bottom-0 right-0 border-b border-r" />
