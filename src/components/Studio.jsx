@@ -3,12 +3,14 @@ import {
     Type, Image as ImageIcon, Sparkles, Layers, 
     Settings, Download, ChevronRight, Maximize2, 
     Move, Sliders, Box, Grid, Monitor, Eye,
-    MousePointer, Hand, ZoomIn, Undo, Redo,
+    MousePointer, Hand, ZoomIn, ZoomOut, Undo, Redo,
     AlignLeft, AlignCenter, AlignRight,
     Bold, Italic, Underline, MoreHorizontal,
-    Check, Lock, Unlock, Trash2, ArrowLeft
+    Check, Lock, Unlock, Trash2, ArrowLeft,
+    CornerRightDown,
+    Plus
 } from 'lucide-react';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { SmartImage } from './studio/SmartImage';
 import { LayerProperties } from './studio/LayerProperties';
@@ -18,23 +20,18 @@ const Corner = ({ className = "" }) => (
     <div className={`absolute w-1.5 h-1.5 border-white/40 ${className}`} />
 );
 
-const Badge = ({ children, active = false, className = "" }) => (
-    <span className={`font-mono text-[9px] uppercase tracking-widest px-1.5 py-0.5 rounded-[1px] border ${active ? 'bg-[#E3E3FD] text-black border-[#E3E3FD]' : 'bg-white/5 text-white/40 border-white/10'} ${className}`}>
-        {children}
-    </span>
-);
-
-const IconButton = ({ icon: Icon, active, onClick, disabled }) => (
+const IconButton = ({ icon: Icon, active, onClick, disabled, title }) => (
     <button 
         onClick={onClick}
         disabled={disabled}
+        title={title}
         className={`p-2 border ${active ? 'bg-[#E3E3FD] text-black border-[#E3E3FD]' : 'bg-transparent text-white/60 border-transparent hover:bg-white/5 hover:text-white'} ${disabled ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer'} transition-colors rounded-[1px]`}
     >
         <Icon size={14} />
     </button>
 );
 
-const Ruler = ({ orientation = 'horizontal' }) => (
+const Ruler = ({ orientation = 'horizontal', zoom = 1, offset = 0 }) => (
     <div className={`absolute bg-[#050505] border-white/10 z-10 pointer-events-none ${orientation === 'horizontal' ? 'top-0 left-0 right-0 h-6 border-b flex items-end' : 'top-0 left-0 bottom-0 w-6 border-r flex flex-col items-end'}`}>
         {Array.from({ length: orientation === 'horizontal' ? 50 : 30 }).map((_, i) => (
             <div 
@@ -53,11 +50,9 @@ const Ruler = ({ orientation = 'horizontal' }) => (
 const INITIAL_LAYERS = [
   {
     id: 'frame-bg',
-    type: 'TEXT', // Using TEXT as a placeholder for frame, or actually just use a shape later. 
-    // In this simplified version, we'll assume the canvas BG is handled by config, but we can add shapes.
-    // For now, let's replicate the 'tarot' example
+    type: 'TEXT',
     x: 0, y: 0, width: 0, height: 0, zIndex: 0, locked: true, allowContentChange: false,
-    text: '', // invisible
+    text: '', 
     hidden: true
   },
   {
@@ -100,9 +95,14 @@ export default function Studio() {
     // App State
     const [mode, setMode] = useState('STUDIO'); // STUDIO | CLIENT
     const [activeTab, setActiveTab] = useState('components');
-    const [selectedTool, setSelectedTool] = useState('select');
+    const [selectedTool, setSelectedTool] = useState('select'); // select | pan | zoom
     
-    // Canvas State
+    // Canvas Viewport State
+    const [zoom, setZoom] = useState(1);
+    const [pan, setPan] = useState({ x: 0, y: 0 });
+    const viewportRef = useRef(null);
+    
+    // Canvas Content State
     const [layers, setLayers] = useState(INITIAL_LAYERS);
     const [selectedLayerId, setSelectedLayerId] = useState(null);
     const [canvasConfig, setCanvasConfig] = useState({
@@ -118,8 +118,10 @@ export default function Studio() {
 
     // Interaction State
     const [isDragging, setIsDragging] = useState(false);
-    const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
-    const canvasRef = useRef(null);
+    const [isResizing, setIsResizing] = useState(false);
+    const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+    const [initialLayerState, setInitialLayerState] = useState(null);
+    const [resizeHandle, setResizeHandle] = useState(null);
 
     // Helpers
     const selectedLayer = layers.find(l => l.id === selectedLayerId);
@@ -157,42 +159,168 @@ export default function Studio() {
         setSelectedLayerId(newLayer.id);
     };
 
-    // Handlers
-    const handleMouseDown = (e, layer) => {
-        if (mode === 'CLIENT' && layer.locked) return;
+    const handleFileUpload = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const newLayer = {
+                id: `img-${Math.random().toString(36).substr(2, 5)}`,
+                type: 'IMAGE',
+                x: 50, y: 50,
+                width: 200, height: 200,
+                zIndex: layers.length + 1,
+                src: event.target.result,
+                locked: false,
+                allowContentChange: true,
+                filterType: 'none',
+                blendMode: 'normal'
+            };
+            setLayers([...layers, newLayer]);
+            setSelectedLayerId(newLayer.id);
+        };
+        reader.readAsDataURL(file);
+    };
+
+    // --- INTERACTION HANDLERS ---
+
+    const getCanvasPoint = (e) => {
+        // Returns coordinates relative to the canvas origin (0,0), accounting for zoom and pan
+        // We don't rely on e.nativeEvent.offsetX because the target changes
+        // Instead, we use clientX/Y relative to the viewport container center
+        if (!viewportRef.current) return { x: 0, y: 0 };
         
+        const rect = viewportRef.current.getBoundingClientRect();
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        // Mouse relative to viewport center
+        const mouseX = e.clientX - rect.left - centerX;
+        const mouseY = e.clientY - rect.top - centerY;
+        
+        // Adjust for pan and zoom to get canvas space coordinate
+        // Canvas is centered at (0,0) visually when pan is 0,0
+        // So: CanvasX = (MouseX - PanX) / Zoom
+        // But our canvas origin (top-left) is shifted by width/2, height/2 relative to center
+        // Let's assume the "Canvas Component" is centered.
+        // Its top-left in "Center Space" is (-W/2, -H/2)
+        
+        const viewX = (mouseX - pan.x) / zoom;
+        const viewY = (mouseY - pan.y) / zoom;
+        
+        // Convert to canvas local coords (0,0 at top-left)
+        // Since the div is centered, we add half width/height
+        const canvasX = viewX + (canvasConfig.width / 2);
+        const canvasY = viewY + (canvasConfig.height / 2);
+        
+        return { x: canvasX, y: canvasY, rawX: e.clientX, rawY: e.clientY };
+    };
+
+    const handleMouseDown = (e, layer = null, handle = null) => {
         e.stopPropagation();
-        setSelectedLayerId(layer.id);
-        if (selectedTool === 'select') {
+        
+        if (selectedTool === 'pan' || (e.button === 1) || e.target === viewportRef.current) {
+            // Pan Start
             setIsDragging(true);
-            setDragOffset({
-                x: e.clientX - layer.x,
-                y: e.clientY - layer.y
-            });
+            setDragStart({ x: e.clientX, y: e.clientY });
+            setInitialLayerState('pan'); // hijack this var for mode
+            return;
+        }
+
+        // Layer Interaction
+        if (layer) {
+            if (mode === 'CLIENT' && layer.locked) return;
+            
+            setSelectedLayerId(layer.id);
+            setIsDragging(true);
+            const pt = getCanvasPoint(e);
+            setDragStart({ x: pt.x, y: pt.y });
+            
+            if (handle) {
+                setIsResizing(true);
+                setResizeHandle(handle);
+                setInitialLayerState({ ...layer }); // Copy layer state
+            } else {
+                // Moving
+                setInitialLayerState({ x: layer.x, y: layer.y });
+            }
+        } else {
+            // Clicked empty space
+            setSelectedLayerId(null);
         }
     };
 
     const handleMouseMove = (e) => {
-        if (!isDragging || !selectedLayerId || selectedTool !== 'select') return;
-        
-        const layer = layers.find(l => l.id === selectedLayerId);
-        if (!layer) return;
+        if (!isDragging) return;
 
-        // Simple relative drag (in a real app, map screen coords to canvas space)
-        // For this demo, assuming canvas is 1:1 with pointer or simple offset
-        // We need to account for the canvas container offset
-        // But simplifying: update x/y relative to the initial click offset
-        
-        // Actually, since we don't have the canvas rect in state, let's just use delta
-        // But better:
-        const newX = e.clientX - dragOffset.x;
-        const newY = e.clientY - dragOffset.y;
-        
-        updateLayer(selectedLayerId, { x: newX, y: newY });
+        if (initialLayerState === 'pan') {
+            const dx = e.clientX - dragStart.x;
+            const dy = e.clientY - dragStart.y;
+            setPan(prev => ({ x: prev.x + dx, y: prev.y + dy }));
+            setDragStart({ x: e.clientX, y: e.clientY }); // Incremental
+            return;
+        }
+
+        if (selectedLayerId && selectedTool === 'select') {
+             const pt = getCanvasPoint(e);
+             
+             if (isResizing && resizeHandle) {
+                 const layer = layers.find(l => l.id === selectedLayerId);
+                 const dx = pt.x - dragStart.x;
+                 const dy = pt.y - dragStart.y;
+                 
+                 const newProps = { ...initialLayerState };
+
+                 // Simple resize logic (bottom-right only for MVP, or specific handles)
+                 if (resizeHandle === 'se') {
+                     newProps.width = Math.max(10, initialLayerState.width + dx);
+                     newProps.height = Math.max(10, initialLayerState.height + dy);
+                 } else if (resizeHandle === 'sw') {
+                     newProps.width = Math.max(10, initialLayerState.width - dx);
+                     newProps.x = initialLayerState.x + dx;
+                     newProps.height = Math.max(10, initialLayerState.height + dy);
+                 } else if (resizeHandle === 'ne') {
+                     newProps.width = Math.max(10, initialLayerState.width + dx);
+                     newProps.height = Math.max(10, initialLayerState.height - dy);
+                     newProps.y = initialLayerState.y + dy;
+                 } else if (resizeHandle === 'nw') {
+                     newProps.width = Math.max(10, initialLayerState.width - dx);
+                     newProps.x = initialLayerState.x + dx;
+                     newProps.height = Math.max(10, initialLayerState.height - dy);
+                     newProps.y = initialLayerState.y + dy;
+                 }
+                 
+                 updateLayer(selectedLayerId, newProps);
+             } else {
+                 // Moving
+                 const dx = pt.x - dragStart.x;
+                 const dy = pt.y - dragStart.y;
+                 
+                 updateLayer(selectedLayerId, {
+                     x: initialLayerState.x + dx,
+                     y: initialLayerState.y + dy
+                 });
+             }
+        }
     };
 
     const handleMouseUp = () => {
         setIsDragging(false);
+        setIsResizing(false);
+        setResizeHandle(null);
+        setInitialLayerState(null);
+    };
+
+    const handleWheel = (e) => {
+        if (e.ctrlKey || e.metaKey) {
+            e.preventDefault();
+            const delta = -e.deltaY * 0.002;
+            setZoom(z => Math.min(Math.max(0.1, z + delta), 5));
+        } else {
+            // Pan with scroll
+            setPan(p => ({ x: p.x - e.deltaX, y: p.y - e.deltaY }));
+        }
     };
 
     const handleGenerate = async () => {
@@ -209,16 +337,31 @@ export default function Studio() {
 
         try {
             const prompt = aiLayer.aiPromptTemplate.replace('{subject}', clientSubject);
-            // Call our service
             const base64Image = await generateImage(prompt);
             updateLayer(aiLayer.id, { src: base64Image });
         } catch (e) {
             console.error(e);
-            setGenerationError("FAILED"); // Keep it simple
+            setGenerationError("FAILED");
         } finally {
             setIsGenerating(false);
         }
     };
+
+    // Hotkeys
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.key === 'Delete' || e.key === 'Backspace') {
+                if (selectedLayerId && mode === 'STUDIO') {
+                    deleteLayer(selectedLayerId);
+                }
+            }
+            if (e.key === ' ') {
+                // Space for pan (could implement hold-to-pan)
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [selectedLayerId, mode]);
 
     return (
         <div className="min-h-screen bg-[#020202] text-white font-montreal flex flex-col overflow-hidden selection:bg-[#E3E3FD] selection:text-black">
@@ -259,11 +402,7 @@ export default function Studio() {
             </header>
 
             {/* Main Workspace */}
-            <div 
-                className="flex-1 grid grid-cols-12 h-[calc(100vh-3rem)]"
-                onMouseMove={handleMouseMove}
-                onMouseUp={handleMouseUp}
-            >
+            <div className="flex-1 grid grid-cols-12 h-[calc(100vh-3rem)]">
                 
                 {/* Left Panel: Components & Layers */}
                 <aside className="col-span-2 border-r border-white/10 bg-[#050505] flex flex-col">
@@ -291,10 +430,11 @@ export default function Studio() {
                                         <Type size={16} className="text-white/60 group-hover:text-[#E3E3FD]" />
                                         <span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">Text</span>
                                     </button>
-                                    <button onClick={() => addLayer('IMAGE')} className="flex flex-col items-center justify-center p-3 border border-white/10 hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group">
+                                    <label className="flex flex-col items-center justify-center p-3 border border-white/10 hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group cursor-pointer">
                                         <ImageIcon size={16} className="text-white/60 group-hover:text-[#E3E3FD]" />
                                         <span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">Image</span>
-                                    </button>
+                                        <input type="file" className="hidden" accept="image/*" onChange={handleFileUpload} />
+                                    </label>
                                     <button onClick={() => addLayer('AI_FRAME')} className="flex flex-col items-center justify-center p-3 border border-white/10 hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group">
                                         <Sparkles size={16} className="text-white/60 group-hover:text-[#E3E3FD]" />
                                         <span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">AI Gen</span>
@@ -364,33 +504,48 @@ export default function Studio() {
                     
                     {/* Toolbar */}
                     <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 bg-[#050505] border border-white/10 p-1 flex items-center gap-1 rounded-[2px] shadow-xl">
-                        <IconButton icon={MousePointer} active={selectedTool === 'select'} onClick={() => setSelectedTool('select')} />
-                        <IconButton icon={Hand} active={selectedTool === 'pan'} onClick={() => setSelectedTool('pan')} />
+                        <IconButton icon={MousePointer} active={selectedTool === 'select'} onClick={() => setSelectedTool('select')} title="Select (V)" />
+                        <IconButton icon={Hand} active={selectedTool === 'pan'} onClick={() => setSelectedTool('pan')} title="Pan (H)" />
                         <div className="w-px h-4 bg-white/10 mx-1"></div>
-                        <IconButton icon={ZoomIn} onClick={() => {}} />
+                        <IconButton icon={ZoomOut} onClick={() => setZoom(z => Math.max(0.1, z - 0.1))} title="Zoom Out" />
+                        <span className="font-mono text-[9px] text-white/60 px-2 w-10 text-center">{Math.round(zoom * 100)}%</span>
+                        <IconButton icon={ZoomIn} onClick={() => setZoom(z => Math.min(5, z + 0.1))} title="Zoom In" />
                     </div>
 
                     {/* Canvas Wrapper */}
-                    <div className="flex-1 relative overflow-hidden bg-[#080808]">
-                        <div className="absolute inset-0 opacity-[0.03]" style={{ 
+                    <div 
+                        className="flex-1 relative overflow-hidden bg-[#080808]"
+                        onMouseMove={handleMouseMove}
+                        onMouseUp={handleMouseUp}
+                        onWheel={handleWheel}
+                        ref={viewportRef}
+                        onMouseDown={(e) => handleMouseDown(e)}
+                    >
+                        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ 
                             backgroundImage: 'radial-gradient(circle, #E3E3FD 1px, transparent 1px)', 
-                            backgroundSize: '20px 20px' 
+                            backgroundSize: `${20 * zoom}px ${20 * zoom}px`,
+                            backgroundPosition: `${pan.x}px ${pan.y}px`
                         }}></div>
                         
-                        <Ruler orientation="horizontal" />
-                        <Ruler orientation="vertical" />
-
-                        {/* Viewport */}
-                        <div className="absolute inset-0 flex items-center justify-center p-12 overflow-hidden">
+                        {/* Viewport Content */}
+                        <div 
+                            className="absolute transform-gpu origin-center"
+                            style={{
+                                transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`,
+                                left: '50%',
+                                top: '50%',
+                                // We center the canvas div so that (0,0) translation puts its center at viewport center
+                                marginLeft: -canvasConfig.width / 2,
+                                marginTop: -canvasConfig.height / 2
+                            }}
+                        >
                             <div 
-                                ref={canvasRef}
                                 style={{
                                     width: canvasConfig.width,
                                     height: canvasConfig.height,
                                     backgroundColor: canvasConfig.backgroundColor
                                 }}
-                                className="relative shadow-2xl transition-all duration-300"
-                                onClick={() => setSelectedLayerId(null)}
+                                className="relative shadow-2xl transition-shadow duration-300"
                             >
                                 {layers.map(layer => (
                                     !layer.hidden && (
@@ -404,25 +559,13 @@ export default function Studio() {
                                                 width: layer.width,
                                                 height: layer.type === 'TEXT' ? 'auto' : layer.height,
                                                 zIndex: layer.zIndex,
-                                                cursor: (mode === 'CLIENT' && layer.locked) ? 'default' : (selectedTool === 'select' ? 'move' : 'default'),
+                                                cursor: (mode === 'CLIENT' && layer.locked) ? 'default' : (selectedTool === 'select' ? 'move' : (selectedTool === 'pan' ? 'grab' : 'default')),
                                                 border: layer.borderWidth ? `${layer.borderWidth}px solid ${layer.borderColor}` : 'none',
                                                 borderRadius: layer.borderRadius ? `${layer.borderRadius}px` : '0px',
-                                                mixBlendMode: layer.blendMode || 'normal'
+                                                mixBlendMode: layer.blendMode || 'normal',
+                                                whiteSpace: layer.type === 'TEXT' ? 'nowrap' : 'normal'
                                             }}
                                         >
-                                            {/* Selection Outline */}
-                                            {selectedLayerId === layer.id && (
-                                                <div className="absolute -inset-[1px] border border-[#E3E3FD] pointer-events-none z-50">
-                                                    <div className="absolute -top-1.5 -left-1.5 w-3 h-3 border border-[#E3E3FD] bg-[#020202]"></div>
-                                                    <div className="absolute -top-1.5 -right-1.5 w-3 h-3 border border-[#E3E3FD] bg-[#020202]"></div>
-                                                    <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 border border-[#E3E3FD] bg-[#020202]"></div>
-                                                    <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 border border-[#E3E3FD] bg-[#020202]"></div>
-                                                    <div className="absolute -top-6 left-0 bg-[#E3E3FD] px-1.5 py-0.5 flex items-center gap-2">
-                                                        <span className="font-mono text-[9px] text-black uppercase tracking-widest font-bold">{layer.id}</span>
-                                                    </div>
-                                                </div>
-                                            )}
-
                                             {/* Content Rendering */}
                                             {layer.type === 'TEXT' && (
                                                 <div style={{
@@ -432,7 +575,7 @@ export default function Studio() {
                                                     textAlign: layer.textAlign,
                                                     lineHeight: 1.2
                                                 }}>
-                                                    {layer.text}
+                                                    {layer.text || 'Text Layer'}
                                                 </div>
                                             )}
 
@@ -449,7 +592,6 @@ export default function Studio() {
                                             {layer.type === 'AI_FRAME' && (
                                                 <div className="w-full h-full bg-black/20 relative overflow-hidden flex items-center justify-center">
                                                     {layer.src && !layer.src.startsWith('http') ? ( 
-                                                        // Base64 or specific generated content
                                                         <SmartImage 
                                                             src={layer.src}
                                                             className="w-full h-full object-cover pointer-events-none"
@@ -473,21 +615,40 @@ export default function Studio() {
                                                      )}
                                                 </div>
                                             )}
+
+                                            {/* Selection Outline & Handles */}
+                                            {selectedLayerId === layer.id && mode === 'STUDIO' && (
+                                                <>
+                                                    <div className="absolute -inset-[1px] border border-[#E3E3FD] pointer-events-none z-50">
+                                                        <div className="absolute -top-6 left-0 bg-[#E3E3FD] px-1.5 py-0.5 flex items-center gap-2">
+                                                            <span className="font-mono text-[9px] text-black uppercase tracking-widest font-bold">{layer.id}</span>
+                                                        </div>
+                                                    </div>
+                                                    {/* Resize Handles */}
+                                                    {['nw', 'ne', 'sw', 'se'].map(h => (
+                                                        <div 
+                                                            key={h}
+                                                            onMouseDown={(e) => handleMouseDown(e, layer, h)}
+                                                            className={`absolute w-2 h-2 bg-[#E3E3FD] border border-black z-50 cursor-${h}-resize`}
+                                                            style={{
+                                                                top: h[0] === 'n' ? -4 : 'auto',
+                                                                bottom: h[0] === 's' ? -4 : 'auto',
+                                                                left: h[1] === 'w' ? -4 : 'auto',
+                                                                right: h[1] === 'e' ? -4 : 'auto',
+                                                            }}
+                                                        />
+                                                    ))}
+                                                </>
+                                            )}
                                         </div>
                                     )
                                 ))}
                             </div>
                         </div>
 
-                        {/* Zoom Controls */}
-                        <div className="absolute bottom-6 right-6 flex items-center gap-2 bg-[#050505] border border-white/10 p-1 rounded-[2px]">
-                            <IconButton icon={ZoomIn} />
-                            <span className="font-mono text-[10px] text-white px-2">100%</span>
-                        </div>
-                        
-                        {/* Viewport Info */}
-                        <div className="absolute bottom-6 left-6 font-mono text-[9px] text-white/20 uppercase tracking-widest">
-                            VP: {canvasConfig.width}x{canvasConfig.height} // ZOOM: 100%
+                        {/* Zoom Controls Overlay */}
+                        <div className="absolute bottom-6 left-6 font-mono text-[9px] text-white/20 uppercase tracking-widest pointer-events-none">
+                            VP: {canvasConfig.width}x{canvasConfig.height} // ZOOM: {Math.round(zoom * 100)}% // PAN: {Math.round(pan.x)},{Math.round(pan.y)}
                         </div>
                     </div>
                 </main>
