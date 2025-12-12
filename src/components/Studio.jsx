@@ -11,7 +11,8 @@ import {
     Plus, Upload,
     Copy, Search, Layout,
     ArrowUp, ArrowDown,
-    Save
+    Save,
+    BringToFront, SendToBack // Added these
 } from 'lucide-react';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
@@ -99,6 +100,7 @@ const INITIAL_LAYERS = [
     src: "https://cdn-icons-png.flaticon.com/512/7510/7510065.png",
     locked: false, 
     allowContentChange: false,
+    lockPosition: true, // Granular Lock test
   },
   {
     id: 'card-title',
@@ -111,6 +113,7 @@ const INITIAL_LAYERS = [
     textAlign: "center",
     locked: false,
     allowContentChange: true,
+    lockPosition: false,
   },
   {
     id: 'ai-frame',
@@ -124,7 +127,8 @@ const INITIAL_LAYERS = [
     borderColor: "#4338ca",
     borderRadius: 8,
     filterType: 'dither',
-    blendMode: 'screen'
+    blendMode: 'screen',
+    lockPosition: false,
   }
 ];
 
@@ -285,30 +289,20 @@ export default function Studio() {
     // Multi-Select Reorder
     const reorderSelectedLayers = (direction) => {
         if (selectedLayerIds.length === 0) return;
-        // This is complex with multi-select (preserving relative order). 
-        // Simple approach: Shift each selected item up/down one slot if possible.
-        // Better for Figma feel: Bring To Front / Send To Back usually moves to extreme.
-        // Cmd + [ moves backward one step.
         
         let newLayers = [...layers];
-        
-        // Sort selected IDs by their current index to handle moving correctly
         const selectedIndices = selectedLayerIds.map(id => layers.findIndex(l => l.id === id)).sort((a,b) => a - b);
         
         if (direction === 'down') { // Backward
-             // Iterate from bottom up
              for (const idx of selectedIndices) {
                  if (idx > 0 && !selectedLayerIds.includes(newLayers[idx - 1].id)) {
-                     // Swap with element below
                      [newLayers[idx], newLayers[idx - 1]] = [newLayers[idx - 1], newLayers[idx]];
                  }
              }
         } else if (direction === 'up') { // Forward
-             // Iterate from top down
              for (let i = selectedIndices.length - 1; i >= 0; i--) {
                  const idx = selectedIndices[i];
                  if (idx < newLayers.length - 1 && !selectedLayerIds.includes(newLayers[idx + 1].id)) {
-                     // Swap with element above
                      [newLayers[idx], newLayers[idx + 1]] = [newLayers[idx + 1], newLayers[idx]];
                  }
              }
@@ -378,6 +372,7 @@ export default function Studio() {
             textAlign: "left",
             locked: false,
             allowContentChange: true,
+            lockPosition: false, // Default
             aiPromptTemplate: type === 'AI_FRAME' ? "A render of {subject}" : undefined,
             filterType: 'none',
             blendMode: 'normal'
@@ -397,6 +392,39 @@ export default function Studio() {
         
         setZoom(newZoom);
         setPan({ x: 0, y: 0 }); 
+    };
+
+    const zoomToSelection = () => {
+        if (selectedLayerIds.length === 0 || !viewportRef.current) return;
+        const selectedItems = layers.filter(l => selectedLayerIds.includes(l.id));
+        if (selectedItems.length === 0) return;
+
+        const minX = Math.min(...selectedItems.map(l => l.x));
+        const maxX = Math.max(...selectedItems.map(l => l.x + l.width));
+        const minY = Math.min(...selectedItems.map(l => l.y));
+        const maxY = Math.max(...selectedItems.map(l => l.y + l.height));
+        
+        const w = maxX - minX;
+        const h = maxY - minY;
+        
+        const padding = 100;
+        const rect = viewportRef.current.getBoundingClientRect();
+        
+        const scaleX = (rect.width - padding * 2) / w;
+        const scaleY = (rect.height - padding * 2) / h;
+        const newZoom = Math.min(scaleX, scaleY, 4); 
+        
+        const midX = minX + w / 2;
+        const midY = minY + h / 2;
+        
+        // We want (midX, midY) to be at center of screen.
+        // Canvas center is (canvasConfig.width/2, canvasConfig.height/2).
+        // Difference:
+        const dx = midX - (canvasConfig.width / 2);
+        const dy = midY - (canvasConfig.height / 2);
+        
+        setZoom(newZoom);
+        setPan({ x: -dx * newZoom, y: -dy * newZoom });
     };
 
     // --- ACTIONS ---
@@ -531,7 +559,7 @@ export default function Studio() {
             if (mode === 'CLIENT' && layer.locked) return;
             
             // Alt + Drag Duplicate Logic
-            if (e.altKey) {
+            if (e.altKey && !layer.lockPosition && !handle) {
                 let idsToDup = selectedLayerIds;
                 if (!idsToDup.includes(layer.id)) {
                     idsToDup = [layer.id];
@@ -580,7 +608,8 @@ export default function Studio() {
             setSelectedLayerIds(newSelectedIds);
 
             // Start Dragging
-            if (mode === 'STUDIO' && layer.locked) {
+            if (mode === 'STUDIO' && (layer.locked || layer.lockPosition) && !handle) {
+                // If position is locked, select but don't drag
                 return;
             }
 
@@ -643,9 +672,7 @@ export default function Studio() {
                  const initialState = initialLayerStates[layerId];
                  const newProps = { ...initialState };
 
-                 // Aspect Ratio Lock (Shift key)
                  const aspectRatio = initialState.width / initialState.height;
-                 
                  let newW = initialState.width;
                  let newH = initialState.height;
 
@@ -655,8 +682,6 @@ export default function Studio() {
                  if (resizeHandle.includes('n')) newH = Math.max(10, initialState.height - dy);
                  
                  if (e.shiftKey) {
-                     // Simple implementation: Use the larger dimension change to drive aspect ratio
-                     // Or just prioritize width.
                      if (resizeHandle.includes('e') || resizeHandle.includes('w')) {
                          newH = newW / aspectRatio;
                      } else {
@@ -667,7 +692,6 @@ export default function Studio() {
                  newProps.width = newW;
                  newProps.height = newH;
                  
-                 // Adjust Position based on Handle anchor
                  if (resizeHandle.includes('w')) newProps.x = initialState.x + (initialState.width - newW);
                  if (resizeHandle.includes('n')) newProps.y = initialState.y + (initialState.height - newH);
 
@@ -676,12 +700,15 @@ export default function Studio() {
                  // Moving (Multi Layer)
                  const updates = {};
                  selectedLayerIds.forEach(id => {
-                     const init = initialLayerStates[id];
-                     if (init) {
-                         updates[id] = {
-                             x: init.x + dx,
-                             y: init.y + dy
-                         };
+                     const layer = layers.find(l => l.id === id);
+                     if (layer && !layer.lockPosition) { // Respect Position Lock
+                         const init = initialLayerStates[id];
+                         if (init) {
+                             updates[id] = {
+                                 x: init.x + dx,
+                                 y: init.y + dy
+                             };
+                         }
                      }
                  });
                  updateLayers(updates);
@@ -837,10 +864,10 @@ export default function Studio() {
                  if (e.key === ']') reorderSelectedLayers('up');
             }
 
-            // Zoom Fit
-            if (e.shiftKey && e.key === '1') {
-                zoomToFit();
-            }
+            // Zoom Fit / Selection
+            if (e.shiftKey && e.key === '1') zoomToFit();
+            if (e.shiftKey && e.key === '2') zoomToSelection();
+
             // Nudge
             if (selectedLayerIds.length > 0 && ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
                 e.preventDefault();
@@ -849,7 +876,7 @@ export default function Studio() {
                 
                 selectedLayerIds.forEach(id => {
                     const layer = layers.find(l => l.id === id);
-                    if (layer) {
+                    if (layer && !layer.lockPosition) {
                         updates[id] = { ...layer };
                         if (e.key === 'ArrowUp') updates[id].y -= step;
                         if (e.key === 'ArrowDown') updates[id].y += step;
@@ -1187,12 +1214,14 @@ export default function Studio() {
                                                         <div 
                                                             key={h}
                                                             onMouseDown={(e) => handleMouseDown(e, layer, h)}
-                                                            className={`absolute w-2 h-2 bg-white border border-[#E3E3FD] z-50 cursor-${h}-resize`}
+                                                            className={`absolute bg-white border border-[#E3E3FD] z-50 cursor-${h}-resize`}
                                                             style={{
-                                                                top: h[0] === 'n' ? -4 : 'auto',
-                                                                bottom: h[0] === 's' ? -4 : 'auto',
-                                                                left: h[1] === 'w' ? -4 : 'auto',
-                                                                right: h[1] === 'e' ? -4 : 'auto',
+                                                                width: 8 / zoom, // Constant visual size
+                                                                height: 8 / zoom,
+                                                                top: h[0] === 'n' ? -4 / zoom : 'auto',
+                                                                bottom: h[0] === 's' ? -4 / zoom : 'auto',
+                                                                left: h[1] === 'w' ? -4 / zoom : 'auto',
+                                                                right: h[1] === 'e' ? -4 / zoom : 'auto',
                                                             }}
                                                         />
                                                     ))}
