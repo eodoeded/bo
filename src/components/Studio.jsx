@@ -159,6 +159,16 @@ const INITIAL_LAYERS = [
   }
 ];
 
+// Helper for bounds
+const getBounds = (items) => {
+    if (items.length === 0) return { x: 0, y: 0, width: 0, height: 0 };
+    const minX = Math.min(...items.map(i => i.x));
+    const minY = Math.min(...items.map(i => i.y));
+    const maxX = Math.max(...items.map(i => i.x + i.width));
+    const maxY = Math.max(...items.map(i => i.y + i.height));
+    return { x: minX, y: minY, width: maxX - minX, height: maxY - minY };
+};
+
 export default function Studio() {
     // App State
     const [mode, setMode] = useState('STUDIO'); // STUDIO | CLIENT
@@ -198,6 +208,7 @@ export default function Studio() {
     const [isSelecting, setIsSelecting] = useState(false); 
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
     const [initialLayerStates, setInitialLayerStates] = useState({}); // Map of ID -> {x,y,w,h}
+    const [initialSelectionBounds, setInitialSelectionBounds] = useState(null); // For multi-resize
     const [resizeHandle, setResizeHandle] = useState(null);
     const [isPanning, setIsPanning] = useState(false);
     const [editingTextId, setEditingTextId] = useState(null);
@@ -679,6 +690,7 @@ export default function Studio() {
                 setLayers(newLayers);
                 setSelectedLayerIds(newIds);
                 setInitialLayerStates(newInitialStates);
+                setInitialSelectionBounds(getBounds(newLayers.filter(l => newIds.includes(l.id))));
                 
                 setIsDragging(true);
                 setDragStart({ x: e.clientX, y: e.clientY });
@@ -712,14 +724,14 @@ export default function Studio() {
             const initialStates = {};
             newSelectedIds.forEach(id => {
                 const l = layers.find(item => item.id === id);
-                if (l) initialStates[id] = { x: l.x, y: l.y, width: l.width, height: l.height };
+                if (l) initialStates[id] = { x: l.x, y: l.y, width: l.width, height: l.height, fontSize: l.fontSize };
             });
             setInitialLayerStates(initialStates);
+            setInitialSelectionBounds(getBounds(newSelectedIds.map(id => layers.find(l => l.id === id))));
 
             if (handle) {
                 setIsResizing(true);
                 setResizeHandle(handle);
-                setInitialLayerStates({ [layer.id]: { x: layer.x, y: layer.y, width: layer.width, height: layer.height } });
             }
         } else {
             // Background Click -> Start Marquee
@@ -780,43 +792,34 @@ export default function Studio() {
                  dy = Math.round(rawDy / 10) * 10;
              }
 
-             // Snap to Guides
+             // Snap to Guides (Same as before)
              if (guides.length > 0 && !isResizing && selectedLayerIds.length > 0) {
-                 const activeId = selectedLayerIds[selectedLayerIds.length - 1]; // Use primary selection
+                 const activeId = selectedLayerIds[selectedLayerIds.length - 1]; 
                  const initial = initialLayerStates[activeId];
                  
                  if (initial) {
-                     // Vertical Guides (Snap X)
+                     // ... guide snap logic ...
                      const vGuides = guides.filter(g => g.type === 'v');
                      let bestDx = dx;
-                     let minDistX = 10 / zoom; // Threshold
-                     
+                     let minDistX = 10 / zoom; 
                      vGuides.forEach(g => {
-                         // Snap Left
                          const distLeft = Math.abs(g.pos - (initial.x + dx));
                          if (distLeft < minDistX) { bestDx = g.pos - initial.x; minDistX = distLeft; }
-                         // Snap Center
                          const distCenter = Math.abs(g.pos - (initial.x + initial.width/2 + dx));
                          if (distCenter < minDistX) { bestDx = g.pos - (initial.x + initial.width/2); minDistX = distCenter; }
-                         // Snap Right
                          const distRight = Math.abs(g.pos - (initial.x + initial.width + dx));
                          if (distRight < minDistX) { bestDx = g.pos - (initial.x + initial.width); minDistX = distRight; }
                      });
                      dx = bestDx;
 
-                     // Horizontal Guides (Snap Y)
                      const hGuides = guides.filter(g => g.type === 'h');
                      let bestDy = dy;
                      let minDistY = 10 / zoom;
-                     
                      hGuides.forEach(g => {
-                         // Snap Top
                          const distTop = Math.abs(g.pos - (initial.y + dy));
                          if (distTop < minDistY) { bestDy = g.pos - initial.y; minDistY = distTop; }
-                         // Snap Middle
                          const distMiddle = Math.abs(g.pos - (initial.y + initial.height/2 + dy));
                          if (distMiddle < minDistY) { bestDy = g.pos - (initial.y + initial.height/2); minDistY = distMiddle; }
-                         // Snap Bottom
                          const distBottom = Math.abs(g.pos - (initial.y + initial.height + dy));
                          if (distBottom < minDistY) { bestDy = g.pos - (initial.y + initial.height); minDistY = distBottom; }
                      });
@@ -824,41 +827,72 @@ export default function Studio() {
                  }
              }
              
-             if (isResizing && resizeHandle) {
-                 const layerId = Object.keys(initialLayerStates)[0];
-                 const initialState = initialLayerStates[layerId];
-                 const newProps = { ...initialState };
+             if (isResizing && resizeHandle && initialSelectionBounds) {
+                 const oldBounds = initialSelectionBounds;
+                 let newBounds = { ...oldBounds };
 
-                 const aspectRatio = initialState.width / initialState.height;
-                 let newW = initialState.width;
-                 let newH = initialState.height;
-
-                 if (resizeHandle.includes('e')) newW = Math.max(10, initialState.width + dx);
-                 if (resizeHandle.includes('w')) newW = Math.max(10, initialState.width - dx);
-                 if (resizeHandle.includes('s')) newH = Math.max(10, initialState.height + dy);
-                 if (resizeHandle.includes('n')) newH = Math.max(10, initialState.height - dy);
-                 
-                 if (e.shiftKey) {
-                     if (resizeHandle.includes('e') || resizeHandle.includes('w')) {
-                         newH = newW / aspectRatio;
-                     } else {
-                         newW = newH * aspectRatio;
-                     }
+                 // Calculate new bounds based on handle
+                 if (resizeHandle.includes('e')) newBounds.width = Math.max(10, oldBounds.width + dx);
+                 if (resizeHandle.includes('w')) {
+                     const newW = Math.max(10, oldBounds.width - dx);
+                     newBounds.x = oldBounds.x + (oldBounds.width - newW);
+                     newBounds.width = newW;
+                 }
+                 if (resizeHandle.includes('s')) newBounds.height = Math.max(10, oldBounds.height + dy);
+                 if (resizeHandle.includes('n')) {
+                     const newH = Math.max(10, oldBounds.height - dy);
+                     newBounds.y = oldBounds.y + (oldBounds.height - newH);
+                     newBounds.height = newH;
                  }
                  
-                 newProps.width = newW;
-                 newProps.height = newH;
-                 
-                 if (resizeHandle.includes('w')) newProps.x = initialState.x + (initialState.width - newW);
-                 if (resizeHandle.includes('n')) newProps.y = initialState.y + (initialState.height - newH);
+                 // Aspect Ratio Lock (Shift) - Basic implementation for bounds
+                 if (e.shiftKey) {
+                     const ratio = oldBounds.width / oldBounds.height;
+                     if (resizeHandle.includes('e') || resizeHandle.includes('w')) {
+                         newBounds.height = newBounds.width / ratio;
+                         if (resizeHandle.includes('n')) newBounds.y = oldBounds.y + (oldBounds.height - newBounds.height);
+                     } else {
+                         newBounds.width = newBounds.height * ratio;
+                         if (resizeHandle.includes('w')) newBounds.x = oldBounds.x + (oldBounds.width - newBounds.width);
+                     }
+                 }
 
-                 updateLayer(layerId, newProps);
+                 // Calculate Scale Factors
+                 const scaleX = newBounds.width / oldBounds.width;
+                 const scaleY = newBounds.height / oldBounds.height;
+
+                 // Apply to all selected layers
+                 const updates = {};
+                 selectedLayerIds.forEach(id => {
+                     const init = initialLayerStates[id];
+                     if (!init) return;
+
+                     // Relative position from bounds origin
+                     const relX = init.x - oldBounds.x;
+                     const relY = init.y - oldBounds.y;
+
+                     const newLayer = {
+                         x: newBounds.x + (relX * scaleX),
+                         y: newBounds.y + (relY * scaleY),
+                         width: init.width * scaleX,
+                         height: init.height * scaleY
+                     };
+
+                     // Font Scaling
+                     if (init.fontSize) {
+                         newLayer.fontSize = init.fontSize * scaleY;
+                     }
+
+                     updates[id] = newLayer;
+                 });
+                 updateLayers(updates);
+
              } else {
-                 // Moving (Multi Layer)
+                 // Moving (Multi Layer) - No changes needed here, existing logic is fine for translation
                  const updates = {};
                  selectedLayerIds.forEach(id => {
                      const layer = layers.find(l => l.id === id);
-                     if (layer && !layer.lockPosition) { // Respect Position Lock
+                     if (layer && !layer.lockPosition) { 
                          const init = initialLayerStates[id];
                          if (init) {
                              updates[id] = {
@@ -874,7 +908,23 @@ export default function Studio() {
     };
 
     const handleMouseUp = () => {
-        setDraggedGuideId(null); // Stop dragging guide
+        // Guide Deletion Logic
+        if (draggedGuideId) {
+            const guide = guides.find(g => g.id === draggedGuideId);
+            if (guide) {
+                // If dragged out of canvas area (plus margin), delete
+                const margin = 50;
+                const isOut = 
+                    (guide.type === 'v' && (guide.pos < -margin || guide.pos > canvasConfig.width + margin)) ||
+                    (guide.type === 'h' && (guide.pos < -margin || guide.pos > canvasConfig.height + margin));
+                
+                if (isOut) {
+                    setGuides(prev => prev.filter(g => g.id !== draggedGuideId));
+                    showToast("Guide Deleted");
+                }
+            }
+            setDraggedGuideId(null);
+        }
 
         if (isSelecting && selectionBox) {
             const selected = [];
@@ -899,9 +949,12 @@ export default function Studio() {
         setIsSelecting(false);
         setResizeHandle(null);
         setInitialLayerStates({});
+        setInitialSelectionBounds(null); // Clear bounds
         setSelectionBox(null);
     };
 
+    // ... (Zoom, Alt, Context, DoubleClick, Blur, Generate, Hotkeys) ...
+    // Note: Re-include all existing effects and handlers here
     // Zoom to Point Logic
     useEffect(() => {
         const viewport = viewportRef.current;
@@ -1507,6 +1560,8 @@ export default function Studio() {
                                 onChange={setCanvasConfig}
                                 snapToGrid={snapToGrid}
                                 onToggleSnap={setSnapToGrid}
+                                guides={guides}
+                                onClearGuides={() => setGuides([])}
                             />
                         )}
                         

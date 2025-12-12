@@ -1,5 +1,5 @@
 import React from 'react';
-import { Monitor, Smartphone, Layout, PenTool, Hash, Palette, Check } from 'lucide-react';
+import { Monitor, Smartphone, Layout, PenTool, Hash, Palette, Check, Trash2 } from 'lucide-react';
 
 const PRESETS = [
     { label: "IG Story", width: 1080, height: 1920, icon: Smartphone },
@@ -13,7 +13,7 @@ const COLORS = [
     '#1C3A96', '#020202', '#FFFFFF', '#FF5733', '#10B981', '#3B82F6'
 ];
 
-export const CanvasProperties = ({ config, onChange, snapToGrid, onToggleSnap }) => {
+export const CanvasProperties = ({ config, onChange, snapToGrid, onToggleSnap, guides = [], onClearGuides }) => {
     return (
         <div className="space-y-8">
             <div>
@@ -55,6 +55,19 @@ export const CanvasProperties = ({ config, onChange, snapToGrid, onToggleSnap })
                         <span className={snapToGrid ? 'text-white' : 'text-white/60 group-hover:text-white'}>Snap to Grid (10px)</span>
                     </button>
                 </div>
+
+                {/* Clear Guides */}
+                {guides.length > 0 && (
+                    <div className="mb-4">
+                        <button 
+                            onClick={onClearGuides}
+                            className="flex items-center gap-2 font-mono text-[9px] text-red-400 hover:text-red-300 uppercase tracking-widest group w-full p-2 border border-red-900/30 hover:bg-red-900/20 transition-colors"
+                        >
+                            <Trash2 size={10} />
+                            <span>Clear {guides.length} Guides</span>
+                        </button>
+                    </div>
+                )}
 
                 {/* Presets */}
                 <div className="grid grid-cols-2 gap-2">
