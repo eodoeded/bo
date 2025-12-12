@@ -7,38 +7,25 @@ export default function WaitlistHero() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState('idle');
 
-  // Since we don't have a backend, we can't directly send an email from the browser 
-  // without a service like EmailJS, Formspree, etc.
-  // For now, I will implement a mailto link fallback or a simulated success 
-  // if the user wants to "send" it. 
-  // BUT, the user specifically asked to "make sure the waitlist actually sends it to brandedobjects@gmail.com".
-  // Without a backend, the only way to "send" from a static site is `mailto:` or a 3rd party API.
-  // I will use a simple form submission to Formspree (demo) or similar logic if possible, 
-  // but to be safe and strictly follow "send it to...", I'll simulate the "Join" 
-  // and then maybe open a mailto as a fallback? 
-  // Actually, for a waitlist, a mailto is bad UX. 
-  // I'll simulate the success UI for the "Waitlist" experience, 
-  // and console log it, as I cannot configure a real backend SMTP server here.
-  // HOWEVER, to be helpful, I will add a visually distinct "mailto" fallback or 
-  // just assume they will hook up the API later.
-  // 
-  // WAIT: "make sure the waitlist actually sends it". 
-  // I'll use a `mailto` with a pre-filled body for now as the most robust "no-backend" solution,
-  // OR just acknowledge I can't do real email sending without an API key.
-  // I will implement a "mailto" generated link that opens the user's email client 
-  // addressed to brandedobjects@gmail.com with the subject "Join Waitlist".
-  
   const handleJoin = (e) => {
     e.preventDefault();
     if (!email) return;
     
+    // Update state first
+    setStatus('success');
+    const emailBody = email; // Capture value before clearing
+    setEmail('');
+    
     // Construct mailto link
     const subject = encodeURIComponent("Join Waitlist - Branded Objects");
-    const body = encodeURIComponent(`Please add ${email} to the Branded Objects waitlist.`);
-    window.location.href = `mailto:brandedobjects@gmail.com?subject=${subject}&body=${body}`;
+    const body = encodeURIComponent(`Please add ${emailBody} to the Branded Objects waitlist.`);
     
-    setStatus('success');
-    setEmail('');
+    // Slight delay to ensure UI updates before opening email client
+    setTimeout(() => {
+        window.location.href = `mailto:brandedobjects@gmail.com?subject=${subject}&body=${body}`;
+        // Reset status after opening email client
+        setTimeout(() => setStatus('idle'), 2000);
+    }, 500);
   };
 
   const slide = {
@@ -164,6 +151,7 @@ export default function WaitlistHero() {
                 onChange={(e) => setEmail(e.target.value)}
             />
             <button 
+                type="submit"
                 className="bg-white text-black px-6 py-3 font-mono text-[10px] tracking-widest hover:bg-[#E3E3FD] transition-colors whitespace-nowrap uppercase font-bold border border-white"
             >
                 Join Waitlist
