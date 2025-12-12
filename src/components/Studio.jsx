@@ -152,6 +152,7 @@ export default function Studio() {
     const [activeTab, setActiveTab] = useState('components');
     const [selectedTool, setSelectedTool] = useState('select');
     const [statusMessage, setStatusMessage] = useState(null); 
+    const [snapToGrid, setSnapToGrid] = useState(false); // Snap Toggle
     
     // Canvas Viewport
     const [zoom, setZoom] = useState(1);
@@ -232,6 +233,19 @@ export default function Studio() {
         }
     };
 
+    const toggleLock = (ids) => {
+        if (!ids || ids.length === 0) return;
+        const targetId = ids[0];
+        const layer = layers.find(l => l.id === targetId);
+        if (!layer) return;
+        
+        const newLockedState = !layer.lockPosition; 
+        
+        const newLayers = layers.map(l => ids.includes(l.id) ? { ...l, lockPosition: newLockedState } : l);
+        setLayers(newLayers);
+        setContextMenu(null);
+    };
+
     const duplicateLayer = (id) => {
         const layer = layers.find(l => l.id === id);
         if (!layer) return;
@@ -296,19 +310,6 @@ export default function Studio() {
         setLayers(newLayers);
         setSelectedLayerIds(newIds);
         showToast(`Pasted ${clipboard.length} Elements`);
-    };
-
-    const toggleLock = (ids) => {
-        if (!ids || ids.length === 0) return;
-        const targetId = ids[0];
-        const layer = layers.find(l => l.id === targetId);
-        if (!layer) return;
-        
-        const newLockedState = !layer.lockPosition; 
-        
-        const newLayers = layers.map(l => ids.includes(l.id) ? { ...l, lockPosition: newLockedState } : l);
-        setLayers(newLayers);
-        setContextMenu(null);
     };
 
     const reorderLayer = (id, direction) => {
@@ -389,6 +390,33 @@ export default function Studio() {
              if (alignment === 'bottom') u.y = maxY - l.height;
              updates[l.id] = u;
         });
+        updateLayers(updates);
+    };
+
+    const distributeSelectedLayers = (axis) => { // axis: 'x' or 'y'
+        if (selectedLayerIds.length < 3) return; // Need 3+ to distribute
+        const items = layers.filter(l => selectedLayerIds.includes(l.id));
+        const dimension = axis === 'x' ? 'width' : 'height';
+        
+        // Sort
+        const sorted = [...items].sort((a, b) => a[axis] - b[axis]);
+        
+        const first = sorted[0];
+        const last = sorted[sorted.length - 1];
+        
+        // Distribute Centers
+        const startCenter = first[axis] + first[dimension] / 2;
+        const endCenter = last[axis] + last[dimension] / 2;
+        const totalSpan = endCenter - startCenter;
+        const step = totalSpan / (sorted.length - 1);
+        
+        const updates = {};
+        sorted.forEach((l, i) => {
+            if (i === 0 || i === sorted.length - 1) return; // Pin ends
+            const newCenter = startCenter + (step * i);
+            updates[l.id] = { [axis]: newCenter - (l[dimension] / 2) };
+        });
+        
         updateLayers(updates);
     };
 
@@ -700,8 +728,17 @@ export default function Studio() {
         if (isDragging && Object.keys(initialLayerStates).length > 0) {
              const dxScreen = e.clientX - dragStart.x;
              const dyScreen = e.clientY - dragStart.y;
-             const dx = dxScreen / zoom;
-             const dy = dyScreen / zoom;
+             const rawDx = dxScreen / zoom;
+             const rawDy = dyScreen / zoom;
+             
+             // Snap Logic
+             let dx = rawDx;
+             let dy = rawDy;
+             
+             if (snapToGrid) {
+                 dx = Math.round(rawDx / 10) * 10;
+                 dy = Math.round(rawDy / 10) * 10;
+             }
              
              if (isResizing && resizeHandle) {
                  const layerId = Object.keys(initialLayerStates)[0];
@@ -1048,6 +1085,9 @@ export default function Studio() {
                                                 <button onClick={(e) => { e.stopPropagation(); toggleVisibility(layer.id); }} className="hover:text-[#E3E3FD]">
                                                     {layer.visible ? <Eye size={10} /> : <EyeOff size={10} className="text-white/40" />}
                                                 </button>
+                                                <button onClick={(e) => { e.stopPropagation(); toggleLock([layer.id]); }} className="hover:text-[#E3E3FD]">
+                                                    {layer.lockPosition ? <Lock size={10} className="text-[#E3E3FD]" /> : <Unlock size={10} className="text-white/40" />}
+                                                </button>
                                             </div>
                                             <Layers size={14} className={selectedLayerIds.includes(layer.id) ? 'text-[#E3E3FD]' : 'text-white/40 group-hover:text-white'} />
                                             <span className={`font-mono text-[10px] uppercase tracking-widest ${selectedLayerIds.includes(layer.id) ? 'text-white' : 'text-white/60 group-hover:text-white'} ${!layer.visible ? 'opacity-50 line-through' : ''}`}>
@@ -1336,12 +1376,15 @@ export default function Studio() {
                                 mode={mode} 
                                 onUpdate={updateLayer} 
                                 onDelete={deleteLayer}
-                                onAlign={alignSelectedLayers} 
+                                onAlign={alignSelectedLayers}
+                                onDistribute={distributeSelectedLayers} 
                             />
                         ) : (
                             <CanvasProperties 
                                 config={canvasConfig}
                                 onChange={setCanvasConfig}
+                                snapToGrid={snapToGrid}
+                                onToggleSnap={setSnapToGrid}
                             />
                         )}
                         

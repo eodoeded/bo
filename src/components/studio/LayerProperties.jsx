@@ -1,5 +1,5 @@
 import React from 'react';
-import { Lock, Unlock, Trash2, Check, Sliders, ChevronRight, AlignLeft, AlignCenter, AlignRight, AlignVerticalDistributeCenter, AlignHorizontalDistributeCenter, AlignJustify, AlignEndVertical, Bold, Italic, Underline, Type, RotateCw } from 'lucide-react';
+import { Lock, Unlock, Trash2, Check, Sliders, ChevronRight, AlignLeft, AlignCenter, AlignRight, AlignVerticalDistributeCenter, AlignHorizontalDistributeCenter, AlignJustify, AlignEndVertical, Bold, Italic, Underline, Type, RotateCw, ArrowUp, ArrowDown } from 'lucide-react';
 
 const InputRow = ({ label, children }) => (
   <div className="mb-4">
@@ -46,7 +46,8 @@ export const LayerProperties = ({
   mode, 
   onUpdate, 
   onDelete,
-  onAlign // New prop
+  onAlign,
+  onDistribute // New prop
 }) => {
   const isStudio = mode === 'STUDIO';
   
@@ -352,14 +353,18 @@ export const LayerProperties = ({
 
            {/* Alignment Tools */}
            <div>
-            <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-4">Align</span>
-            <div className="grid grid-cols-6 gap-1">
-                <button onClick={() => handleAlign('left')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignLeft size={14} /></button>
-                <button onClick={() => handleAlign('center')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignCenter size={14} /></button>
-                <button onClick={() => handleAlign('right')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignRight size={14} /></button>
-                <button onClick={() => handleAlign('top')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignVerticalDistributeCenter size={14} className="rotate-90" /></button>
-                <button onClick={() => handleAlign('middle')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignHorizontalDistributeCenter size={14} /></button>
-                <button onClick={() => handleAlign('bottom')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignEndVertical size={14} /></button>
+            <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-4">Align & Distribute</span>
+            <div className="grid grid-cols-4 gap-1 mb-2">
+                <button onClick={() => handleAlign('left')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]" title="Align Left"><AlignLeft size={14} /></button>
+                <button onClick={() => handleAlign('center')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]" title="Align Center"><AlignCenter size={14} /></button>
+                <button onClick={() => handleAlign('right')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]" title="Align Right"><AlignRight size={14} /></button>
+                <button onClick={() => handleAlign('middle')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]" title="Align Middle"><AlignHorizontalDistributeCenter size={14} /></button>
+            </div>
+            <div className="grid grid-cols-4 gap-1">
+                 <button onClick={() => handleAlign('top')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]" title="Align Top"><ArrowUp size={14} /></button>
+                 <button onClick={() => handleAlign('bottom')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]" title="Align Bottom"><ArrowDown size={14} /></button>
+                 <button onClick={() => onDistribute && onDistribute('x')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]" title="Distribute Horizontally"><AlignHorizontalDistributeCenter size={14} /></button>
+                 <button onClick={() => onDistribute && onDistribute('y')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]" title="Distribute Vertically"><AlignVerticalDistributeCenter size={14} /></button>
             </div>
            </div>
         </div>

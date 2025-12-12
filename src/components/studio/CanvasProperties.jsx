@@ -1,5 +1,5 @@
 import React from 'react';
-import { Monitor, Smartphone, Layout, PenTool, Hash, Palette } from 'lucide-react';
+import { Monitor, Smartphone, Layout, PenTool, Hash, Palette, Check } from 'lucide-react';
 
 const PRESETS = [
     { label: "IG Story", width: 1080, height: 1920, icon: Smartphone },
@@ -13,7 +13,7 @@ const COLORS = [
     '#1C3A96', '#020202', '#FFFFFF', '#FF5733', '#10B981', '#3B82F6'
 ];
 
-export const CanvasProperties = ({ config, onChange }) => {
+export const CanvasProperties = ({ config, onChange, snapToGrid, onToggleSnap }) => {
     return (
         <div className="space-y-8">
             <div>
@@ -41,6 +41,19 @@ export const CanvasProperties = ({ config, onChange }) => {
                             className="w-12 bg-transparent text-right font-mono text-[9px] text-white focus:outline-none focus:text-[#E3E3FD]"
                         />
                     </div>
+                </div>
+
+                {/* Snap Toggle */}
+                <div className="mb-4">
+                    <button 
+                        onClick={() => onToggleSnap(!snapToGrid)}
+                        className="flex items-center gap-2 font-mono text-[9px] text-white uppercase tracking-widest group w-full p-2 border border-white/10 hover:bg-white/5 transition-colors"
+                    >
+                        <div className={`w-3 h-3 border flex items-center justify-center ${snapToGrid ? 'bg-[#E3E3FD] border-[#E3E3FD]' : 'border-white/40 bg-transparent'}`}>
+                            {snapToGrid && <Check size={8} className="text-black" />}
+                        </div>
+                        <span className={snapToGrid ? 'text-white' : 'text-white/60 group-hover:text-white'}>Snap to Grid (10px)</span>
+                    </button>
                 </div>
 
                 {/* Presets */}
@@ -89,4 +102,3 @@ export const CanvasProperties = ({ config, onChange }) => {
         </div>
     );
 };
-
