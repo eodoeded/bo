@@ -15,7 +15,7 @@
     "@react-three/drei": "^9.122.0",
     "@react-three/fiber": "^9.4.0",
     "@tailwindcss/vite": "^4.1.13",
-    "framer-motion": "^12.23.16",
+    "framer-motion": "^12.23.26",
     "gif.js.optimized": "^1.0.1",
     "html2canvas": "^1.4.1",
     "jwt-decode": "^4.0.0",
