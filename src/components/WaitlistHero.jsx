@@ -130,7 +130,7 @@ export default function WaitlistHero() {
                 transition={{ delay: 0.1, duration: 0.8 }}
             >
                 Empower clients to generate on-brand assets without breaking the design system. 
-                Studios build the logic. Clients fill the blanks.
+                Studios define the logic. Clients fill the blanks.
             </motion.p>
             
             <motion.form 
@@ -158,7 +158,7 @@ export default function WaitlistHero() {
                     />
                     <button 
                         type="submit"
-                        className="bg-white text-black px-8 py-4 font-mono text-[10px] tracking-[0.2em] hover:bg-[#E3E3FD] transition-colors whitespace-nowrap uppercase border border-transparent flex items-center gap-2 group/btn"
+                        className="bg-white text-black px-8 py-4 font-mono font-medium text-[11px] tracking-[0.2em] hover:bg-[#E3E3FD] transition-colors whitespace-nowrap uppercase border border-transparent flex items-center gap-2 group/btn"
                     >
                         Request Access
                         <ArrowRight size={12} className="group-hover/btn:translate-x-0.5 transition-transform" />
@@ -220,20 +220,13 @@ export default function WaitlistHero() {
                             <img src={bottomComp} alt="Bottom" className="w-[100px] object-contain opacity-100" />
                         </motion.div>
                         <motion.div
-                            className="absolute top-8"
+                            className="absolute top-12"
                             animate={{ y: [0, -6, 0] }}
                             transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
                             style={{ zIndex: 2 }}
                         >
                             <img src={upComp} alt="Top" className="w-[50px] object-contain opacity-100" />
                         </motion.div>
-                        
-                        {/* Scanning Effect */}
-                        <motion.div 
-                            className="absolute top-0 left-0 w-full h-1 bg-[#E3E3FD]/50 shadow-[0_0_10px_#E3E3FD]"
-                            animate={{ top: ['0%', '100%'] }}
-                            transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-                        />
                     </div>
                     <div className="flex justify-between items-center px-1">
                         <span className="font-mono text-[8px] text-white/40">GENERATING</span>

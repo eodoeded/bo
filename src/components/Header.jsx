@@ -40,9 +40,6 @@ export default function Header() {
                 <button onClick={() => scrollToSection('process')} className="font-mono text-[11px] text-white/60 hover:text-white uppercase tracking-widest transition-colors">Process</button>
                 <button onClick={() => scrollToSection('value')} className="font-mono text-[11px] text-white/60 hover:text-white uppercase tracking-widest transition-colors">Value</button>
                 <button onClick={() => scrollToSection('specs')} className="font-mono text-[11px] text-white/60 hover:text-white uppercase tracking-widest transition-colors">Specs</button>
-                <Link to="/brandguidelines" className="font-mono text-[11px] text-white/60 hover:text-white uppercase tracking-widest transition-colors flex items-center gap-1">
-                    System <div className="w-1 h-1 bg-[#E3E3FD] rounded-full animate-pulse ml-1"></div>
-                </Link>
             </nav>
         </div>
 
@@ -55,7 +52,7 @@ export default function Header() {
             
             <button 
                 onClick={focusEmail}
-                className="bg-white text-black px-5 py-2.5 font-mono text-[10px] uppercase tracking-widest hover:bg-[#E3E3FD] transition-colors border border-transparent"
+                className="bg-white text-black px-5 py-2.5 font-mono font-medium text-[11px] uppercase tracking-widest hover:bg-[#E3E3FD] transition-colors border border-transparent"
             >
                 Request Access
             </button>
@@ -73,7 +70,6 @@ export default function Header() {
              <button onClick={() => scrollToSection('process')} className="py-4 border-b border-white/5 font-mono text-xs text-left uppercase tracking-widest text-white/60">Process</button>
              <button onClick={() => scrollToSection('value')} className="py-4 border-b border-white/5 font-mono text-xs text-left uppercase tracking-widest text-white/60">Value</button>
              <button onClick={() => scrollToSection('specs')} className="py-4 border-b border-white/5 font-mono text-xs text-left uppercase tracking-widest text-white/60">Specifications</button>
-             <Link to="/brandguidelines" className="py-4 border-b border-white/5 font-mono text-xs text-left uppercase tracking-widest text-white/60">System Guidelines</Link>
         </div>
       )}
     </header>
