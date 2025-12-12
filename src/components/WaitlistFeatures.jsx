@@ -92,10 +92,6 @@ export default function WaitlistFeatures() {
                         <span className="block font-mono text-[9px] text-white/30 uppercase tracking-widest mb-1">Render</span>
                         <span className="font-mono text-xl text-[#E3E3FD]">&lt;200ms</span>
                      </div>
-                     <div>
-                        <span className="block font-mono text-[9px] text-white/30 uppercase tracking-widest mb-1">Security</span>
-                        <span className="font-mono text-xl text-[#E3E3FD]">SOC-2</span>
-                     </div>
                 </div>
             </div>
 
