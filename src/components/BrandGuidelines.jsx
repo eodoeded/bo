@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Box, Layout, Type, MousePointer, CreditCard, Layers, Grid as GridIcon, Database, Cpu, Activity, User, Mail, Send, ChevronDown, Check, AlertCircle, Terminal, BarChart2, CornerDownRight, Zap, Move, Eye, Code, Command } from 'lucide-react';
+import { ArrowLeft, Box, Layout, Type, MousePointer, CreditCard, Layers, Grid as GridIcon, Database, Cpu, Activity, User, Mail, Send, ChevronDown, Check, AlertCircle, Terminal, BarChart2, CornerDownRight, Zap, Move, Eye, Code, Command, Github, Twitter, Disc } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import upComp from "../assets/up-comp.png";
@@ -17,60 +17,65 @@ const Badge = ({ children, className = "", color = "text-[#E3E3FD]" }) => (
     </span>
 );
 
-const Node = ({ title, inputs = [], outputs = [], children, x, y, delay = 0, width = "w-32", type = "default", status }) => (
-  <motion.div 
-    initial={{ opacity: 0, scale: 0.9, y: y + 20 }}
-    animate={{ opacity: 1, scale: 1, y: y }}
-    transition={{ duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] }}
-    className={`absolute z-10 ${width}`}
-    style={{ left: x, top: y }}
-  >
-    {type === "minimal" ? (
-       <div className="relative group cursor-pointer">
-          {/* Square "Glow" */}
-          <div className="absolute -inset-4 bg-[#E3E3FD]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"></div>
-          
-          <div className="relative bg-[#0A0A0A] border border-white/10 px-4 py-2 flex items-center justify-center shadow-xl backdrop-blur-md hover:border-[#E3E3FD]/50 transition-colors">
-             {/* Tech Corners */}
-             <div className="absolute top-0 left-0 w-1 h-1 border-t border-l border-white/50"></div>
-             <div className="absolute bottom-0 right-0 w-1 h-1 border-b border-r border-white/50"></div>
-             {children}
+const Node = ({ title, inputs = [], outputs = [], children, x, y, delay = 0, width = "w-32", type = "default", status }) => {
+    // Offset for center-based positioning logic
+    const widthVal = type === "minimal" ? 140 : parseInt(width.replace('w-', '')) * 4; 
+    
+    return (
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.9, y: y + 20 }}
+        animate={{ opacity: 1, scale: 1, y: y }}
+        transition={{ duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] }}
+        className={`absolute z-10 ${width}`}
+        style={{ left: x, top: y }}
+      >
+        {type === "minimal" ? (
+           <div className="relative group cursor-pointer">
+              {/* Square "Glow" */}
+              <div className="absolute -inset-4 bg-[#E3E3FD]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"></div>
+              
+              <div className="relative bg-[#0A0A0A] border border-white/10 px-4 py-2 flex items-center justify-center shadow-xl backdrop-blur-md hover:border-[#E3E3FD]/50 transition-colors">
+                 {/* Tech Corners */}
+                 <div className="absolute top-0 left-0 w-1 h-1 border-t border-l border-white/50"></div>
+                 <div className="absolute bottom-0 right-0 w-1 h-1 border-b border-r border-white/50"></div>
+                 {children}
+              </div>
+              
+              {/* Ports - Squared */}
+              {inputs.map((_, i) => (
+                <div key={`in-${i}`} className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#0A0A0A] border border-[#E3E3FD]/50" />
+              ))}
+              {outputs.map((_, i) => (
+                <div key={`out-${i}`} className="absolute -right-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#0A0A0A] border border-[#E3E3FD]/50" />
+              ))}
+           </div>
+        ) : (
+          <div className="bg-[#050505]/95 border border-white/10 p-3 shadow-2xl backdrop-blur-md hover:border-white/30 transition-colors group relative">
+            {/* Technical Decor */}
+            <div className="absolute top-0 left-0 w-1.5 h-1.5 border-t border-l border-white/30"></div>
+            <div className="absolute top-0 right-0 w-1.5 h-1.5 border-t border-r border-white/30"></div>
+            <div className="absolute bottom-0 left-0 w-1.5 h-1.5 border-b border-l border-white/30"></div>
+            <div className="absolute bottom-0 right-0 w-1.5 h-1.5 border-b border-r border-white/30"></div>
+    
+            <div className="flex justify-between items-center mb-3 pb-2 border-b border-white/5">
+              <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest group-hover:text-white/60 transition-colors">{title}</span>
+              <div className={`w-1 h-1 ${status === 'active' ? 'bg-[#E3E3FD] animate-pulse shadow-[0_0_8px_#E3E3FD]' : 'bg-white/10'}`}></div>
+            </div>
+            {children}
+            
+            {/* Input Ports - Rectangular */}
+            {inputs.map((_, i) => (
+              <div key={`in-${i}`} className="absolute -left-[5px] top-8 w-1.5 h-2 bg-[#050505] border border-white/30 hover:border-[#E3E3FD] transition-colors" />
+            ))}
+            {/* Output Ports - Rectangular */}
+            {outputs.map((_, i) => (
+              <div key={`out-${i}`} className="absolute -right-[5px] top-8 w-1.5 h-2 bg-[#050505] border border-white/30 hover:border-[#E3E3FD] transition-colors" />
+            ))}
           </div>
-          
-          {/* Ports - Squared */}
-          {inputs.map((_, i) => (
-            <div key={`in-${i}`} className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#0A0A0A] border border-[#E3E3FD]/50" />
-          ))}
-          {outputs.map((_, i) => (
-            <div key={`out-${i}`} className="absolute -right-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#0A0A0A] border border-[#E3E3FD]/50" />
-          ))}
-       </div>
-    ) : (
-      <div className="bg-[#050505]/95 border border-white/10 p-3 shadow-2xl backdrop-blur-md hover:border-white/30 transition-colors group relative">
-        {/* Technical Decor */}
-        <div className="absolute top-0 left-0 w-1.5 h-1.5 border-t border-l border-white/30"></div>
-        <div className="absolute top-0 right-0 w-1.5 h-1.5 border-t border-r border-white/30"></div>
-        <div className="absolute bottom-0 left-0 w-1.5 h-1.5 border-b border-l border-white/30"></div>
-        <div className="absolute bottom-0 right-0 w-1.5 h-1.5 border-b border-r border-white/30"></div>
-
-        <div className="flex justify-between items-center mb-3 pb-2 border-b border-white/5">
-          <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest group-hover:text-white/60 transition-colors">{title}</span>
-          <div className={`w-1 h-1 ${status === 'active' ? 'bg-[#E3E3FD] animate-pulse shadow-[0_0_8px_#E3E3FD]' : 'bg-white/10'}`}></div>
-        </div>
-        {children}
-        
-        {/* Input Ports - Rectangular */}
-        {inputs.map((_, i) => (
-          <div key={`in-${i}`} className="absolute -left-[5px] top-8 w-1.5 h-2 bg-[#050505] border border-white/30 hover:border-[#E3E3FD] transition-colors" />
-        ))}
-        {/* Output Ports - Rectangular */}
-        {outputs.map((_, i) => (
-          <div key={`out-${i}`} className="absolute -right-[5px] top-8 w-1.5 h-2 bg-[#050505] border border-white/30 hover:border-[#E3E3FD] transition-colors" />
-        ))}
-      </div>
-    )}
-  </motion.div>
-);
+        )}
+      </motion.div>
+    );
+};
 
 const Connection = ({ start, end, delay, dashed = false, active = false }) => {
   // Squared / Circuit-like Path Logic with offset for correct alignment
@@ -123,10 +128,10 @@ const Connection = ({ start, end, delay, dashed = false, active = false }) => {
 };
 
 const SectionHeader = ({ title, number }) => (
-    <div className="flex items-end justify-between mb-16 border-b border-white/10 pb-6 group">
+    <div className="flex items-end justify-between mb-16 border-b border-white/10 pb-6 group cursor-crosshair">
         <div className="flex items-center gap-4">
-            <div className="w-1.5 h-1.5 bg-[#E3E3FD] group-hover:scale-150 transition-transform duration-500"></div>
-            <h2 className="font-montreal font-medium text-3xl tracking-tight text-white">{title}</h2>
+            <div className="w-1.5 h-1.5 bg-[#E3E3FD] group-hover:rotate-45 transition-transform duration-300"></div>
+            <h2 className="font-montreal font-medium text-3xl tracking-tight text-white group-hover:translate-x-2 transition-transform duration-300">{title}</h2>
         </div>
         <div className="flex items-center gap-2">
             <span className="font-mono text-[10px] text-white/30 tracking-widest group-hover:text-[#E3E3FD] transition-colors">/ {number}</span>
@@ -164,8 +169,8 @@ export default function BrandGuidelines() {
       {/* Hero: Advanced Node System */}
       <section className="relative h-[90vh] w-full flex items-center justify-center overflow-hidden bg-[#020202]">
         
-        {/* Title Top-Left */}
-        <div className="absolute top-32 left-6 md:left-12 max-w-xl z-20 pointer-events-none">
+        {/* Title Centered (Reverted Preference) */}
+        <div className="absolute bottom-12 left-6 md:left-12 max-w-xl z-20 pointer-events-none">
             <Badge className="mb-4 text-[#E3E3FD] border-[#E3E3FD]/20 bg-[#E3E3FD]/5">System_OS v2.2</Badge>
             <h1 className="font-montreal font-medium text-6xl md:text-8xl tracking-tight mb-6 text-white leading-[0.9]">
                 Visual<br/><span className="text-[#E3E3FD]">System</span>
@@ -176,7 +181,7 @@ export default function BrandGuidelines() {
         </div>
 
         {/* Centered Node Graph */}
-        <div className="relative w-full h-full flex items-center justify-center scale-90 md:scale-100 translate-y-12 md:translate-x-24">
+        <div className="relative w-full h-full flex items-center justify-center scale-90 md:scale-100">
             <div className="relative w-[1000px] h-[600px]">
                 {/* Input Layer */}
                 <Node title="Data_Ingest" outputs={[1]} x={50} y={250} delay={0.2} width="w-40" status="active">
@@ -245,14 +250,37 @@ export default function BrandGuidelines() {
                     <span className="font-mono text-[10px] tracking-[0.2em] text-[#E3E3FD] uppercase">Deployment</span>
                 </Node>
 
-                {/* Connections */}
-                <Connection start={{x: 210, y: 285}} end={{x: 350, y: 185}} delay={0.5} active={true} />
-                <Connection start={{x: 210, y: 285}} end={{x: 350, y: 435}} delay={0.6} active={true} />
+                {/* Connections - Fixed Coordinates relative to Node ports */}
+                {/* Node widths: w-40=160px, w-48=192px. Padding p-3. Ports top-8 (32px).
+                    Outputs: x + w - 5px. Inputs: x - 5px.
+                    
+                    Data_Ingest (50, 250) -> Out: 50+160-5 = 205, 250+32 = 282.
+                    Neural_Core (350, 150) -> In: 350-5 = 345, 150+32 = 182.
+                    Logic_Gate (350, 400) -> In: 350-5 = 345, 400+32 = 432.
+                    
+                    Neural_Core (350, 150) -> Out: 350+192-5 = 537, 150+32 = 182.
+                    Logic_Gate (350, 400) -> Out: 350+160-5 = 505, 400+32 = 432.
+                    
+                    Renderer (700, 250) -> In: 700-5 = 695, 250+24(mid) = 274? No, minimal type is different.
+                    Minimal node: px-4 py-2. Height approx 40px. Ports centered vertical?
+                    Let's assume Minimal ports are centered vertically at y + 20? 
+                    Renderer (700, 250). In: 695, 270. Out: 700+width?-5, 270.
+                    
+                    Let's standardise lines to exact calculated points.
+                */}
                 
-                <Connection start={{x: 542, y: 185}} end={{x: 700, y: 275}} delay={0.8} active={true} />
-                <Connection start={{x: 510, y: 435}} end={{x: 700, y: 275}} delay={0.9} dashed={true} />
+                {/* Data to Neural */}
+                <Connection start={{x: 205, y: 282}} end={{x: 345, y: 182}} delay={0.5} active={true} />
+                {/* Data to Logic */}
+                <Connection start={{x: 205, y: 282}} end={{x: 345, y: 432}} delay={0.6} active={true} />
                 
-                <Connection start={{x: 830, y: 275}} end={{x: 900, y: 275}} delay={1.1} active={true} />
+                {/* Neural to Renderer */}
+                <Connection start={{x: 537, y: 182}} end={{x: 695, y: 270}} delay={0.8} active={true} />
+                {/* Logic to Renderer */}
+                <Connection start={{x: 505, y: 432}} end={{x: 695, y: 270}} delay={0.9} dashed={true} />
+                
+                {/* Renderer to Deployment (Deployment at 900) */}
+                <Connection start={{x: 840, y: 270}} end={{x: 895, y: 270}} delay={1.1} active={true} />
             </div>
         </div>
       </section>
@@ -730,19 +758,21 @@ export default function BrandGuidelines() {
             </div>
             
             <div className="md:col-span-8">
-                 <div className="grid grid-cols-12 gap-4 h-64 border border-white/10 p-4 bg-[#050505]">
+                 <div className="grid grid-cols-12 gap-4 h-64 border border-white/10 p-4 bg-[#050505] relative">
                     {[...Array(12)].map((_, i) => (
                         <div key={i} className="bg-[#E3E3FD]/10 border border-[#E3E3FD]/10 h-full flex items-end justify-center pb-2">
                              <span className="font-mono text-[9px] text-white/20">{i+1}</span>
                         </div>
                     ))}
                     
-                    {/* Floating Elements on Grid */}
-                    <div className="absolute col-span-4 h-32 bg-[#E3E3FD]/20 border border-[#E3E3FD] top-20 left-20 flex items-center justify-center backdrop-blur-sm">
-                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest">4 COL</span>
-                    </div>
-                    <div className="absolute col-span-2 h-16 bg-white/10 border border-white top-40 right-40 flex items-center justify-center backdrop-blur-sm">
-                         <span className="font-mono text-[9px] text-white tracking-widest">2 COL</span>
+                    {/* Floating Elements on Grid - Fixed Positioning relative to grid items */}
+                    <div className="absolute top-20 left-4 right-4 flex gap-4 pointer-events-none">
+                        <div className="w-[calc(33.33%-11px)] h-32 bg-[#E3E3FD]/20 border border-[#E3E3FD] flex items-center justify-center backdrop-blur-sm">
+                            <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest">4 COL</span>
+                        </div>
+                        <div className="w-[calc(16.66%-11px)] h-16 bg-white/10 border border-white flex items-center justify-center backdrop-blur-sm mt-20 ml-auto">
+                             <span className="font-mono text-[9px] text-white tracking-widest">2 COL</span>
+                        </div>
                     </div>
                  </div>
             </div>
@@ -750,8 +780,51 @@ export default function BrandGuidelines() {
 
       </div>
       
-      <footer className="py-12 border-t border-white/5 text-center relative z-10">
-        <span className="font-mono text-[10px] text-white/20 uppercase tracking-widest hover:text-white/40 transition-colors cursor-default">© 2025 Branded Objects Systems</span>
+      {/* Expanded Footer Component */}
+      <footer className="w-full border-t border-white/10 bg-[#020202] relative z-10">
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-20">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
+                <div className="col-span-1 md:col-span-2">
+                    <h3 className="font-montreal font-medium text-2xl text-white mb-6">Branded Objects</h3>
+                    <p className="font-montreal text-white/60 text-sm max-w-md leading-relaxed">
+                        A modular design system for automated brand governance. Empowering studios to create custom tools for their clients.
+                    </p>
+                </div>
+                
+                <div className="space-y-6">
+                    <h4 className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">Sitemap</h4>
+                    <ul className="space-y-3 font-mono text-xs text-white/60">
+                        <li className="hover:text-white cursor-pointer transition-colors">Typography</li>
+                        <li className="hover:text-white cursor-pointer transition-colors">Interface</li>
+                        <li className="hover:text-white cursor-pointer transition-colors">Components</li>
+                        <li className="hover:text-white cursor-pointer transition-colors">Motion</li>
+                    </ul>
+                </div>
+
+                <div className="space-y-6">
+                    <h4 className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">Connect</h4>
+                    <div className="flex gap-4">
+                        <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center rounded-sm hover:bg-white hover:text-black transition-all">
+                            <Twitter size={16} />
+                        </a>
+                        <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center rounded-sm hover:bg-white hover:text-black transition-all">
+                            <Github size={16} />
+                        </a>
+                        <a href="#" className="w-10 h-10 border border-white/10 flex items-center justify-center rounded-sm hover:bg-white hover:text-black transition-all">
+                            <Disc size={16} />
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/5">
+                <span className="font-mono text-[10px] text-white/30 uppercase tracking-widest">© 2025 Branded Objects Systems</span>
+                <div className="flex gap-8 mt-4 md:mt-0">
+                    <span className="font-mono text-[10px] text-white/30 uppercase tracking-widest hover:text-white cursor-pointer transition-colors">Privacy Policy</span>
+                    <span className="font-mono text-[10px] text-white/30 uppercase tracking-widest hover:text-white cursor-pointer transition-colors">Terms of Service</span>
+                </div>
+            </div>
+        </div>
       </footer>
 
     </div>
