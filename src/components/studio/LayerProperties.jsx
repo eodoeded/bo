@@ -1,5 +1,5 @@
 import React from 'react';
-import { Lock, Unlock, Trash2, Check, Sliders, ChevronRight, AlignLeft, AlignCenter, AlignRight, AlignVerticalDistributeCenter, AlignHorizontalDistributeCenter, AlignJustify, AlignEnd } from 'lucide-react';
+import { Lock, Unlock, Trash2, Check, Sliders, ChevronRight, AlignLeft, AlignCenter, AlignRight, AlignVerticalDistributeCenter, AlignHorizontalDistributeCenter, AlignJustify, AlignEndVertical } from 'lucide-react';
 
 const InputRow = ({ label, children }) => (
   <div className="mb-4">
@@ -293,9 +293,9 @@ export const LayerProperties = ({
                 <button onClick={() => handleAlign('left')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignLeft size={14} /></button>
                 <button onClick={() => handleAlign('center')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignCenter size={14} /></button>
                 <button onClick={() => handleAlign('right')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignRight size={14} /></button>
-                <button onClick={() => handleAlign('top')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignJustify size={14} className="rotate-90" /></button>
-                <button onClick={() => handleAlign('middle')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignVerticalDistributeCenter size={14} /></button>
-                <button onClick={() => handleAlign('bottom')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignEnd size={14} className="rotate-90" /></button>
+                <button onClick={() => handleAlign('top')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignVerticalDistributeCenter size={14} className="rotate-90" /></button>
+                <button onClick={() => handleAlign('middle')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignHorizontalDistributeCenter size={14} /></button>
+                <button onClick={() => handleAlign('bottom')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignEndVertical size={14} /></button>
             </div>
            </div>
         </div>
