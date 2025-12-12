@@ -3,6 +3,10 @@
     {
       "source": "/studio",
       "destination": "/studio.html"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
