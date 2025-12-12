@@ -203,15 +203,15 @@ export default function BrandGuidelines() {
                  <div className="p-2 bg-white/5 border border-white/5">
                     <div className="flex justify-between items-center mb-2">
                         <Activity size={12} className="text-white/40"/>
-                        <span className="font-mono text-[9px] text-green-400">OPTIMAL</span>
-                    </div>
-                    <div className="h-8 w-full flex items-end gap-[2px]">
-                        {[40, 70, 30, 80, 50, 90, 60].map((h, i) => (
-                            <motion.div key={i} className="flex-1 bg-white/20" animate={{height: [`${h}%`, `${Math.random()*80+20}%`]}} transition={{duration:2, repeat:Infinity}} />
-                        ))}
-                    </div>
-                 </div>
-            </Node>
+                            <span className="font-mono text-[9px] text-[#E3E3FD]">OPTIMAL</span>
+                        </div>
+                        <div className="h-8 w-full flex items-end gap-[2px]">
+                            {[40, 70, 30, 80, 50, 90, 60].map((h, i) => (
+                                <motion.div key={i} className="flex-1 bg-white/20" animate={{height: [`${h}%`, `${Math.random()*80+20}%`]}} transition={{duration:2, repeat:Infinity}} />
+                            ))}
+                        </div>
+                     </div>
+                </Node>
 
             {/* Output Layer */}
             <Node type="minimal" inputs={[1, 1]} outputs={[1]} x={700} y={250} delay={0.7}>
@@ -397,20 +397,20 @@ export default function BrandGuidelines() {
                                 <label className="font-mono text-xs text-white/40 uppercase tracking-widest">Full Name</label>
                                 <span className="font-mono text-[9px] text-white/20">*REQUIRED</span>
                             </div>
-                            <input type="text" placeholder="John Doe" className="w-full bg-[#050505] border border-white/10 p-4 text-white placeholder:text-white/20 focus:outline-none focus:border-[#E3E3FD] focus:bg-[#E3E3FD]/5 transition-all font-montreal" />
+                            <input type="text" placeholder="John Doe" className="w-full bg-[#050505] border border-white/10 p-4 text-white placeholder:text-white/20 focus:outline-none focus:border-[#E3E3FD] focus:bg-[#E3E3FD]/5 transition-all font-mono text-sm rounded-sm" />
                         </div>
                         <div className="grid grid-cols-2 gap-8">
                             <div className="space-y-3">
                                 <label className="font-mono text-xs text-white/40 uppercase tracking-widest">Email</label>
                                 <div className="relative">
                                     <Mail size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" />
-                                    <input type="email" placeholder="john@company.com" className="w-full bg-[#050505] border border-white/10 p-4 pl-12 text-white placeholder:text-white/20 focus:outline-none focus:border-[#E3E3FD] focus:bg-[#E3E3FD]/5 transition-all font-montreal" />
+                                    <input type="email" placeholder="john@company.com" className="w-full bg-[#050505] border border-white/10 p-4 pl-12 text-white placeholder:text-white/20 focus:outline-none focus:border-[#E3E3FD] focus:bg-[#E3E3FD]/5 transition-all font-mono text-sm rounded-sm" />
                                 </div>
                             </div>
                             <div className="space-y-3">
                                 <label className="font-mono text-xs text-white/40 uppercase tracking-widest">Department</label>
                                 <div className="relative">
-                                    <select className="w-full bg-[#050505] border border-white/10 p-4 text-white appearance-none focus:outline-none focus:border-[#E3E3FD] focus:bg-[#E3E3FD]/5 transition-all font-montreal">
+                                    <select className="w-full bg-[#050505] border border-white/10 p-4 text-white appearance-none focus:outline-none focus:border-[#E3E3FD] focus:bg-[#E3E3FD]/5 transition-all font-mono text-sm rounded-sm">
                                         <option>Design</option>
                                         <option>Engineering</option>
                                         <option>Product</option>
@@ -423,12 +423,12 @@ export default function BrandGuidelines() {
                         </div>
                         <div className="space-y-3">
                             <label className="font-mono text-xs text-white/40 uppercase tracking-widest">Message</label>
-                            <textarea rows="4" placeholder="Tell us about your project..." className="w-full bg-[#050505] border border-white/10 p-4 text-white placeholder:text-white/20 focus:outline-none focus:border-[#E3E3FD] focus:bg-[#E3E3FD]/5 transition-all font-montreal resize-none"></textarea>
+                            <textarea rows="4" placeholder="Tell us about your project..." className="w-full bg-[#050505] border border-white/10 p-4 text-white placeholder:text-white/20 focus:outline-none focus:border-[#E3E3FD] focus:bg-[#E3E3FD]/5 transition-all font-mono text-sm resize-none rounded-sm"></textarea>
                         </div>
                         <div className="flex justify-end pt-4">
-                            <button className="bg-white text-black px-8 py-4 font-medium hover:bg-[#E3E3FD] transition-all flex items-center gap-2 group border border-transparent hover:border-white">
+                            <button className="bg-white text-black px-8 py-4 font-mono text-[10px] uppercase tracking-[0.2em] hover:bg-[#E3E3FD] transition-all flex items-center gap-3 group border border-transparent hover:border-white rounded-sm">
                                 <span>Send Message</span>
-                                <Send size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                                <Send size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                             </button>
                         </div>
                     </div>
@@ -454,22 +454,22 @@ export default function BrandGuidelines() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
                         <div className="space-y-4">
                             <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block">Primary</span>
-                            <button className="w-full bg-white text-black px-6 py-3 font-medium hover:bg-[#E3E3FD] transition-all active:translate-y-0.5">
+                            <button className="w-full bg-white text-black px-6 py-3 font-mono text-[10px] uppercase tracking-[0.2em] hover:bg-[#E3E3FD] transition-all active:translate-y-0.5 rounded-sm">
                                 Join Waitlist
                             </button>
                         </div>
                         <div className="space-y-4">
                             <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block">With Icon</span>
-                            <button className="w-full bg-white text-black px-6 py-3 font-medium hover:bg-[#E3E3FD] transition-all active:translate-y-0.5 flex items-center justify-center gap-2 group">
+                            <button className="w-full bg-white text-black px-6 py-3 font-mono text-[10px] uppercase tracking-[0.2em] hover:bg-[#E3E3FD] transition-all active:translate-y-0.5 flex items-center justify-center gap-3 group rounded-sm">
                                 <span>Proceed</span>
-                                <ArrowLeft size={16} className="rotate-180 group-hover:translate-x-1 transition-transform"/>
+                                <ArrowLeft size={14} className="rotate-180 group-hover:translate-x-1 transition-transform"/>
                             </button>
                         </div>
                         <div className="space-y-4">
                             <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block">Loading</span>
-                            <button className="w-full bg-[#E3E3FD] text-black px-6 py-3 font-medium flex items-center justify-center gap-2 cursor-wait opacity-80 border border-black/5">
-                                <div className="w-3 h-3 border border-black/30 border-t-black animate-spin"></div>
-                                <span className="text-xs font-mono uppercase tracking-widest">Processing</span>
+                            <button className="w-full bg-[#E3E3FD] text-black px-6 py-3 font-mono text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 cursor-wait opacity-80 border border-black/5 rounded-sm">
+                                <div className="w-3 h-3 border border-black/30 border-t-black animate-spin rounded-full"></div>
+                                <span>Processing</span>
                             </button>
                         </div>
                     </div>
@@ -478,24 +478,24 @@ export default function BrandGuidelines() {
                      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
                         <div className="space-y-4">
                             <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block">Secondary</span>
-                            <button className="w-full bg-transparent border border-white/20 text-white px-6 py-3 font-medium hover:bg-white hover:text-black transition-all active:translate-y-0.5">
+                            <button className="w-full bg-transparent border border-white/20 text-white px-6 py-3 font-mono text-[10px] uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all active:translate-y-0.5 rounded-sm">
                                 Documentation
                             </button>
                         </div>
                         <div className="space-y-4">
                             <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block">Minimal</span>
-                            <button className="w-full bg-white/5 text-white px-6 py-3 font-medium hover:bg-white/10 transition-all active:translate-y-0.5 backdrop-blur-md">
+                            <button className="w-full bg-white/5 text-white px-6 py-3 font-mono text-[10px] uppercase tracking-[0.2em] hover:bg-white/10 transition-all active:translate-y-0.5 backdrop-blur-md rounded-sm">
                                 Cancel
                             </button>
                         </div>
                         <div className="space-y-4">
                             <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block">Icon Only</span>
                              <div className="flex gap-4">
-                                <button className="w-12 h-12 border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all hover:rotate-90">
-                                    <GridIcon size={18} />
+                                <button className="w-12 h-12 border border-white/20 flex items-center justify-center text-white hover:bg-white hover:text-black transition-all hover:rotate-90 rounded-sm">
+                                    <GridIcon size={16} />
                                 </button>
-                                 <button className="w-12 h-12 bg-[#E3E3FD] flex items-center justify-center text-black hover:scale-105 transition-transform border border-white/10">
-                                    <Send size={18} />
+                                 <button className="w-12 h-12 bg-[#E3E3FD] flex items-center justify-center text-black hover:scale-105 transition-transform border border-white/10 rounded-sm">
+                                    <Send size={16} />
                                 </button>
                              </div>
                         </div>
