@@ -1,7 +1,8 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Box, Layout, Type, MousePointer, CreditCard, Layers, Grid as GridIcon, Database, Cpu, Activity, User, Mail, Send, ChevronDown, Check, AlertCircle, Terminal, BarChart2, CornerDownRight, Zap, Move, Eye, Code, Command, Github, Twitter, Disc, Lock, Unlock, Edit3, Image as ImageIcon, Linkedin, Download, Share2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import html2canvas from 'html2canvas';
 import upComp from "../assets/up-comp.png";
 import bottomComp from "../assets/bottom-comp.png";
 
@@ -140,6 +141,28 @@ const SectionHeader = ({ title, number }) => (
 );
 
 export default function BrandGuidelines() {
+  const downloadRef1 = useRef(null);
+  const downloadRef2 = useRef(null);
+  const downloadRef3 = useRef(null);
+  const downloadRef4 = useRef(null);
+
+  const handleDownload = async (ref, name) => {
+    if (ref.current) {
+        try {
+            const canvas = await html2canvas(ref.current, {
+                backgroundColor: '#020202',
+                scale: 2 // High res
+            });
+            const link = document.createElement('a');
+            link.download = `branded-objects-${name}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        } catch (error) {
+            console.error('Download failed:', error);
+        }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#020202] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal overflow-x-hidden">
       
@@ -1003,7 +1026,7 @@ export default function BrandGuidelines() {
                     <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest mb-6 block">LinkedIn Banner (1584 x 396px)</span>
                     <div className="grid grid-cols-1 gap-8">
                         {/* Option 1: 3D Node (New Request) */}
-                        <div className="group relative">
+                        <div className="group relative" ref={downloadRef1}>
                             <div className="w-full aspect-[4/1] bg-[#020202] border border-white/10 flex items-center justify-between px-16 relative overflow-hidden">
                                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05]"></div>
                                 
@@ -1037,7 +1060,7 @@ export default function BrandGuidelines() {
                             </div>
                             <div className="flex justify-between items-center mt-3">
                                 <span className="font-mono text-[10px] text-white/40">Option 01: 3D Node</span>
-                                <button className="flex items-center gap-2 text-[#E3E3FD] hover:text-white transition-colors">
+                                <button onClick={() => handleDownload(downloadRef1, 'banner-3d')} className="flex items-center gap-2 text-[#E3E3FD] hover:text-white transition-colors">
                                     <Download size={12} />
                                     <span className="font-mono text-[10px] uppercase tracking-widest">Download .png</span>
                                 </button>
@@ -1045,7 +1068,7 @@ export default function BrandGuidelines() {
                         </div>
 
                         {/* Option 2: Node System */}
-                        <div className="group relative">
+                        <div className="group relative" ref={downloadRef2}>
                             <div className="w-full aspect-[4/1] bg-[#0A0A0A] border border-white/10 flex items-center justify-center relative overflow-hidden">
                                 <div className="absolute inset-0" style={{ 
                                     backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px)', 
@@ -1070,7 +1093,7 @@ export default function BrandGuidelines() {
                             </div>
                              <div className="flex justify-between items-center mt-3">
                                 <span className="font-mono text-[10px] text-white/40">Option 02: System Flow</span>
-                                <button className="flex items-center gap-2 text-[#E3E3FD] hover:text-white transition-colors">
+                                <button onClick={() => handleDownload(downloadRef2, 'banner-system')} className="flex items-center gap-2 text-[#E3E3FD] hover:text-white transition-colors">
                                     <Download size={12} />
                                     <span className="font-mono text-[10px] uppercase tracking-widest">Download .png</span>
                                 </button>
@@ -1085,7 +1108,7 @@ export default function BrandGuidelines() {
                      <div className="flex gap-8">
                         {/* Option 1: The Grid (New) */}
                         <div className="group">
-                             <div className="w-32 h-32 bg-[#020202] border border-white/10 flex items-center justify-center relative overflow-hidden">
+                             <div className="w-32 h-32 bg-[#020202] border border-white/10 flex items-center justify-center relative overflow-hidden" ref={downloadRef3}>
                                 <div className="grid grid-cols-2 gap-1 p-1 border border-white/20">
                                     <div className="w-4 h-4 bg-white/10"></div>
                                     <div className="w-4 h-4 bg-[#E3E3FD]"></div>
@@ -1095,18 +1118,18 @@ export default function BrandGuidelines() {
                              </div>
                              <div className="flex justify-between items-center mt-3 w-32">
                                 <span className="font-mono text-[9px] text-white/40">Grid Mark</span>
-                                <Download size={12} className="text-[#E3E3FD] cursor-pointer hover:text-white"/>
+                                <Download size={12} className="text-[#E3E3FD] cursor-pointer hover:text-white" onClick={() => handleDownload(downloadRef3, 'pfp-grid')}/>
                             </div>
                         </div>
 
                         {/* Option 2: Technical Monogram (New) */}
                         <div className="group">
-                             <div className="w-32 h-32 bg-[#0A0A0A] border border-white/10 flex items-center justify-center relative text-white">
+                             <div className="w-32 h-32 bg-[#0A0A0A] border border-white/10 flex items-center justify-center relative text-white" ref={downloadRef4}>
                                 <span className="font-mono text-xl tracking-[0.2em] group-hover:text-[#E3E3FD] transition-colors">[ BO ]</span>
                              </div>
                              <div className="flex justify-between items-center mt-3 w-32">
                                 <span className="font-mono text-[9px] text-white/40">Tech Mono</span>
-                                <Download size={12} className="text-[#E3E3FD] cursor-pointer hover:text-white"/>
+                                <Download size={12} className="text-[#E3E3FD] cursor-pointer hover:text-white" onClick={() => handleDownload(downloadRef4, 'pfp-mono')}/>
                             </div>
                         </div>
                      </div>
@@ -1144,7 +1167,7 @@ export default function BrandGuidelines() {
                         </li>
                     </ul>
                 </div>
-    
+
                 <div className="col-span-1 md:col-span-2 space-y-6">
                     <h4 className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">Connect</h4>
                     <div className="flex flex-col gap-3">
