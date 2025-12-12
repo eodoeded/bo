@@ -28,7 +28,7 @@ const Node = ({ id, title, children, x, y, onDragStart, isDragging, width = "w-4
       style={{ 
           left: `${x}%`, 
           top: `${y}%`,
-          transform: 'translate(-50%, -50%)' // Centered on coordinate
+          transform: 'translate(-50%, -50%)'
       }}
       onPointerDown={(e) => onDragStart(e, id)}
     >
@@ -45,7 +45,7 @@ const Node = ({ id, title, children, x, y, onDragStart, isDragging, width = "w-4
                     {children}
                 </div>
                 
-                {/* Ports - Perfectly centered vertically */}
+                {/* Ports */}
                 <div className="absolute -left-[5px] top-1/2 -translate-y-1/2 w-1.5 h-2 bg-[#050505] border border-white/30 group-hover:border-[#E3E3FD] transition-colors" />
                 <div className="absolute -right-[5px] top-1/2 -translate-y-1/2 w-1.5 h-2 bg-[#050505] border border-white/30 group-hover:border-[#E3E3FD] transition-colors" />
             </div>
@@ -78,7 +78,6 @@ export default function WaitlistHero() {
 
       const { width, height, left, top } = container.getBoundingClientRect();
       
-      // Calculate initial offset
       const nodeX = (nodes[id].x / 100) * width;
       const nodeY = (nodes[id].y / 100) * height;
       const offsetX = (e.clientX - left) - nodeX;
@@ -91,7 +90,6 @@ export default function WaitlistHero() {
           let newNodeX = newMouseX - offsetX;
           let newNodeY = newMouseY - offsetY;
           
-          // Clamp
           newNodeX = Math.max(0, Math.min(width, newNodeX));
           newNodeY = Math.max(0, Math.min(height, newNodeY));
 
@@ -160,59 +158,59 @@ export default function WaitlistHero() {
       {/* Node Graph Layer */}
       <div ref={containerRef} className="absolute inset-0 w-full h-full z-10 touch-none">
           
-          {/* Connecting Lines - SVG Scaling Fix */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none hidden md:block" viewBox="0 0 100 100" preserveAspectRatio="none" style={{zIndex: 10}}>
-               <defs>
-                   {/* Gradient for the line */}
-                   <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                       <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.1" />
-                       <stop offset="50%" stopColor="#FFFFFF" stopOpacity="0.6" />
-                       <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.1" />
-                   </linearGradient>
-               </defs>
-
-               {/* Studio -> Core */}
+          {/* Connecting Lines - Rectilinear Style */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none hidden md:block" style={{zIndex: 10}}>
+               {/* 
+                  Rectilinear Logic:
+                  Start -> Horizontal to Mid X -> Vertical to End Y -> Horizontal to End X
+               */}
                <motion.path
-                  d={`M ${nodes.studio.x} ${nodes.studio.y} C ${nodes.studio.x + 15} ${nodes.studio.y}, ${nodes.core.x - 15} ${nodes.core.y}, ${nodes.core.x} ${nodes.core.y}`}
+                  d={`M ${nodes.studio.x}% ${nodes.studio.y}% 
+                      L ${(nodes.studio.x + nodes.core.x) / 2}% ${nodes.studio.y}% 
+                      L ${(nodes.studio.x + nodes.core.x) / 2}% ${nodes.core.y}% 
+                      L ${nodes.core.x}% ${nodes.core.y}%`}
                   fill="none"
-                  stroke="url(#lineGradient)"
-                  strokeWidth="0.2"
-                  vectorEffect="non-scaling-stroke"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ duration: 1.5, delay: 0.5 }}
+                  stroke="white"
+                  strokeWidth="1.5"
+                  strokeOpacity="0.2"
                 />
-                
-                {/* Moving Data Packet - Studio to Core */}
-                <motion.circle r="0.3" fill="#E3E3FD">
-                    <motion.animateMotion 
-                        dur="3s" 
-                        repeatCount="indefinite"
-                        path={`M ${nodes.studio.x} ${nodes.studio.y} C ${nodes.studio.x + 15} ${nodes.studio.y}, ${nodes.core.x - 15} ${nodes.core.y}, ${nodes.core.x} ${nodes.core.y}`}
-                    />
-                </motion.circle>
-
-                {/* Core -> Output */}
+                {/* Animated overlay line */}
                 <motion.path
-                  d={`M ${nodes.core.x} ${nodes.core.y} C ${nodes.core.x + 15} ${nodes.core.y}, ${nodes.output.x - 15} ${nodes.output.y}, ${nodes.output.x} ${nodes.output.y}`}
+                  d={`M ${nodes.studio.x}% ${nodes.studio.y}% 
+                      L ${(nodes.studio.x + nodes.core.x) / 2}% ${nodes.studio.y}% 
+                      L ${(nodes.studio.x + nodes.core.x) / 2}% ${nodes.core.y}% 
+                      L ${nodes.core.x}% ${nodes.core.y}%`}
                   fill="none"
-                  stroke="url(#lineGradient)"
-                  strokeWidth="0.2"
-                  vectorEffect="non-scaling-stroke"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ duration: 1.5, delay: 0.7 }}
+                  stroke="#E3E3FD"
+                  strokeWidth="1.5"
+                  initial={{ pathLength: 0, opacity: 0 }}
+                  animate={{ pathLength: 1, opacity: 1 }}
+                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 1, ease: "linear" }}
                 />
 
-                {/* Moving Data Packet - Core to Output */}
-                <motion.circle r="0.3" fill="#E3E3FD">
-                    <motion.animateMotion 
-                        dur="3s" 
-                        begin="1.5s"
-                        repeatCount="indefinite"
-                        path={`M ${nodes.core.x} ${nodes.core.y} C ${nodes.core.x + 15} ${nodes.core.y}, ${nodes.output.x - 15} ${nodes.output.y}, ${nodes.output.x} ${nodes.output.y}`}
-                    />
-                </motion.circle>
+                <motion.path
+                  d={`M ${nodes.core.x}% ${nodes.core.y}% 
+                      L ${(nodes.core.x + nodes.output.x) / 2}% ${nodes.core.y}% 
+                      L ${(nodes.core.x + nodes.output.x) / 2}% ${nodes.output.y}% 
+                      L ${nodes.output.x}% ${nodes.output.y}%`}
+                  fill="none"
+                  stroke="white"
+                  strokeWidth="1.5"
+                  strokeOpacity="0.2"
+                />
+                {/* Animated overlay line */}
+                <motion.path
+                  d={`M ${nodes.core.x}% ${nodes.core.y}% 
+                      L ${(nodes.core.x + nodes.output.x) / 2}% ${nodes.core.y}% 
+                      L ${(nodes.core.x + nodes.output.x) / 2}% ${nodes.output.y}% 
+                      L ${nodes.output.x}% ${nodes.output.y}%`}
+                  fill="none"
+                  stroke="#E3E3FD"
+                  strokeWidth="1.5"
+                  initial={{ pathLength: 0, opacity: 0 }}
+                  animate={{ pathLength: 1, opacity: 1 }}
+                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 1, ease: "linear", delay: 1 }} // Staggered
+                />
           </svg>
 
           {/* Nodes */}
