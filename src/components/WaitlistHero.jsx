@@ -158,58 +158,64 @@ export default function WaitlistHero() {
       {/* Node Graph Layer */}
       <div ref={containerRef} className="absolute inset-0 w-full h-full z-10 touch-none">
           
-          {/* Connecting Lines - Rectilinear Style */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none hidden md:block" style={{zIndex: 10}}>
+          {/* Connecting Lines - Rectilinear Style Fixed */}
+          {/* viewBox="0 0 100 100" establishes a coordinate system from 0 to 100 on both axes. */}
+          {/* preserveAspectRatio="none" ensures it stretches to fill the container regardless of aspect ratio. */}
+          <svg className="absolute inset-0 w-full h-full pointer-events-none hidden md:block" viewBox="0 0 100 100" preserveAspectRatio="none" style={{zIndex: 10}}>
                {/* 
-                  Rectilinear Logic:
+                  Rectilinear Logic using 0-100 coordinates directly:
                   Start -> Horizontal to Mid X -> Vertical to End Y -> Horizontal to End X
                */}
                <motion.path
-                  d={`M ${nodes.studio.x}% ${nodes.studio.y}% 
-                      L ${(nodes.studio.x + nodes.core.x) / 2}% ${nodes.studio.y}% 
-                      L ${(nodes.studio.x + nodes.core.x) / 2}% ${nodes.core.y}% 
-                      L ${nodes.core.x}% ${nodes.core.y}%`}
+                  d={`M ${nodes.studio.x} ${nodes.studio.y} 
+                      L ${(nodes.studio.x + nodes.core.x) / 2} ${nodes.studio.y} 
+                      L ${(nodes.studio.x + nodes.core.x) / 2} ${nodes.core.y} 
+                      L ${nodes.core.x} ${nodes.core.y}`}
                   fill="none"
                   stroke="white"
-                  strokeWidth="1.5"
+                  strokeWidth="0.15"
+                  vectorEffect="non-scaling-stroke" 
                   strokeOpacity="0.2"
                 />
                 {/* Animated overlay line */}
                 <motion.path
-                  d={`M ${nodes.studio.x}% ${nodes.studio.y}% 
-                      L ${(nodes.studio.x + nodes.core.x) / 2}% ${nodes.studio.y}% 
-                      L ${(nodes.studio.x + nodes.core.x) / 2}% ${nodes.core.y}% 
-                      L ${nodes.core.x}% ${nodes.core.y}%`}
+                  d={`M ${nodes.studio.x} ${nodes.studio.y} 
+                      L ${(nodes.studio.x + nodes.core.x) / 2} ${nodes.studio.y} 
+                      L ${(nodes.studio.x + nodes.core.x) / 2} ${nodes.core.y} 
+                      L ${nodes.core.x} ${nodes.core.y}`}
                   fill="none"
                   stroke="#E3E3FD"
-                  strokeWidth="1.5"
+                  strokeWidth="0.15"
+                  vectorEffect="non-scaling-stroke"
                   initial={{ pathLength: 0, opacity: 0 }}
                   animate={{ pathLength: 1, opacity: 1 }}
                   transition={{ duration: 2, repeat: Infinity, repeatDelay: 1, ease: "linear" }}
                 />
 
                 <motion.path
-                  d={`M ${nodes.core.x}% ${nodes.core.y}% 
-                      L ${(nodes.core.x + nodes.output.x) / 2}% ${nodes.core.y}% 
-                      L ${(nodes.core.x + nodes.output.x) / 2}% ${nodes.output.y}% 
-                      L ${nodes.output.x}% ${nodes.output.y}%`}
+                  d={`M ${nodes.core.x} ${nodes.core.y} 
+                      L ${(nodes.core.x + nodes.output.x) / 2} ${nodes.core.y} 
+                      L ${(nodes.core.x + nodes.output.x) / 2} ${nodes.output.y} 
+                      L ${nodes.output.x} ${nodes.output.y}`}
                   fill="none"
                   stroke="white"
-                  strokeWidth="1.5"
+                  strokeWidth="0.15"
+                  vectorEffect="non-scaling-stroke"
                   strokeOpacity="0.2"
                 />
                 {/* Animated overlay line */}
                 <motion.path
-                  d={`M ${nodes.core.x}% ${nodes.core.y}% 
-                      L ${(nodes.core.x + nodes.output.x) / 2}% ${nodes.core.y}% 
-                      L ${(nodes.core.x + nodes.output.x) / 2}% ${nodes.output.y}% 
-                      L ${nodes.output.x}% ${nodes.output.y}%`}
+                  d={`M ${nodes.core.x} ${nodes.core.y} 
+                      L ${(nodes.core.x + nodes.output.x) / 2} ${nodes.core.y} 
+                      L ${(nodes.core.x + nodes.output.x) / 2} ${nodes.output.y} 
+                      L ${nodes.output.x} ${nodes.output.y}`}
                   fill="none"
                   stroke="#E3E3FD"
-                  strokeWidth="1.5"
+                  strokeWidth="0.15"
+                  vectorEffect="non-scaling-stroke"
                   initial={{ pathLength: 0, opacity: 0 }}
                   animate={{ pathLength: 1, opacity: 1 }}
-                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 1, ease: "linear", delay: 1 }} // Staggered
+                  transition={{ duration: 2, repeat: Infinity, repeatDelay: 1, ease: "linear", delay: 1 }}
                 />
           </svg>
 
