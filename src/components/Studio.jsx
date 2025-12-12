@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
 import { 
     Type, Image as ImageIcon, Sparkles, Layers, 
     Settings, Download, ChevronRight, Maximize2, 
@@ -6,9 +6,9 @@ import {
     MousePointer, Hand, ZoomIn, Undo, Redo,
     AlignLeft, AlignCenter, AlignRight,
     Bold, Italic, Underline, MoreHorizontal,
-    Check
+    Check, X, Plus, Trash2
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const Corner = ({ className = "" }) => (
@@ -21,38 +21,67 @@ const Badge = ({ children, active = false, className = "" }) => (
     </span>
 );
 
-const IconButton = ({ icon: Icon, active, onClick }) => (
+const IconButton = ({ icon: Icon, active, onClick, disabled }) => (
     <button 
         onClick={onClick}
-        className={`p-2 border ${active ? 'bg-[#E3E3FD] text-black border-[#E3E3FD]' : 'bg-transparent text-white/60 border-transparent hover:bg-white/5 hover:text-white'} transition-colors rounded-[1px]`}
+        disabled={disabled}
+        className={`p-2 border ${active ? 'bg-[#E3E3FD] text-black border-[#E3E3FD]' : 'bg-transparent text-white/60 border-transparent hover:bg-white/5 hover:text-white'} ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} transition-colors rounded-[1px]`}
     >
         <Icon size={14} />
     </button>
 );
 
-const Ruler = ({ orientation = 'horizontal' }) => (
-    <div className={`absolute bg-[#050505] border-white/10 z-10 ${orientation === 'horizontal' ? 'top-0 left-0 right-0 h-6 border-b flex items-end' : 'top-0 left-0 bottom-0 w-6 border-r flex flex-col items-end'}`}>
-        {Array.from({ length: orientation === 'horizontal' ? 50 : 30 }).map((_, i) => (
-            <div 
-                key={i} 
-                className={`bg-white/20 ${orientation === 'horizontal' ? 'w-px h-full mr-4' : 'h-px w-full mb-4'} ${i % 5 === 0 ? 'bg-white/40' : ''}`}
-                style={{ 
-                    height: orientation === 'horizontal' ? (i % 5 === 0 ? '100%' : '30%') : undefined,
-                    width: orientation === 'vertical' ? (i % 5 === 0 ? '100%' : '30%') : undefined
-                }}
-            />
-        ))}
-    </div>
-);
+// Initial State for Canvas Elements
+const INITIAL_ELEMENTS = [
+    {
+        id: 'bg',
+        type: 'frame',
+        x: 0, y: 0, w: 1080, h: 1350,
+        fill: '#1C3A96',
+        locked: true
+    },
+    {
+        id: 'image-1',
+        type: 'image',
+        x: 100, y: 200, w: 880, h: 880,
+        src: null, // Placeholder
+        placeholder: true
+    },
+    {
+        id: 'text-1',
+        type: 'text',
+        x: 540, y: 1150,
+        text: 'THE HODLER',
+        fontSize: 120,
+        fontFamily: 'serif',
+        align: 'center',
+        color: '#FFFFFF'
+    }
+];
 
 export default function Studio() {
     const [activeTab, setActiveTab] = useState('components');
-    const [selectedTool, setSelectedTool] = useState('select');
-    const [canvasText, setCanvasText] = useState("THE HODLER");
-    const [width, setWidth] = useState("1080");
-    const [height, setHeight] = useState("1350");
-    const [ditherIntensity, setDitherIntensity] = useState(80);
+    const [tool, setTool] = useState('select'); // select, pan, text, image
+    const [elements, setElements] = useState(INITIAL_ELEMENTS);
+    const [selection, setSelection] = useState(null); // ID of selected element
+    const [zoom, setZoom] = useState(1);
     
+    // Canvas Refs for coordinates
+    const canvasRef = useRef(null);
+
+    // Helpers
+    const selectedElement = elements.find(el => el.id === selection);
+
+    const updateElement = (id, props) => {
+        setElements(prev => prev.map(el => el.id === id ? { ...el, ...props } : el));
+    };
+
+    const handleCanvasClick = (e) => {
+        if (e.target === e.currentTarget) {
+            setSelection(null);
+        }
+    };
+
     return (
         <div className="min-h-screen bg-[#020202] text-white font-montreal flex flex-col overflow-hidden selection:bg-[#E3E3FD] selection:text-black">
             
@@ -88,9 +117,8 @@ export default function Studio() {
             {/* Main Workspace */}
             <div className="flex-1 grid grid-cols-12 h-[calc(100vh-3rem)]">
                 
-                {/* Left Panel: Components & Layers */}
+                {/* Left Panel */}
                 <aside className="col-span-2 border-r border-white/10 bg-[#050505] flex flex-col">
-                    {/* Tabs */}
                     <div className="grid grid-cols-2 border-b border-white/10">
                         <button 
                             onClick={() => setActiveTab('components')}
@@ -109,18 +137,18 @@ export default function Studio() {
                     <div className="flex-1 overflow-y-auto custom-scrollbar">
                         {activeTab === 'components' ? (
                             <div className="p-4 space-y-6">
-                                <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-4">Explore Components</span>
+                                <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-4">Add Element</span>
                                 <div className="grid grid-cols-3 gap-2">
-                                    <button onClick={() => setSelectedTool('text')} className={`flex flex-col items-center justify-center p-3 border ${selectedTool === 'text' ? 'border-[#E3E3FD] bg-[#E3E3FD]/5' : 'border-white/10 hover:border-white/30'} transition-colors rounded-sm`}>
-                                        <Type size={16} className={selectedTool === 'text' ? 'text-[#E3E3FD]' : 'text-white/60'} />
+                                    <button onClick={() => setTool('text')} className={`flex flex-col items-center justify-center p-3 border ${tool === 'text' ? 'border-[#E3E3FD] bg-[#E3E3FD]/5' : 'border-white/10 hover:border-white/30'} transition-colors rounded-sm`}>
+                                        <Type size={16} className={tool === 'text' ? 'text-[#E3E3FD]' : 'text-white/60'} />
                                         <span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60">Text</span>
                                     </button>
-                                    <button onClick={() => setSelectedTool('image')} className={`flex flex-col items-center justify-center p-3 border ${selectedTool === 'image' ? 'border-[#E3E3FD] bg-[#E3E3FD]/5' : 'border-white/10 hover:border-white/30'} transition-colors rounded-sm`}>
-                                        <ImageIcon size={16} className={selectedTool === 'image' ? 'text-[#E3E3FD]' : 'text-white/60'} />
+                                    <button onClick={() => setTool('image')} className={`flex flex-col items-center justify-center p-3 border ${tool === 'image' ? 'border-[#E3E3FD] bg-[#E3E3FD]/5' : 'border-white/10 hover:border-white/30'} transition-colors rounded-sm`}>
+                                        <ImageIcon size={16} className={tool === 'image' ? 'text-[#E3E3FD]' : 'text-white/60'} />
                                         <span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60">Image</span>
                                     </button>
-                                    <button onClick={() => setSelectedTool('ai')} className={`flex flex-col items-center justify-center p-3 border ${selectedTool === 'ai' ? 'border-[#E3E3FD] bg-[#E3E3FD]/5' : 'border-white/10 hover:border-white/30'} transition-colors rounded-sm`}>
-                                        <Sparkles size={16} className={selectedTool === 'ai' ? 'text-[#E3E3FD]' : 'text-white/60'} />
+                                    <button onClick={() => setTool('ai')} className={`flex flex-col items-center justify-center p-3 border ${tool === 'ai' ? 'border-[#E3E3FD] bg-[#E3E3FD]/5' : 'border-white/10 hover:border-white/30'} transition-colors rounded-sm`}>
+                                        <Sparkles size={16} className={tool === 'ai' ? 'text-[#E3E3FD]' : 'text-white/60'} />
                                         <span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60">AI Gen</span>
                                     </button>
                                 </div>
@@ -148,11 +176,19 @@ export default function Studio() {
                             </div>
                         ) : (
                             <div className="p-2 space-y-1">
-                                {['AI Canvas', 'The Hodler', 'Image/Frame', 'Overlay_01', 'Signature'].map((layer, i) => (
-                                    <div key={i} className={`flex items-center gap-3 p-3 border ${i === 0 ? 'border-[#E3E3FD] bg-[#E3E3FD]/5' : 'border-transparent hover:bg-white/5'} transition-colors rounded-sm cursor-pointer group`}>
-                                        <Layers size={14} className={i === 0 ? 'text-[#E3E3FD]' : 'text-white/40 group-hover:text-white'} />
-                                        <span className={`font-mono text-[10px] uppercase tracking-widest ${i === 0 ? 'text-white' : 'text-white/60 group-hover:text-white'}`}>{layer}</span>
-                                        {i === 0 && <div className="ml-auto w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"></div>}
+                                {elements.slice().reverse().map((el) => (
+                                    <div 
+                                        key={el.id} 
+                                        onClick={() => setSelection(el.id)}
+                                        className={`flex items-center gap-3 p-3 border ${selection === el.id ? 'border-[#E3E3FD] bg-[#E3E3FD]/5' : 'border-transparent hover:bg-white/5'} transition-colors rounded-sm cursor-pointer group`}
+                                    >
+                                        {el.type === 'text' && <Type size={14} className={selection === el.id ? 'text-[#E3E3FD]' : 'text-white/40'} />}
+                                        {el.type === 'image' && <ImageIcon size={14} className={selection === el.id ? 'text-[#E3E3FD]' : 'text-white/40'} />}
+                                        {el.type === 'frame' && <Box size={14} className={selection === el.id ? 'text-[#E3E3FD]' : 'text-white/40'} />}
+                                        <span className={`font-mono text-[10px] uppercase tracking-widest ${selection === el.id ? 'text-white' : 'text-white/60'}`}>
+                                            {el.id}
+                                        </span>
+                                        {selection === el.id && <div className="ml-auto w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"></div>}
                                     </div>
                                 ))}
                             </div>
@@ -165,179 +201,162 @@ export default function Studio() {
                     
                     {/* Toolbar */}
                     <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 bg-[#050505] border border-white/10 p-1 flex items-center gap-1 rounded-[2px] shadow-xl">
-                        <IconButton icon={MousePointer} active={selectedTool === 'select'} onClick={() => setSelectedTool('select')} />
-                        <IconButton icon={Hand} active={selectedTool === 'pan'} onClick={() => setSelectedTool('pan')} />
+                        <IconButton icon={MousePointer} active={tool === 'select'} onClick={() => setTool('select')} />
+                        <IconButton icon={Hand} active={tool === 'pan'} onClick={() => setTool('pan')} />
                         <div className="w-px h-4 bg-white/10 mx-1"></div>
-                        <IconButton icon={Type} active={selectedTool === 'text'} onClick={() => setSelectedTool('text')} />
-                        <IconButton icon={ImageIcon} active={selectedTool === 'image'} onClick={() => setSelectedTool('image')} />
-                        <IconButton icon={Box} active={selectedTool === 'shape'} onClick={() => setSelectedTool('shape')} />
+                        <IconButton icon={Type} active={tool === 'text'} onClick={() => setTool('text')} />
+                        <IconButton icon={ImageIcon} active={tool === 'image'} onClick={() => setTool('image')} />
+                        <IconButton icon={Box} active={tool === 'shape'} onClick={() => setTool('shape')} />
                     </div>
 
-                    {/* Canvas Wrapper */}
-                    <div className="flex-1 relative overflow-hidden bg-[#080808]">
-                        <div className="absolute inset-0 opacity-[0.03]" style={{ 
+                    {/* Canvas Background */}
+                    <div 
+                        className="flex-1 relative overflow-hidden bg-[#080808]" 
+                        onMouseDown={handleCanvasClick}
+                    >
+                        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ 
                             backgroundImage: 'radial-gradient(circle, #E3E3FD 1px, transparent 1px)', 
                             backgroundSize: '20px 20px' 
                         }}></div>
                         
-                        {/* Rulers */}
-                        <Ruler orientation="horizontal" />
-                        <Ruler orientation="vertical" />
-
-                        {/* Viewport */}
+                        {/* Interactive Canvas Viewport */}
                         <div className="absolute inset-0 flex items-center justify-center p-12">
                             <motion.div 
-                                initial={{ scale: 0.95, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                className="relative w-[380px] h-[500px] bg-[#1C3A96] shadow-2xl group"
+                                style={{ 
+                                    width: 400, // Scaled for view
+                                    height: 500, // Scaled for view
+                                    scale: zoom
+                                }}
+                                className="relative bg-[#1C3A96] shadow-2xl group overflow-hidden"
                             >
-                                {/* Active Selection Overlay */}
-                                <div className="absolute top-8 left-8 right-8 bottom-24 border border-[#E3E3FD] z-20 pointer-events-none">
-                                    <div className="absolute -top-1.5 -left-1.5 w-3 h-3 border border-[#E3E3FD] bg-[#020202]"></div>
-                                    <div className="absolute -top-1.5 -right-1.5 w-3 h-3 border border-[#E3E3FD] bg-[#020202]"></div>
-                                    <div className="absolute -bottom-1.5 -left-1.5 w-3 h-3 border border-[#E3E3FD] bg-[#020202]"></div>
-                                    <div className="absolute -bottom-1.5 -right-1.5 w-3 h-3 border border-[#E3E3FD] bg-[#020202]"></div>
+                                {/* Render Elements */}
+                                {elements.map(el => {
+                                    if (el.type === 'frame') return null; // BG handled by container for now
                                     
-                                    <div className="absolute -top-6 left-0 bg-[#E3E3FD] px-1.5 py-0.5 flex items-center gap-2">
-                                        <span className="font-mono text-[9px] text-black uppercase tracking-widest font-bold">AI_Canvas</span>
-                                    </div>
-                                </div>
+                                    // Calculate relative positions for the scaled view (approximate for demo)
+                                    // In a real app, use a real transform system
+                                    const scaleX = 400 / 1080;
+                                    const scaleY = 500 / 1350;
+                                    
+                                    const style = {
+                                        position: 'absolute',
+                                        left: el.x * scaleX,
+                                        top: el.y * scaleY,
+                                        width: el.w ? el.w * scaleX : 'auto',
+                                        height: el.h ? el.h * scaleY : 'auto',
+                                        color: el.color,
+                                        fontSize: el.fontSize ? el.fontSize * scaleX : undefined,
+                                        fontFamily: el.fontFamily,
+                                        textAlign: el.align,
+                                        zIndex: selection === el.id ? 10 : 1
+                                    };
 
-                                {/* Content Simulation */}
-                                <div className="absolute inset-0 p-8 flex flex-col items-center justify-center">
-                                    <div className="w-full h-full bg-white flex items-center justify-center relative overflow-hidden">
-                                        {/* Placeholder for Bear Illustration */}
-                                        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-multiply"></div>
-                                        <div className="text-[#1C3A96] w-full h-full p-4 flex flex-col items-center justify-center border-4 border-[#1C3A96]/10">
-                                            <div className="w-48 h-48 border-2 border-[#1C3A96] rounded-full flex items-center justify-center mb-4 relative">
-                                                <div className="absolute inset-0 border border-[#1C3A96] rounded-full scale-110 opacity-30"></div>
-                                                <Sparkles size={48} strokeWidth={1} />
-                                            </div>
-                                            <div className="h-1 w-24 bg-[#1C3A96]/20"></div>
+                                    return (
+                                        <motion.div
+                                            key={el.id}
+                                            style={style}
+                                            drag={tool === 'select'}
+                                            dragMomentum={false}
+                                            onDragEnd={(e, info) => {
+                                                // Update position logic would go here
+                                            }}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setSelection(el.id);
+                                            }}
+                                            className={`cursor-pointer ${selection === el.id ? 'ring-1 ring-[#E3E3FD]' : 'hover:ring-1 hover:ring-white/20'}`}
+                                        >
+                                            {el.type === 'text' && el.text}
+                                            {el.type === 'image' && (
+                                                <div className="w-full h-full border-2 border-[#1C3A96] rounded-full flex items-center justify-center relative bg-white">
+                                                    <div className="absolute inset-0 border border-[#1C3A96] rounded-full scale-110 opacity-30"></div>
+                                                    <Sparkles size={24} strokeWidth={1} className="text-[#1C3A96]" />
+                                                </div>
+                                            )}
+                                        </motion.div>
+                                    );
+                                })}
+
+                                {/* Active Selection Overlay Bounds (Static for demo) */}
+                                {selection && (
+                                    <div className="absolute inset-0 border border-[#E3E3FD] pointer-events-none z-50 opacity-50">
+                                        <div className="absolute -top-6 left-0 bg-[#E3E3FD] px-1.5 py-0.5">
+                                            <span className="font-mono text-[9px] text-black uppercase tracking-widest font-bold">{selection}</span>
                                         </div>
                                     </div>
-                                </div>
-
-                                <div className="absolute bottom-8 w-full text-center">
-                                    <h2 className="font-serif text-3xl text-white tracking-wider">{canvasText}</h2>
-                                </div>
+                                )}
                             </motion.div>
                         </div>
 
                         {/* Zoom Controls */}
                         <div className="absolute bottom-6 right-6 flex items-center gap-2 bg-[#050505] border border-white/10 p-1 rounded-[2px]">
-                            <IconButton icon={ZoomIn} />
-                            <span className="font-mono text-[10px] text-white px-2">100%</span>
-                        </div>
-                        
-                        {/* Viewport Info */}
-                        <div className="absolute bottom-6 left-6 font-mono text-[9px] text-white/20 uppercase tracking-widest">
-                            VP: 380x500 // ZOOM: 100%
+                            <IconButton icon={ZoomIn} onClick={() => setZoom(z => Math.min(z + 0.1, 2))} />
+                            <span className="font-mono text-[10px] text-white px-2">{Math.round(zoom * 100)}%</span>
                         </div>
                     </div>
                 </main>
 
-                {/* Right Panel: Specifications */}
+                {/* Right Panel: Properties */}
                 <aside className="col-span-3 border-l border-white/10 bg-[#050505] flex flex-col">
                     <div className="p-4 border-b border-white/10 flex justify-between items-center">
-                        <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">Specifications</span>
-                        <Maximize2 size={12} className="text-white/40" />
+                        <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">Properties</span>
+                        <Settings size={12} className="text-white/40" />
                     </div>
 
-                    <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-8">
-                        
-                        {/* Prompt Template */}
-                        <div>
-                            <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest block mb-4">Prompt Template</span>
-                            <div className="bg-[#0A0A0A] border border-white/10 p-4 font-mono text-xs text-white/60 leading-relaxed relative group">
-                                <Corner className="top-0 left-0 border-t border-l" />
-                                <Corner className="bottom-0 right-0 border-b border-r" />
-                                <p>
-                                    A mystical tarot card illustration of <span className="text-[#E3E3FD]">{'{subject}'}</span>, high contrast, black and white ink drawing, woodcut style, esoteric symbols, white background, clean lines. No text!.
-                                </p>
-                            </div>
-                            <div className="mt-2 flex items-center gap-2">
-                                <span className="w-1 h-4 bg-white/10"></span>
-                                <span className="font-mono text-[9px] text-white/40">Variable: <span className="text-[#E3E3FD]">{'{subject}'}</span></span>
-                            </div>
-                        </div>
+                    <div className="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-6">
+                        {selectedElement ? (
+                            <>
+                                {/* Selection Header */}
+                                <div className="flex items-center justify-between pb-4 border-b border-white/10">
+                                    <span className="font-mono text-[10px] text-[#E3E3FD] uppercase font-bold">{selectedElement.id}</span>
+                                    <IconButton icon={Trash2} onClick={() => {
+                                        setElements(prev => prev.filter(el => el.id !== selection));
+                                        setSelection(null);
+                                    }} />
+                                </div>
 
-                        {/* Processing Unit */}
-                        <div>
-                            <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest block mb-4">Processing Unit</span>
-                            <div className="grid grid-cols-2 gap-4 mb-4">
-                                <div>
-                                    <label className="font-mono text-[8px] text-white/30 uppercase tracking-widest block mb-1">Filter</label>
-                                    <div className="bg-[#0A0A0A] border border-white/10 px-3 py-2 flex justify-between items-center">
-                                        <span className="font-mono text-[10px] text-white">Threshold</span>
-                                        <Sliders size={10} className="text-white/40" />
+                                {/* Layout */}
+                                <div className="space-y-3">
+                                    <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">Dimensions</span>
+                                    <div className="grid grid-cols-2 gap-2">
+                                        {['x', 'y', 'w', 'h'].map(prop => (
+                                            <div key={prop} className="bg-[#0A0A0A] border border-white/10 px-2 py-1.5 flex items-center gap-2 focus-within:border-[#E3E3FD]">
+                                                <span className="font-mono text-[9px] text-white/30 uppercase">{prop}</span>
+                                                <input 
+                                                    type="number" 
+                                                    value={selectedElement[prop] || 0} 
+                                                    onChange={(e) => updateElement(selection, { [prop]: parseInt(e.target.value) })}
+                                                    className="bg-transparent font-mono text-[10px] text-white w-full focus:outline-none" 
+                                                />
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
-                                <div>
-                                    <label className="font-mono text-[8px] text-white/30 uppercase tracking-widest block mb-1">Blend Mode</label>
-                                    <div className="bg-[#0A0A0A] border border-white/10 px-3 py-2 flex justify-between items-center">
-                                        <span className="font-mono text-[10px] text-white">Screen</span>
-                                        <ChevronRight size={10} className="text-white/40 rotate-90" />
+
+                                {/* Type Specific Props */}
+                                {selectedElement.type === 'text' && (
+                                    <div className="space-y-3">
+                                        <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">Content</span>
+                                        <textarea 
+                                            value={selectedElement.text} 
+                                            onChange={(e) => updateElement(selection, { text: e.target.value })}
+                                            className="w-full bg-[#0A0A0A] border border-white/10 p-2 font-mono text-[10px] text-white focus:outline-none focus:border-[#E3E3FD] h-20"
+                                        />
                                     </div>
-                                </div>
+                                )}
+                            </>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center h-full text-white/20">
+                                <MousePointer size={24} className="mb-2 opacity-50" />
+                                <span className="font-mono text-[10px] uppercase tracking-widest">No Selection</span>
                             </div>
-                            
-                            <div className="flex items-center gap-3 p-3 border border-[#E3E3FD]/20 bg-[#E3E3FD]/5">
-                                <div className="w-3 h-3 bg-[#E3E3FD] flex items-center justify-center">
-                                    <Check size={10} className="text-black" />
-                                </div>
-                                <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">Allow Client Modification</span>
-                            </div>
-                        </div>
-
-                        {/* Border Style */}
-                        <div>
-                             <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-4">Border Style</span>
-                             <div className="grid grid-cols-3 gap-2">
-                                <div>
-                                    <label className="font-mono text-[8px] text-white/30 uppercase tracking-widest block mb-1">Width</label>
-                                    <input type="number" defaultValue="1" className="w-full bg-[#0A0A0A] border border-white/10 px-2 py-1.5 font-mono text-[10px] text-white focus:outline-none focus:border-[#E3E3FD]" />
-                                </div>
-                                <div>
-                                    <label className="font-mono text-[8px] text-white/30 uppercase tracking-widest block mb-1">Radius</label>
-                                    <input type="number" defaultValue="8" className="w-full bg-[#0A0A0A] border border-white/10 px-2 py-1.5 font-mono text-[10px] text-white focus:outline-none focus:border-[#E3E3FD]" />
-                                </div>
-                                <div>
-                                    <label className="font-mono text-[8px] text-white/30 uppercase tracking-widest block mb-1">Color</label>
-                                    <div className="w-full h-[26px] bg-[#1C3A96] border border-white/10"></div>
-                                </div>
-                             </div>
-                        </div>
-                        
-                        {/* Transform */}
-                         <div>
-                             <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-4">Transform</span>
-                             <div className="grid grid-cols-2 gap-2">
-                                <div className="flex items-center bg-[#0A0A0A] border border-white/10 px-2 py-1.5">
-                                    <span className="font-mono text-[9px] text-white/30 w-6">X</span>
-                                    <span className="font-mono text-[10px] text-white">35</span>
-                                </div>
-                                <div className="flex items-center bg-[#0A0A0A] border border-white/10 px-2 py-1.5">
-                                    <span className="font-mono text-[9px] text-white/30 w-6">Y</span>
-                                    <span className="font-mono text-[10px] text-white">87</span>
-                                </div>
-                                <div className="flex items-center bg-[#0A0A0A] border border-white/10 px-2 py-1.5">
-                                    <span className="font-mono text-[9px] text-white/30 w-6">W</span>
-                                    <input type="text" value={width} onChange={(e) => setWidth(e.target.value)} className="w-full bg-transparent font-mono text-[10px] text-white focus:outline-none" />
-                                </div>
-                                <div className="flex items-center bg-[#0A0A0A] border border-white/10 px-2 py-1.5">
-                                    <span className="font-mono text-[9px] text-white/30 w-6">H</span>
-                                    <input type="text" value={height} onChange={(e) => setHeight(e.target.value)} className="w-full bg-transparent font-mono text-[10px] text-white focus:outline-none" />
-                                </div>
-                             </div>
-                        </div>
-
+                        )}
                     </div>
 
                     <div className="p-4 border-t border-white/10">
                         <button className="w-full py-3 border border-white/20 hover:border-[#E3E3FD] hover:text-[#E3E3FD] transition-all group flex items-center justify-center gap-2 bg-white/5">
                             <Download size={14} className="group-hover:animate-bounce" />
-                            <span className="font-mono text-[10px] uppercase tracking-[0.2em]">Export Artifact</span>
+                            <span className="font-mono text-[10px] uppercase tracking-[0.2em]">Export Asset</span>
                         </button>
                     </div>
                 </aside>
@@ -346,9 +365,9 @@ export default function Studio() {
     );
 }
 
-// Simple internal icon wrapper for the back button
 const ArrowLeftIcon = () => (
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M19 12H5M12 19l-7-7 7-7"/>
     </svg>
 );
+
