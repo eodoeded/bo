@@ -3,7 +3,7 @@ import {
     Type, Image as ImageIcon, Sparkles, Layers, 
     Settings, Download, ChevronRight, Maximize2, 
     Move, Sliders, Box, Grid, Monitor, Eye,
-    MousePointer, Hand, ZoomIn, ZoomOut, Undo, Redo,
+    MousePointer, ZoomIn, ZoomOut, Undo, Redo,
     AlignLeft, AlignCenter, AlignRight,
     Bold, Italic, Underline, MoreHorizontal,
     Check, Lock, Unlock, Trash2, ArrowLeft,
@@ -12,7 +12,7 @@ import {
     Copy, Search, Layout,
     ArrowUp, ArrowDown,
     Save,
-    BringToFront, SendToBack // Added these
+    BringToFront, SendToBack
 } from 'lucide-react';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
@@ -136,7 +136,7 @@ export default function Studio() {
     // App State
     const [mode, setMode] = useState('STUDIO'); // STUDIO | CLIENT
     const [activeTab, setActiveTab] = useState('components');
-    const [selectedTool, setSelectedTool] = useState('select');
+    const [selectedTool, setSelectedTool] = useState('select'); // select | pan
     const [statusMessage, setStatusMessage] = useState(null); 
     
     // Canvas Viewport
@@ -173,10 +173,11 @@ export default function Studio() {
     const [contextMenu, setContextMenu] = useState(null);
     const [selectionBox, setSelectionBox] = useState(null); 
     const [isAltPressed, setIsAltPressed] = useState(false);
+    const [isSpacePressed, setIsSpacePressed] = useState(false); // Spacebar toggle
 
     // Helpers
     const selectedLayers = layers.filter(l => selectedLayerIds.includes(l.id));
-    const primarySelectedLayer = selectedLayers.length === 1 ? selectedLayers[0] : null; 
+    const primarySelectedLayer = selectedLayers.length > 0 ? selectedLayers[selectedLayers.length - 1] : null; // Last selected is primary
     
     const showToast = (msg) => {
         setStatusMessage(msg);
@@ -184,8 +185,16 @@ export default function Studio() {
     };
 
     const updateLayer = (id, updates) => {
-        const newLayers = layers.map(l => l.id === id ? { ...l, ...updates } : l);
-        setLayers(newLayers);
+        // Multi-Property Edit Logic
+        // If the ID being updated is part of the selection, apply updates to ALL selected layers
+        if (selectedLayerIds.includes(id) && selectedLayerIds.length > 1) {
+            const newLayers = layers.map(l => selectedLayerIds.includes(l.id) ? { ...l, ...updates } : l);
+            setLayers(newLayers);
+        } else {
+            // Standard single update
+            const newLayers = layers.map(l => l.id === id ? { ...l, ...updates } : l);
+            setLayers(newLayers);
+        }
     };
 
     const updateLayers = (updatesMap) => {
@@ -270,6 +279,19 @@ export default function Studio() {
         setLayers(newLayers);
         setSelectedLayerIds(newIds);
         showToast(`Pasted ${clipboard.length} Elements`);
+    };
+
+    const toggleLock = (ids) => {
+        if (!ids || ids.length === 0) return;
+        const targetId = ids[0];
+        const layer = layers.find(l => l.id === targetId);
+        if (!layer) return;
+        
+        const newLockedState = !layer.lockPosition; // Toggle based on primary
+        
+        const newLayers = layers.map(l => ids.includes(l.id) ? { ...l, lockPosition: newLockedState } : l);
+        setLayers(newLayers);
+        setContextMenu(null);
     };
 
     const reorderLayer = (id, direction) => {
@@ -417,9 +439,6 @@ export default function Studio() {
         const midX = minX + w / 2;
         const midY = minY + h / 2;
         
-        // We want (midX, midY) to be at center of screen.
-        // Canvas center is (canvasConfig.width/2, canvasConfig.height/2).
-        // Difference:
         const dx = midX - (canvasConfig.width / 2);
         const dy = midY - (canvasConfig.height / 2);
         
@@ -544,7 +563,7 @@ export default function Studio() {
         setContextMenu(null);
 
         // Pan Logic
-        if (e.button === 1 || selectedTool === 'pan') {
+        if (e.button === 1 || selectedTool === 'pan' || isSpacePressed) {
             setIsPanning(true);
             setDragStart({ x: e.clientX, y: e.clientY });
             return;
@@ -779,16 +798,24 @@ export default function Studio() {
         return () => viewport.removeEventListener('wheel', onWheel);
     }, [zoom, pan]); 
 
-    // Alt Key Listener
+    // Alt Key & Spacebar Listener
     useEffect(() => {
-        const handleKey = (e) => setIsAltPressed(e.altKey);
+        const handleKey = (e) => {
+            setIsAltPressed(e.altKey);
+            
+            if (e.code === 'Space' && !e.repeat && !editingTextId) {
+                if (e.type === 'keydown') setIsSpacePressed(true);
+                if (e.type === 'keyup') setIsSpacePressed(false);
+            }
+        };
+        
         window.addEventListener('keydown', handleKey);
         window.addEventListener('keyup', handleKey);
         return () => {
             window.removeEventListener('keydown', handleKey);
             window.removeEventListener('keyup', handleKey);
         };
-    }, []);
+    }, [editingTextId]);
 
     const handleContextMenu = (e) => {
         e.preventDefault();
@@ -1031,8 +1058,8 @@ export default function Studio() {
                     
                     {/* Toolbar */}
                     <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 bg-[#050505] border border-white/10 p-1 flex items-center gap-1 rounded-[2px] shadow-xl">
-                        <IconButton icon={MousePointer} active={selectedTool === 'select'} onClick={() => setSelectedTool('select')} title="Pointer (V)" />
-                        <IconButton icon={Hand} active={selectedTool === 'pan'} onClick={() => setSelectedTool('pan')} title="Pan (H)" />
+                        <IconButton icon={MousePointer} active={selectedTool === 'select' && !isSpacePressed} onClick={() => setSelectedTool('select')} title="Pointer (V)" />
+                        {/* Hand Tool Removed, replaced by Spacebar behavior */}
                         <div className="w-px h-4 bg-white/10 mx-1"></div>
                         <IconButton icon={ZoomOut} onClick={() => setZoom(z => Math.max(0.1, z - 0.1))} title="Zoom Out" />
                         <span className="font-mono text-[9px] text-white/60 px-2 w-10 text-center">{Math.round(zoom * 100)}%</span>
@@ -1049,7 +1076,7 @@ export default function Studio() {
                         onContextMenu={handleContextMenu}
                         onDrop={handleDrop}
                         onDragOver={(e) => e.preventDefault()}
-                        style={{ cursor: isPanning ? 'grabbing' : (selectedTool === 'pan' ? 'grab' : 'default') }}
+                        style={{ cursor: isPanning ? 'grabbing' : (isSpacePressed ? 'grab' : (selectedTool === 'select' ? 'default' : 'default')) }}
                     >
                         <Ruler orientation="horizontal" zoom={zoom} pan={pan} />
                         <Ruler orientation="vertical" zoom={zoom} pan={pan} />
@@ -1242,17 +1269,24 @@ export default function Studio() {
                                 <button onClick={() => { duplicateSelectedLayers(); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group">
                                     <span>Duplicate</span> <span className="text-white/40 group-hover:text-black/40">Ctrl+D</span>
                                 </button>
-                                {selectedLayerIds.length === 1 && (
-                                    <>
-                                        <button onClick={() => { reorderLayer(selectedLayerIds[0], 'up'); setContextMenu(null); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group">
-                                            <span>Bring Forward</span> <span className="text-white/40 group-hover:text-black/40">]</span>
-                                        </button>
-                                        <button onClick={() => { reorderLayer(selectedLayerIds[0], 'down'); setContextMenu(null); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group">
-                                            <span>Send Backward</span> <span className="text-white/40 group-hover:text-black/40">[</span>
-                                        </button>
-                                    </>
-                                )}
+                                <button onClick={() => { toggleLock(selectedLayerIds); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group">
+                                    <span>{primarySelectedLayer?.lockPosition ? 'Unlock' : 'Lock'}</span> <span className="text-white/40 group-hover:text-black/40">L</span>
+                                </button>
+                                
                                 <div className="h-px bg-white/10 my-1"></div>
+                                
+                                <button onClick={() => { reorderSelectedLayers('up'); setContextMenu(null); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group">
+                                    <span>Bring Forward</span> <span className="text-white/40 group-hover:text-black/40">]</span>
+                                </button>
+                                <button onClick={() => { reorderSelectedLayers('down'); setContextMenu(null); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group">
+                                    <span>Send Backward</span> <span className="text-white/40 group-hover:text-black/40">[</span>
+                                </button>
+                                
+                                <div className="h-px bg-white/10 my-1"></div>
+                                
+                                <button onClick={() => { zoomToSelection(); setContextMenu(null); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group">
+                                    <span>Zoom to Selection</span> <span className="text-white/40 group-hover:text-black/40">Shift+2</span>
+                                </button>
                                 <button onClick={() => deleteSelectedLayers()} className="text-left px-3 py-2 text-[10px] font-mono text-red-400 hover:bg-red-900/20 uppercase tracking-widest flex items-center justify-between">
                                     <span>Delete</span> <span>Del</span>
                                 </button>
@@ -1274,7 +1308,10 @@ export default function Studio() {
                     </div>
 
                     <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-8">
-                        {selectedLayerIds.length === 1 && primarySelectedLayer ? (
+                        {/* Always show properties if at least one layer selected. 
+                            If multiple, we pass primary but update function handles broadcasting to all. 
+                        */}
+                        {selectedLayerIds.length > 0 && primarySelectedLayer ? (
                             <LayerProperties 
                                 layer={primarySelectedLayer} 
                                 mode={mode} 
@@ -1282,28 +1319,21 @@ export default function Studio() {
                                 onDelete={deleteLayer}
                                 onAlign={alignSelectedLayers} 
                             />
-                        ) : selectedLayerIds.length > 1 ? (
-                            <div className="h-full flex flex-col items-center justify-center text-white/20">
-                                <Layers size={24} strokeWidth={1} className="mb-2" />
-                                <span className="font-mono text-[10px] uppercase tracking-widest">{selectedLayerIds.length} Elements Selected</span>
-                                <div className="mt-6 w-full px-6">
-                                     <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-4 text-center">Align Selection</span>
-                                     <div className="grid grid-cols-6 gap-1">
-                                        <button onClick={() => alignSelectedLayers('left')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignLeft size={14} /></button>
-                                        <button onClick={() => alignSelectedLayers('center')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignCenter size={14} /></button>
-                                        <button onClick={() => alignSelectedLayers('right')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignRight size={14} /></button>
-                                        <button onClick={() => alignSelectedLayers('top')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignLeft size={14} className="rotate-90" /></button>
-                                        <button onClick={() => alignSelectedLayers('middle')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignCenter size={14} className="rotate-90" /></button>
-                                        <button onClick={() => alignSelectedLayers('bottom')} className="p-2 border border-transparent hover:bg-white/5 hover:text-white text-white/60 transition-colors rounded-[1px]"><AlignRight size={14} className="rotate-90" /></button>
-                                    </div>
-                                </div>
-                            </div>
                         ) : (
                             <div className="h-full flex flex-col items-center justify-center text-white/20">
                                 <MousePointer size={24} strokeWidth={1} className="mb-2" />
                                 <span className="font-mono text-[10px] uppercase tracking-widest">Select an element</span>
                             </div>
                         )}
+                        
+                        {/* Multi-selection info overlay if needed, but LayerProperties now handles the editing interface */}
+                        {selectedLayerIds.length > 1 && (
+                             <div className="mt-4 border-t border-white/10 pt-4">
+                                 <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest mb-2 block">{selectedLayerIds.length} Items Selected</span>
+                                 <p className="font-mono text-[8px] text-white/40">Editing properties applies to all selected items.</p>
+                             </div>
+                        )}
+
                         {mode === 'CLIENT' && (
                             <div className="pt-6 border-t border-white/10 mt-auto">
                                 <h2 className="font-mono text-[9px] font-bold text-[#E3E3FD] uppercase tracking-widest mb-4 flex items-center gap-2"><Sparkles size={12} /> Generator Protocol</h2>
