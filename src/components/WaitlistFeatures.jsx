@@ -1,76 +1,95 @@
 import { motion } from 'framer-motion';
-import { Database, Image, Layers, Palette, Lock, Upload, Download } from 'lucide-react';
-
-const features = [
-    { name: "AI IMAGE GENERATOR", icon: Image },
-    { name: "BACKGROUND REMOVAL", icon: Layers },
-    { name: "TEXT LAYERS", icon: Database },
-    { name: "COLOUR LAYERS", icon: Palette },
-    { name: "IMAGE/LOGO UPLOAD", icon: Upload },
-    { name: "LOCKING SYSTEM", icon: Lock },
-    { name: "EXPORT BUTTON", icon: Download }
-];
+import { Database, Cpu, Layout, Lock, Share2, Layers, Image, Type } from 'lucide-react';
 
 const Corner = ({ className = "" }) => (
     <div className={`absolute w-1.5 h-1.5 border-white/40 ${className}`} />
 );
 
+const specs = [
+    { label: "GEN_CORE", value: "v1.4 (Stable)", icon: Cpu },
+    { label: "ASSET_LOCK", value: "Active / Strict", icon: Lock },
+    { label: "FORMATS", value: "PNG, JPG, SVG", icon: Image },
+    { label: "TYPOGRAPHY", value: "Custom Font Support", icon: Type },
+    { label: "LAYERS", value: "Smart Composition", icon: Layers },
+    { label: "EXPORT", value: "Instant / Batch", icon: Share2 },
+];
+
 export default function WaitlistFeatures() {
   return (
     <section id="specs" className="w-full py-32 px-6 border-t border-white/5 bg-[#020202]">
-      <div className="max-w-[1400px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+      <div className="max-w-[1400px] mx-auto">
         
-        {/* Left: Sticky Header */}
-        <div className="lg:col-span-4 sticky top-32">
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-            >
-                 <div className="mb-8 flex items-center gap-3">
-                     <div className="w-1.5 h-1.5 bg-[#E3E3FD]"></div>
-                     <span className="font-mono text-[9px] text-white/40 tracking-widest uppercase">Specifications</span>
-                </div>
-
-                <h2 className="font-montreal font-medium text-white text-4xl md:text-5xl tracking-tight mb-8 leading-[0.9]">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row justify-between items-end mb-20 border-b border-white/10 pb-8">
+             <div>
+                <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-4">Specifications</span>
+                <h2 className="font-montreal font-medium text-white text-4xl md:text-5xl tracking-tight leading-[0.9]">
                     System<br/>Kernel.
                 </h2>
-                <p className="font-montreal text-white/60 text-lg leading-relaxed max-w-sm mb-12">
-                    The MVP includes the essential modules to let your clients create without chaos. Precise control over every brand asset.
-                </p>
-                
-                <div className="hidden lg:block font-mono text-[9px] text-white/20 uppercase tracking-widest">
-                    v1.0 Release Candidate
-                </div>
-            </motion.div>
+            </div>
+            <div className="font-mono text-[10px] text-white/30 uppercase tracking-widest mt-8 md:mt-0">
+                Build_2025.1.0_RC
+            </div>
         </div>
 
-        {/* Right: Technical Grid */}
-        <div className="lg:col-span-8 w-full">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/10 border border-white/10">
-                {features.map((feature, index) => (
-                    <motion.div 
-                        key={index}
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: index * 0.05 }}
-                        className="bg-[#050505] p-8 flex items-center justify-between group hover:bg-[#0A0A0A] transition-colors relative"
-                    >
-                        {/* Hover Corner */}
-                        <Corner className="top-0 left-0 border-t border-l opacity-0 group-hover:opacity-100 transition-opacity" />
-
-                        <div className="flex items-center gap-6">
-                            <span className="font-mono text-[#E3E3FD]/20 text-[9px]">0{index + 1}</span>
-                            <span className="font-mono text-white/70 text-xs tracking-widest uppercase group-hover:text-white transition-colors">{feature.name}</span>
-                        </div>
-                        
-                        <feature.icon size={16} className="text-white/20 group-hover:text-[#E3E3FD] transition-colors" />
-                    </motion.div>
-                ))}
-                {/* Filler for even grid if odd number */}
-                <div className="bg-[#050505] p-8 hidden md:block"></div>
+        {/* Technical Data Sheet Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-px bg-white/10 border border-white/10">
+            
+            {/* Left: Capability Manifest */}
+            <div className="bg-[#050505] p-12 relative">
+                <Corner className="top-0 left-0 border-t border-l" />
+                <h3 className="font-mono text-sm text-white/40 uppercase tracking-widest mb-8">Capabilities Manifest</h3>
+                
+                <div className="space-y-6">
+                    {specs.map((spec, i) => (
+                        <motion.div 
+                            key={i}
+                            initial={{ opacity: 0, x: -10 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            transition={{ delay: i * 0.05 }}
+                            viewport={{ once: true }}
+                            className="flex items-center justify-between py-3 border-b border-white/5 group hover:bg-white/[0.02] transition-colors px-2 -mx-2"
+                        >
+                            <div className="flex items-center gap-4">
+                                <spec.icon size={14} className="text-[#E3E3FD]/50 group-hover:text-[#E3E3FD] transition-colors" />
+                                <span className="font-mono text-xs text-white/70 group-hover:text-white transition-colors uppercase tracking-wider">{spec.label}</span>
+                            </div>
+                            <span className="font-mono text-[10px] text-[#E3E3FD]">{spec.value}</span>
+                        </motion.div>
+                    ))}
+                </div>
             </div>
+
+            {/* Right: Technical Description */}
+            <div className="bg-[#050505] p-12 relative flex flex-col justify-between">
+                <Corner className="bottom-0 right-0 border-b border-r" />
+                
+                <div>
+                    <h3 className="font-mono text-sm text-white/40 uppercase tracking-widest mb-8">Architecture Overview</h3>
+                    <p className="font-montreal text-lg text-white/60 leading-relaxed mb-8">
+                        The platform operates on a decentralized asset logic. Studios upload rulesets; clients interact only with safe parameters. The rendering engine ensures pixel-perfect compliance with the master brand guidelines, regardless of user input.
+                    </p>
+                    <p className="font-montreal text-lg text-white/60 leading-relaxed">
+                        Designed for high-throughput environments where consistency cannot be compromised by human error or speed requirements.
+                    </p>
+                </div>
+
+                <div className="mt-12 pt-8 border-t border-white/5 flex gap-12">
+                     <div>
+                        <span className="block font-mono text-[9px] text-white/30 uppercase tracking-widest mb-1">Uptime</span>
+                        <span className="font-mono text-xl text-[#E3E3FD]">99.9%</span>
+                     </div>
+                     <div>
+                        <span className="block font-mono text-[9px] text-white/30 uppercase tracking-widest mb-1">Render</span>
+                        <span className="font-mono text-xl text-[#E3E3FD]">&lt;200ms</span>
+                     </div>
+                     <div>
+                        <span className="block font-mono text-[9px] text-white/30 uppercase tracking-widest mb-1">Security</span>
+                        <span className="font-mono text-xl text-[#E3E3FD]">SOC-2</span>
+                     </div>
+                </div>
+            </div>
+
         </div>
 
       </div>

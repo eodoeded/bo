@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { Database, Cpu, Layout, ArrowRight, Lock, Sparkles, Scan, Activity, Zap } from 'lucide-react';
+import { Database, Layout, ArrowRight, Lock, Scan, Zap } from 'lucide-react';
 import upComp from "../assets/up-comp.png";
 import bottomComp from "../assets/bottom-comp.png";
 
@@ -9,13 +9,7 @@ const Corner = ({ className = "" }) => (
     <div className={`absolute w-1.5 h-1.5 border-white/40 ${className}`} />
 );
 
-const Badge = ({ children, className = "", color = "text-[#E3E3FD]" }) => (
-    <span className={`font-mono text-[9px] uppercase tracking-widest border border-white/10 px-1.5 py-0.5 rounded-[1px] bg-white/[0.02] ${color} ${className}`}>
-        {children}
-    </span>
-);
-
-const Node = ({ title, icon: Icon, children, x, y, delay = 0, width = "w-48" }) => (
+const Node = ({ title, children, x, y, delay = 0, width = "w-48" }) => (
   <motion.div 
     initial={{ opacity: 0, scale: 0.9 }}
     animate={{ opacity: 1, scale: 1 }}
@@ -40,33 +34,6 @@ const Node = ({ title, icon: Icon, children, x, y, delay = 0, width = "w-48" }) 
   </motion.div>
 );
 
-const Connection = ({ start, end, delay }) => {
-    // Basic SVG line connection for visual effect
-    return (
-      <svg className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-visible z-0 hidden md:block">
-        <motion.path
-          d={`M ${start.x} ${start.y} L ${end.x} ${end.y}`}
-          fill="none"
-          stroke="#E3E3FD"
-          strokeWidth="1"
-          strokeOpacity="0.1"
-          initial={{ pathLength: 0, opacity: 0 }}
-          animate={{ pathLength: 1, opacity: 1 }}
-          transition={{ duration: 1.2, delay, ease: "easeInOut" }}
-        />
-        <motion.path
-          d={`M ${start.x} ${start.y} L ${end.x} ${end.y}`}
-          fill="none"
-          stroke="#E3E3FD"
-          strokeWidth="1"
-          initial={{ pathLength: 0, opacity: 0 }}
-          animate={{ pathLength: [0, 0.4, 0], opacity: [0, 1, 0], pathOffset: [0, 1, 1] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "linear", delay: delay + 0.5 }}
-        />
-      </svg>
-    );
-};
-
 export default function WaitlistHero() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState('idle');
@@ -77,7 +44,7 @@ export default function WaitlistHero() {
     setStatus('sending');
     
     try {
-        const response = await fetch("https://formspree.io/f/xzzzdnlj", {
+        const response = await fetch("https://formspree.io/f/xblnqyya", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -108,7 +75,7 @@ export default function WaitlistHero() {
           backgroundSize: '40px 40px' 
       }}></div>
 
-      {/* Decorative Floating Elements (Subtler) */}
+      {/* Decorative Floating Elements */}
       <div className="absolute top-32 left-6 md:left-12 font-mono text-[9px] text-white/10 uppercase tracking-widest hidden md:block">
           SYS_READY <br/> 37.7749° N, 122.4194° W
       </div>
@@ -118,9 +85,8 @@ export default function WaitlistHero() {
 
       <div className="max-w-[1400px] mx-auto w-full h-full relative z-20 flex items-center">
         
-        {/* Left Column: Text & Form */}
-        <div className="flex flex-col items-start text-left z-20 max-w-2xl">
-            {/* Simplified Header - Removed complex badge stack */}
+        {/* Text Content - Clear of Nodes */}
+        <div className="flex flex-col items-start text-left z-30 max-w-2xl relative">
             <div className="flex items-center gap-3 mb-8">
                 <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">Early Access Protocol</span>
             </div>
@@ -203,16 +169,11 @@ export default function WaitlistHero() {
 
       </div>
 
-      {/* Node Graph - Spread Across Screen */}
+      {/* Node Graph - Shifted Right to avoid overlapping text */}
       <div className="absolute inset-0 w-full h-full pointer-events-none z-10 overflow-hidden">
-            {/* 
-                Coordinates:
-                - Using viewport units (vw/vh) via calc() for responsive positioning
-                - Nodes hidden on mobile (md:block)
-            */}
-
-            {/* Studio Input - Far Left */}
-            <Node title="Design_Studio" x="5%" y="25%" delay={0.4} width="w-48">
+            
+            {/* Studio Input - Shifted from 5% to 50% */}
+            <Node title="Design_Studio" x="50%" y="25%" delay={0.4} width="w-48">
                 <div className="flex items-center gap-3 text-white/60">
                     <Database size={14} />
                     <span className="font-mono text-[9px]">ASSETS_LOADED</span>
@@ -223,8 +184,8 @@ export default function WaitlistHero() {
                 </div>
             </Node>
 
-            {/* System Core - Center Right */}
-            <Node title="Branded_Objects" x="55%" y="40%" delay={0.6} width="w-64">
+            {/* System Core - Shifted from 55% to 70% */}
+            <Node title="Branded_Objects" x="70%" y="45%" delay={0.6} width="w-64">
                 <div className="h-48 w-full relative flex items-center justify-center overflow-hidden bg-[#0A0A0A] border border-white/10 mb-2 shadow-inner">
                      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05]"></div>
                     <motion.div
@@ -253,8 +214,8 @@ export default function WaitlistHero() {
                 </div>
             </Node>
 
-            {/* Client Output - Far Right Bottom */}
-            <Node title="Client_Output" x="80%" y="70%" delay={0.8} width="w-48">
+            {/* Client Output - Shifted from 80% to 85% */}
+            <Node title="Client_Output" x="85%" y="75%" delay={0.8} width="w-48">
                 <div className="flex items-center gap-3 text-white/60">
                     <Layout size={14} />
                     <span className="font-mono text-[9px]">RENDER_COMPLETE</span>
@@ -265,11 +226,12 @@ export default function WaitlistHero() {
                 </div>
             </Node>
 
-            {/* Connecting Lines - Adjusted for spread */}
+            {/* Connecting Lines - Adjusted for new positions */}
             <svg className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-visible z-0 hidden md:block">
-                {/* Studio to Core */}
+                {/* Studio to Core: (50%+width) -> Core */}
+                {/* 50vw + ~100px to 70vw */}
                 <motion.path
-                  d="M 150 250 C 400 250, 400 450, 800 450" // Curved path
+                  d="M 800 250 C 900 250, 900 450, 1100 450" 
                   fill="none"
                   stroke="#E3E3FD"
                   strokeWidth="1"
@@ -278,9 +240,9 @@ export default function WaitlistHero() {
                   animate={{ pathLength: 1 }}
                   transition={{ duration: 1.5, delay: 0.5 }}
                 />
-                 {/* Core to Output */}
+                 {/* Core to Output: (70%+width) -> Output */}
                 <motion.path
-                  d="M 1050 500 C 1200 500, 1200 750, 1400 750" // Curved path
+                  d="M 1350 500 C 1450 500, 1450 800, 1600 800" 
                   fill="none"
                   stroke="#E3E3FD"
                   strokeWidth="1"
