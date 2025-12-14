@@ -1127,7 +1127,7 @@ export default function Studio() {
     }, [selectedLayerIds, mode, canUndo, canRedo, editingTextId, layers, zoom, pan, clipboard]);
 
     return (
-        <div className="fixed inset-0 w-full h-[100dvh] bg-[#020202] text-white font-montreal flex flex-col overflow-hidden overscroll-none selection:bg-[#E3E3FD] selection:text-black" onClick={() => setContextMenu(null)}>
+        <div className="fixed inset-0 w-full h-[100dvh] bg-[#050505] text-white font-montreal flex flex-col overflow-hidden overscroll-none selection:bg-[#E3E3FD] selection:text-black" onClick={() => setContextMenu(null)}>
             
             {/* Shortcuts Modal */}
             <AnimatePresence>
@@ -1144,13 +1144,13 @@ export default function Studio() {
             </AnimatePresence>
 
             {/* Top Bar */}
-            <header className="h-12 border-b border-white/10 flex items-center justify-between px-4 bg-[#050505] relative z-20">
+            <header className="h-12 border-b border-white/5 flex items-center justify-between px-4 bg-[#0A0A0A] relative z-20">
                 <div className="flex items-center gap-6">
                     <Link to="/" className="font-mono text-[10px] text-white/40 hover:text-white transition-colors uppercase tracking-widest flex items-center gap-2">
                         <ArrowLeft size={12} />
                         <span>Back</span>
                     </Link>
-                    <div className="h-4 w-px bg-white/10"></div>
+                    <div className="h-4 w-px bg-white/5"></div>
                     <div className="flex items-center gap-2">
                         <span className="font-mono text-[10px] text-white uppercase tracking-widest font-bold">BrandForge <span className="text-white/40">//</span> CONFIGURATOR</span>
                     </div>
@@ -1169,14 +1169,14 @@ export default function Studio() {
                          </motion.div>
                      )}
 
-                     <div className="flex items-center gap-1 bg-[#0A0A0A] border border-white/5 p-1 rounded-[2px]">
+                     <div className="flex items-center gap-1 bg-[#050505] border border-white/5 p-1 rounded-[2px]">
                         <IconButton icon={Undo} onClick={() => setLayers(undo())} disabled={!canUndo} title="Undo (Ctrl+Z)" />
                         <IconButton icon={Redo} onClick={() => setLayers(redo())} disabled={!canRedo} title="Redo (Ctrl+Shift+Z)" />
                     </div>
-                    <div className="h-4 w-px bg-white/10"></div>
+                    <div className="h-4 w-px bg-white/5"></div>
                     <IconButton icon={HelpCircle} onClick={() => setShowShortcuts(true)} title="Keyboard Shortcuts (?)" />
-                    <div className="h-4 w-px bg-white/10"></div>
-                    <div className="flex items-center gap-2 bg-[#0A0A0A] border border-white/10 p-1 rounded-[2px]">
+                    <div className="h-4 w-px bg-white/5"></div>
+                    <div className="flex items-center gap-2 bg-[#050505] border border-white/5 p-1 rounded-[2px]">
                         <button 
                             onClick={() => { setMode('STUDIO'); setSelectedLayerIds([]); }}
                             className={`px-3 py-1 font-mono text-[9px] uppercase tracking-widest rounded-[1px] transition-colors ${mode === 'STUDIO' ? 'bg-[#E3E3FD] text-black' : 'text-white/40 hover:text-white'}`}
@@ -1190,7 +1190,7 @@ export default function Studio() {
                             Client
                         </button>
                     </div>
-                    <div className="h-4 w-px bg-white/10"></div>
+                    <div className="h-4 w-px bg-white/5"></div>
                     <button 
                         onClick={handlePublish}
                         className="px-4 py-1.5 bg-[#E3E3FD] text-black font-mono text-[10px] uppercase tracking-widest rounded-[1px] hover:bg-white transition-colors font-semibold flex items-center gap-2"
@@ -1206,8 +1206,8 @@ export default function Studio() {
                 
                 {/* Left Panel */}
                 {!isMobile && (
-                <aside className="w-64 border-r border-white/10 bg-[#050505] flex flex-col z-20 shrink-0 h-full">
-                    <div className="grid grid-cols-2 border-b border-white/10">
+                <aside className="w-64 border-r border-white/5 bg-[#0A0A0A] flex flex-col z-20 shrink-0 h-full">
+                    <div className="grid grid-cols-2 border-b border-white/5">
                         <button onClick={() => setActiveTab('components')} className={`py-3 font-mono text-[9px] uppercase tracking-widest transition-colors ${activeTab === 'components' ? 'text-[#E3E3FD] border-b border-[#E3E3FD] bg-[#E3E3FD]/5' : 'text-white/40 hover:text-white'}`}>Components</button>
                         <button onClick={() => setActiveTab('layers')} className={`py-3 font-mono text-[9px] uppercase tracking-widest transition-colors ${activeTab === 'layers' ? 'text-[#E3E3FD] border-b border-[#E3E3FD] bg-[#E3E3FD]/5' : 'text-white/40 hover:text-white'}`}>Layers</button>
                     </div>
@@ -1217,9 +1217,9 @@ export default function Studio() {
                             <div className="p-4 space-y-6">
                                 <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-4">Explore Components</span>
                                 <div className="grid grid-cols-3 gap-2">
-                                    <button onClick={() => addLayer('TEXT')} className="flex flex-col items-center justify-center p-3 border border-white/10 hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group"><Type size={16} className="text-white/60 group-hover:text-[#E3E3FD]" /><span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">Text</span></button>
+                                    <button onClick={() => addLayer('TEXT')} className="flex flex-col items-center justify-center p-3 border border-white/5 bg-[#050505] hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group"><Type size={16} className="text-white/60 group-hover:text-[#E3E3FD]" /><span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">Text</span></button>
                                     
-                                    <button onClick={handleUploadClick} className="flex flex-col items-center justify-center p-3 border border-white/10 hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group cursor-pointer relative">
+                                    <button onClick={handleUploadClick} className="flex flex-col items-center justify-center p-3 border border-white/5 bg-[#050505] hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group cursor-pointer relative">
                                         <ImageIcon size={16} className="text-white/60 group-hover:text-[#E3E3FD]" />
                                         <span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">Image</span>
                                         <div className="absolute top-1 right-1"><Plus size={8} className="text-[#E3E3FD]" /></div>
@@ -1233,7 +1233,7 @@ export default function Studio() {
                                         onChange={handleFileUpload} 
                                     />
 
-                                    <button onClick={() => addLayer('AI_FRAME')} className="flex flex-col items-center justify-center p-3 border border-white/10 hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group"><Sparkles size={16} className="text-white/60 group-hover:text-[#E3E3FD]" /><span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">AI Gen</span></button>
+                                    <button onClick={() => addLayer('AI_FRAME')} className="flex flex-col items-center justify-center p-3 border border-white/5 bg-[#050505] hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group"><Sparkles size={16} className="text-white/60 group-hover:text-[#E3E3FD]" /><span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">AI Gen</span></button>
                                 </div>
                             </div>
                         ) : (
@@ -1275,13 +1275,13 @@ export default function Studio() {
                 )}
 
                 {/* Center: Canvas Area */}
-                <main className="flex-1 bg-[#020202] relative flex flex-col overflow-hidden">
+                <main className="flex-1 bg-[#050505] relative flex flex-col overflow-hidden">
                     
                     {/* Toolbar */}
-                    <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 bg-[#050505] border border-white/10 p-1 flex items-center gap-1 rounded-[2px] shadow-xl">
+                    <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 bg-[#0A0A0A] border border-white/10 p-1 flex items-center gap-1 rounded-[2px] shadow-xl">
                         <IconButton icon={MousePointer} active={selectedTool === 'select' && !isSpacePressed} onClick={() => setSelectedTool('select')} title="Pointer (V)" />
                         {/* Hand Tool Removed, replaced by Spacebar behavior */}
-                        <div className="w-px h-4 bg-white/10 mx-1"></div>
+                        <div className="w-px h-4 bg-white/5 mx-1"></div>
                         <IconButton icon={ZoomOut} onClick={() => setZoom(z => Math.max(0.1, z - 0.1))} title="Zoom Out" />
                         <span className="font-mono text-[9px] text-white/60 px-2 w-10 text-center">{Math.round(zoom * 100)}%</span>
                         <IconButton icon={ZoomIn} onClick={() => setZoom(z => Math.min(5, z + 0.1))} title="Zoom In" />

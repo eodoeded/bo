@@ -5,15 +5,15 @@ import bottomComp from "../assets/bottom-comp.png";
 
 // Shared Components
 const Corner = ({ className = "" }) => (
-    <div className={`absolute w-1.5 h-1.5 border-white/40 ${className}`} />
+    <div className={`absolute w-1 h-1 bg-white/20 ${className}`} />
 );
 
 // Node Content Wrapper for Floating Animation
 const FloatingContent = ({ children, isDragging }) => {
     return (
         <motion.div
-            animate={isDragging ? {} : { y: [0, -8, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            animate={isDragging ? {} : { y: [0, -4, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
             className="relative w-full h-full"
         >
             {children}
@@ -33,21 +33,24 @@ const Node = ({ id, title, children, x, y, onDragStart, isDragging, width = "w-4
       onPointerDown={(e) => onDragStart(e, id)}
     >
         <FloatingContent isDragging={isDragging}>
-            <div className={`bg-[#050505] border border-white/10 p-2 md:p-4 ${width} shadow-2xl backdrop-blur-md group hover:border-white/30 transition-colors relative`}>
-                <Corner className="top-0 left-0 border-t border-l group-hover:border-white transition-colors" />
-                <Corner className="bottom-0 right-0 border-b border-r group-hover:border-white transition-colors" />
+            <div className={`bg-[#0A0A0A]/90 border border-white/10 p-3 md:p-4 ${width} shadow-2xl backdrop-blur-xl group hover:border-[#E3E3FD]/50 transition-colors duration-500 relative rounded-sm`}>
+                {/* Clean Corners */}
+                <Corner className="top-0 left-0" />
+                <Corner className="top-0 right-0" />
+                <Corner className="bottom-0 left-0" />
+                <Corner className="bottom-0 right-0" />
 
-                <div className="flex justify-between items-center mb-2 md:mb-3 pb-1 md:pb-2 border-b border-white/5">
-                    <span className="font-mono text-[7px] md:text-[9px] text-white/40 uppercase tracking-widest group-hover:text-white transition-colors">{title}</span>
-                    <div className="w-1 h-1 bg-[#E3E3FD] animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
+                <div className="flex justify-between items-center mb-3 pb-2 border-b border-white/5">
+                    <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">{title}</span>
+                    <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full shadow-[0_0_8px_#E3E3FD]"></div>
                 </div>
-                <div className="flex flex-col gap-1 md:gap-2 relative z-10">
+                <div className="flex flex-col gap-2 relative z-10">
                     {children}
                 </div>
                 
-                {/* Ports */}
-                <div className="absolute -left-[5px] top-1/2 -translate-y-1/2 w-1.5 h-2 bg-[#050505] border border-white/30 group-hover:border-[#E3E3FD] transition-colors" />
-                <div className="absolute -right-[5px] top-1/2 -translate-y-1/2 w-1.5 h-2 bg-[#050505] border border-white/30 group-hover:border-[#E3E3FD] transition-colors" />
+                {/* Ports - Clean Circles */}
+                <div className="absolute -left-[4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-[#0A0A0A] border border-white/20 rounded-full group-hover:border-[#E3E3FD] transition-colors" />
+                <div className="absolute -right-[4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-[#0A0A0A] border border-white/20 rounded-full group-hover:border-[#E3E3FD] transition-colors" />
             </div>
         </FloatingContent>
     </div>
@@ -164,30 +167,39 @@ export default function WaitlistHero() {
   };
 
   return (
-    <section className="relative w-full h-screen overflow-hidden bg-[#020202]">
+    <section className="relative w-full h-screen overflow-hidden bg-[#050505]">
       
-      {/* Background Grid */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.02]" style={{ 
-          backgroundImage: 'linear-gradient(rgba(227, 227, 253, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(227, 227, 253, 0.1) 1px, transparent 1px)', 
-          backgroundSize: '40px 40px' 
-      }}></div>
-
-      {/* Decorative Floating Elements */}
-      <div className="absolute top-32 left-6 md:left-12 font-mono text-[9px] text-white/10 uppercase tracking-widest hidden md:block">
-          SYS_READY <br/> 37.7749° N, 122.4194° W
+      {/* Cleaner Generative Background */}
+      <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute inset-0 opacity-[0.03]" style={{ 
+              backgroundImage: 'radial-gradient(#E3E3FD 1px, transparent 1px)', 
+              backgroundSize: '40px 40px' 
+          }}></div>
+          <motion.div 
+            className="absolute inset-0 opacity-[0.02]"
+            animate={{ backgroundPosition: ["0px 0px", "40px 40px"] }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            style={{ 
+              backgroundImage: 'linear-gradient(90deg, rgba(227, 227, 253, 0.1) 1px, transparent 1px), linear-gradient(rgba(227, 227, 253, 0.1) 1px, transparent 1px)', 
+              backgroundSize: '80px 80px' 
+          }}></motion.div>
       </div>
-      <div className="absolute top-32 right-6 md:right-12 font-mono text-[9px] text-white/10 uppercase tracking-widest hidden md:block text-right">
-          LATENCY: 12ms <br/> SECURE_CONNECTION
+
+      {/* Decorative Floating Elements - Simplified */}
+      <div className="absolute top-8 left-8 md:left-12 font-mono text-[9px] text-white/20 uppercase tracking-widest hidden md:block">
+          System_OS v2.4
+      </div>
+      <div className="absolute top-8 right-8 md:right-12 font-mono text-[9px] text-white/20 uppercase tracking-widest hidden md:block text-right">
+          <span className="w-2 h-2 bg-[#E3E3FD] rounded-full inline-block mr-2 animate-pulse"></span>
+          Online
       </div>
 
       {/* Node Graph Layer - Absolute on both, with mobile adjustments */}
-      <div className="absolute inset-0 w-full h-full z-10 touch-none overflow-hidden">
+      <div className="absolute inset-0 w-full h-full z-10 touch-none overflow-hidden mix-blend-screen">
           <div ref={containerRef} className="absolute inset-0 w-full h-full">
             <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none" style={{zIndex: 10}}>
                 {/* 
-                    Unique Style: "Energy Pulse"
-                    - Base wire is static and dim
-                    - Pulse travels along the wire
+                    Unique Style: "Clean Circuit"
                 */}
 
                 {/* Path 1: Studio -> Core */}
@@ -198,8 +210,8 @@ export default function WaitlistHero() {
                         L ${nodes.core.x} ${nodes.core.y}`}
                     fill="none"
                     stroke="white"
-                    strokeWidth="0.1"
-                    strokeOpacity="0.15"
+                    strokeWidth="0.05"
+                    strokeOpacity="0.2"
                     vectorEffect="non-scaling-stroke"
                     />
                     
@@ -211,19 +223,19 @@ export default function WaitlistHero() {
                         L ${nodes.core.x} ${nodes.core.y}`}
                     fill="none"
                     stroke="#E3E3FD"
-                    strokeWidth="0.3"
+                    strokeWidth="0.15"
                     vectorEffect="non-scaling-stroke"
                     initial={{ pathLength: 0, pathOffset: 0, opacity: 0 }}
                     animate={{ 
-                        pathLength: [0, 0.3, 0], // Grows then shrinks
+                        pathLength: [0, 0.4, 0], // Grows then shrinks
                         pathOffset: [0, 1, 1],   // Moves from start to end
                         opacity: [0, 1, 0] 
                     }}
                     transition={{ 
-                        duration: 3, 
+                        duration: 4, 
                         ease: "easeInOut", 
                         repeat: Infinity,
-                        repeatDelay: 0.2
+                        repeatDelay: 0.5
                     }}
                     />
 
@@ -235,8 +247,8 @@ export default function WaitlistHero() {
                         L ${nodes.output.x} ${nodes.output.y}`}
                     fill="none"
                     stroke="white"
-                    strokeWidth="0.1"
-                    strokeOpacity="0.15"
+                    strokeWidth="0.05"
+                    strokeOpacity="0.2"
                     vectorEffect="non-scaling-stroke"
                     />
                     
@@ -248,20 +260,20 @@ export default function WaitlistHero() {
                         L ${nodes.output.x} ${nodes.output.y}`}
                     fill="none"
                     stroke="#E3E3FD"
-                    strokeWidth="0.3"
+                    strokeWidth="0.15"
                     vectorEffect="non-scaling-stroke"
                     initial={{ pathLength: 0, pathOffset: 0, opacity: 0 }}
                     animate={{ 
-                        pathLength: [0, 0.3, 0], 
+                        pathLength: [0, 0.4, 0], 
                         pathOffset: [0, 1, 1],
                         opacity: [0, 1, 0] 
                     }}
                     transition={{ 
-                        duration: 3, 
+                        duration: 4, 
                         ease: "easeInOut", 
                         repeat: Infinity,
-                        repeatDelay: 0.2,
-                        delay: 1.5 // Offset timing
+                        repeatDelay: 0.5,
+                        delay: 2 // Offset timing
                     }}
                     />
             </svg>
@@ -338,45 +350,42 @@ export default function WaitlistHero() {
       </div>
 
       {/* Text Content */}
-      <div className="absolute bottom-0 left-0 w-full md:w-auto md:bottom-20 md:left-12 z-30 px-6 pb-12 pt-24 md:pt-0 md:pb-0 pointer-events-none bg-gradient-to-t from-[#020202] via-[#020202]/80 to-transparent md:bg-none">
-        <div className="flex flex-col items-start text-left pointer-events-auto max-w-xl">
-            <div className="flex items-center gap-3 mb-4 md:mb-6">
-                <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">Early Access Protocol</span>
+      <div className="absolute bottom-0 left-0 w-full md:w-auto md:bottom-24 md:left-16 z-30 px-6 pb-12 pt-24 md:pt-0 md:pb-0 pointer-events-none bg-gradient-to-t from-[#050505] via-[#050505]/90 to-transparent md:bg-none">
+        <div className="flex flex-col items-start text-left pointer-events-auto max-w-2xl">
+            <div className="flex items-center gap-3 mb-6">
+                <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest border border-[#E3E3FD]/20 bg-[#E3E3FD]/10 px-2 py-1 rounded-sm">System_OS v2.4</span>
             </div>
             
             <motion.h1
-                className="font-montreal font-medium text-4xl md:text-7xl leading-[0.9] tracking-tight mb-4 md:mb-8"
+                className="font-montreal font-medium text-5xl md:text-8xl leading-[0.9] tracking-tight mb-6 text-white"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
             >
-                Client-Safe <br/><span className="text-[#E3E3FD]">Design Tools.</span>
+                Intelligent <br/> <span className="text-[#E3E3FD]">Design Systems.</span>
             </motion.h1>
 
             <motion.p
-                className="font-montreal text-white/60 text-sm md:text-lg max-w-md mb-6 md:mb-8 leading-relaxed border-l border-white/10 pl-4 md:pl-6"
+                className="font-montreal text-white/70 text-lg md:text-xl max-w-md mb-8 leading-relaxed"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1, duration: 0.8 }}
             >
-                Empower clients to generate on-brand assets. <br/>
-                You define the logic. They fill the blanks.
+                Automated brand governance for scaling studios. <br/>
+                Define the logic. We handle the rest.
             </motion.p>
             
             <motion.form 
-                className="flex flex-col sm:flex-row w-full max-w-full md:max-w-[420px] relative group"
+                className="flex flex-col sm:flex-row w-full max-w-full md:max-w-[440px] relative group"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.8 }}
                 onSubmit={handleJoin}
             >
-                <div className="absolute -inset-[1px] bg-gradient-to-r from-[#E3E3FD]/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 blur-sm"></div>
-                <div className="relative flex flex-col sm:flex-row w-full bg-[#050505] border border-white/10 p-1">
-                    <Corner className="top-0 left-0 border-t border-l" />
-                    <Corner className="bottom-0 right-0 border-b border-r" />
+                <div className="relative flex flex-col sm:flex-row w-full bg-[#0A0A0A] border border-white/10 p-1.5 rounded-sm">
                     
                     <div className="absolute left-0 top-1/2 -translate-y-1/2 pl-4 pointer-events-none">
-                        <Scan size={14} className="text-white/20" />
+                        <Scan size={16} className="text-white/30" />
                     </div>
 
                     <input 
@@ -390,11 +399,11 @@ export default function WaitlistHero() {
                     />
                     <button 
                         type="submit"
-                        className="bg-white text-black px-6 py-4 font-mono font-semibold text-[11px] tracking-[0.2em] hover:bg-[#E3E3FD] transition-colors whitespace-nowrap uppercase border border-transparent flex items-center gap-2 justify-center group/btn mt-2 sm:mt-0 w-full sm:w-auto"
+                        className="bg-white text-black px-8 py-4 font-mono font-semibold text-[11px] tracking-[0.1em] hover:bg-[#E3E3FD] transition-colors whitespace-nowrap uppercase border border-transparent flex items-center gap-2 justify-center group/btn mt-2 sm:mt-0 w-full sm:w-auto rounded-sm"
                         disabled={status === 'sending' || status === 'success'}
                     >
                         {status === 'sending' ? 'Sending...' : status === 'success' ? 'Joined' : 'Request Access'}
-                        {status === 'idle' && <ArrowRight size={12} className="group-hover/btn:translate-x-0.5 transition-transform" />}
+                        {status === 'idle' && <ArrowRight size={14} className="group-hover/btn:translate-x-0.5 transition-transform" />}
                     </button>
                 </div>
             </motion.form>

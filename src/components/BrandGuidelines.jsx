@@ -168,14 +168,13 @@ export default function BrandGuidelines() {
   };
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal overflow-x-hidden">
+    <div className="min-h-screen bg-[#050505] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal overflow-x-hidden">
       
-      {/* Background Grid - "Weird" glitchy pattern */}
-      <div className="fixed inset-0 pointer-events-none opacity-[0.04]" style={{ 
-          backgroundImage: 'linear-gradient(rgba(227, 227, 253, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(227, 227, 253, 0.1) 1px, transparent 1px)', 
-          backgroundSize: '20px 20px' 
+      {/* Clean Global Background */}
+      <div className="fixed inset-0 pointer-events-none opacity-[0.02]" style={{ 
+          backgroundImage: 'radial-gradient(#E3E3FD 1px, transparent 1px)', 
+          backgroundSize: '40px 40px' 
       }}></div>
-      <div className="fixed inset-0 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05] mix-blend-overlay"></div>
 
       {/* Nav */}
       <nav className="fixed top-0 left-0 w-full p-6 z-50 flex justify-between items-center bg-[#020202]/90 backdrop-blur-md border-b border-white/5">
@@ -194,11 +193,27 @@ export default function BrandGuidelines() {
       </nav>
 
       {/* Hero: Advanced Node System */}
-      <section className="relative h-[90vh] w-full flex items-center justify-center overflow-hidden bg-[#020202]">
+      <section className="relative h-[90vh] w-full flex items-center justify-center overflow-hidden bg-[#050505]">
         
+        {/* Generative Background */}
+        <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute inset-0 opacity-[0.03]" style={{ 
+                backgroundImage: 'radial-gradient(#E3E3FD 1px, transparent 1px)', 
+                backgroundSize: '40px 40px' 
+            }}></div>
+             <motion.div 
+                className="absolute inset-0 opacity-[0.02]"
+                animate={{ backgroundPosition: ["0px 0px", "40px 40px"] }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                style={{ 
+                backgroundImage: 'linear-gradient(90deg, rgba(227, 227, 253, 0.1) 1px, transparent 1px), linear-gradient(rgba(227, 227, 253, 0.1) 1px, transparent 1px)', 
+                backgroundSize: '80px 80px' 
+            }}></motion.div>
+        </div>
+
         {/* Title Centered (Reverted Preference) */}
         <div className="absolute bottom-12 left-6 md:left-12 max-w-xl z-20 pointer-events-none">
-            <Badge className="mb-4 text-[#E3E3FD] border-[#E3E3FD]/20 bg-[#E3E3FD]/5">System_OS v2.2</Badge>
+            <Badge className="mb-4 text-[#E3E3FD] border-[#E3E3FD]/20 bg-[#E3E3FD]/5">System_OS v2.4</Badge>
             <h1 className="font-montreal font-medium text-6xl md:text-8xl tracking-tight mb-6 text-white leading-[0.9]">
                 Visual<br/><span className="text-[#E3E3FD]">System</span>
             </h1>
@@ -209,7 +224,7 @@ export default function BrandGuidelines() {
 
             {/* Centered Node Graph */}
             <div className="relative w-full h-full flex items-center justify-center">
-                <div className="relative w-[1000px] h-[600px] scale-[0.35] md:scale-100 origin-center transition-transform duration-500">
+                <div className="relative w-[1000px] h-[600px] scale-[0.35] md:scale-100 origin-center transition-transform duration-500 mix-blend-screen">
                     {/* Input Layer */}
                     <Node title="Data_Ingest" outputs={[1]} x={50} y={250} delay={0.2} width="w-40" status="active">
                         <div className="space-y-3">
