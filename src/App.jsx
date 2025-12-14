@@ -13,6 +13,7 @@ import StudioDashboard from './pages/StudioDashboard';
 import ToolBuilder from './pages/ToolBuilder';
 import ToolRunner from './pages/ToolRunner';
 
+// App entry point
 function ScrollToTop() {
   const { pathname } = useLocation();
 
