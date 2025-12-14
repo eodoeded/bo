@@ -371,13 +371,13 @@ export default function WaitlistHero() {
             </motion.p>
             
             <motion.form 
-                className="w-full max-w-full md:max-w-[480px] relative group"
+                className="flex flex-col sm:flex-row w-full max-w-full md:max-w-[440px] relative group"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.8 }}
                 onSubmit={handleJoin}
             >
-                <div className="relative flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full bg-[#1A1614] border border-white/10 p-2 rounded-2xl shadow-lg">
+                <div className="relative flex flex-col sm:flex-row w-full bg-[#1A1614] border border-white/10 p-1.5 rounded-full">
                     
                     <div className="absolute left-0 top-1/2 -translate-y-1/2 pl-4 pointer-events-none">
                         <Scan size={16} className="text-white/30" />
@@ -387,14 +387,14 @@ export default function WaitlistHero() {
                         type="email" 
                         name="email"
                         placeholder="studio@agency.com" 
-                        className="flex-1 bg-transparent text-white pl-10 pr-4 py-3 sm:py-3.5 font-mono text-sm focus:outline-none placeholder:text-white/30 tracking-wider w-full"
+                        className="flex-1 bg-transparent text-white pl-10 pr-6 py-4 font-mono text-xs focus:outline-none placeholder:text-white/20 tracking-wider w-full"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
                     <button 
                         type="submit"
-                        className="bg-white text-black px-6 sm:px-7 py-3 sm:py-3.5 font-mono font-semibold text-[11px] tracking-[0.1em] hover:bg-[#E3E3FD] transition-colors whitespace-nowrap uppercase border border-transparent flex items-center gap-2 justify-center group/btn w-full sm:w-auto rounded-xl sm:rounded-full"
+                        className="bg-white text-black px-8 py-4 font-mono font-semibold text-[11px] tracking-[0.1em] hover:bg-[#E3E3FD] transition-colors whitespace-nowrap uppercase border border-transparent flex items-center gap-2 justify-center group/btn mt-2 sm:mt-0 w-full sm:w-auto rounded-full"
                         disabled={status === 'sending' || status === 'success'}
                     >
                         {status === 'sending' ? 'Sending...' : status === 'success' ? 'Joined' : 'Request Access'}
