@@ -9,7 +9,9 @@ import WaitlistBenefits from './components/WaitlistBenefits';
 import WaitlistFeatures from './components/WaitlistFeatures';
 import WaitlistFooter from './components/WaitlistFooter';
 import BrandGuidelines from './components/BrandGuidelines';
-import Studio from './components/Studio';
+import StudioDashboard from './pages/StudioDashboard';
+import ToolBuilder from './pages/ToolBuilder';
+import ToolRunner from './pages/ToolRunner';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -43,7 +45,9 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/brandguidelines" element={<BrandGuidelines />} />
-        <Route path="/studio" element={<Studio />} />
+        <Route path="/studio" element={<StudioDashboard />} />
+        <Route path="/studio/builder/:id" element={<ToolBuilder />} />
+        <Route path="/tool/:id" element={<ToolRunner />} />
       </Routes>
       <Analytics />
     </>
