@@ -8,27 +8,27 @@ const Corner = ({ className = "" }) => (
 const steps = [
   {
     number: "01",
-    title: "CONFIGURE",
-    description: "Define the boundaries.",
-    detail: "Lock fonts, colours, and layout. Expose only what's safe."
+    title: "DEFINE THE LOGIC",
+    description: "Designers set the rules.",
+    detail: "You build the master system. Lock fonts, positioning, and style. Define exactly what can change and what must stay fixed."
   },
   {
     number: "02",
-    title: "GENERATE",
-    description: "AI fills the blanks.",
-    detail: "Client types a prompt. System enforces the brand style."
+    title: "EXPOSE SAFE CONTROLS",
+    description: "Clients get a simple UI.",
+    detail: "They can't break the layout. They only see safe inputs: 'Change Headline', 'Swap Product Image', 'Generate Background'."
   },
   {
     number: "03",
-    title: "DEPLOY",
-    description: "Ship with confidence.",
-    detail: "Perfect exports every time. No design debt."
+    title: "AUTOMATE & SCALE",
+    description: "Perfect assets, instantly.",
+    detail: "The system generates on-brand outputs automatically. No approval chains. No manual resizing. Just correct files."
   }
 ];
 
 export default function WaitlistHowItWorks() {
   return (
-    <section id="process" className="w-full py-20 md:py-32 px-6 border-t border-white/5 bg-[#020202] relative overflow-hidden">
+    <section id="process" className="w-full py-20 md:py-32 px-6 border-t border-white/5 bg-[#261E19] relative overflow-hidden">
       
       {/* Background Decor */}
       <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-white/[0.02] to-transparent pointer-events-none"></div>
@@ -43,9 +43,9 @@ export default function WaitlistHowItWorks() {
                 viewport={{ once: true }}
                 className="mb-12 md:mb-16 border-l border-white/20 pl-6"
             >
-                <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-4">System Workflow</span>
+                <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-4">The Mechanism</span>
                 <h2 className="font-montreal font-medium text-white text-4xl md:text-5xl tracking-tight leading-tight">
-                    Rigid rules.<br/>Flexible output.
+                    Turn brand guidelines<br/>into <span className="text-[#E3E3FD]">software rules.</span>
                 </h2>
             </motion.div>
 
@@ -59,7 +59,7 @@ export default function WaitlistHowItWorks() {
                         transition={{ delay: index * 0.2 }}
                         className="group relative pl-6 md:pl-12 border-l border-white/10 hover:border-[#E3E3FD] transition-colors duration-500"
                     >
-                        <span className="absolute -left-[5px] top-0 w-2.5 h-2.5 bg-[#020202] border border-white/20 group-hover:border-[#E3E3FD] transition-colors rotate-45"></span>
+                        <span className="absolute -left-[5px] top-0 w-2.5 h-2.5 bg-[#261E19] border border-white/20 group-hover:border-[#E3E3FD] transition-colors rounded-full"></span>
                         
                         <span className="font-mono text-[9px] text-white/30 tracking-widest block mb-2 uppercase">/ {step.number}</span>
                         <h3 className="font-mono text-white text-lg tracking-widest mb-2 uppercase">{step.title}</h3>
@@ -70,82 +70,87 @@ export default function WaitlistHowItWorks() {
             </div>
         </div>
 
-        {/* Right: Governance UI (Ported from Brand Guidelines) */}
+        {/* Right: Governance UI Representation */}
         <motion.div 
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             className="relative"
         >
-            <div className="absolute -inset-1 bg-gradient-to-br from-[#E3E3FD]/10 to-transparent blur-xl opacity-50"></div>
-            <div className="bg-[#050505] border border-white/10 p-8 relative">
-                <Corner className="top-0 left-0 border-t border-l" />
-                <Corner className="top-0 right-0 border-t border-r" />
-                <Corner className="bottom-0 left-0 border-b border-l" />
-                <Corner className="bottom-0 right-0 border-b border-r" />
+            <div className="absolute -inset-1 bg-gradient-to-br from-[#E3E3FD]/10 to-transparent blur-2xl opacity-50 rounded-3xl"></div>
+            <div className="bg-[#1A1614] border border-white/10 p-8 relative rounded-3xl overflow-hidden shadow-2xl">
                 
                 <div className="flex justify-between items-center mb-8 pb-4 border-b border-white/5">
                     <div className="flex items-center gap-3">
-                        <div className="w-2 h-2 bg-[#E3E3FD] rounded-full animate-pulse"></div>
+                        <div className="w-2 h-2 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
                         <span className="font-mono text-[10px] text-white/60 uppercase tracking-widest">Active Configuration</span>
                     </div>
-                    <span className="font-mono text-[9px] text-white/20">ID: 882-AF</span>
+                    <div className="px-2 py-1 bg-white/5 rounded-full border border-white/5">
+                        <span className="font-mono text-[9px] text-white/40">ID: 882-AF</span>
+                    </div>
                 </div>
 
                 <div className="space-y-4">
                     {/* Locked Param */}
-                    <div className="flex items-center justify-between p-4 bg-white/[0.02] border border-white/5 group hover:border-white/10 transition-colors">
+                    <div className="flex items-center justify-between p-4 bg-white/[0.02] border border-white/5 group hover:border-white/10 transition-colors rounded-2xl">
                         <div className="flex items-center gap-4">
-                            <ImageIcon size={16} className="text-white/40"/>
+                            <div className="p-2 bg-white/5 rounded-lg">
+                                <ImageIcon size={16} className="text-white/40"/>
+                            </div>
                             <div className="flex flex-col">
                                 <span className="font-mono text-[10px] text-white/60">BACKGROUND_IMG</span>
-                                <span className="font-mono text-[8px] text-white/20">Asset_Pool_A</span>
+                                <span className="font-mono text-[8px] text-white/20">Asset_Pool_A (Fixed)</span>
                             </div>
                         </div>
-                        <div className="flex items-center gap-2 px-2 py-1 bg-white/5 border border-white/5 rounded-sm">
+                        <div className="flex items-center gap-2 px-3 py-1.5 bg-[#261E19] border border-white/5 rounded-full">
                             <Lock size={10} className="text-[#E3E3FD]"/>
                             <span className="font-mono text-[8px] text-white/40 uppercase">Locked</span>
                         </div>
                     </div>
 
                     {/* Locked Param */}
-                    <div className="flex items-center justify-between p-4 bg-white/[0.02] border border-white/5 group hover:border-white/10 transition-colors">
+                    <div className="flex items-center justify-between p-4 bg-white/[0.02] border border-white/5 group hover:border-white/10 transition-colors rounded-2xl">
                         <div className="flex items-center gap-4">
-                            <Move size={16} className="text-white/40"/>
+                            <div className="p-2 bg-white/5 rounded-lg">
+                                <Move size={16} className="text-white/40"/>
+                            </div>
                             <div className="flex flex-col">
                                 <span className="font-mono text-[10px] text-white/60">LOGO_POSITION</span>
-                                <span className="font-mono text-[8px] text-white/20">Top_Right_Fixed</span>
+                                <span className="font-mono text-[8px] text-white/20">Top_Right (Fixed)</span>
                             </div>
                         </div>
-                        <div className="flex items-center gap-2 px-2 py-1 bg-white/5 border border-white/5 rounded-sm">
+                        <div className="flex items-center gap-2 px-3 py-1.5 bg-[#261E19] border border-white/5 rounded-full">
                             <Lock size={10} className="text-[#E3E3FD]"/>
                             <span className="font-mono text-[8px] text-white/40 uppercase">Locked</span>
                         </div>
                     </div>
 
                     {/* Unlocked Param */}
-                    <div className="flex items-center justify-between p-4 bg-[#E3E3FD]/[0.02] border border-[#E3E3FD]/20 group hover:bg-[#E3E3FD]/5 transition-colors">
+                    <div className="flex items-center justify-between p-4 bg-[#E3E3FD]/[0.02] border border-[#E3E3FD]/20 group hover:bg-[#E3E3FD]/5 transition-colors rounded-2xl relative overflow-hidden">
+                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#E3E3FD]"></div>
                         <div className="flex items-center gap-4">
-                            <Type size={16} className="text-white"/>
+                            <div className="p-2 bg-[#E3E3FD]/10 rounded-lg">
+                                <Type size={16} className="text-[#E3E3FD]"/>
+                            </div>
                             <div className="flex flex-col">
                                 <span className="font-mono text-[10px] text-white">HEADLINE_TEXT</span>
-                                <span className="font-mono text-[8px] text-[#E3E3FD]/60">Client_Input_Field</span>
+                                <span className="font-mono text-[8px] text-[#E3E3FD]/60">Client Input Allowed</span>
                             </div>
                         </div>
-                        <div className="flex items-center gap-2 px-2 py-1 bg-[#E3E3FD]/10 border border-[#E3E3FD]/20 rounded-sm">
+                        <div className="flex items-center gap-2 px-3 py-1.5 bg-[#E3E3FD]/10 border border-[#E3E3FD]/20 rounded-full">
                             <Edit3 size={10} className="text-[#E3E3FD]"/>
-                            <span className="font-mono text-[8px] text-[#E3E3FD] uppercase">Editable</span>
+                            <span className="font-mono text-[8px] text-[#E3E3FD] uppercase">Safe Edit</span>
                         </div>
                     </div>
                 </div>
 
                 <div className="mt-8 pt-4 border-t border-white/5 flex justify-between items-center">
-                    <span className="font-mono text-[9px] text-white/20 uppercase tracking-widest">Validation Active</span>
-                    <div className="flex gap-1">
-                        <div className="w-1 h-1 bg-[#E3E3FD] opacity-20"></div>
-                        <div className="w-1 h-1 bg-[#E3E3FD] opacity-40"></div>
-                        <div className="w-1 h-1 bg-[#E3E3FD] opacity-60"></div>
-                        <div className="w-1 h-1 bg-[#E3E3FD] opacity-80"></div>
+                    <span className="font-mono text-[9px] text-white/20 uppercase tracking-widest">Logic Validation Active</span>
+                    <div className="flex gap-1.5">
+                        <div className="w-1.5 h-1.5 bg-[#E3E3FD] opacity-20 rounded-full"></div>
+                        <div className="w-1.5 h-1.5 bg-[#E3E3FD] opacity-40 rounded-full"></div>
+                        <div className="w-1.5 h-1.5 bg-[#E3E3FD] opacity-60 rounded-full"></div>
+                        <div className="w-1.5 h-1.5 bg-[#E3E3FD] opacity-80 rounded-full"></div>
                     </div>
                 </div>
             </div>

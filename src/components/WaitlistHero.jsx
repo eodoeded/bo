@@ -33,13 +33,8 @@ const Node = ({ id, title, children, x, y, onDragStart, isDragging, width = "w-4
       onPointerDown={(e) => onDragStart(e, id)}
     >
         <FloatingContent isDragging={isDragging}>
-            <div className={`bg-[#0A0A0A]/90 border border-white/10 p-3 md:p-4 ${width} shadow-2xl backdrop-blur-xl group hover:border-[#E3E3FD]/50 transition-colors duration-500 relative rounded-sm`}>
-                {/* Clean Corners */}
-                <Corner className="top-0 left-0" />
-                <Corner className="top-0 right-0" />
-                <Corner className="bottom-0 left-0" />
-                <Corner className="bottom-0 right-0" />
-
+            <div className={`bg-[#1A1614]/90 border border-white/10 p-3 md:p-4 ${width} shadow-2xl backdrop-blur-xl group hover:border-[#E3E3FD]/50 transition-colors duration-500 relative rounded-2xl`}>
+                
                 <div className="flex justify-between items-center mb-3 pb-2 border-b border-white/5">
                     <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">{title}</span>
                     <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full shadow-[0_0_8px_#E3E3FD]"></div>
@@ -49,8 +44,8 @@ const Node = ({ id, title, children, x, y, onDragStart, isDragging, width = "w-4
                 </div>
                 
                 {/* Ports - Clean Circles */}
-                <div className="absolute -left-[4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-[#0A0A0A] border border-white/20 rounded-full group-hover:border-[#E3E3FD] transition-colors" />
-                <div className="absolute -right-[4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-[#0A0A0A] border border-white/20 rounded-full group-hover:border-[#E3E3FD] transition-colors" />
+                <div className="absolute -left-[4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-[#1A1614] border border-white/20 rounded-full group-hover:border-[#E3E3FD] transition-colors" />
+                <div className="absolute -right-[4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-[#1A1614] border border-white/20 rounded-full group-hover:border-[#E3E3FD] transition-colors" />
             </div>
         </FloatingContent>
     </div>
@@ -187,7 +182,7 @@ export default function WaitlistHero() {
 
       {/* Decorative Floating Elements - Simplified */}
       <div className="absolute top-8 left-8 md:left-12 font-mono text-[9px] text-white/20 uppercase tracking-widest hidden md:block">
-          System_OS v2.4
+          System_OS v2.5
       </div>
       <div className="absolute top-8 right-8 md:right-12 font-mono text-[9px] text-white/20 uppercase tracking-widest hidden md:block text-right">
           <span className="w-2 h-2 bg-[#E3E3FD] rounded-full inline-block mr-2 animate-pulse"></span>
@@ -199,15 +194,15 @@ export default function WaitlistHero() {
           <div ref={containerRef} className="absolute inset-0 w-full h-full">
             <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none" style={{zIndex: 10}}>
                 {/* 
-                    Unique Style: "Clean Circuit"
+                    Unique Style: "Organic Connection"
                 */}
 
                 {/* Path 1: Studio -> Core */}
                 <motion.path
                     d={`M ${nodes.studio.x} ${nodes.studio.y} 
-                        L ${(nodes.studio.x + nodes.core.x) / 2} ${nodes.studio.y} 
-                        L ${(nodes.studio.x + nodes.core.x) / 2} ${nodes.core.y} 
-                        L ${nodes.core.x} ${nodes.core.y}`}
+                        C ${(nodes.studio.x + nodes.core.x) / 2} ${nodes.studio.y} 
+                          ${(nodes.studio.x + nodes.core.x) / 2} ${nodes.core.y} 
+                          ${nodes.core.x} ${nodes.core.y}`}
                     fill="none"
                     stroke="white"
                     strokeWidth="0.05"
@@ -218,9 +213,9 @@ export default function WaitlistHero() {
                     {/* Pulse Animation */}
                     <motion.path
                     d={`M ${nodes.studio.x} ${nodes.studio.y} 
-                        L ${(nodes.studio.x + nodes.core.x) / 2} ${nodes.studio.y} 
-                        L ${(nodes.studio.x + nodes.core.x) / 2} ${nodes.core.y} 
-                        L ${nodes.core.x} ${nodes.core.y}`}
+                        C ${(nodes.studio.x + nodes.core.x) / 2} ${nodes.studio.y} 
+                          ${(nodes.studio.x + nodes.core.x) / 2} ${nodes.core.y} 
+                          ${nodes.core.x} ${nodes.core.y}`}
                     fill="none"
                     stroke="#E3E3FD"
                     strokeWidth="0.15"
@@ -242,9 +237,9 @@ export default function WaitlistHero() {
                 {/* Path 2: Core -> Output */}
                 <motion.path
                     d={`M ${nodes.core.x} ${nodes.core.y} 
-                        L ${(nodes.core.x + nodes.output.x) / 2} ${nodes.core.y} 
-                        L ${(nodes.core.x + nodes.output.x) / 2} ${nodes.output.y} 
-                        L ${nodes.output.x} ${nodes.output.y}`}
+                        C ${(nodes.core.x + nodes.output.x) / 2} ${nodes.core.y} 
+                          ${(nodes.core.x + nodes.output.x) / 2} ${nodes.output.y} 
+                          ${nodes.output.x} ${nodes.output.y}`}
                     fill="none"
                     stroke="white"
                     strokeWidth="0.05"
@@ -255,9 +250,9 @@ export default function WaitlistHero() {
                     {/* Pulse Animation */}
                     <motion.path
                     d={`M ${nodes.core.x} ${nodes.core.y} 
-                        L ${(nodes.core.x + nodes.output.x) / 2} ${nodes.core.y} 
-                        L ${(nodes.core.x + nodes.output.x) / 2} ${nodes.output.y} 
-                        L ${nodes.output.x} ${nodes.output.y}`}
+                        C ${(nodes.core.x + nodes.output.x) / 2} ${nodes.core.y} 
+                          ${(nodes.core.x + nodes.output.x) / 2} ${nodes.output.y} 
+                          ${nodes.output.x} ${nodes.output.y}`}
                     fill="none"
                     stroke="#E3E3FD"
                     strokeWidth="0.15"
@@ -308,7 +303,7 @@ export default function WaitlistHero() {
                 width="w-40 md:w-64"
             >
                     {/* Spot Mini - Base Only */}
-                    <div className="h-28 md:h-48 w-full relative flex items-center justify-center overflow-hidden bg-[#0A0A0A] border border-white/10 mb-2 shadow-inner pointer-events-none">
+                    <div className="h-28 md:h-48 w-full relative flex items-center justify-center overflow-hidden bg-[#1A1614] border border-white/10 mb-2 shadow-inner pointer-events-none rounded-lg">
                         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05]"></div>
                         <motion.div
                             className="relative z-0"
@@ -322,7 +317,7 @@ export default function WaitlistHero() {
                         <span className="font-mono text-[6px] md:text-[8px] text-white/40">GENERATING_ASSET_ID_8492</span>
                         <div className="flex gap-0.5">
                             {[1,2,3,4,5].map(i => (
-                                <div key={i} className="w-0.5 h-1.5 bg-[#E3E3FD]" style={{opacity: 0.2 + (i*0.15)}}></div>
+                                <div key={i} className="w-0.5 h-1.5 bg-[#E3E3FD] rounded-full" style={{opacity: 0.2 + (i*0.15)}}></div>
                             ))}
                         </div>
                     </div>
@@ -350,10 +345,10 @@ export default function WaitlistHero() {
       </div>
 
       {/* Text Content */}
-      <div className="absolute bottom-0 left-0 w-full md:w-auto md:bottom-24 md:left-16 z-30 px-6 pb-12 pt-24 md:pt-0 md:pb-0 pointer-events-none bg-gradient-to-t from-[#050505] via-[#050505]/90 to-transparent md:bg-none">
+      <div className="absolute bottom-0 left-0 w-full md:w-auto md:bottom-24 md:left-16 z-30 px-6 pb-12 pt-24 md:pt-0 md:pb-0 pointer-events-none bg-gradient-to-t from-[#261E19] via-[#261E19]/90 to-transparent md:bg-none">
         <div className="flex flex-col items-start text-left pointer-events-auto max-w-2xl">
             <div className="flex items-center gap-3 mb-6">
-                <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest border border-[#E3E3FD]/20 bg-[#E3E3FD]/10 px-2 py-1 rounded-sm">System_OS v2.4</span>
+                <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest border border-[#E3E3FD]/20 bg-[#E3E3FD]/10 px-2 py-1 rounded-full">System_OS v2.5</span>
             </div>
             
             <motion.h1
@@ -372,7 +367,7 @@ export default function WaitlistHero() {
                 transition={{ delay: 0.1, duration: 0.8 }}
             >
                 Automated brand governance for scaling studios. <br/>
-                Define the logic. We handle the rest.
+                Turn brand guidelines into software, not PDFs.
             </motion.p>
             
             <motion.form 
@@ -382,7 +377,7 @@ export default function WaitlistHero() {
                 transition={{ delay: 0.2, duration: 0.8 }}
                 onSubmit={handleJoin}
             >
-                <div className="relative flex flex-col sm:flex-row w-full bg-[#0A0A0A] border border-white/10 p-1.5 rounded-sm">
+                <div className="relative flex flex-col sm:flex-row w-full bg-[#1A1614] border border-white/10 p-1.5 rounded-full">
                     
                     <div className="absolute left-0 top-1/2 -translate-y-1/2 pl-4 pointer-events-none">
                         <Scan size={16} className="text-white/30" />
@@ -399,7 +394,7 @@ export default function WaitlistHero() {
                     />
                     <button 
                         type="submit"
-                        className="bg-white text-black px-8 py-4 font-mono font-semibold text-[11px] tracking-[0.1em] hover:bg-[#E3E3FD] transition-colors whitespace-nowrap uppercase border border-transparent flex items-center gap-2 justify-center group/btn mt-2 sm:mt-0 w-full sm:w-auto rounded-sm"
+                        className="bg-white text-black px-8 py-4 font-mono font-semibold text-[11px] tracking-[0.1em] hover:bg-[#E3E3FD] transition-colors whitespace-nowrap uppercase border border-transparent flex items-center gap-2 justify-center group/btn mt-2 sm:mt-0 w-full sm:w-auto rounded-full"
                         disabled={status === 'sending' || status === 'success'}
                     >
                         {status === 'sending' ? 'Sending...' : status === 'success' ? 'Joined' : 'Request Access'}
@@ -407,6 +402,15 @@ export default function WaitlistHero() {
                     </button>
                 </div>
             </motion.form>
+            <div className="mt-4 flex items-center gap-3">
+                <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-[#E3E3FD] animate-pulse rounded-full"></div>
+                    Limited Studio Pilots
+                </span>
+                <span className="text-white/20 text-[9px] font-mono">|</span>
+                <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">Q1 2025 Cohort</span>
+            </div>
+
              {status === 'success' && (
                 <motion.p 
                     initial={{ opacity: 0 }} 
