@@ -1127,7 +1127,7 @@ export default function Studio() {
     }, [selectedLayerIds, mode, canUndo, canRedo, editingTextId, layers, zoom, pan, clipboard]);
 
     return (
-        <div className="min-h-screen bg-[#020202] text-white font-montreal flex flex-col overflow-hidden selection:bg-[#E3E3FD] selection:text-black" onClick={() => setContextMenu(null)}>
+        <div className="fixed inset-0 w-full h-[100dvh] bg-[#020202] text-white font-montreal flex flex-col overflow-hidden overscroll-none selection:bg-[#E3E3FD] selection:text-black" onClick={() => setContextMenu(null)}>
             
             {/* Shortcuts Modal */}
             <AnimatePresence>
@@ -1202,11 +1202,11 @@ export default function Studio() {
             </header>
 
             {/* Main Workspace */}
-            <div className="flex-1 flex h-[calc(100vh-3rem)] relative overflow-hidden">
+            <div className="flex-1 flex relative overflow-hidden min-h-0">
                 
                 {/* Left Panel */}
                 {!isMobile && (
-                <aside className="w-64 border-r border-white/10 bg-[#050505] flex flex-col z-20 shrink-0">
+                <aside className="w-64 border-r border-white/10 bg-[#050505] flex flex-col z-20 shrink-0 h-full">
                     <div className="grid grid-cols-2 border-b border-white/10">
                         <button onClick={() => setActiveTab('components')} className={`py-3 font-mono text-[9px] uppercase tracking-widest transition-colors ${activeTab === 'components' ? 'text-[#E3E3FD] border-b border-[#E3E3FD] bg-[#E3E3FD]/5' : 'text-white/40 hover:text-white'}`}>Components</button>
                         <button onClick={() => setActiveTab('layers')} className={`py-3 font-mono text-[9px] uppercase tracking-widest transition-colors ${activeTab === 'layers' ? 'text-[#E3E3FD] border-b border-[#E3E3FD] bg-[#E3E3FD]/5' : 'text-white/40 hover:text-white'}`}>Layers</button>
@@ -1549,7 +1549,7 @@ export default function Studio() {
 
                 {/* Right Panel */}
                 {!isMobile && (
-                <aside className="w-80 border-l border-white/10 bg-[#050505] flex flex-col z-20 shrink-0">
+                <aside className="w-80 border-l border-white/10 bg-[#050505] flex flex-col z-20 shrink-0 h-full">
                     <div className="p-4 border-b border-white/10 flex justify-between items-center">
                         <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">Specifications</span>
                         <Maximize2 size={12} className="text-white/40" />
