@@ -3,7 +3,6 @@ import { ArrowLeft, Box, Layout, Type, MousePointer, CreditCard, Layers, Grid as
 import { Link } from 'react-router-dom';
 import { useState, useRef } from 'react';
 import html2canvas from 'html2canvas';
-import upComp from "../assets/up-comp.png";
 import bottomComp from "../assets/bottom-comp.png";
 
 // Decorative Corner Component
@@ -13,7 +12,7 @@ const Corner = ({ className = "" }) => (
 
 // Tiny Technical Badge
 const Badge = ({ children, className = "", color = "text-[#E3E3FD]" }) => (
-    <span className={`font-mono text-[9px] uppercase tracking-widest border border-white/10 px-1.5 py-0.5 rounded-[1px] bg-white/[0.02] ${color} ${className}`}>
+    <span className={`font-mono text-[9px] uppercase tracking-widest border border-white/10 px-2 py-1 rounded-full bg-white/[0.02] ${color} ${className}`}>
         {children}
     </span>
 );
@@ -29,45 +28,36 @@ const Node = ({ title, inputs = [], outputs = [], children, x, y, delay = 0, wid
       >
         {type === "minimal" ? (
            <div className="relative group cursor-pointer">
-              {/* Square "Glow" */}
-              <div className="absolute -inset-4 bg-[#E3E3FD]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"></div>
+              {/* Organic "Glow" */}
+              <div className="absolute -inset-4 bg-[#E3E3FD]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-2xl rounded-full"></div>
               
-              <div className="relative bg-[#0A0A0A] border border-white/10 px-4 py-2 flex items-center justify-center shadow-xl backdrop-blur-md hover:border-[#E3E3FD]/50 transition-colors">
-                 {/* Tech Corners */}
-                 <div className="absolute top-0 left-0 w-1 h-1 border-t border-l border-white/50"></div>
-                 <div className="absolute bottom-0 right-0 w-1 h-1 border-b border-r border-white/50"></div>
+              <div className="relative bg-[#261E19] border border-white/10 px-4 py-2 flex items-center justify-center shadow-xl backdrop-blur-md hover:border-[#E3E3FD]/50 transition-colors rounded-2xl">
                  {children}
               </div>
               
-              {/* Ports - Squared */}
+              {/* Ports - Circular */}
               {inputs.map((_, i) => (
-                <div key={`in-${i}`} className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#0A0A0A] border border-[#E3E3FD]/50" />
+                <div key={`in-${i}`} className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#261E19] border border-[#E3E3FD]/50 rounded-full" />
               ))}
               {outputs.map((_, i) => (
-                <div key={`out-${i}`} className="absolute -right-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#0A0A0A] border border-[#E3E3FD]/50" />
+                <div key={`out-${i}`} className="absolute -right-1 top-1/2 -translate-y-1/2 w-2 h-2 bg-[#261E19] border border-[#E3E3FD]/50 rounded-full" />
               ))}
            </div>
         ) : (
-          <div className="bg-[#050505]/95 border border-white/10 p-3 shadow-2xl backdrop-blur-md hover:border-[#E3E3FD]/30 transition-colors group relative">
-            {/* Technical Decor */}
-            <div className="absolute top-0 left-0 w-1.5 h-1.5 border-t border-l border-white/30 group-hover:border-[#E3E3FD] transition-colors"></div>
-            <div className="absolute top-0 right-0 w-1.5 h-1.5 border-t border-r border-white/30 group-hover:border-[#E3E3FD] transition-colors"></div>
-            <div className="absolute bottom-0 left-0 w-1.5 h-1.5 border-b border-l border-white/30 group-hover:border-[#E3E3FD] transition-colors"></div>
-            <div className="absolute bottom-0 right-0 w-1.5 h-1.5 border-b border-r border-white/30 group-hover:border-[#E3E3FD] transition-colors"></div>
-    
+          <div className="bg-[#261E19]/95 border border-white/10 p-4 shadow-2xl backdrop-blur-md hover:border-[#E3E3FD]/30 transition-colors group relative rounded-2xl">
             <div className="flex justify-between items-center mb-3 pb-2 border-b border-white/5">
               <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest group-hover:text-[#E3E3FD] transition-colors">{title}</span>
-              <div className={`w-1 h-1 ${status === 'active' ? 'bg-[#E3E3FD] animate-pulse shadow-[0_0_8px_#E3E3FD]' : 'bg-white/10'}`}></div>
+              <div className={`w-1.5 h-1.5 rounded-full ${status === 'active' ? 'bg-[#E3E3FD] animate-pulse shadow-[0_0_8px_#E3E3FD]' : 'bg-white/10'}`}></div>
             </div>
             {children}
             
-            {/* Input Ports - Rectangular - Adjusted vertical pos to match connections */}
+            {/* Input Ports - Circular */}
             {inputs.map((_, i) => (
-              <div key={`in-${i}`} className="absolute -left-[5px] top-[32px] w-1.5 h-2 bg-[#050505] border border-white/30 hover:border-[#E3E3FD] transition-colors" />
+              <div key={`in-${i}`} className="absolute -left-[5px] top-[32px] w-2 h-2 bg-[#261E19] border border-white/30 hover:border-[#E3E3FD] transition-colors rounded-full" />
             ))}
-            {/* Output Ports - Rectangular - Adjusted vertical pos to match connections */}
+            {/* Output Ports - Circular */}
             {outputs.map((_, i) => (
-              <div key={`out-${i}`} className="absolute -right-[5px] top-[32px] w-1.5 h-2 bg-[#050505] border border-white/30 hover:border-[#E3E3FD] transition-colors" />
+              <div key={`out-${i}`} className="absolute -right-[5px] top-[32px] w-2 h-2 bg-[#261E19] border border-white/30 hover:border-[#E3E3FD] transition-colors rounded-full" />
             ))}
           </div>
         )}
@@ -75,9 +65,11 @@ const Node = ({ title, inputs = [], outputs = [], children, x, y, delay = 0, wid
     );
 };
 
+// Curved Connection Logic
 const Connection = ({ start, end, delay, dashed = false, active = false }) => {
+  // Bezier Control Points for organic curve
   const midX = (start.x + end.x) / 2;
-  const path = `M ${start.x} ${start.y} L ${midX} ${start.y} L ${midX} ${end.y} L ${end.x} ${end.y}`;
+  const path = `M ${start.x} ${start.y} C ${midX} ${start.y} ${midX} ${end.y} ${end.x} ${end.y}`;
 
   return (
     <svg className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-visible z-0">
@@ -86,16 +78,16 @@ const Connection = ({ start, end, delay, dashed = false, active = false }) => {
         fill="none"
         stroke="#ffffff"
         strokeWidth="1"
-        strokeOpacity={dashed ? "0.2" : "0.3"} // Increased opacity
+        strokeOpacity={dashed ? "0.1" : "0.2"}
         strokeDasharray={dashed ? "4 4" : "none"}
         initial={{ pathLength: 0, opacity: 0 }}
         animate={{ pathLength: 1, opacity: 1 }}
         transition={{ duration: 1.2, delay, ease: "easeInOut" }}
       />
       
-      {/* Circuit joints */}
-      <rect x={start.x - 1.5} y={start.y - 1.5} width="3" height="3" fill="#E3E3FD" fillOpacity="0.8" />
-      <rect x={end.x - 1.5} y={end.y - 1.5} width="3" height="3" fill="#E3E3FD" fillOpacity="0.8" />
+      {/* Circuit joints - Circular */}
+      <circle cx={start.x} cy={start.y} r="2" fill="#E3E3FD" fillOpacity="0.8" />
+      <circle cx={end.x} cy={end.y} r="2" fill="#E3E3FD" fillOpacity="0.8" />
 
       {(active || !dashed) && (
         <motion.path
@@ -103,7 +95,7 @@ const Connection = ({ start, end, delay, dashed = false, active = false }) => {
             fill="none"
             stroke="#E3E3FD" // Lavender
             strokeWidth="1.5"
-            strokeLinecap="square"
+            strokeLinecap="round"
             initial={{ pathLength: 0, pathOffset: 0, opacity: 0 }}
             animate={{ 
                 pathLength: [0, 0.3, 0], 
@@ -113,7 +105,7 @@ const Connection = ({ start, end, delay, dashed = false, active = false }) => {
             transition={{ 
                 duration: 2.5, 
                 delay: delay + 0.5, 
-                ease: "linear", 
+                ease: "easeInOut", 
                 repeat: Infinity,
                 repeatDelay: 0.5
             }}
@@ -126,7 +118,7 @@ const Connection = ({ start, end, delay, dashed = false, active = false }) => {
 const SectionHeader = ({ title, number }) => (
     <div className="flex items-end justify-between mb-16 border-b border-white/10 pb-6 group cursor-crosshair">
         <div className="flex items-center gap-4">
-            <div className="w-1.5 h-1.5 bg-[#E3E3FD] group-hover:rotate-45 transition-transform duration-300 shadow-[0_0_8px_#E3E3FD]"></div>
+            <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full group-hover:scale-150 transition-transform duration-300 shadow-[0_0_8px_#E3E3FD]"></div>
             <h2 className="font-montreal font-medium text-3xl tracking-tight text-white group-hover:translate-x-2 transition-transform duration-300">{title}</h2>
         </div>
         <div className="flex items-center gap-2">
@@ -138,7 +130,7 @@ const SectionHeader = ({ title, number }) => (
 // Helper for Studio UI components in Brand Guidelines
 const IconButton = ({ icon: Icon, active }) => (
     <button 
-        className={`p-2 border ${active ? 'bg-[#E3E3FD] text-black border-[#E3E3FD]' : 'bg-transparent text-white/60 border-transparent hover:bg-white/5 hover:text-white'} transition-colors rounded-[1px]`}
+        className={`p-2 border ${active ? 'bg-[#E3E3FD] text-black border-[#E3E3FD]' : 'bg-transparent text-white/60 border-transparent hover:bg-white/5 hover:text-white'} transition-colors rounded-lg`}
     >
         <Icon size={14} />
     </button>
@@ -146,61 +138,37 @@ const IconButton = ({ icon: Icon, active }) => (
 
 export default function BrandGuidelines() {
   const downloadRef1 = useRef(null);
-  const downloadRef2 = useRef(null);
-  const downloadRef3 = useRef(null);
-  const downloadRef4 = useRef(null);
-
-  const handleDownload = async (ref, name) => {
-    if (ref.current) {
-        try {
-            const canvas = await html2canvas(ref.current, {
-                backgroundColor: '#020202',
-                scale: 4 // High res (2x standard banner size roughly)
-            });
-            const link = document.createElement('a');
-            link.download = `branded-objects-${name}.png`;
-            link.href = canvas.toDataURL();
-            link.click();
-        } catch (error) {
-            console.error('Download failed:', error);
-        }
-    }
-  };
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal overflow-x-hidden">
+    <div className="min-h-screen bg-[#261E19] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal overflow-x-hidden">
       
-      {/* Clean Global Background */}
-      <div className="fixed inset-0 pointer-events-none opacity-[0.02]" style={{ 
+      {/* Organic Background Noise */}
+      <div className="fixed inset-0 pointer-events-none opacity-[0.03]" style={{ 
           backgroundImage: 'radial-gradient(#E3E3FD 1px, transparent 1px)', 
-          backgroundSize: '40px 40px' 
+          backgroundSize: '30px 30px' 
       }}></div>
 
       {/* Nav */}
-      <nav className="fixed top-0 left-0 w-full p-6 z-50 flex justify-between items-center bg-[#020202]/90 backdrop-blur-md border-b border-white/5">
+      <nav className="fixed top-0 left-0 w-full p-6 z-50 flex justify-between items-center bg-[#261E19]/90 backdrop-blur-md border-b border-white/5">
         <Link to="/" className="flex items-center gap-3 text-white/50 hover:text-white transition-colors group">
-            <div className="w-8 h-8 bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-[#E3E3FD] group-hover:text-[#E3E3FD] transition-colors">
+            <div className="w-8 h-8 bg-white/5 flex items-center justify-center border border-white/10 rounded-full group-hover:border-[#E3E3FD] group-hover:text-[#E3E3FD] transition-colors">
                 <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
             </div>
             <span className="font-mono text-[10px] uppercase tracking-widest group-hover:text-[#E3E3FD] transition-colors">[ BACK ]</span>
         </Link>
         <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 hover:border-[#E3E3FD]/50 transition-colors">
-                <span className="w-1 h-1 bg-[#E3E3FD] animate-pulse shadow-[0_0_8px_#E3E3FD]"></span>
-                <span className="font-mono text-[10px] text-white/60 uppercase tracking-widest">System V2.2</span>
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 hover:border-[#E3E3FD]/50 transition-colors rounded-full">
+                <span className="w-1.5 h-1.5 bg-[#E3E3FD] animate-pulse shadow-[0_0_8px_#E3E3FD] rounded-full"></span>
+                <span className="font-mono text-[10px] text-white/60 uppercase tracking-widest">System V2.5</span>
             </div>
         </div>
       </nav>
 
       {/* Hero: Advanced Node System */}
-      <section className="relative h-[90vh] w-full flex items-center justify-center overflow-hidden bg-[#050505]">
+      <section className="relative h-[90vh] w-full flex items-center justify-center overflow-hidden bg-[#261E19]">
         
         {/* Generative Background */}
         <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute inset-0 opacity-[0.03]" style={{ 
-                backgroundImage: 'radial-gradient(#E3E3FD 1px, transparent 1px)', 
-                backgroundSize: '40px 40px' 
-            }}></div>
              <motion.div 
                 className="absolute inset-0 opacity-[0.02]"
                 animate={{ backgroundPosition: ["0px 0px", "40px 40px"] }}
@@ -211,14 +179,13 @@ export default function BrandGuidelines() {
             }}></motion.div>
         </div>
 
-        {/* Title Centered (Reverted Preference) */}
         <div className="absolute bottom-12 left-6 md:left-12 max-w-xl z-20 pointer-events-none">
-            <Badge className="mb-4 text-[#E3E3FD] border-[#E3E3FD]/20 bg-[#E3E3FD]/5">System_OS v2.4</Badge>
+            <Badge className="mb-4 text-[#E3E3FD] border-[#E3E3FD]/20 bg-[#E3E3FD]/5">System_OS v2.5</Badge>
             <h1 className="font-montreal font-medium text-6xl md:text-8xl tracking-tight mb-6 text-white leading-[0.9]">
-                Visual<br/><span className="text-[#E3E3FD]">System</span>
+                Visual<br/><span className="text-[#E3E3FD]">Intelligence</span>
             </h1>
             <p className="font-montreal text-white/60 text-lg leading-relaxed max-w-md">
-                A modular design language built for precision, scalability, and automated brand governance.
+                A modular, organic design language built for automated brand governance.
             </p>
         </div>
 
@@ -228,12 +195,12 @@ export default function BrandGuidelines() {
                     {/* Input Layer */}
                     <Node title="Data_Ingest" outputs={[1]} x={50} y={250} delay={0.2} width="w-40" status="active">
                         <div className="space-y-3">
-                            <div className="flex items-center gap-3 p-2 bg-white/5 border border-white/5">
+                            <div className="flex items-center gap-3 p-2 bg-white/5 border border-white/5 rounded-lg">
                                 <Database size={14} className="text-white/40"/>
                                 <span className="font-mono text-[10px] text-white/60">JSON_STREAM</span>
                             </div>
                             <div className="flex gap-1">
-                                <div className="h-0.5 w-full bg-white/10 overflow-hidden">
+                                <div className="h-1 w-full bg-white/10 overflow-hidden rounded-full">
                                     <motion.div className="h-full bg-[#E3E3FD]" animate={{x:['0%','100%']}} transition={{duration:1.5, repeat:Infinity, ease:"linear"}} />
                                 </div>
                             </div>
@@ -251,7 +218,7 @@ export default function BrandGuidelines() {
                                 {[...Array(10)].map((_,i) => (
                                     <motion.div 
                                         key={i}
-                                        className="bg-[#E3E3FD]/20 border border-[#E3E3FD]/10"
+                                        className="bg-[#E3E3FD]/20 border border-[#E3E3FD]/10 rounded-sm"
                                         animate={{opacity:[0.2, 1, 0.2]}}
                                         transition={{duration:Math.random()*2 + 1, repeat:Infinity}}
                                     />
@@ -261,14 +228,14 @@ export default function BrandGuidelines() {
                     </Node>
 
                     <Node title="Logic_Gate" inputs={[1]} outputs={[1]} x={350} y={400} delay={0.5} width="w-40">
-                         <div className="p-2 bg-white/5 border border-white/5">
+                         <div className="p-2 bg-white/5 border border-white/5 rounded-lg">
                             <div className="flex justify-between items-center mb-2">
                                 <Activity size={12} className="text-white/40"/>
                                 <span className="font-mono text-[9px] text-[#E3E3FD]">OPTIMAL</span>
                             </div>
                             <div className="h-6 w-full flex items-end gap-[2px]">
                                 {[40, 70, 30, 80, 50, 90, 60].map((h, i) => (
-                                    <motion.div key={i} className="flex-1 bg-white/20" animate={{height: [`${h}%`, `${Math.random()*80+20}%`]}} transition={{duration:2, repeat:Infinity}} />
+                                    <motion.div key={i} className="flex-1 bg-white/20 rounded-t-sm" animate={{height: [`${h}%`, `${Math.random()*80+20}%`]}} transition={{duration:2, repeat:Infinity}} />
                                 ))}
                             </div>
                          </div>
@@ -277,7 +244,7 @@ export default function BrandGuidelines() {
                     {/* Output Layer */}
                     <Node type="minimal" inputs={[1, 1]} outputs={[1]} x={700} y={250} delay={0.7}>
                         <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 bg-[#E3E3FD]/10 flex items-center justify-center text-[#E3E3FD] border border-[#E3E3FD]/20">
+                            <div className="w-8 h-8 bg-[#E3E3FD]/10 flex items-center justify-center text-[#E3E3FD] border border-[#E3E3FD]/20 rounded-full">
                                 <Cpu size={16} />
                             </div>
                             <div className="flex flex-col">
@@ -310,7 +277,7 @@ export default function BrandGuidelines() {
             <div className="md:col-span-4 sticky top-32 h-fit">
                 <SectionHeader title="Typography" number="01" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
-                    PP Neue Montreal serves as the primary typeface—a versatile grotesque sans serif. SF Mono provides technical contrast.
+                    PP Neue Montreal serves as the primary typeface. Technical, legible, yet soft.
                 </p>
                 <div className="flex gap-4">
                     <Badge>.otf</Badge>
@@ -330,15 +297,11 @@ export default function BrandGuidelines() {
                         Aa Bb Cc<br/>123 456
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div className="p-8 border border-white/10 bg-white/[0.02] relative group hover:bg-white/[0.04] transition-colors min-h-[200px] flex flex-col justify-between hover:border-[#E3E3FD]/50">
-                            <Corner className="top-0 left-0 border-t border-l" />
-                            <Corner className="bottom-0 right-0 border-b border-r" />
+                        <div className="p-8 border border-white/10 bg-white/[0.02] relative group hover:bg-white/[0.04] transition-colors min-h-[200px] flex flex-col justify-between hover:border-[#E3E3FD]/50 rounded-2xl">
                             <span className="text-4xl mb-2 block">Regular</span>
                             <span className="font-mono text-xs text-white/40">400 — Body / Subheads</span>
                         </div>
-                        <div className="p-8 border border-white/10 bg-white/[0.02] relative group hover:bg-white/[0.04] transition-colors min-h-[200px] flex flex-col justify-between hover:border-[#E3E3FD]/50">
-                            <Corner className="top-0 left-0 border-t border-l" />
-                            <Corner className="bottom-0 right-0 border-b border-r" />
+                        <div className="p-8 border border-white/10 bg-white/[0.02] relative group hover:bg-white/[0.04] transition-colors min-h-[200px] flex flex-col justify-between hover:border-[#E3E3FD]/50 rounded-2xl">
                             <span className="text-4xl font-medium mb-2 block">Medium</span>
                             <span className="font-mono text-xs text-white/40">500 — Headlines / UI</span>
                         </div>
@@ -371,15 +334,15 @@ export default function BrandGuidelines() {
             <div className="md:col-span-4 sticky top-32 h-fit">
                 <SectionHeader title="Application UI" number="13" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
-                    The Studio interface components. Designed for density and precision.
+                    The Studio interface components. Designed for density, precision, and organic flow.
                 </p>
             </div>
             
             <div className="md:col-span-8 space-y-12">
                 {/* Toolbar */}
-                <div className="bg-[#050505] border border-white/10 p-8">
+                <div className="bg-[#261E19] border border-white/10 p-8 rounded-3xl">
                     <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-4">Floating Toolbar</span>
-                    <div className="inline-flex bg-[#050505] border border-white/10 p-1 items-center gap-1 rounded-[2px] shadow-xl">
+                    <div className="inline-flex bg-[#1A1614] border border-white/10 p-2 items-center gap-1 rounded-2xl shadow-xl">
                         <IconButton icon={MousePointer} active={true} />
                         <IconButton icon={Hand} />
                         <div className="w-px h-4 bg-white/10 mx-1"></div>
@@ -390,14 +353,14 @@ export default function BrandGuidelines() {
                 </div>
 
                 {/* Property Item */}
-                <div className="bg-[#050505] border border-white/10 p-8">
+                <div className="bg-[#261E19] border border-white/10 p-8 rounded-3xl">
                     <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-4">Property Control</span>
                     <div className="grid grid-cols-2 gap-4 max-w-sm">
-                        <div className="bg-[#0A0A0A] border border-white/10 px-2 py-1.5 flex items-center gap-2 group hover:border-white/30 transition-colors">
+                        <div className="bg-[#1A1614] border border-white/10 px-3 py-2 flex items-center gap-2 group hover:border-white/30 transition-colors rounded-lg">
                             <span className="font-mono text-[9px] text-white/30">W</span>
                             <span className="font-mono text-[10px] text-white">1080</span>
                         </div>
-                        <div className="bg-[#0A0A0A] border border-white/10 px-2 py-1.5 flex items-center gap-2 group hover:border-white/30 transition-colors">
+                        <div className="bg-[#1A1614] border border-white/10 px-3 py-2 flex items-center gap-2 group hover:border-white/30 transition-colors rounded-lg">
                             <span className="font-mono text-[9px] text-white/30">H</span>
                             <span className="font-mono text-[10px] text-white">1350</span>
                         </div>
@@ -405,12 +368,9 @@ export default function BrandGuidelines() {
                 </div>
 
                 {/* Effects Panel */}
-                <div className="bg-[#050505] border border-white/10 p-8">
+                <div className="bg-[#261E19] border border-white/10 p-8 rounded-3xl">
                     <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-4">Effect Panel</span>
-                    <div className="bg-[#0A0A0A] border border-white/10 p-3 space-y-3 relative overflow-hidden group max-w-sm">
-                        <Corner className="top-0 left-0 border-t border-l" />
-                        <Corner className="bottom-0 right-0 border-b border-r" />
-                        
+                    <div className="bg-[#1A1614] border border-white/10 p-4 space-y-3 relative overflow-hidden group max-w-sm rounded-xl">
                         <div className="flex items-center justify-between">
                             <span className="font-mono text-[10px] text-white">Dither</span>
                             <div className="w-8 h-4 bg-[#E3E3FD] rounded-full relative">
@@ -436,18 +396,16 @@ export default function BrandGuidelines() {
             <div className="md:col-span-4 sticky top-32 h-fit">
                 <SectionHeader title="Marketing" number="14" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
-                    Public-facing components for the marketing site. Bold, high-contrast, informative.
+                    Public-facing components. Bold, high-contrast, informative.
                 </p>
             </div>
             
             <div className="md:col-span-8 space-y-12">
                 {/* Benefit Card */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="bg-[#050505] border border-white/10 p-8 relative group hover:bg-[#080808] transition-colors">
-                        <Corner className="top-0 right-0 border-t border-r" />
-                        <Corner className="bottom-0 left-0 border-b border-l" />
+                    <div className="bg-[#261E19] border border-white/10 p-8 relative group hover:bg-[#2E2824] transition-colors rounded-3xl">
                         
-                        <div className="w-12 h-12 border border-white/10 bg-white/5 flex items-center justify-center mb-8 group-hover:border-[#E3E3FD] transition-colors">
+                        <div className="w-12 h-12 border border-white/10 bg-white/5 flex items-center justify-center mb-8 group-hover:border-[#E3E3FD] transition-colors rounded-2xl">
                             <CreditCard size={20} className="text-white/60 group-hover:text-[#E3E3FD] transition-colors" />
                         </div>
                         
@@ -459,8 +417,7 @@ export default function BrandGuidelines() {
                     </div>
                     
                     {/* Feature Row */}
-                    <div className="bg-[#050505] p-8 relative flex flex-col justify-center">
-                        <Corner className="top-0 left-0 border-t border-l" />
+                    <div className="bg-[#261E19] p-8 relative flex flex-col justify-center rounded-3xl border border-white/10">
                         <div className="flex items-center justify-between py-3 border-b border-white/5 group hover:bg-white/[0.02] transition-colors px-2">
                             <div className="flex items-center gap-4">
                                 <Cpu size={14} className="text-[#E3E3FD]/50 group-hover:text-[#E3E3FD] transition-colors" />
@@ -480,67 +437,10 @@ export default function BrandGuidelines() {
             </div>
         </section>
 
-        {/* 15. Interactive Nodes */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
-            <div className="md:col-span-4 sticky top-32 h-fit">
-                <SectionHeader title="Interactive Node" number="15" />
-                <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
-                    The floating, draggable node component used in the hero section.
-                </p>
-            </div>
-            
-            <div className="md:col-span-8 h-[400px] bg-[#050505] relative overflow-hidden border border-white/10">
-                <div className="absolute inset-0 pointer-events-none opacity-[0.05]" style={{ 
-                    backgroundImage: 'linear-gradient(rgba(227, 227, 253, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(227, 227, 253, 0.1) 1px, transparent 1px)', 
-                    backgroundSize: '20px 20px' 
-                }}></div>
-                
-                {/* Static Representation of Hero Node */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64">
-                    <motion.div
-                        animate={{ y: [0, -8, 0] }}
-                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                    >
-                        <div className="bg-[#050505] border border-white/10 p-4 shadow-2xl backdrop-blur-md group hover:border-white/30 transition-colors relative">
-                            <Corner className="top-0 left-0 border-t border-l group-hover:border-white transition-colors" />
-                            <Corner className="bottom-0 right-0 border-b border-r group-hover:border-white transition-colors" />
-
-                            <div className="flex justify-between items-center mb-3 pb-2 border-b border-white/5">
-                                <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest group-hover:text-white transition-colors">Branded_Objects</span>
-                                <div className="w-1 h-1 bg-[#E3E3FD] animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
-                            </div>
-                            
-                            <div className="h-32 w-full relative flex items-center justify-center overflow-hidden bg-[#0A0A0A] border border-white/10 mb-2 shadow-inner">
-                                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05]"></div>
-                                <motion.div
-                                    className="relative z-0"
-                                    animate={{ y: [0, -4, 0] }}
-                                    transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                                >
-                                    <img src={bottomComp} alt="Bottom" className="w-[100px] object-contain opacity-100" />
-                                </motion.div>
-                            </div>
-                            <div className="flex justify-between items-center px-1">
-                                <span className="font-mono text-[8px] text-white/40">GENERATING_ASSET</span>
-                                <div className="flex gap-0.5">
-                                    {[1,2,3,4,5].map(i => (
-                                        <div key={i} className="w-0.5 h-1.5 bg-[#E3E3FD]" style={{opacity: 0.2 + (i*0.15)}}></div>
-                                    ))}
-                                </div>
-                            </div>
-                            
-                            <div className="absolute -left-[5px] top-1/2 -translate-y-1/2 w-1.5 h-2 bg-[#050505] border border-white/30 group-hover:border-[#E3E3FD] transition-colors" />
-                            <div className="absolute -right-[5px] top-1/2 -translate-y-1/2 w-1.5 h-2 bg-[#050505] border border-white/30 group-hover:border-[#E3E3FD] transition-colors" />
-                        </div>
-                    </motion.div>
-                </div>
-            </div>
-        </section>
-
       </div>
       
       {/* Footer */}
-      <footer className="w-full border-t border-white/10 bg-[#020202] relative z-10">
+      <footer className="w-full border-t border-white/10 bg-[#261E19] relative z-10">
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-20">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-20">
                 <div className="col-span-1 md:col-span-5">
