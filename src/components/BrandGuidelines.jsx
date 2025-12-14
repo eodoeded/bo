@@ -208,8 +208,8 @@ export default function BrandGuidelines() {
         </div>
 
             {/* Centered Node Graph */}
-            <div className="relative w-full h-full flex items-center justify-center scale-90 md:scale-100">
-                <div className="relative w-[1000px] h-[600px]">
+            <div className="relative w-full h-full flex items-center justify-center">
+                <div className="relative w-[1000px] h-[600px] scale-[0.35] md:scale-100 origin-center transition-transform duration-500">
                     {/* Input Layer */}
                     <Node title="Data_Ingest" outputs={[1]} x={50} y={250} delay={0.2} width="w-40" status="active">
                         <div className="space-y-3">

@@ -180,6 +180,16 @@ export default function Studio() {
     const [guides, setGuides] = useState([]); // Ruler Guides
     const [draggedGuideId, setDraggedGuideId] = useState(null); // Current dragged guide
     
+    // Mobile State
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+    const [mobilePanel, setMobilePanel] = useState(null); // 'layers', 'components', 'properties'
+
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+    
     // Canvas Viewport
     const [zoom, setZoom] = useState(1);
     const [pan, setPan] = useState({ x: 0, y: 0 });
@@ -1192,10 +1202,11 @@ export default function Studio() {
             </header>
 
             {/* Main Workspace */}
-            <div className="flex-1 grid grid-cols-12 h-[calc(100vh-3rem)]">
+            <div className="flex-1 flex h-[calc(100vh-3rem)] relative overflow-hidden">
                 
                 {/* Left Panel */}
-                <aside className="col-span-2 border-r border-white/10 bg-[#050505] flex flex-col">
+                {!isMobile && (
+                <aside className="w-64 border-r border-white/10 bg-[#050505] flex flex-col z-20 shrink-0">
                     <div className="grid grid-cols-2 border-b border-white/10">
                         <button onClick={() => setActiveTab('components')} className={`py-3 font-mono text-[9px] uppercase tracking-widest transition-colors ${activeTab === 'components' ? 'text-[#E3E3FD] border-b border-[#E3E3FD] bg-[#E3E3FD]/5' : 'text-white/40 hover:text-white'}`}>Components</button>
                         <button onClick={() => setActiveTab('layers')} className={`py-3 font-mono text-[9px] uppercase tracking-widest transition-colors ${activeTab === 'layers' ? 'text-[#E3E3FD] border-b border-[#E3E3FD] bg-[#E3E3FD]/5' : 'text-white/40 hover:text-white'}`}>Layers</button>
@@ -1261,9 +1272,10 @@ export default function Studio() {
                         )}
                     </div>
                 </aside>
+                )}
 
                 {/* Center: Canvas Area */}
-                <main className="col-span-7 bg-[#020202] relative flex flex-col overflow-hidden">
+                <main className="flex-1 bg-[#020202] relative flex flex-col overflow-hidden">
                     
                     {/* Toolbar */}
                     <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 bg-[#050505] border border-white/10 p-1 flex items-center gap-1 rounded-[2px] shadow-xl">
@@ -1277,11 +1289,12 @@ export default function Studio() {
 
                     {/* Canvas Wrapper */}
                     <div 
-                        className="flex-1 relative overflow-hidden bg-[#080808] cursor-default"
-                        onMouseMove={handleMouseMove}
-                        onMouseUp={handleMouseUp}
+                        className="flex-1 relative overflow-hidden bg-[#080808] cursor-default touch-none"
+                        onPointerMove={handleMouseMove}
+                        onPointerUp={handleMouseUp}
+                        onPointerLeave={handleMouseUp}
                         ref={viewportRef}
-                        onMouseDown={handleMouseDown}
+                        onPointerDown={handleMouseDown}
                         onContextMenu={handleContextMenu}
                         onDrop={handleDrop}
                         onDragOver={(e) => e.preventDefault()}
@@ -1535,7 +1548,8 @@ export default function Studio() {
                 </main>
 
                 {/* Right Panel */}
-                <aside className="col-span-3 border-l border-white/10 bg-[#050505] flex flex-col">
+                {!isMobile && (
+                <aside className="w-80 border-l border-white/10 bg-[#050505] flex flex-col z-20 shrink-0">
                     <div className="p-4 border-b border-white/10 flex justify-between items-center">
                         <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">Specifications</span>
                         <Maximize2 size={12} className="text-white/40" />
@@ -1594,6 +1608,99 @@ export default function Studio() {
                         </button>
                     </div>
                 </aside>
+                )}
+
+                {/* Mobile Bottom Bar & Drawers */}
+                {isMobile && (
+                    <>
+                        {/* Bar */}
+                        <div className="absolute bottom-0 left-0 w-full h-16 bg-[#050505] border-t border-white/10 flex items-center justify-around z-40 px-2 pb-safe">
+                             <button onClick={() => setMobilePanel(mobilePanel === 'components' ? null : 'components')} className={`flex flex-col items-center gap-1 p-2 ${mobilePanel === 'components' ? 'text-[#E3E3FD]' : 'text-white/40'}`}>
+                                <Box size={18} />
+                                <span className="text-[9px] uppercase tracking-widest">Add</span>
+                            </button>
+                            <button onClick={() => setMobilePanel(mobilePanel === 'layers' ? null : 'layers')} className={`flex flex-col items-center gap-1 p-2 ${mobilePanel === 'layers' ? 'text-[#E3E3FD]' : 'text-white/40'}`}>
+                                <Layers size={18} />
+                                <span className="text-[9px] uppercase tracking-widest">Layers</span>
+                            </button>
+                            <button onClick={() => setMobilePanel(mobilePanel === 'properties' ? null : 'properties')} className={`flex flex-col items-center gap-1 p-2 ${mobilePanel === 'properties' ? 'text-[#E3E3FD]' : 'text-white/40'}`}>
+                                <Sliders size={18} />
+                                <span className="text-[9px] uppercase tracking-widest">Edit</span>
+                            </button>
+                        </div>
+
+                        {/* Drawer */}
+                        <AnimatePresence>
+                            {mobilePanel && (
+                                <motion.div 
+                                    initial={{ y: '100%' }}
+                                    animate={{ y: '0%' }}
+                                    exit={{ y: '100%' }}
+                                    transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                                    className="absolute bottom-16 left-0 w-full h-[45vh] bg-[#050505] border-t border-white/10 z-30 flex flex-col shadow-2xl"
+                                >
+                                     {/* Simple Handle */}
+                                     <div className="w-full flex justify-center py-2 border-b border-white/5 bg-[#0A0A0A]">
+                                         <div className="w-10 h-1 bg-white/10 rounded-full" />
+                                     </div>
+                                     
+                                     <div className="flex-1 overflow-y-auto custom-scrollbar p-4 bg-[#050505]">
+                                         {mobilePanel === 'components' && (
+                                             <div className="grid grid-cols-3 gap-3">
+                                                <button onClick={() => { addLayer('TEXT'); setMobilePanel(null); }} className="flex flex-col items-center p-4 border border-white/10 bg-white/5 rounded-sm"><Type size={20} className="mb-2 text-white/60"/><span className="text-[9px] font-mono uppercase">Text</span></button>
+                                                <button onClick={() => { handleUploadClick(); setMobilePanel(null); }} className="flex flex-col items-center p-4 border border-white/10 bg-white/5 rounded-sm"><ImageIcon size={20} className="mb-2 text-white/60"/><span className="text-[9px] font-mono uppercase">Image</span></button>
+                                                <button onClick={() => { addLayer('AI_FRAME'); setMobilePanel(null); }} className="flex flex-col items-center p-4 border border-white/10 bg-white/5 rounded-sm"><Sparkles size={20} className="mb-2 text-white/60"/><span className="text-[9px] font-mono uppercase">AI</span></button>
+                                             </div>
+                                         )}
+
+                                         {mobilePanel === 'layers' && (
+                                            <div className="space-y-1">
+                                                {layers.slice().reverse().map((layer) => (
+                                                    !layer.hidden && (
+                                                        <div 
+                                                            key={layer.id} 
+                                                            className={`flex items-center gap-3 p-3 border ${selectedLayerIds.includes(layer.id) ? 'border-[#E3E3FD] bg-[#E3E3FD]/5' : 'border-transparent hover:bg-white/5'} transition-colors rounded-sm`} 
+                                                            onClick={() => setSelectedLayerIds([layer.id])}
+                                                        >
+                                                            <Layers size={14} className={selectedLayerIds.includes(layer.id) ? 'text-[#E3E3FD]' : 'text-white/40'} />
+                                                            <span className={`font-mono text-[10px] uppercase tracking-widest ${selectedLayerIds.includes(layer.id) ? 'text-white' : 'text-white/60'}`}>
+                                                                {layer.type} - {layer.id.slice(-4)}
+                                                            </span>
+                                                        </div>
+                                                    )
+                                                ))}
+                                            </div>
+                                         )}
+
+                                         {mobilePanel === 'properties' && (
+                                             selectedLayerIds.length > 0 && primarySelectedLayer ? (
+                                                <LayerProperties 
+                                                    layers={layers}
+                                                    selectedLayerIds={selectedLayerIds}
+                                                    mode={mode} 
+                                                    onUpdate={updateLayer} 
+                                                    onDelete={deleteLayer}
+                                                    onCommit={updateLayer}
+                                                    onAlign={alignSelectedLayers}
+                                                    onDistribute={distributeSelectedLayers} 
+                                                />
+                                            ) : (
+                                                <CanvasProperties 
+                                                    config={canvasConfig}
+                                                    onChange={setCanvasConfig}
+                                                    snapToGrid={snapToGrid}
+                                                    onToggleSnap={setSnapToGrid}
+                                                    guides={guides}
+                                                    onClearGuides={() => setGuides([])}
+                                                />
+                                            )
+                                         )}
+                                     </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </>
+                )}
                 
                 {/* Global File Input */}
                 <input 

@@ -69,6 +69,31 @@ export default function WaitlistHero() {
       output: { x: 80, y: 30 }
   });
 
+  // Responsive Node Positioning
+  useEffect(() => {
+      const handleResize = () => {
+          if (window.innerWidth < 768) {
+              // Vertical Stack for Mobile
+              setNodes({
+                  studio: { x: 50, y: 15 },
+                  core: { x: 50, y: 45 },
+                  output: { x: 50, y: 75 }
+              });
+          } else {
+              // Horizontal Layout for Desktop
+              setNodes({
+                  studio: { x: 20, y: 30 },
+                  core: { x: 50, y: 55 },
+                  output: { x: 80, y: 30 }
+              });
+          }
+      };
+      
+      handleResize();
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const handleDragStart = (e, id) => {
       e.preventDefault();
       setDraggingId(id);
@@ -139,7 +164,7 @@ export default function WaitlistHero() {
   };
 
   return (
-    <section className="relative w-full min-h-screen md:h-screen flex flex-col md:block overflow-hidden bg-[#020202]">
+    <section className="relative w-full h-screen overflow-hidden bg-[#020202]">
       
       {/* Background Grid */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.02]" style={{ 
@@ -155,8 +180,8 @@ export default function WaitlistHero() {
           LATENCY: 12ms <br/> SECURE_CONNECTION
       </div>
 
-      {/* Node Graph Layer - Relative on Mobile (Top Half), Absolute on Desktop */}
-      <div className="relative w-full h-[50vh] md:absolute md:inset-0 md:h-full z-10 touch-none order-1 md:order-none bg-[#020202] md:bg-transparent">
+      {/* Node Graph Layer - Absolute on both, with mobile adjustments */}
+      <div className="absolute inset-0 w-full h-full z-10 touch-none overflow-hidden">
           <div ref={containerRef} className="absolute inset-0 w-full h-full">
             <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none" style={{zIndex: 10}}>
                 {/* 
@@ -312,15 +337,15 @@ export default function WaitlistHero() {
           </div>
       </div>
 
-      {/* Text Content - Relative on Mobile (Bottom Half), Absolute on Desktop */}
-      <div className="relative md:absolute md:bottom-20 left-0 md:left-12 z-30 w-full md:max-w-xl px-6 pb-12 pt-6 md:pt-0 md:pb-0 pointer-events-none order-2 md:order-none bg-[#020202] md:bg-transparent">
-        <div className="flex flex-col items-start text-left pointer-events-auto">
-            <div className="flex items-center gap-3 mb-6">
+      {/* Text Content */}
+      <div className="absolute bottom-0 left-0 w-full md:w-auto md:bottom-20 md:left-12 z-30 px-6 pb-12 pt-24 md:pt-0 md:pb-0 pointer-events-none bg-gradient-to-t from-[#020202] via-[#020202]/80 to-transparent md:bg-none">
+        <div className="flex flex-col items-start text-left pointer-events-auto max-w-xl">
+            <div className="flex items-center gap-3 mb-4 md:mb-6">
                 <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">Early Access Protocol</span>
             </div>
             
             <motion.h1
-                className="font-montreal font-medium text-white text-4xl md:text-7xl leading-[0.9] tracking-tight mb-8"
+                className="font-montreal font-medium text-4xl md:text-7xl leading-[0.9] tracking-tight mb-4 md:mb-8"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
@@ -329,7 +354,7 @@ export default function WaitlistHero() {
             </motion.h1>
 
             <motion.p
-                className="font-montreal text-white/60 text-lg max-w-md mb-8 leading-relaxed border-l border-white/10 pl-6"
+                className="font-montreal text-white/60 text-sm md:text-lg max-w-md mb-6 md:mb-8 leading-relaxed border-l border-white/10 pl-4 md:pl-6"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1, duration: 0.8 }}
