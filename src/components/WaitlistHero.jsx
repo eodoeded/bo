@@ -377,7 +377,7 @@ export default function WaitlistHero() {
                 transition={{ delay: 0.2, duration: 0.8 }}
                 onSubmit={handleJoin}
             >
-                <div className="relative flex flex-col sm:flex-row w-full bg-[#1A1614] border border-white/10 p-1.5 rounded-full">
+                <div className="relative flex flex-col w-full bg-[#1A1614] border border-white/10 p-1.5 rounded-full">
                     
                     <div className="absolute left-0 top-1/2 -translate-y-1/2 pl-4 pointer-events-none">
                         <Scan size={16} className="text-white/30" />
