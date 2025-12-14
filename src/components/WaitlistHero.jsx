@@ -167,7 +167,7 @@ export default function WaitlistHero() {
   };
 
   return (
-    <section className="relative w-full h-screen overflow-hidden bg-[#050505]">
+    <section className="relative w-full h-screen overflow-hidden bg-[#261E19]">
       
       {/* Cleaner Generative Background */}
       <div className="absolute inset-0 pointer-events-none">

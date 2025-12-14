@@ -23,7 +23,7 @@ function ScrollToTop() {
 
 function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#020202] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal">
+    <div className="min-h-screen bg-[#261E19] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal">
       <Header />
       <main className="relative">
         <WaitlistHero />

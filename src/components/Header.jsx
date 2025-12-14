@@ -23,7 +23,7 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 border-b border-white/5 bg-[#020202]/80 backdrop-blur-md">
+    <header className="fixed top-0 left-0 w-full z-50 border-b border-white/5 bg-[#261E19]/80 backdrop-blur-md">
       <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
         
         {/* Brand / Logo - Left */}
@@ -67,7 +67,7 @@ export default function Header() {
 
       {/* Mobile Menu Overlay */}
       {isMenuOpen && (
-        <div className="fixed inset-0 top-20 bg-[#020202] z-40 flex flex-col p-6 border-t border-white/10 md:hidden">
+        <div className="fixed inset-0 top-20 bg-[#261E19] z-40 flex flex-col p-6 border-t border-white/10 md:hidden">
              <button onClick={() => scrollToSection('process')} className="py-4 border-b border-white/5 font-mono text-xs text-left uppercase tracking-widest text-white/60">Process</button>
              <button onClick={() => scrollToSection('value')} className="py-4 border-b border-white/5 font-mono text-xs text-left uppercase tracking-widest text-white/60">Value</button>
              <button onClick={() => scrollToSection('specs')} className="py-4 border-b border-white/5 font-mono text-xs text-left uppercase tracking-widest text-white/60">Specifications</button>

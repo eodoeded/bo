@@ -55,16 +55,12 @@ function useHistory(initialState) {
     return [history[index], setState, undo, redo, index > 0, index < history.length - 1];
 }
 
-const Corner = ({ className = "" }) => (
-    <div className={`absolute w-1.5 h-1.5 border-white/40 ${className}`} />
-);
-
 const IconButton = ({ icon: Icon, active, onClick, disabled, title }) => (
     <button 
         onClick={onClick}
         disabled={disabled}
         title={title}
-        className={`p-2 border ${active ? 'bg-[#E3E3FD] text-black border-[#E3E3FD]' : 'bg-transparent text-white/60 border-transparent hover:bg-white/5 hover:text-white'} ${disabled ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer'} transition-colors rounded-[1px]`}
+        className={`p-2 border ${active ? 'bg-[#E3E3FD] text-black border-[#E3E3FD]' : 'bg-transparent text-white/60 border-transparent hover:bg-white/5 hover:text-white'} ${disabled ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer'} transition-colors rounded-lg`}
     >
         <Icon size={14} />
     </button>
@@ -75,7 +71,7 @@ const Ruler = ({ orientation = 'horizontal', zoom = 1, pan = {x:0, y:0}, onDragS
     return (
         <div 
             onMouseDown={(e) => { e.preventDefault(); e.stopPropagation(); onDragStart && onDragStart(orientation, e); }}
-            className={`absolute bg-[#050505] border-white/10 z-10 overflow-hidden hover:bg-white/5 transition-colors cursor-crosshair ${orientation === 'horizontal' ? 'top-0 left-0 right-0 h-6 border-b flex items-end' : 'top-0 left-0 bottom-0 w-6 border-r flex flex-col items-end'}`}
+            className={`absolute bg-[#261E19] border-white/10 z-10 overflow-hidden hover:bg-white/5 transition-colors cursor-crosshair ${orientation === 'horizontal' ? 'top-0 left-0 right-0 h-6 border-b flex items-end' : 'top-0 left-0 bottom-0 w-6 border-r flex flex-col items-end'}`}
         >
             {ticks.map((_, i) => {
                 const value = Math.round(i * 100);
@@ -1127,7 +1123,7 @@ export default function Studio() {
     }, [selectedLayerIds, mode, canUndo, canRedo, editingTextId, layers, zoom, pan, clipboard]);
 
     return (
-        <div className="fixed inset-0 w-full h-[100dvh] bg-[#050505] text-white font-montreal flex flex-col overflow-hidden overscroll-none selection:bg-[#E3E3FD] selection:text-black" onClick={() => setContextMenu(null)}>
+        <div className="fixed inset-0 w-full h-[100dvh] bg-[#261E19] text-white font-montreal flex flex-col overflow-hidden overscroll-none selection:bg-[#E3E3FD] selection:text-black" onClick={() => setContextMenu(null)}>
             
             {/* Shortcuts Modal */}
             <AnimatePresence>
@@ -1144,7 +1140,7 @@ export default function Studio() {
             </AnimatePresence>
 
             {/* Top Bar */}
-            <header className="h-12 border-b border-white/5 flex items-center justify-between px-4 bg-[#0A0A0A] relative z-20">
+            <header className="h-14 border-b border-white/5 flex items-center justify-between px-6 bg-[#261E19] relative z-20">
                 <div className="flex items-center gap-6">
                     <Link to="/" className="font-mono text-[10px] text-white/40 hover:text-white transition-colors uppercase tracking-widest flex items-center gap-2">
                         <ArrowLeft size={12} />
@@ -1162,30 +1158,30 @@ export default function Studio() {
                          <motion.div 
                             initial={{ opacity: 0, y: -10 }} 
                             animate={{ opacity: 1, y: 0 }}
-                            className="flex items-center gap-2 px-3 py-1 bg-[#E3E3FD] text-black font-mono text-[9px] uppercase tracking-widest rounded-[1px]"
+                            className="flex items-center gap-2 px-3 py-1 bg-[#E3E3FD] text-black font-mono text-[9px] uppercase tracking-widest rounded-full"
                          >
                              <Check size={10} />
                              {statusMessage}
                          </motion.div>
                      )}
 
-                     <div className="flex items-center gap-1 bg-[#050505] border border-white/5 p-1 rounded-[2px]">
+                     <div className="flex items-center gap-1 bg-[#1A1614] border border-white/5 p-1.5 rounded-full">
                         <IconButton icon={Undo} onClick={() => setLayers(undo())} disabled={!canUndo} title="Undo (Ctrl+Z)" />
                         <IconButton icon={Redo} onClick={() => setLayers(redo())} disabled={!canRedo} title="Redo (Ctrl+Shift+Z)" />
                     </div>
                     <div className="h-4 w-px bg-white/5"></div>
                     <IconButton icon={HelpCircle} onClick={() => setShowShortcuts(true)} title="Keyboard Shortcuts (?)" />
                     <div className="h-4 w-px bg-white/5"></div>
-                    <div className="flex items-center gap-2 bg-[#050505] border border-white/5 p-1 rounded-[2px]">
+                    <div className="flex items-center gap-2 bg-[#1A1614] border border-white/5 p-1 rounded-full">
                         <button 
                             onClick={() => { setMode('STUDIO'); setSelectedLayerIds([]); }}
-                            className={`px-3 py-1 font-mono text-[9px] uppercase tracking-widest rounded-[1px] transition-colors ${mode === 'STUDIO' ? 'bg-[#E3E3FD] text-black' : 'text-white/40 hover:text-white'}`}
+                            className={`px-4 py-1.5 font-mono text-[9px] uppercase tracking-widest rounded-full transition-colors ${mode === 'STUDIO' ? 'bg-[#E3E3FD] text-black' : 'text-white/40 hover:text-white'}`}
                         >
                             Studio
                         </button>
                         <button 
                             onClick={() => { setMode('CLIENT'); setSelectedLayerIds([]); }}
-                            className={`px-3 py-1 font-mono text-[9px] uppercase tracking-widest rounded-[1px] transition-colors ${mode === 'CLIENT' ? 'bg-[#E3E3FD] text-black' : 'text-white/40 hover:text-white'}`}
+                            className={`px-4 py-1.5 font-mono text-[9px] uppercase tracking-widest rounded-full transition-colors ${mode === 'CLIENT' ? 'bg-[#E3E3FD] text-black' : 'text-white/40 hover:text-white'}`}
                         >
                             Client
                         </button>
@@ -1193,7 +1189,7 @@ export default function Studio() {
                     <div className="h-4 w-px bg-white/5"></div>
                     <button 
                         onClick={handlePublish}
-                        className="px-4 py-1.5 bg-[#E3E3FD] text-black font-mono text-[10px] uppercase tracking-widest rounded-[1px] hover:bg-white transition-colors font-semibold flex items-center gap-2"
+                        className="px-5 py-2 bg-[#E3E3FD] text-black font-mono text-[10px] uppercase tracking-widest rounded-full hover:bg-white transition-colors font-semibold flex items-center gap-2"
                     >
                         <Save size={12} />
                         Publish
@@ -1206,23 +1202,23 @@ export default function Studio() {
                 
                 {/* Left Panel */}
                 {!isMobile && (
-                <aside className="w-64 border-r border-white/5 bg-[#0A0A0A] flex flex-col z-20 shrink-0 h-full">
+                <aside className="w-72 border-r border-white/5 bg-[#1A1614] flex flex-col z-20 shrink-0 h-full">
                     <div className="grid grid-cols-2 border-b border-white/5">
-                        <button onClick={() => setActiveTab('components')} className={`py-3 font-mono text-[9px] uppercase tracking-widest transition-colors ${activeTab === 'components' ? 'text-[#E3E3FD] border-b border-[#E3E3FD] bg-[#E3E3FD]/5' : 'text-white/40 hover:text-white'}`}>Components</button>
-                        <button onClick={() => setActiveTab('layers')} className={`py-3 font-mono text-[9px] uppercase tracking-widest transition-colors ${activeTab === 'layers' ? 'text-[#E3E3FD] border-b border-[#E3E3FD] bg-[#E3E3FD]/5' : 'text-white/40 hover:text-white'}`}>Layers</button>
+                        <button onClick={() => setActiveTab('components')} className={`py-4 font-mono text-[9px] uppercase tracking-widest transition-colors ${activeTab === 'components' ? 'text-[#E3E3FD] border-b-2 border-[#E3E3FD] bg-[#E3E3FD]/5' : 'text-white/40 hover:text-white'}`}>Components</button>
+                        <button onClick={() => setActiveTab('layers')} className={`py-4 font-mono text-[9px] uppercase tracking-widest transition-colors ${activeTab === 'layers' ? 'text-[#E3E3FD] border-b-2 border-[#E3E3FD] bg-[#E3E3FD]/5' : 'text-white/40 hover:text-white'}`}>Layers</button>
                     </div>
 
                     <div className="flex-1 overflow-y-auto custom-scrollbar">
                         {activeTab === 'components' && mode === 'STUDIO' ? (
-                            <div className="p-4 space-y-6">
-                                <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-4">Explore Components</span>
-                                <div className="grid grid-cols-3 gap-2">
-                                    <button onClick={() => addLayer('TEXT')} className="flex flex-col items-center justify-center p-3 border border-white/5 bg-[#050505] hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group"><Type size={16} className="text-white/60 group-hover:text-[#E3E3FD]" /><span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">Text</span></button>
+                            <div className="p-6 space-y-8">
+                                <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-4">Core Elements</span>
+                                <div className="grid grid-cols-3 gap-3">
+                                    <button onClick={() => addLayer('TEXT')} className="flex flex-col items-center justify-center p-4 border border-white/5 bg-[#261E19] hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-2xl group"><Type size={20} className="text-white/60 group-hover:text-[#E3E3FD]" /><span className="font-mono text-[8px] mt-3 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">Text</span></button>
                                     
-                                    <button onClick={handleUploadClick} className="flex flex-col items-center justify-center p-3 border border-white/5 bg-[#050505] hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group cursor-pointer relative">
-                                        <ImageIcon size={16} className="text-white/60 group-hover:text-[#E3E3FD]" />
-                                        <span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">Image</span>
-                                        <div className="absolute top-1 right-1"><Plus size={8} className="text-[#E3E3FD]" /></div>
+                                    <button onClick={handleUploadClick} className="flex flex-col items-center justify-center p-4 border border-white/5 bg-[#261E19] hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-2xl group cursor-pointer relative">
+                                        <ImageIcon size={20} className="text-white/60 group-hover:text-[#E3E3FD]" />
+                                        <span className="font-mono text-[8px] mt-3 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">Image</span>
+                                        <div className="absolute top-2 right-2"><Plus size={10} className="text-[#E3E3FD]" /></div>
                                     </button>
                                     <input 
                                         type="file" 
@@ -1233,16 +1229,16 @@ export default function Studio() {
                                         onChange={handleFileUpload} 
                                     />
 
-                                    <button onClick={() => addLayer('AI_FRAME')} className="flex flex-col items-center justify-center p-3 border border-white/5 bg-[#050505] hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-sm group"><Sparkles size={16} className="text-white/60 group-hover:text-[#E3E3FD]" /><span className="font-mono text-[8px] mt-2 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">AI Gen</span></button>
+                                    <button onClick={() => addLayer('AI_FRAME')} className="flex flex-col items-center justify-center p-4 border border-white/5 bg-[#261E19] hover:border-[#E3E3FD] hover:bg-[#E3E3FD]/5 transition-colors rounded-2xl group"><Sparkles size={20} className="text-white/60 group-hover:text-[#E3E3FD]" /><span className="font-mono text-[8px] mt-3 uppercase tracking-wider text-white/60 group-hover:text-[#E3E3FD]">AI Gen</span></button>
                                 </div>
                             </div>
                         ) : (
-                            <div className="p-2 space-y-1">
+                            <div className="p-3 space-y-2">
                                 {layers.slice().reverse().map((layer, index) => (
                                     !layer.hidden && (
                                         <div 
                                             key={layer.id} 
-                                            className={`flex items-center gap-3 p-3 border ${selectedLayerIds.includes(layer.id) ? 'border-[#E3E3FD] bg-[#E3E3FD]/5' : 'border-transparent hover:bg-white/5'} transition-colors rounded-sm cursor-pointer group`} 
+                                            className={`flex items-center gap-3 p-3 border ${selectedLayerIds.includes(layer.id) ? 'border-[#E3E3FD] bg-[#E3E3FD]/10' : 'border-transparent hover:bg-white/5'} transition-colors rounded-xl cursor-pointer group`} 
                                             onClick={(e) => {
                                                 if(e.shiftKey) {
                                                     const newIds = selectedLayerIds.includes(layer.id) ? selectedLayerIds.filter(i => i !== layer.id) : [...selectedLayerIds, layer.id];
@@ -1252,16 +1248,16 @@ export default function Studio() {
                                                 }
                                             }}
                                         >
-                                            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                                 <button onClick={(e) => { e.stopPropagation(); toggleVisibility(layer.id); }} className="hover:text-[#E3E3FD]">
-                                                    {layer.visible ? <Eye size={10} /> : <EyeOff size={10} className="text-white/40" />}
+                                                    {layer.visible ? <Eye size={12} /> : <EyeOff size={12} className="text-white/40" />}
                                                 </button>
                                                 <button onClick={(e) => { e.stopPropagation(); toggleLock([layer.id]); }} className="hover:text-[#E3E3FD]">
-                                                    {layer.lockPosition ? <Lock size={10} className="text-[#E3E3FD]" /> : <Unlock size={10} className="text-white/40" />}
+                                                    {layer.lockPosition ? <Lock size={12} className="text-[#E3E3FD]" /> : <Unlock size={12} className="text-white/40" />}
                                                 </button>
                                             </div>
                                             <Layers size={14} className={selectedLayerIds.includes(layer.id) ? 'text-[#E3E3FD]' : 'text-white/40 group-hover:text-white'} />
-                                            <span className={`font-mono text-[10px] uppercase tracking-widest ${selectedLayerIds.includes(layer.id) ? 'text-white' : 'text-white/60 group-hover:text-white'} ${!layer.visible ? 'opacity-50 line-through' : ''}`}>
+                                            <span className={`font-mono text-[10px] uppercase tracking-widest truncate ${selectedLayerIds.includes(layer.id) ? 'text-white' : 'text-white/60 group-hover:text-white'} ${!layer.visible ? 'opacity-50 line-through' : ''}`}>
                                                 {layer.type} - {layer.id.slice(-4)}
                                             </span>
                                             {selectedLayerIds.includes(layer.id) && <div className="ml-auto w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"></div>}
@@ -1275,13 +1271,12 @@ export default function Studio() {
                 )}
 
                 {/* Center: Canvas Area */}
-                <main className="flex-1 bg-[#050505] relative flex flex-col overflow-hidden">
+                <main className="flex-1 bg-[#261E19] relative flex flex-col overflow-hidden">
                     
                     {/* Toolbar */}
-                    <div className="absolute top-4 left-1/2 -translate-x-1/2 z-30 bg-[#0A0A0A] border border-white/10 p-1 flex items-center gap-1 rounded-[2px] shadow-xl">
+                    <div className="absolute top-6 left-1/2 -translate-x-1/2 z-30 bg-[#1A1614] border border-white/10 p-2 flex items-center gap-2 rounded-full shadow-2xl">
                         <IconButton icon={MousePointer} active={selectedTool === 'select' && !isSpacePressed} onClick={() => setSelectedTool('select')} title="Pointer (V)" />
-                        {/* Hand Tool Removed, replaced by Spacebar behavior */}
-                        <div className="w-px h-4 bg-white/5 mx-1"></div>
+                        <div className="w-px h-4 bg-white/10"></div>
                         <IconButton icon={ZoomOut} onClick={() => setZoom(z => Math.max(0.1, z - 0.1))} title="Zoom Out" />
                         <span className="font-mono text-[9px] text-white/60 px-2 w-10 text-center">{Math.round(zoom * 100)}%</span>
                         <IconButton icon={ZoomIn} onClick={() => setZoom(z => Math.min(5, z + 0.1))} title="Zoom In" />
@@ -1289,7 +1284,7 @@ export default function Studio() {
 
                     {/* Canvas Wrapper */}
                     <div 
-                        className="flex-1 relative overflow-hidden bg-[#080808] cursor-default touch-none"
+                        className="flex-1 relative overflow-hidden bg-[#2E2824] cursor-default touch-none"
                         onPointerMove={handleMouseMove}
                         onPointerUp={handleMouseUp}
                         onPointerLeave={handleMouseUp}
@@ -1303,7 +1298,7 @@ export default function Studio() {
                         <Ruler orientation="horizontal" zoom={zoom} pan={pan} onDragStart={handleRulerDragStart} />
                         <Ruler orientation="vertical" zoom={zoom} pan={pan} onDragStart={handleRulerDragStart} />
 
-                        <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{ 
+                        <div className="absolute inset-0 pointer-events-none opacity-[0.05]" style={{ 
                             backgroundImage: 'radial-gradient(circle, #E3E3FD 1px, transparent 1px)', 
                             backgroundSize: `${20 * zoom}px ${20 * zoom}px`,
                             backgroundPosition: `${pan.x}px ${pan.y}px`
@@ -1323,7 +1318,7 @@ export default function Studio() {
                              {/* Marquee Box */}
                              {selectionBox && (
                                 <div 
-                                    className="absolute border border-[#E3E3FD] bg-[#E3E3FD]/10 z-[100] pointer-events-none"
+                                    className="absolute border border-[#E3E3FD] bg-[#E3E3FD]/10 z-[100] pointer-events-none rounded-lg"
                                     style={{
                                         left: selectionBox.x,
                                         top: selectionBox.y,
@@ -1341,7 +1336,7 @@ export default function Studio() {
                                     style={{
                                         [g.type === 'h' ? 'top' : 'left']: g.pos,
                                         opacity: 0.5,
-                                        boxShadow: '0 0 2px rgba(0,0,0,0.5)'
+                                        boxShadow: '0 0 4px rgba(227, 227, 253, 0.5)'
                                     }}
                                 />
                              ))}
@@ -1381,7 +1376,7 @@ export default function Studio() {
                                         >
                                             {/* Hover Outline */}
                                             {!selectedLayerIds.includes(layer.id) && mode === 'STUDIO' && (
-                                                <div className="absolute inset-0 border border-[#E3E3FD] opacity-0 group-hover:opacity-30 pointer-events-none transition-opacity"></div>
+                                                <div className="absolute -inset-2 border border-[#E3E3FD]/30 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity rounded-lg"></div>
                                             )}
 
                                             {/* Content Rendering */}
@@ -1478,8 +1473,8 @@ export default function Studio() {
                                             {/* Selection Outline & Handles */}
                                             {selectedLayerIds.includes(layer.id) && mode === 'STUDIO' && (
                                                 <>
-                                                    <div className="absolute -inset-[1px] border border-[#E3E3FD] pointer-events-none z-50">
-                                                        <div className="absolute -top-6 left-0 bg-[#E3E3FD] px-1.5 py-0.5 flex items-center gap-2 pointer-events-auto">
+                                                    <div className="absolute -inset-[2px] border border-[#E3E3FD] pointer-events-none z-50 rounded-sm">
+                                                        <div className="absolute -top-8 left-0 bg-[#E3E3FD] px-2 py-1 rounded-md flex items-center gap-2 pointer-events-auto shadow-lg">
                                                             <span className="font-mono text-[9px] text-black uppercase tracking-widest font-bold">{layer.id}</span>
                                                         </div>
                                                     </div>
@@ -1488,14 +1483,14 @@ export default function Studio() {
                                                         <div 
                                                             key={h}
                                                             onMouseDown={(e) => handleMouseDown(e, layer, h)}
-                                                            className={`absolute bg-white border border-[#E3E3FD] z-50 cursor-${h}-resize`}
+                                                            className={`absolute bg-white border border-[#E3E3FD] z-50 cursor-${h}-resize rounded-full shadow-sm`}
                                                             style={{
-                                                                width: 8 / zoom, // Constant visual size
-                                                                height: 8 / zoom,
-                                                                top: h[0] === 'n' ? -4 / zoom : 'auto',
-                                                                bottom: h[0] === 's' ? -4 / zoom : 'auto',
-                                                                left: h[1] === 'w' ? -4 / zoom : 'auto',
-                                                                right: h[1] === 'e' ? -4 / zoom : 'auto',
+                                                                width: 10 / zoom, // Constant visual size
+                                                                height: 10 / zoom,
+                                                                top: h[0] === 'n' ? -5 / zoom : 'auto',
+                                                                bottom: h[0] === 's' ? -5 / zoom : 'auto',
+                                                                left: h[1] === 'w' ? -5 / zoom : 'auto',
+                                                                right: h[1] === 'e' ? -5 / zoom : 'auto',
                                                             }}
                                                         />
                                                     ))}
@@ -1510,31 +1505,31 @@ export default function Studio() {
                         {/* Context Menu */}
                         {contextMenu && selectedLayerIds.length > 0 && (
                             <div 
-                                className="absolute bg-[#050505] border border-white/10 shadow-2xl z-50 w-48 flex flex-col p-1"
+                                className="absolute bg-[#1A1614] border border-white/10 shadow-2xl z-50 w-48 flex flex-col p-1 rounded-xl overflow-hidden"
                                 style={{ top: contextMenu.y, left: contextMenu.x }}
                             >
-                                <button onClick={() => { duplicateSelectedLayers(); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group">
+                                <button onClick={() => { duplicateSelectedLayers(); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group rounded-lg">
                                     <span>Duplicate</span> <span className="text-white/40 group-hover:text-black/40">Ctrl+D</span>
                                 </button>
-                                <button onClick={() => { toggleLock(selectedLayerIds); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group">
+                                <button onClick={() => { toggleLock(selectedLayerIds); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group rounded-lg">
                                     <span>{primarySelectedLayer?.lockPosition ? 'Unlock' : 'Lock'}</span> <span className="text-white/40 group-hover:text-black/40">L</span>
                                 </button>
                                 
                                 <div className="h-px bg-white/10 my-1"></div>
                                 
-                                <button onClick={() => { reorderSelectedLayers('up'); setContextMenu(null); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group">
+                                <button onClick={() => { reorderSelectedLayers('up'); setContextMenu(null); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group rounded-lg">
                                     <span>Bring Forward</span> <span className="text-white/40 group-hover:text-black/40">]</span>
                                 </button>
-                                <button onClick={() => { reorderSelectedLayers('down'); setContextMenu(null); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group">
+                                <button onClick={() => { reorderSelectedLayers('down'); setContextMenu(null); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group rounded-lg">
                                     <span>Send Backward</span> <span className="text-white/40 group-hover:text-black/40">[</span>
                                 </button>
                                 
                                 <div className="h-px bg-white/10 my-1"></div>
                                 
-                                <button onClick={() => { zoomToSelection(); setContextMenu(null); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group">
+                                <button onClick={() => { zoomToSelection(); setContextMenu(null); }} className="text-left px-3 py-2 text-[10px] font-mono text-white hover:bg-[#E3E3FD] hover:text-black uppercase tracking-widest flex items-center justify-between group rounded-lg">
                                     <span>Zoom to Selection</span> <span className="text-white/40 group-hover:text-black/40">Shift+2</span>
                                 </button>
-                                <button onClick={() => deleteSelectedLayers()} className="text-left px-3 py-2 text-[10px] font-mono text-red-400 hover:bg-red-900/20 uppercase tracking-widest flex items-center justify-between">
+                                <button onClick={() => deleteSelectedLayers()} className="text-left px-3 py-2 text-[10px] font-mono text-red-400 hover:bg-red-900/20 uppercase tracking-widest flex items-center justify-between rounded-lg">
                                     <span>Delete</span> <span>Del</span>
                                 </button>
                             </div>
@@ -1549,7 +1544,7 @@ export default function Studio() {
 
                 {/* Right Panel */}
                 {!isMobile && (
-                <aside className="w-80 border-l border-white/10 bg-[#050505] flex flex-col z-20 shrink-0 h-full">
+                <aside className="w-80 border-l border-white/10 bg-[#1A1614] flex flex-col z-20 shrink-0 h-full">
                     <div className="p-4 border-b border-white/10 flex justify-between items-center">
                         <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">Specifications</span>
                         <Maximize2 size={12} className="text-white/40" />
@@ -1565,6 +1560,7 @@ export default function Studio() {
                                 mode={mode} 
                                 onUpdate={updateLayer} 
                                 onDelete={deleteLayer}
+                                onCommit={updateLayer}
                                 onAlign={alignSelectedLayers}
                                 onDistribute={distributeSelectedLayers} 
                             />
@@ -1591,9 +1587,9 @@ export default function Studio() {
                             <div className="pt-6 border-t border-white/10 mt-auto">
                                 <h2 className="font-mono text-[9px] font-bold text-[#E3E3FD] uppercase tracking-widest mb-4 flex items-center gap-2"><Sparkles size={12} /> Generator Protocol</h2>
                                 <div className="space-y-4">
-                                   <div><label className="block font-mono text-[8px] text-white/40 uppercase tracking-widest mb-1.5">Subject Input</label><input type="text" value={clientSubject} onChange={(e) => setClientSubject(e.target.value)} placeholder="Enter subject..." className="w-full bg-[#0A0A0A] border border-white/10 p-2 text-xs text-white focus:border-[#E3E3FD] focus:outline-none font-mono placeholder-white/20" /></div>
-                                   <button onClick={handleGenerate} disabled={isGenerating || !clientSubject} className={`w-full py-3 font-mono text-[9px] font-bold uppercase tracking-widest transition-all ${isGenerating ? 'bg-white/10 text-white/40 cursor-wait' : 'bg-[#E3E3FD] text-black hover:bg-white'}`}>{isGenerating ? 'INITIALIZING...' : 'EXECUTE GENERATION'}</button>
-                                   {generationError && <div className="p-2 border border-red-900/50 bg-red-900/10 text-red-400 text-[9px] font-mono">ERROR: {generationError}</div>}
+                                   <div><label className="block font-mono text-[8px] text-white/40 uppercase tracking-widest mb-1.5">Subject Input</label><input type="text" value={clientSubject} onChange={(e) => setClientSubject(e.target.value)} placeholder="Enter subject..." className="w-full bg-[#261E19] border border-white/10 p-2 text-xs text-white focus:border-[#E3E3FD] focus:outline-none font-mono placeholder-white/20 rounded-lg" /></div>
+                                   <button onClick={handleGenerate} disabled={isGenerating || !clientSubject} className={`w-full py-3 font-mono text-[9px] font-bold uppercase tracking-widest transition-all rounded-lg ${isGenerating ? 'bg-white/10 text-white/40 cursor-wait' : 'bg-[#E3E3FD] text-black hover:bg-white'}`}>{isGenerating ? 'INITIALIZING...' : 'EXECUTE GENERATION'}</button>
+                                   {generationError && <div className="p-2 border border-red-900/50 bg-red-900/10 text-red-400 text-[9px] font-mono rounded-lg">ERROR: {generationError}</div>}
                                 </div>
                             </div>
                         )}
@@ -1601,7 +1597,7 @@ export default function Studio() {
                     <div className="p-4 border-t border-white/10">
                         <button 
                             onClick={handleExport}
-                            className="w-full py-3 border border-white/20 hover:border-[#E3E3FD] hover:text-[#E3E3FD] transition-all group flex items-center justify-center gap-2 bg-white/5"
+                            className="w-full py-3 border border-white/20 hover:border-[#E3E3FD] hover:text-[#E3E3FD] transition-all group flex items-center justify-center gap-2 bg-white/5 rounded-xl"
                         >
                             <Download size={14} className="group-hover:animate-bounce" />
                             <span className="font-mono text-[10px] uppercase tracking-[0.2em]">Export Artifact</span>
@@ -1614,7 +1610,7 @@ export default function Studio() {
                 {isMobile && (
                     <>
                         {/* Bar */}
-                        <div className="absolute bottom-0 left-0 w-full h-16 bg-[#050505] border-t border-white/10 flex items-center justify-around z-40 px-2 pb-safe">
+                        <div className="absolute bottom-0 left-0 w-full h-16 bg-[#1A1614] border-t border-white/10 flex items-center justify-around z-40 px-2 pb-safe">
                              <button onClick={() => setMobilePanel(mobilePanel === 'components' ? null : 'components')} className={`flex flex-col items-center gap-1 p-2 ${mobilePanel === 'components' ? 'text-[#E3E3FD]' : 'text-white/40'}`}>
                                 <Box size={18} />
                                 <span className="text-[9px] uppercase tracking-widest">Add</span>
@@ -1637,29 +1633,29 @@ export default function Studio() {
                                     animate={{ y: '0%' }}
                                     exit={{ y: '100%' }}
                                     transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                                    className="absolute bottom-16 left-0 w-full h-[45vh] bg-[#050505] border-t border-white/10 z-30 flex flex-col shadow-2xl"
+                                    className="absolute bottom-16 left-0 w-full h-[45vh] bg-[#1A1614] border-t border-white/10 z-30 flex flex-col shadow-2xl rounded-t-3xl"
                                 >
                                      {/* Simple Handle */}
-                                     <div className="w-full flex justify-center py-2 border-b border-white/5 bg-[#0A0A0A]">
-                                         <div className="w-10 h-1 bg-white/10 rounded-full" />
+                                     <div className="w-full flex justify-center py-3 border-b border-white/5 bg-[#1A1614] rounded-t-3xl">
+                                         <div className="w-12 h-1.5 bg-white/10 rounded-full" />
                                      </div>
                                      
-                                     <div className="flex-1 overflow-y-auto custom-scrollbar p-4 bg-[#050505]">
+                                     <div className="flex-1 overflow-y-auto custom-scrollbar p-4 bg-[#1A1614]">
                                          {mobilePanel === 'components' && (
                                              <div className="grid grid-cols-3 gap-3">
-                                                <button onClick={() => { addLayer('TEXT'); setMobilePanel(null); }} className="flex flex-col items-center p-4 border border-white/10 bg-white/5 rounded-sm"><Type size={20} className="mb-2 text-white/60"/><span className="text-[9px] font-mono uppercase">Text</span></button>
-                                                <button onClick={() => { handleUploadClick(); setMobilePanel(null); }} className="flex flex-col items-center p-4 border border-white/10 bg-white/5 rounded-sm"><ImageIcon size={20} className="mb-2 text-white/60"/><span className="text-[9px] font-mono uppercase">Image</span></button>
-                                                <button onClick={() => { addLayer('AI_FRAME'); setMobilePanel(null); }} className="flex flex-col items-center p-4 border border-white/10 bg-white/5 rounded-sm"><Sparkles size={20} className="mb-2 text-white/60"/><span className="text-[9px] font-mono uppercase">AI</span></button>
+                                                <button onClick={() => { addLayer('TEXT'); setMobilePanel(null); }} className="flex flex-col items-center p-4 border border-white/10 bg-white/5 rounded-2xl"><Type size={20} className="mb-2 text-white/60"/><span className="text-[9px] font-mono uppercase">Text</span></button>
+                                                <button onClick={() => { handleUploadClick(); setMobilePanel(null); }} className="flex flex-col items-center p-4 border border-white/10 bg-white/5 rounded-2xl"><ImageIcon size={20} className="mb-2 text-white/60"/><span className="text-[9px] font-mono uppercase">Image</span></button>
+                                                <button onClick={() => { addLayer('AI_FRAME'); setMobilePanel(null); }} className="flex flex-col items-center p-4 border border-white/10 bg-white/5 rounded-2xl"><Sparkles size={20} className="mb-2 text-white/60"/><span className="text-[9px] font-mono uppercase">AI</span></button>
                                              </div>
                                          )}
 
                                          {mobilePanel === 'layers' && (
-                                            <div className="space-y-1">
+                                            <div className="space-y-2">
                                                 {layers.slice().reverse().map((layer) => (
                                                     !layer.hidden && (
                                                         <div 
                                                             key={layer.id} 
-                                                            className={`flex items-center gap-3 p-3 border ${selectedLayerIds.includes(layer.id) ? 'border-[#E3E3FD] bg-[#E3E3FD]/5' : 'border-transparent hover:bg-white/5'} transition-colors rounded-sm`} 
+                                                            className={`flex items-center gap-3 p-3 border ${selectedLayerIds.includes(layer.id) ? 'border-[#E3E3FD] bg-[#E3E3FD]/5' : 'border-transparent hover:bg-white/5'} transition-colors rounded-xl`} 
                                                             onClick={() => setSelectedLayerIds([layer.id])}
                                                         >
                                                             <Layers size={14} className={selectedLayerIds.includes(layer.id) ? 'text-[#E3E3FD]' : 'text-white/40'} />

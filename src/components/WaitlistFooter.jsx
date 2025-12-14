@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 export default function WaitlistFooter() {
     return (
-        <footer className="w-full border-t border-white/10 bg-[#020202] relative z-10">
+        <footer className="w-full border-t border-white/10 bg-[#261E19] relative z-10">
             <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-12 md:py-20">
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-10 md:mb-20">
                     <div className="col-span-1 md:col-span-5">
