@@ -370,8 +370,8 @@ export default function WaitlistHero() {
                 Turn brand guidelines into software, not PDFs.
             </motion.p>
             
-            <motion.form 
-                className="flex flex-col sm:flex-row w-full max-w-full md:max-w-[440px] relative group"
+            <motion.form
+                className="flex flex-col w-full max-w-full md:max-w-[440px] relative group"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.8 }}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Type, Layout, MousePointer, Box } from 'lucide-react';
 
@@ -30,25 +31,33 @@ export default function Manual() {
     return (
         <div className="min-h-screen bg-[#261E19] text-white font-montreal selection:bg-[#E3E3FD] selection:text-[#261E19]">
             {/* Header */}
-            <header className="fixed top-0 left-0 w-full z-50 bg-[#261E19]/90 backdrop-blur-md border-b border-[#33302E]">
-                <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                        <div className="w-3 h-3 bg-[#E3E3FD] rounded-full"></div>
-                        <span className="font-mono text-xs text-[#E3E3FD] uppercase tracking-widest">System_OS v2.4 // Manual</span>
+            <header className="fixed top-0 left-0 w-full z-50 border-b border-white/5 bg-[#261E19]/80 backdrop-blur-md">
+                <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+                    <div className="flex items-center">
+                        <Link to="/" className="group flex items-center gap-3" onClick={() => window.scrollTo(0,0)}>
+                            <span className="font-mono text-sm tracking-widest text-white group-hover:text-[#E3E3FD] transition-colors uppercase">[ BRANDED OBJECTS ]</span>
+                        </Link>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <div className="w-2 h-2 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
+                        <span className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">Guidelines</span>
                     </div>
                 </div>
             </header>
 
-            <main className="max-w-7xl mx-auto px-6 pt-32 pb-32">
+            <main className="max-w-7xl mx-auto px-6 pt-24 pb-32">
                 
                 {/* Intro */}
                 <div className="mb-32">
+                    <div className="flex items-center gap-3 mb-6">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest border border-[#E3E3FD]/20 bg-[#E3E3FD]/10 px-2 py-1 rounded-full">System_OS v2.5</span>
+                    </div>
                     <h1 className="text-6xl md:text-8xl font-medium tracking-tight mb-8 leading-[0.9]">
                         Intelligent <br/>
-                        <span className="text-[#E3E3FD]">Design Systems</span>
+                        <span className="text-[#E3E3FD]">Design Systems.</span>
                     </h1>
                     <p className="text-xl text-white/60 max-w-2xl leading-relaxed">
-                        The visual language of Branded Objects is utilitarian, precise, and system-oriented. 
+                        The visual language of Branded Objects is utilitarian, precise, and system-oriented.
                         It rejects decoration in favor of clarity. It is the interface between creative intent and automated execution.
                     </p>
                 </div>
