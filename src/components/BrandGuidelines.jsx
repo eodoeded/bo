@@ -182,10 +182,10 @@ export default function BrandGuidelines() {
         <div className="absolute bottom-12 left-6 md:left-12 max-w-xl z-20 pointer-events-none">
             <Badge className="mb-4 text-[#E3E3FD] border-[#E3E3FD]/20 bg-[#E3E3FD]/5">System_OS v2.5</Badge>
             <h1 className="font-montreal font-medium text-6xl md:text-8xl tracking-tight mb-6 text-white leading-[0.9]">
-                Visual<br/><span className="text-[#E3E3FD]">Intelligence</span>
+                Intelligent<br/><span className="text-[#E3E3FD]">Design Systems.</span>
             </h1>
             <p className="font-montreal text-white/60 text-lg leading-relaxed max-w-md">
-                A modular, organic design language built for automated brand governance.
+                The same node language as the landing: Studio inputs, governed logic, pristine outputs.
             </p>
         </div>
 
@@ -193,11 +193,11 @@ export default function BrandGuidelines() {
             <div className="relative w-full h-full flex items-center justify-center">
                 <div className="relative w-[1000px] h-[600px] scale-[0.35] md:scale-100 origin-center transition-transform duration-500 mix-blend-screen">
                     {/* Input Layer */}
-                    <Node title="Data_Ingest" outputs={[1]} x={50} y={250} delay={0.2} width="w-40" status="active">
+                    <Node title="Design_Studio" outputs={[1]} x={50} y={250} delay={0.2} width="w-40" status="active">
                         <div className="space-y-3">
                             <div className="flex items-center gap-3 p-2 bg-white/5 border border-white/5 rounded-lg">
                                 <Database size={14} className="text-white/40"/>
-                                <span className="font-mono text-[10px] text-white/60">JSON_STREAM</span>
+                                <span className="font-mono text-[10px] text-white/60">ASSET_FEED</span>
                             </div>
                             <div className="flex gap-1">
                                 <div className="h-1 w-full bg-white/10 overflow-hidden rounded-full">
@@ -208,11 +208,11 @@ export default function BrandGuidelines() {
                     </Node>
 
                     {/* Processing Layer */}
-                    <Node title="Neural_Core" inputs={[1]} outputs={[1, 1]} x={350} y={150} delay={0.4} width="w-48">
+                    <Node title="Logic_Core" inputs={[1]} outputs={[1, 1]} x={350} y={150} delay={0.4} width="w-48">
                         <div className="space-y-2">
                             <div className="flex justify-between items-center text-[10px] font-mono text-white/40">
-                                <span>LATENCY</span>
-                                <span className="text-[#E3E3FD]">12ms</span>
+                                <span>Governance</span>
+                                <span className="text-[#E3E3FD]">Locked</span>
                             </div>
                             <div className="grid grid-cols-5 gap-1 h-6">
                                 {[...Array(10)].map((_,i) => (
@@ -227,11 +227,11 @@ export default function BrandGuidelines() {
                         </div>
                     </Node>
 
-                    <Node title="Logic_Gate" inputs={[1]} outputs={[1]} x={350} y={400} delay={0.5} width="w-40">
+                    <Node title="Compliance_Gate" inputs={[1]} outputs={[1]} x={350} y={400} delay={0.5} width="w-40">
                          <div className="p-2 bg-white/5 border border-white/5 rounded-lg">
                             <div className="flex justify-between items-center mb-2">
                                 <Activity size={12} className="text-white/40"/>
-                                <span className="font-mono text-[9px] text-[#E3E3FD]">OPTIMAL</span>
+                                <span className="font-mono text-[9px] text-[#E3E3FD]">ON_POLICY</span>
                             </div>
                             <div className="h-6 w-full flex items-end gap-[2px]">
                                 {[40, 70, 30, 80, 50, 90, 60].map((h, i) => (
@@ -249,14 +249,14 @@ export default function BrandGuidelines() {
                             </div>
                             <div className="flex flex-col">
                                 <span className="font-montreal font-medium text-sm text-white">Renderer</span>
-                                <span className="font-mono text-[9px] text-white/40">v2.4.0-stable</span>
+                                <span className="font-mono text-[9px] text-white/40">v2.5-stable</span>
                             </div>
                         </div>
                     </Node>
 
                     {/* Final */}
                     <Node type="minimal" inputs={[1]} x={900} y={250} delay={0.9}>
-                        <span className="font-mono text-[10px] tracking-[0.2em] text-[#E3E3FD] uppercase">Deployment</span>
+                        <span className="font-mono text-[10px] tracking-[0.2em] text-[#E3E3FD] uppercase">Client_Output</span>
                     </Node>
 
                     {/* Connections */}
@@ -272,6 +272,88 @@ export default function BrandGuidelines() {
       {/* Main Content */}
       <div className="max-w-[1400px] mx-auto py-32 px-6 md:px-12 space-y-48 relative z-10">
         
+        {/* 00. Identity System */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+            <div className="md:col-span-4 sticky top-32 h-fit">
+                <SectionHeader title="Identity System" number="00" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
+                    Mirrors the landing experience: a tri-node flow (Studio → Logic → Output), a night-mode canvas (#261E19), and lavender signal accents (#E3E3FD).
+                </p>
+                <div className="flex gap-2 flex-wrap">
+                    <Badge className="bg-[#E3E3FD]/10 border-[#E3E3FD]/30 text-[#E3E3FD]">Primary</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">Secondary</Badge>
+                    <Badge className="bg-[#1A1614] border-white/10 text-white/70">Panels</Badge>
+                </div>
+            </div>
+
+            <div className="md:col-span-8 space-y-8">
+                {/* Palette */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {[
+                        { name: 'Background', swatch: '#261E19', detail: 'Surface / Backdrop' },
+                        { name: 'Signal', swatch: '#E3E3FD', detail: 'Accents / Status' },
+                        { name: 'Ink', swatch: '#FFFFFF', detail: 'Copy / Inputs' }
+                    ].map((tone) => (
+                        <div key={tone.name} className="p-6 border border-white/10 bg-white/[0.02] rounded-2xl flex items-center gap-4 hover:border-[#E3E3FD]/40 transition-colors">
+                            <div className="w-12 h-12 rounded-xl border border-white/10" style={{ backgroundColor: tone.swatch }}></div>
+                            <div>
+                                <p className="font-montreal text-white">{tone.name}</p>
+                                <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest">{tone.detail} — {tone.swatch}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Node Language Snapshot */}
+                <div className="bg-[#1A1614] border border-white/10 rounded-3xl p-6 relative overflow-hidden">
+                    <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-4">Node Language — Matches Landing</span>
+                    <div className="relative h-[200px]">
+                        <Connection start={{x: 80, y: 100}} end={{x: 240, y: 60}} delay={0.2} active />
+                        <Connection start={{x: 80, y: 100}} end={{x: 240, y: 140}} delay={0.3} active />
+                        <Connection start={{x: 400, y: 100}} end={{x: 540, y: 100}} delay={0.5} active />
+                        <Node type="minimal" outputs={[1]} x={60} y={120} delay={0.1} width="w-28">
+                            <div className="flex items-center gap-2">
+                                <div className="w-2 h-2 bg-[#E3E3FD] rounded-full animate-pulse"></div>
+                                <span className="font-mono text-[10px] text-white">Studio_Input</span>
+                            </div>
+                        </Node>
+                        <Node type="minimal" inputs={[1]} outputs={[1]} x={240} y={80} delay={0.2} width="w-32">
+                            <div className="flex items-center gap-2">
+                                <Shield size={14} className="text-[#E3E3FD]" />
+                                <span className="font-mono text-[10px] text-white">Logic_Core</span>
+                            </div>
+                        </Node>
+                        <Node type="minimal" inputs={[1]} x={520} y={80} delay={0.4} width="w-32">
+                            <div className="flex items-center gap-2">
+                                <Zap size={14} className="text-[#E3E3FD]" />
+                                <span className="font-mono text-[10px] text-white">Client_Output</span>
+                            </div>
+                        </Node>
+                    </div>
+                </div>
+
+                {/* CTA Spec */}
+                <div className="bg-[#261E19] border border-white/10 rounded-3xl p-6 flex flex-col gap-4">
+                    <div className="flex items-center gap-3">
+                        <Scan size={16} className="text-[#E3E3FD]" />
+                        <span className="font-mono text-[10px] text-white/60 uppercase tracking-widest">CTA: Request Access</span>
+                    </div>
+                    <p className="font-montreal text-white/60 leading-relaxed">
+                        Form matches landing: pill input with scan icon, lavender placeholder, button on the same baseline.
+                    </p>
+                    <div className="flex flex-col sm:flex-row items-stretch gap-2 bg-[#1A1614] border border-white/10 p-2 rounded-2xl max-w-xl">
+                        <div className="flex items-center gap-2 px-3 py-3.5 flex-1">
+                            <Scan size={14} className="text-white/30" />
+                            <span className="font-mono text-[11px] text-white/50">studio@agency.com</span>
+                        </div>
+                        <div className="bg-white text-black px-6 py-3.5 font-mono text-[11px] tracking-[0.1em] uppercase rounded-xl sm:rounded-full text-center">
+                            Request Access
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         {/* 01. Typography */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div className="md:col-span-4 sticky top-32 h-fit">
