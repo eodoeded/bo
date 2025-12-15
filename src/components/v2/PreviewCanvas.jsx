@@ -98,9 +98,11 @@ export default function PreviewCanvas({ layers }) {
             })}
 
             {/* Technical Overlay (Static Branding) */}
-            <div className="absolute bottom-4 left-4 font-mono text-[8px] text-white/20 z-[9999] pointer-events-none">
-                GENERATED_BY_BO_SYSTEM_V2
+            <div className="absolute bottom-3 left-3 font-mono text-[8px] text-white/20 z-[9999] pointer-events-none flex items-center gap-2">
+                <div className="w-1 h-1 bg-[#E3E3FD] rounded-full opacity-40"></div>
+                <span>GENERATED_BY_BO_SYSTEM_V2</span>
             </div>
         </div>
     );
 }
+

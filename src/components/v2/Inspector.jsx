@@ -1,5 +1,6 @@
 // V2 Shared Component: Inspector (Studio Only)
 // Controls for locking/unlocking and editing layer properties with Tri-State Logic
+// Refined for alien ant-colony aesthetic: technical precision, lock states as cellular permissions
 
 import React from 'react';
 import { Lock, Eye, Edit3 } from 'lucide-react';
@@ -9,32 +10,48 @@ const PropertyControl = ({ label, value, type = "text", onChange, lockState, onC
     // Lock State Visuals
     const getLockIcon = () => {
         switch (lockState) {
-            case 'LOCKED': return <Lock size={12} className="text-[#E3E3FD]" />;
-            case 'READ_ONLY': return <Eye size={12} className="text-white/40" />;
-            case 'CLIENT_INPUT': return <Edit3 size={12} className="text-[#E3E3FD]" />;
-            default: return <Lock size={12} />;
+            case 'LOCKED': return <Lock size={11} className="text-[#E3E3FD]" />;
+            case 'READ_ONLY': return <Eye size={11} className="text-white/40" />;
+            case 'CLIENT_INPUT': return <Edit3 size={11} className="text-[#E3E3FD]" />;
+            default: return <Lock size={11} />;
         }
     };
 
     const getLockLabel = () => {
         switch (lockState) {
-            case 'LOCKED': return 'HIDDEN';
-            case 'READ_ONLY': return 'READ ONLY';
-            case 'CLIENT_INPUT': return 'INPUT';
+            case 'LOCKED': return 'LOCKED';
+            case 'READ_ONLY': return 'READ_ONLY';
+            case 'CLIENT_INPUT': return 'CLIENT_INPUT';
             default: return 'LOCKED';
         }
     };
 
+    const getLockBadgeStyle = () => {
+        switch (lockState) {
+            case 'LOCKED': return 'border-[#E3E3FD]/20 bg-[#E3E3FD]/10 text-[#E3E3FD]';
+            case 'READ_ONLY': return 'border-white/10 bg-white/5 text-white/40';
+            case 'CLIENT_INPUT': return 'border-[#E3E3FD]/30 bg-[#E3E3FD]/10 text-[#E3E3FD]';
+            default: return 'border-white/10 bg-white/5 text-white/40';
+        }
+    };
+
     return (
-        <div className="group p-3 border border-white/10 rounded-md bg-[#2E2824] hover:border-white/20 transition-colors relative">
-            <div className="flex justify-between items-center mb-2">
+        <div className="group p-3 md:p-4 border border-white/10 rounded-lg bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04] transition-colors relative">
+            {/* Connection Port - Left */}
+            <div className={`absolute -left-[3px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full border transition-colors ${
+                lockState === 'CLIENT_INPUT' 
+                    ? 'bg-[#E3E3FD] border-[#E3E3FD] shadow-[0_0_4px_#E3E3FD]' 
+                    : 'bg-[#1A1614] border-white/20 group-hover:border-white/30'
+            }`}></div>
+            
+            <div className="flex justify-between items-center mb-2.5">
                 <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">{label}</span>
                 <button 
                     onClick={onCycleLock} 
-                    className="flex items-center gap-2 px-1.5 py-0.5 rounded hover:bg-white/5 transition-colors"
-                    title="Cycle Permission: Locked -> Read Only -> Client Input"
+                    className={`flex items-center gap-1.5 px-2 py-1 rounded-full border transition-colors ${getLockBadgeStyle()}`}
+                    title="Cycle Permission: LOCKED -> READ_ONLY -> CLIENT_INPUT"
                 >
-                    <span className="font-mono text-[8px] text-white/30 uppercase tracking-widest">{getLockLabel()}</span>
+                    <span className="font-mono text-[8px] uppercase tracking-widest">{getLockLabel()}</span>
                     {getLockIcon()}
                 </button>
             </div>
@@ -43,9 +60,17 @@ const PropertyControl = ({ label, value, type = "text", onChange, lockState, onC
                 type={type === 'number' ? 'number' : 'text'}
                 value={value} 
                 onChange={(e) => onChange(e.target.value)}
-                className="w-full bg-[#3A3430] text-white font-montreal text-sm px-2 py-1.5 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] placeholder:text-white/20"
-                placeholder={`Enter ${label}...`}
+                className="w-full bg-[#261E19] border border-white/10 text-white font-mono text-[10px] md:text-sm px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 placeholder:text-white/20 transition-colors"
+                placeholder={`ENTER_${label.toUpperCase().replace(/\s/g, '_')}...`}
+                disabled={lockState === 'LOCKED'}
             />
+            
+            {/* Connection Port - Right */}
+            <div className={`absolute -right-[3px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full border transition-colors ${
+                lockState === 'CLIENT_INPUT' 
+                    ? 'bg-[#E3E3FD] border-[#E3E3FD] shadow-[0_0_4px_#E3E3FD]' 
+                    : 'bg-[#1A1614] border-white/20 group-hover:border-white/30'
+            }`}></div>
         </div>
     );
 };
@@ -53,9 +78,10 @@ const PropertyControl = ({ label, value, type = "text", onChange, lockState, onC
 export default function Inspector({ selectedLayer, onUpdateLayer }) {
     if (!selectedLayer) {
         return (
-            <div className="flex flex-col items-center justify-center h-full text-white/20 p-8 text-center">
-                <span className="font-mono text-[10px] uppercase tracking-widest">No Layer Selected</span>
-                <p className="text-xs mt-2">Select a layer to configure properties and permissions.</p>
+            <div className="flex flex-col items-center justify-center h-full text-white/20 p-6 md:p-8 text-center">
+                <div className="w-1.5 h-1.5 bg-white/20 rounded-full mb-3"></div>
+                <span className="font-mono text-[9px] md:text-[10px] uppercase tracking-widest mb-2">NO_LAYER_SELECTED</span>
+                <p className="font-montreal text-xs text-white/30">Select a layer to configure properties and permissions.</p>
             </div>
         );
     }
@@ -77,15 +103,20 @@ export default function Inspector({ selectedLayer, onUpdateLayer }) {
     };
 
     return (
-        <div className="flex flex-col gap-4">
-            <div className="pb-4 border-b border-white/10 mb-2">
-                <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest block mb-1">Selected Layer</span>
-                <h3 className="font-montreal text-lg text-white">{selectedLayer.name}</h3>
+        <div className="flex flex-col gap-3 md:gap-4">
+            {/* Header */}
+            <div className="pb-3 md:pb-4 border-b border-white/10 mb-2">
+                <div className="flex items-center gap-2 mb-2">
+                    <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_6px_#E3E3FD]"></div>
+                    <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">SELECTED_LAYER</span>
+                </div>
+                <h3 className="font-montreal text-base md:text-lg text-white">{selectedLayer.name}</h3>
+                <p className="font-mono text-[8px] text-white/20 uppercase tracking-widest mt-1">LAYER_ID: {selectedLayer.id}</p>
             </div>
 
             {/* Common Properties */}
             <div className="space-y-3">
-                 <h4 className="font-mono text-[9px] text-white/30 uppercase tracking-widest mt-4 mb-2">Position & Layout</h4>
+                 <h4 className="font-mono text-[9px] text-white/30 uppercase tracking-widest mt-2 md:mt-4 mb-2">POSITION_&_LAYOUT</h4>
                  <div className="grid grid-cols-2 gap-2">
                     <PropertyControl 
                         label="X (%)" 
@@ -109,7 +140,7 @@ export default function Inspector({ selectedLayer, onUpdateLayer }) {
             {/* Text Specific */}
             {selectedLayer.type === 'text' && (
                 <div className="space-y-3">
-                     <h4 className="font-mono text-[9px] text-white/30 uppercase tracking-widest mt-4 mb-2">Typography</h4>
+                     <h4 className="font-mono text-[9px] text-white/30 uppercase tracking-widest mt-2 md:mt-4 mb-2">TYPOGRAPHY</h4>
                      <PropertyControl 
                         label="Content" 
                         value={selectedLayer.properties.text} 
@@ -140,7 +171,7 @@ export default function Inspector({ selectedLayer, onUpdateLayer }) {
             {/* Image Specific */}
             {selectedLayer.type === 'image' && (
                 <div className="space-y-3">
-                     <h4 className="font-mono text-[9px] text-white/30 uppercase tracking-widest mt-4 mb-2">Image Source</h4>
+                     <h4 className="font-mono text-[9px] text-white/30 uppercase tracking-widest mt-2 md:mt-4 mb-2">IMAGE_SOURCE</h4>
                      <PropertyControl 
                         label="Image URL" 
                         value={selectedLayer.properties.src} 
@@ -172,7 +203,7 @@ export default function Inspector({ selectedLayer, onUpdateLayer }) {
              {/* Rectangle Specific */}
              {selectedLayer.type === 'rectangle' && (
                 <div className="space-y-3">
-                     <h4 className="font-mono text-[9px] text-white/30 uppercase tracking-widest mt-4 mb-2">Style</h4>
+                     <h4 className="font-mono text-[9px] text-white/30 uppercase tracking-widest mt-2 md:mt-4 mb-2">STYLE</h4>
                      <PropertyControl 
                         label="Color" 
                         value={selectedLayer.properties.color} 
@@ -204,3 +235,4 @@ export default function Inspector({ selectedLayer, onUpdateLayer }) {
         </div>
     );
 }
+

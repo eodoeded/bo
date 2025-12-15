@@ -89,29 +89,30 @@ export default function ToolBuilder() {
             <UnifiedNav />
             
             {/* Secondary Toolbar */}
-            <div className="h-12 bg-[#1A1614] border-b border-white/10 flex items-center justify-between px-6 md:px-12 mt-12 md:mt-14 shrink-0 relative z-10">
-                <div className="flex items-center gap-4">
+            <div className="h-12 md:h-14 bg-[#1A1614] border-b border-white/10 flex items-center justify-between px-4 md:px-6 lg:px-12 mt-12 md:mt-14 shrink-0 relative z-10">
+                <div className="flex items-center gap-3 md:gap-4">
+                    <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_6px_#E3E3FD]"></div>
                     <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">
-                        Tool ID: <span className="text-[#E3E3FD]">{id}</span>
+                        TOOL_ID: <span className="text-[#E3E3FD]">{id}</span>
                     </span>
+                    <span className="font-mono text-[9px] text-white/20 hidden sm:inline">|</span>
+                    <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest hidden sm:inline">BUILDER_MODE</span>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 md:gap-3">
                     <button 
                         onClick={handleSave}
-                        className="bg-[#E3E3FD] text-[#261E19] px-4 py-1.5 font-mono font-semibold text-[10px] uppercase tracking-widest hover:bg-white transition-colors flex items-center gap-2 rounded-sm"
+                        className="bg-[#E3E3FD] text-[#261E19] px-4 md:px-5 py-2 md:py-2.5 font-mono font-semibold text-[10px] md:text-[11px] uppercase tracking-widest hover:bg-white transition-colors flex items-center gap-2 rounded-lg"
+                        disabled={isSaving}
                     >
-                        <Save size={12} />
-                        {isSaving ? 'Saving...' : 'Publish'}
+                        <Save size={12} className="md:w-[14px] md:h-[14px]" />
+                        {isSaving ? 'PUBLISHING...' : 'PUBLISH'}
                     </button>
                 </div>
             </div>
 
-            <div className="flex-1 flex overflow-hidden">
+            <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
                 {/* Left: Layer Stack */}
-                <aside className="w-64 bg-[#1A1614] border-r border-white/10 flex flex-col z-10">
-                    <div className="p-4 border-b border-white/10">
-                        <h2 className="font-mono text-[10px] text-white/40 uppercase tracking-widest">Layers</h2>
-                    </div>
+                <aside className="w-full md:w-64 lg:w-72 bg-[#1A1614] border-r border-white/10 flex flex-col z-10 shrink-0">
                     <LayerStack 
                         layers={layers} 
                         selectedId={selectedLayerId} 
@@ -121,38 +122,43 @@ export default function ToolBuilder() {
                 </aside>
 
                 {/* Center: Canvas Stage */}
-                <main className="flex-1 bg-[#0A0A0A] relative flex items-center justify-center p-8 overflow-hidden">
+                <main className="flex-1 bg-[#0A0A0A] relative flex items-center justify-center p-4 md:p-8 overflow-hidden min-h-[400px]">
                     {/* Subtle Grid Pattern */}
                     <div className="absolute inset-0 opacity-[0.03]" style={{ 
-                        backgroundImage: 'linear-gradient(rgba(227, 227, 253, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(227, 227, 253, 0.1) 1px, transparent 1px)', 
-                        backgroundSize: '40px 40px' 
+                        backgroundImage: 'radial-gradient(#E3E3FD 1px, transparent 1px)', 
+                        backgroundSize: '30px 30px' 
                     }}></div>
                     
-                    <div className="relative shadow-2xl transition-all duration-300" style={{ width: '400px', height: '500px' }}>
-                        <div className="absolute -top-8 left-0 font-mono text-[9px] text-white/20 uppercase tracking-widest">
-                            Canvas: 400x500
+                    <div className="relative shadow-2xl transition-all duration-300" style={{ width: '400px', height: '500px', maxWidth: '100%' }}>
+                        <div className="absolute -top-6 md:-top-8 left-0 font-mono text-[8px] md:text-[9px] text-white/20 uppercase tracking-widest">
+                            CANVAS: 400x500
                         </div>
                         <PreviewCanvas layers={layers} />
                     </div>
                 </main>
 
                 {/* Right: Inspector */}
-                <aside className="w-80 bg-[#1A1614] border-l border-white/10 flex flex-col z-10">
-                    <div className="p-4 border-b border-white/10">
-                        <h2 className="font-mono text-[10px] text-white/40 uppercase tracking-widest">Properties</h2>
+                <aside className="w-full md:w-80 lg:w-96 bg-[#1A1614] border-l border-white/10 flex flex-col z-10 shrink-0">
+                    <div className="p-3 md:p-4 border-b border-white/10 bg-[#1A1614]">
+                        <div className="flex items-center gap-2">
+                            <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_6px_#E3E3FD]"></div>
+                            <h2 className="font-mono text-[9px] md:text-[10px] text-white/40 uppercase tracking-widest">PROPERTIES</h2>
+                        </div>
                     </div>
-                    <div className="flex-1 overflow-y-auto p-4">
+                    <div className="flex-1 overflow-y-auto p-3 md:p-4">
                         <Inspector 
                             selectedLayer={selectedLayer} 
                             onUpdateLayer={handleUpdateLayer}
                         />
                     </div>
-                    <div className="p-4 border-t border-white/10 bg-[#261E19]/50">
-                        <div className="flex gap-2 items-start">
-                            <Share2 size={12} className="text-[#E3E3FD] mt-0.5 shrink-0"/>
-                            <div>
-                                <p className="font-mono text-[9px] text-white/60 uppercase tracking-widest mb-1">Runner Link</p>
-                                <p className="font-mono text-[9px] text-[#E3E3FD] break-all select-all cursor-copy">
+                    <div className="p-3 md:p-4 border-t border-white/10 bg-[#261E19]/50">
+                        <div className="flex gap-2.5 items-start">
+                            <div className="p-1.5 bg-[#E3E3FD]/10 border border-[#E3E3FD]/20 rounded-md shrink-0">
+                                <Share2 size={11} className="text-[#E3E3FD]"/>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <p className="font-mono text-[9px] text-white/60 uppercase tracking-widest mb-1.5">RUNNER_LINK</p>
+                                <p className="font-mono text-[9px] text-[#E3E3FD] break-all select-all cursor-copy hover:text-white transition-colors">
                                     /tool/{id}
                                 </p>
                             </div>
