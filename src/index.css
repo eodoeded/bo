@@ -22,18 +22,24 @@
   font-style: normal;
 }
 
+html {
+  scroll-behavior: smooth;
+  background-color: #261E19;
+}
+
 body {
-  @apply bg-body-gradient font-montreal;
+  @apply font-montreal;
   min-height: 100vh;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  background-color: #261E19;
+  background-color: #261E19 !important;
   background-attachment: fixed;
 }
 
-html {
-  scroll-behavior: smooth;
+#root {
+  min-height: 100vh;
+  background-color: #261E19;
 }
 
 .hero-media img {
