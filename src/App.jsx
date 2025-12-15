@@ -8,7 +8,7 @@ import WaitlistHowItWorks from './components/WaitlistHowItWorks';
 import WaitlistBenefits from './components/WaitlistBenefits';
 import WaitlistFeatures from './components/WaitlistFeatures';
 import WaitlistFooter from './components/WaitlistFooter';
-import BrandGuidelines from './components/BrandGuidelines';
+import DesignSystem from './components/DesignSystem';
 import StudioDashboard from './pages/StudioDashboard';
 import ToolBuilder from './pages/ToolBuilder';
 import ToolRunner from './pages/ToolRunner';
@@ -56,8 +56,9 @@ function App() {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/brandguidelines" element={<BrandGuidelines />} />
-        <Route path="/brand-guidelines" element={<BrandGuidelines />} />
+        <Route path="/designsystem" element={<DesignSystem />} />
+        <Route path="/brandguidelines" element={<DesignSystem />} />
+        <Route path="/brand-guidelines" element={<DesignSystem />} />
         <Route path="/studio" element={<StudioDashboard />} />
         <Route path="/studio/builder/:id" element={<ToolBuilder />} />
         <Route path="/tool/:id" element={<ToolRunner />} />
