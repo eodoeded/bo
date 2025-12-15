@@ -1,3 +1,4 @@
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Box, Layout, Type, MousePointer, CreditCard, Layers, Grid as GridIcon, Database, Cpu, Activity, User, Mail, Send, ChevronDown, Check, AlertCircle, Terminal, BarChart2, CornerDownRight, Zap, Move, Eye, Code, Command, Github, Twitter, Disc, Lock, Unlock, Edit3, Image as ImageIcon, Linkedin, Download, Share2, Sliders, Hand, ZoomIn, MoreHorizontal, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -168,17 +169,21 @@ export default function BrandGuidelines() {
   };
 
   return (
-    <div className="min-h-screen bg-[#261E19] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal overflow-x-hidden">
+    <div className="min-h-screen bg-[#261E19] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal overflow-x-hidden relative">
+      {/* Debug: Ensure component renders */}
+      <div className="fixed top-0 left-0 right-0 bg-red-500 text-white p-2 text-center z-[9999] font-mono text-xs">
+        BRAND GUIDELINES LOADED
+      </div>
       
       {/* Background Grid - "Weird" glitchy pattern */}
-      <div className="fixed inset-0 pointer-events-none opacity-[0.04]" style={{ 
+      <div className="fixed inset-0 pointer-events-none opacity-[0.04] z-0" style={{ 
           backgroundImage: 'linear-gradient(rgba(227, 227, 253, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(227, 227, 253, 0.1) 1px, transparent 1px)', 
           backgroundSize: '20px 20px' 
       }}></div>
-      <div className="fixed inset-0 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05] mix-blend-overlay"></div>
+      <div className="fixed inset-0 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.05] mix-blend-overlay z-0"></div>
 
       {/* Nav */}
-      <nav className="fixed top-0 left-0 w-full p-6 z-50 flex justify-between items-center bg-[#261E19]/90 backdrop-blur-md border-b border-white/5">
+      <nav className="fixed top-0 left-0 w-full p-6 z-50 flex justify-between items-center bg-[#261E19]/90 backdrop-blur-md border-b border-white/5 relative">
         <Link to="/" className="flex items-center gap-3 text-white/50 hover:text-white transition-colors group">
             <div className="w-8 h-8 bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-[#E3E3FD] group-hover:text-[#E3E3FD] transition-colors">
                 <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
@@ -194,7 +199,7 @@ export default function BrandGuidelines() {
       </nav>
 
       {/* Hero: Advanced Node System */}
-      <section className="relative h-[90vh] w-full flex items-center justify-center overflow-hidden bg-[#261E19]">
+      <section className="relative h-[90vh] w-full flex items-center justify-center overflow-hidden bg-[#261E19] z-10">
         
         {/* Title Centered (Reverted Preference) */}
         <div className="absolute bottom-12 left-6 md:left-12 max-w-xl z-20 pointer-events-none">
@@ -288,7 +293,7 @@ export default function BrandGuidelines() {
       </section>
 
       {/* Main Content */}
-      <div className="max-w-[1400px] mx-auto py-32 px-6 md:px-12 space-y-48 relative z-10">
+      <div className="max-w-[1400px] mx-auto py-32 px-6 md:px-12 space-y-48 relative z-20">
         
         {/* 01. Typography */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
