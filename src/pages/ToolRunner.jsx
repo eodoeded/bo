@@ -144,8 +144,32 @@ export default function ToolRunner() {
     }
 
     return (
-        <div className="h-screen bg-[#261E19] text-white font-montreal flex flex-col md:flex-row overflow-hidden selection:bg-[#E3E3FD] selection:text-[#261E19] relative">
+        <div className="h-screen bg-[#261E19] text-white font-montreal flex flex-col overflow-hidden selection:bg-[#E3E3FD] selection:text-[#261E19] relative">
             <div className="fixed inset-0 bg-[#261E19] z-0"></div>
+            
+            {/* Custom Top Nav (from clientUI) */}
+            <nav 
+                className="h-12 md:h-14 border-b border-white/10 flex items-center justify-between px-4 md:px-6 shrink-0 relative z-10"
+                style={{
+                    backgroundColor: clientUI.topNavBg,
+                    color: clientUI.topNavText
+                }}
+            >
+                <div className="flex items-center gap-3">
+                    {clientUI.logo && (
+                        <img 
+                            src={clientUI.logo} 
+                            alt="Logo" 
+                            className="h-6 md:h-8 object-contain"
+                        />
+                    )}
+                    <span className="font-mono text-[9px] md:text-[10px] uppercase tracking-widest">
+                        {id}
+                    </span>
+                </div>
+            </nav>
+            
+            <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
             
             {/* Left Panel: Inputs (Isolated Environment) */}
             <aside className="w-full md:w-[400px] lg:w-[420px] bg-[#1A1614] border-r border-white/10 flex flex-col z-20 shadow-2xl relative">
