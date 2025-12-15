@@ -170,8 +170,7 @@ export default function ToolRunner() {
             </nav>
             
             <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
-            
-            {/* Left Panel: Inputs (Isolated Environment) */}
+                {/* Left Panel: Inputs (Isolated Environment) */}
             <aside className="w-full md:w-[400px] lg:w-[420px] bg-[#1A1614] border-r border-white/10 flex flex-col z-20 shadow-2xl relative">
                 
                 {/* Header */}
@@ -272,6 +271,7 @@ export default function ToolRunner() {
                     </div>
                 </div>
             </main>
+            </div>
         </div>
     );
 }
