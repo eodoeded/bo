@@ -133,7 +133,7 @@ export default function ToolBuilder() {
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [selectedLayerId]);
+    }, [selectedLayerId]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleSave = async () => {
         if (id === 'new') return;
