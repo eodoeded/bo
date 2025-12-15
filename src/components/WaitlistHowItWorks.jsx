@@ -104,7 +104,7 @@ export default function WaitlistHowItWorks() {
                         </div>
                         <div className="flex items-center gap-2 px-3 py-1.5 bg-[#261E19] border border-white/5 rounded-full">
                             <Lock size={10} className="text-[#E3E3FD]"/>
-                            <span className="font-mono text-[8px] text-white/40 uppercase">Locked</span>
+                            <span className="font-mono text-[8px] text-white/40 uppercase">LOCKED</span>
                         </div>
                     </div>
 
@@ -121,7 +121,7 @@ export default function WaitlistHowItWorks() {
                         </div>
                         <div className="flex items-center gap-2 px-3 py-1.5 bg-[#261E19] border border-white/5 rounded-full">
                             <Lock size={10} className="text-[#E3E3FD]"/>
-                            <span className="font-mono text-[8px] text-white/40 uppercase">Locked</span>
+                            <span className="font-mono text-[8px] text-white/40 uppercase">LOCKED</span>
                         </div>
                     </div>
 
@@ -139,7 +139,7 @@ export default function WaitlistHowItWorks() {
                         </div>
                         <div className="flex items-center gap-2 px-3 py-1.5 bg-[#E3E3FD]/10 border border-[#E3E3FD]/20 rounded-full">
                             <Edit3 size={10} className="text-[#E3E3FD]"/>
-                            <span className="font-mono text-[8px] text-[#E3E3FD] uppercase">Safe Edit</span>
+                            <span className="font-mono text-[8px] text-[#E3E3FD] uppercase">SAFE_EDIT</span>
                         </div>
                     </div>
                 </div>

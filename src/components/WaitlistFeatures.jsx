@@ -85,12 +85,12 @@ export default function WaitlistFeatures() {
 
                 <div className="mt-8 md:mt-12 pt-8 border-t border-white/5 flex gap-6 md:gap-12">
                      <div>
-                        <span className="block font-mono text-[9px] text-white/30 uppercase tracking-widest mb-1">Uptime</span>
+                        <span className="block font-mono text-[9px] text-white/30 uppercase tracking-widest mb-1">UPTIME</span>
                         <span className="font-mono text-xl text-[#E3E3FD]">99.9%</span>
                      </div>
                      <div>
-                        <span className="block font-mono text-[9px] text-white/30 uppercase tracking-widest mb-1">Output</span>
-                        <span className="font-mono text-xl text-[#E3E3FD]">Pixel Perfect</span>
+                        <span className="block font-mono text-[9px] text-white/30 uppercase tracking-widest mb-1">OUTPUT</span>
+                        <span className="font-mono text-xl text-[#E3E3FD]">PIXEL_PERFECT</span>
                      </div>
                 </div>
             </div>

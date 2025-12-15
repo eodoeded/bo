@@ -43,7 +43,7 @@ export default function StudioDashboard() {
           </div>
           <Link 
             to="/studio/builder/new" 
-            className="mt-6 md:mt-0 bg-[#E3E3FD] text-[#261E19] px-5 py-2.5 font-mono font-semibold text-[11px] uppercase tracking-widest hover:bg-white transition-colors flex items-center gap-2 rounded-sm"
+            className="mt-6 md:mt-0 bg-[#E3E3FD] text-[#261E19] px-5 py-2.5 font-mono font-semibold text-[11px] uppercase tracking-widest hover:bg-white transition-colors flex items-center gap-2 rounded-lg"
           >
             <Plus size={14} />
             INITIALIZE_NEW_TOOL
@@ -70,7 +70,7 @@ export default function StudioDashboard() {
 
                 {/* Status Badge */}
                 <div className="absolute top-6 right-6">
-                  <span className={`font-mono text-[9px] uppercase tracking-widest px-2 py-1 border rounded-lg ${
+                  <span className={`font-mono text-[9px] uppercase tracking-widest px-2 py-1 border rounded-full ${
                     tool.status === 'Live' 
                       ? 'border-[#E3E3FD]/20 bg-[#E3E3FD]/10 text-[#E3E3FD]' 
                       : 'border-white/10 bg-white/5 text-white/40'
