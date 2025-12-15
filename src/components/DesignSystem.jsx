@@ -1493,20 +1493,21 @@ export default function DesignSystem() {
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Empty States</span>
                         <div className="h-px flex-1 bg-white/10"></div>
-                            </div>
+                    </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* No Tools */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        {/* No Tools - Dashed Border */}
                         <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
-                            <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">No Tools Yet</p>
-                            <div className="bg-[#261E19] border border-white/10 p-8 rounded-lg text-center">
-                                <div className="w-12 h-12 border border-white/10 bg-white/5 rounded-2xl mx-auto mb-4 flex items-center justify-center">
-                                    <div className="w-5 h-5 bg-white/20 rounded"></div>
+                            <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">No Tools Yet (Dashed)</p>
+                            <div className="border border-dashed border-white/10 p-8 md:p-10 hover:border-[#E3E3FD]/30 hover:bg-[#E3E3FD]/5 transition-colors flex flex-col items-center justify-center gap-4 text-center cursor-pointer min-h-[280px] rounded-3xl group">
+                                <div className="w-14 h-14 border border-white/10 bg-white/5 flex items-center justify-center text-white/40 group-hover:text-[#E3E3FD] group-hover:border-[#E3E3FD]/50 transition-colors rounded-2xl">
+                                    <Plus size={24} />
+                                </div>
+                                <span className="font-mono text-[10px] text-white/40 group-hover:text-[#E3E3FD] uppercase tracking-widest transition-colors">
+                                    Initialize New Tool
+                                </span>
+                            </div>
                         </div>
-                                <p className="font-montreal text-white/60 text-sm mb-2">No tools created</p>
-                                <p className="font-mono text-[9px] text-white/40">Create your first tool to get started</p>
-                            </div>
-                            </div>
 
                         {/* No Selection */}
                         <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
@@ -1514,9 +1515,19 @@ export default function DesignSystem() {
                             <div className="bg-[#261E19] border border-white/10 p-8 rounded-lg text-center">
                                 <p className="font-mono text-[10px] text-white/20 uppercase tracking-widest mb-2">No Layer Selected</p>
                                 <p className="font-montreal text-xs text-white/40">Select a layer to configure properties</p>
+                            </div>
                         </div>
                     </div>
-                </div>
+
+                    {/* No Inputs Available */}
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                        <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">No Inputs Available</p>
+                        <div className="p-8 border border-dashed border-white/10 rounded-xl text-center">
+                            <p className="font-mono text-xs text-white/40 uppercase tracking-widest">
+                                No inputs available. <br/> This tool is strictly locked.
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Error States */}
