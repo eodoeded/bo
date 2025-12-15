@@ -54,9 +54,11 @@ export default function ToolBuilder() {
 
     // Load tool from database
     useEffect(() => {
-        const loadTool = async () => {
-            setIsLoading(true);
-            try {
+        // Defer loading to prevent blocking initial render
+        const timer = setTimeout(() => {
+            const loadTool = async () => {
+                setIsLoading(true);
+                try {
                 if (id === 'new') {
                     // Create new tool
                     const newTool = await createTool('New Tool');

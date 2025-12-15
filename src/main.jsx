@@ -27,45 +27,53 @@ window.addEventListener('unhandledrejection', (e) => {
   }
 });
 
-// Now try to load React
+// Optimized loading: Use Promise.all for parallel imports
 try {
-  import('react').then(React => {
-    import('react-dom/client').then(ReactDOM => {
-      import('react-router-dom').then(Router => {
-        import('./App.jsx').then(AppModule => {
-          import('./index.css').catch(() => {}); // CSS is optional
-          
-          const { StrictMode, createElement } = React;
-          const { createRoot } = ReactDOM;
-          const { BrowserRouter } = Router;
-          const App = AppModule.default;
-          
-          const root = document.getElementById('root');
-          if (root) {
-            createRoot(root).render(
-              createElement(StrictMode, null,
-                createElement(BrowserRouter, null,
-                  createElement(App, null)
-                )
+  Promise.all([
+    import('react'),
+    import('react-dom/client'),
+    import('react-router-dom'),
+    import('./App.jsx'),
+    import('./index.css').catch(() => {}) // CSS is optional
+  ]).then(([React, ReactDOM, Router, AppModule]) => {
+    const { StrictMode, createElement } = React;
+    const { createRoot } = ReactDOM;
+    const { BrowserRouter } = Router;
+    const App = AppModule.default;
+    
+    const root = document.getElementById('root');
+    if (root) {
+      // Use requestIdleCallback for smoother initial render
+      if (window.requestIdleCallback) {
+        requestIdleCallback(() => {
+          createRoot(root).render(
+            createElement(StrictMode, null,
+              createElement(BrowserRouter, null,
+                createElement(App, null)
               )
-            );
-            console.log('✅ React app mounted successfully');
-          }
-        }).catch(err => {
-          console.error('❌ Error loading App:', err);
-          showError('App module error', err);
-        });
-      }).catch(err => {
-        console.error('❌ Error loading react-router-dom:', err);
-        showError('Router error', err);
-      });
-    }).catch(err => {
-      console.error('❌ Error loading react-dom:', err);
-      showError('React DOM error', err);
-    });
+            )
+          );
+          // Mark body as loaded to prevent layout shifts
+          document.body.classList.add('loaded');
+        }, { timeout: 100 });
+      } else {
+        // Fallback for browsers without requestIdleCallback
+        setTimeout(() => {
+          createRoot(root).render(
+            createElement(StrictMode, null,
+              createElement(BrowserRouter, null,
+                createElement(App, null)
+              )
+            )
+          );
+          document.body.classList.add('loaded');
+        }, 0);
+      }
+      console.log('✅ React app mounted successfully');
+    }
   }).catch(err => {
-    console.error('❌ Error loading react:', err);
-    showError('React error', err);
+    console.error('❌ Error loading modules:', err);
+    showError('Module loading error', err);
   });
 } catch (error) {
   console.error('❌ Error in main.jsx:', error);

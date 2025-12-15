@@ -42,9 +42,11 @@ export default function ToolRunner() {
 
     // Load published tool from database
     useEffect(() => {
-        const loadTool = async () => {
-            setIsLoading(true);
-            try {
+        // Defer loading to prevent blocking initial render
+        const timer = setTimeout(() => {
+            const loadTool = async () => {
+                setIsLoading(true);
+                try {
                 const tool = await getPublishedTool(id);
                 if (tool && tool.layers) {
                     // CRITICAL: Verify tool is published before loading

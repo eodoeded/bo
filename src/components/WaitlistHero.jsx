@@ -55,6 +55,7 @@ const Node = ({ id, title, children, x, y, onDragStart, isDragging, width = "w-4
 export default function WaitlistHero() {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState('idle');
+  const [isMounted, setIsMounted] = useState(false);
   
   // Dragging Logic
   const containerRef = useRef(null);
@@ -67,6 +68,12 @@ export default function WaitlistHero() {
       core:   { x: 58, y: 58 },
       studio: { x: 78, y: 34 }
   });
+
+  // Defer animations until after mount to prevent initial lag
+  useEffect(() => {
+    const timer = setTimeout(() => setIsMounted(true), 50);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleDragStart = (e, id) => {
       e.preventDefault();
@@ -287,7 +294,7 @@ export default function WaitlistHero() {
                             animate={{ y: [0, -4, 0] }}
                             transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
                         >
-                            <img src={bottomComp} alt="Bottom" className="w-[80px] md:w-[140px] object-contain opacity-100" />
+                            <img src={bottomComp} alt="Bottom" className="w-[80px] md:w-[140px] object-contain opacity-100" loading="lazy" decoding="async" />
                         </motion.div>
                     </div>
                     <div className="flex justify-between items-center px-1">
@@ -343,7 +350,7 @@ export default function WaitlistHero() {
             <motion.div
                 className="flex items-center gap-3 mb-6"
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                animate={isMounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                 transition={{ duration: 0.8 }}
             >
                 <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
@@ -353,7 +360,7 @@ export default function WaitlistHero() {
             <motion.h1
                 className="font-montreal font-medium text-4xl sm:text-5xl md:text-6xl lg:text-8xl leading-[0.9] tracking-tight mb-4 md:mb-6 text-white"
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                animate={isMounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                 transition={{ duration: 0.8 }}
             >
                 Intelligent <br/> <span className="text-[#E3E3FD]">Design Systems.</span>
@@ -362,7 +369,7 @@ export default function WaitlistHero() {
             <motion.p
                 className="font-montreal text-white/70 text-base md:text-lg lg:text-xl max-w-md mb-6 md:mb-8 leading-relaxed"
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                animate={isMounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                 transition={{ delay: 0.1, duration: 0.8 }}
             >
                 Automated brand governance for scaling studios. <br className="hidden sm:inline"/>
@@ -372,7 +379,7 @@ export default function WaitlistHero() {
             <motion.form
                 className="w-full max-w-[520px] relative group"
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                animate={isMounted ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
                 transition={{ delay: 0.2, duration: 0.8 }}
                 onSubmit={handleJoin}
             >

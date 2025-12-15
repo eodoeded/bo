@@ -55,7 +55,11 @@ export default function StudioDashboard() {
   };
 
   useEffect(() => {
-    loadTools();
+    // Defer loading to prevent blocking initial render
+    const timer = setTimeout(() => {
+      loadTools();
+    }, 50);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleDelete = async (toolId, e) => {

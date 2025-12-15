@@ -47,6 +47,37 @@ body {
   overflow-x: hidden;
 }
 
+/* Performance optimizations */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Prevent layout shifts during load */
+body {
+  visibility: hidden;
+}
+
+body.loaded {
+  visibility: visible;
+}
+
+/* Optimize animations */
+[data-motion] {
+  will-change: transform, opacity;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 .hero-media img {
   -webkit-user-select: none;
   -moz-user-select: none;

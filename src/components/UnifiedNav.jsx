@@ -14,15 +14,19 @@ export default function UnifiedNav() {
   const isStudio = location.pathname.startsWith('/studio');
 
   useEffect(() => {
-    const checkAuth = async () => {
-      if (isSupabaseConfigured()) {
-        const user = await getCurrentUser();
-        setIsAuthenticated(!!user);
-      } else {
-        setIsAuthenticated(true); // Fallback mode
-      }
-    };
-    checkAuth();
+    // Defer auth check to prevent blocking initial render
+    const timer = setTimeout(() => {
+      const checkAuth = async () => {
+        if (isSupabaseConfigured()) {
+          const user = await getCurrentUser();
+          setIsAuthenticated(!!user);
+        } else {
+          setIsAuthenticated(true); // Fallback mode
+        }
+      };
+      checkAuth();
+    }, 100);
+    return () => clearTimeout(timer);
   }, [location.pathname]);
 
   const handleSignOut = async () => {
