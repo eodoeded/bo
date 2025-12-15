@@ -140,8 +140,7 @@ export default function BrandGuidelines() {
   const downloadRef1 = useRef(null);
 
   return (
-    <div className="min-h-screen bg-[#261E19] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal overflow-x-hidden">
-      
+    <div className="min-h-screen bg-[#261E19] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal overflow-x-hidden relative">
       {/* Organic Background Noise */}
       <div className="fixed inset-0 pointer-events-none opacity-[0.03]" style={{ 
           backgroundImage: 'radial-gradient(#E3E3FD 1px, transparent 1px)', 
