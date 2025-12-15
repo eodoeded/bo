@@ -944,6 +944,232 @@ export default function DesignSystem() {
             </div>
         </section>
 
+        {/* 02d. Landing Page Patterns */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+            <div className="md:col-span-4 sticky top-32 h-fit">
+                <SectionHeader title="Landing Page Patterns" number="02d" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed mb-6">
+                    Marketing surface components. More expressive spacing, visual storytelling through nodes, and conversion-focused copywriting.
+                </p>
+                <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg mb-8">
+                    <p className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest mb-2">Marketing Surface</p>
+                    <p className="font-montreal text-sm text-white/60 leading-relaxed">
+                        Slightly more expressive than product surfaces. More spacing, visual storytelling, but still maintains mono-material restraint and alien ant-colony aesthetic.
+                    </p>
+                </div>
+                <div className="flex gap-2 flex-wrap">
+                    <Badge className="bg-[#E3E3FD]/10 border-[#E3E3FD]/30 text-[#E3E3FD]">Hero</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">Nodes</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">Benefits</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">Features</Badge>
+                </div>
+            </div>
+            
+            <div className="md:col-span-8 space-y-24">
+                
+                {/* Hero Section Pattern */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Hero Section</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-8 rounded-2xl space-y-6">
+                        <div className="space-y-4">
+                            <div className="flex items-center gap-3">
+                                <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest border border-[#E3E3FD]/20 bg-[#E3E3FD]/10 px-2 py-1 rounded-full">System_OS v2.5</span>
+                            </div>
+                            <h1 className="font-montreal font-medium text-5xl md:text-8xl leading-[0.9] tracking-tight text-white">
+                                Intelligent <br/><span className="text-[#E3E3FD]">Design Systems.</span>
+                            </h1>
+                            <p className="font-montreal text-white/70 text-lg md:text-xl max-w-md leading-relaxed">
+                                Automated brand governance for scaling studios. <br/>
+                                Turn brand guidelines into software, not PDFs.
+                            </p>
+                        </div>
+                        
+                        <div className="mt-6 p-4 bg-white/[0.02] border border-white/5 rounded-lg">
+                            <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-3">Structure</p>
+                            <div className="space-y-2 font-mono text-[9px] text-white/40">
+                                <div className="flex justify-between">
+                                    <span>Label Above Hero:</span>
+                                    <code className="text-[#E3E3FD]">font-mono text-[9px] uppercase tracking-widest</code>
+                                </div>
+                                <div className="flex justify-between">
+                                    <span>Hero Text:</span>
+                                    <code className="text-[#E3E3FD]">font-montreal text-5xl md:text-8xl</code>
+                                </div>
+                                <div className="flex justify-between">
+                                    <span>Description:</span>
+                                    <code className="text-[#E3E3FD]">font-montreal text-lg md:text-xl</code>
+                                </div>
+                                <div className="flex justify-between">
+                                    <span>Email Form:</span>
+                                    <code className="text-[#E3E3FD]">Below description</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Copywriting Style */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Copywriting Style & Voice</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-8 rounded-2xl space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="p-6 bg-[#E3E3FD]/10 border border-[#E3E3FD]/20 rounded-2xl">
+                                <p className="font-mono text-xs text-[#E3E3FD] uppercase tracking-widest mb-3">✅ Tone</p>
+                                <ul className="space-y-2 font-montreal text-sm text-white/60">
+                                    <li>• Direct, technical, confident</li>
+                                    <li>• No fluff, no marketing speak</li>
+                                    <li>• Focus on function over emotion</li>
+                                    <li>• Alien engineering precision</li>
+                                    <li>• "Turn X into Y" statements</li>
+                                </ul>
+                            </div>
+                            <div className="p-6 bg-red-500/10 border border-red-500/20 rounded-2xl">
+                                <p className="font-mono text-xs text-red-400 uppercase tracking-widest mb-3">❌ Avoid</p>
+                                <ul className="space-y-2 font-montreal text-sm text-white/60">
+                                    <li>• "Revolutionary", "Game-changing"</li>
+                                    <li>• Excessive exclamation marks</li>
+                                    <li>• Vague promises</li>
+                                    <li>• Human warmth/empathy</li>
+                                    <li>• Corporate jargon</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl">
+                            <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">Examples</p>
+                            <div className="space-y-4">
+                                <div>
+                                    <p className="font-mono text-[9px] text-white/40 mb-2">Hero Headline:</p>
+                                    <p className="font-montreal text-lg text-white/80">"Intelligent Design Systems."</p>
+                                </div>
+                                <div>
+                                    <p className="font-mono text-[9px] text-white/40 mb-2">Value Prop:</p>
+                                    <p className="font-montreal text-base text-white/70">"Turn brand guidelines into software, not PDFs."</p>
+                                </div>
+                                <div>
+                                    <p className="font-mono text-[9px] text-white/40 mb-2">Benefit Statement:</p>
+                                    <p className="font-montreal text-base text-white/70">"Stop selling hours. Start selling systems."</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Nodes System (Landing Page) */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Nodes System (Landing Page)</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-8 rounded-2xl space-y-6">
+                        <p className="font-montreal text-white/60 leading-relaxed">
+                            Interactive floating nodes with connection lines. Visual metaphor for the system architecture—distributed organism, neural network, cellular structures. Used only on landing page as illustration, not UI.
+                        </p>
+                        
+                        <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl">
+                            <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">Node Structure</p>
+                            <div className="space-y-3">
+                                <div className="bg-[#261E19] border border-white/10 p-4 rounded-lg relative">
+                                    <div className="flex justify-between items-center mb-3 pb-2 border-b border-white/5">
+                                        <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">Branded_Objects</span>
+                                        <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full shadow-[0_0_8px_#E3E3FD]"></div>
+                                    </div>
+                                    <div className="h-24 w-full bg-white/5 rounded-lg flex items-center justify-center mb-2">
+                                        <span className="font-mono text-[8px] text-white/30">[ Robot / Visual Content ]</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 text-white/60">
+                                        <div className="w-2 h-2 bg-white/20 rounded"></div>
+                                        <span className="font-mono text-[8px]">GENERATING_ASSET_ID_8492</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
+                            <p className="font-mono text-[9px] text-white/40 mb-2">Connection Lines</p>
+                            <p className="font-montreal text-sm text-white/60">Animated pulse along organic curves. Lavender (#E3E3FD) signal traveling through the network. Represents data flow, system connections, distributed intelligence.</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Benefits Cards Pattern */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Benefits Cards</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-8 rounded-3xl relative group hover:bg-[#2E2824] hover:border-[#E3E3FD]/50 transition-colors">
+                        <div className="w-14 h-14 border border-white/10 bg-white/5 flex items-center justify-center mb-8 group-hover:border-[#E3E3FD] transition-colors rounded-2xl">
+                            <RefreshCw size={24} className="text-white/60 group-hover:text-[#E3E3FD] transition-colors" />
+                        </div>
+                        <h3 className="font-mono text-xs text-[#E3E3FD] uppercase tracking-widest mb-4">01 // Revenue Model</h3>
+                        <h4 className="font-montreal font-medium text-2xl text-white mb-4">Productised Service</h4>
+                        <p className="text-white/50 font-montreal text-sm leading-relaxed">
+                            Don't just bill for the setup. Sell the tool as a subscription. Create recurring revenue streams from a single design system implementation.
+                        </p>
+                    </div>
+                </div>
+
+                {/* Features / Technical Data Sheet */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Technical Data Sheet</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-8 rounded-2xl">
+                        <div className="flex items-center justify-between py-3 border-b border-white/5 group hover:bg-white/[0.02] transition-colors px-2 -mx-2 rounded-lg">
+                            <div className="flex items-center gap-4">
+                                <div className="p-1.5 bg-white/5 rounded-md">
+                                    <Lock size={14} className="text-[#E3E3FD]/50 group-hover:text-[#E3E3FD] transition-colors" />
+                                </div>
+                                <span className="font-mono text-xs text-white/70 group-hover:text-white transition-colors uppercase tracking-wider">BRAND LOGIC</span>
+                            </div>
+                            <span className="font-mono text-[10px] text-[#E3E3FD]">Strict Enforcement</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* How It Works Pattern */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">How It Works Section</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-8 rounded-2xl space-y-6">
+                        <p className="font-montreal text-white/60 leading-relaxed">
+                            Two-column layout: left side with numbered steps (border-left pattern), right side with governance UI representation. Shows the mechanism of turning brand guidelines into software rules.
+                        </p>
+                        
+                        <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl">
+                            <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">Step Pattern</p>
+                            <div className="space-y-4">
+                                <div className="group relative pl-6 border-l border-white/10 hover:border-[#E3E3FD] transition-colors duration-500">
+                                    <span className="absolute -left-[5px] top-0 w-2.5 h-2.5 bg-[#261E19] border border-white/20 group-hover:border-[#E3E3FD] transition-colors rounded-full"></span>
+                                    <span className="font-mono text-[9px] text-white/30 tracking-widest block mb-2 uppercase">/ 01</span>
+                                    <h3 className="font-mono text-white text-lg tracking-widest mb-2 uppercase">DEFINE_THE_LOGIC</h3>
+                                    <p className="font-montreal text-white/60 text-lg mb-2">Designers set the rules.</p>
+                                    <p className="font-mono text-[10px] text-[#E3E3FD]/50 uppercase tracking-wide">You build the master system. Lock fonts, positioning, and style.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
         {/* 02b. Buttons & Forms */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div className="md:col-span-4 sticky top-32 h-fit">

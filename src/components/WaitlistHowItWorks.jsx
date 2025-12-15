@@ -43,7 +43,7 @@ export default function WaitlistHowItWorks() {
                 viewport={{ once: true }}
                 className="mb-12 md:mb-16 border-l border-white/20 pl-6"
             >
-                <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-4">The Mechanism</span>
+                <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-4">THE_MECHANISM</span>
                 <h2 className="font-montreal font-medium text-white text-4xl md:text-5xl tracking-tight leading-tight">
                     Turn brand guidelines<br/>into <span className="text-[#E3E3FD]">software rules.</span>
                 </h2>
@@ -80,10 +80,10 @@ export default function WaitlistHowItWorks() {
             <div className="absolute -inset-1 bg-gradient-to-br from-[#E3E3FD]/10 to-transparent blur-2xl opacity-50 rounded-3xl"></div>
             <div className="bg-[#1A1614] border border-white/10 p-8 relative rounded-3xl overflow-hidden shadow-2xl">
                 
-                <div className="flex justify-between items-center mb-8 pb-4 border-b border-white/5">
+                    <div className="flex justify-between items-center mb-8 pb-4 border-b border-white/5">
                     <div className="flex items-center gap-3">
-                        <div className="w-2 h-2 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
-                        <span className="font-mono text-[10px] text-white/60 uppercase tracking-widest">Active Configuration</span>
+                        <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
+                        <span className="font-mono text-[10px] text-white/60 uppercase tracking-widest">ACTIVE_CONFIGURATION</span>
                     </div>
                     <div className="px-2 py-1 bg-white/5 rounded-full border border-white/5">
                         <span className="font-mono text-[9px] text-white/40">ID: 882-AF</span>
@@ -145,12 +145,25 @@ export default function WaitlistHowItWorks() {
                 </div>
 
                 <div className="mt-8 pt-4 border-t border-white/5 flex justify-between items-center">
-                    <span className="font-mono text-[9px] text-white/20 uppercase tracking-widest">Logic Validation Active</span>
+                    <span className="font-mono text-[9px] text-white/20 uppercase tracking-widest">LOGIC_VALIDATION_ACTIVE</span>
                     <div className="flex gap-1.5">
-                        <div className="w-1.5 h-1.5 bg-[#E3E3FD] opacity-20 rounded-full"></div>
-                        <div className="w-1.5 h-1.5 bg-[#E3E3FD] opacity-40 rounded-full"></div>
-                        <div className="w-1.5 h-1.5 bg-[#E3E3FD] opacity-60 rounded-full"></div>
-                        <div className="w-1.5 h-1.5 bg-[#E3E3FD] opacity-80 rounded-full"></div>
+                        {[1,2,3,4].map(i => (
+                            <motion.div 
+                                key={i}
+                                className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"
+                                style={{opacity: 0.2 + (i*0.2)}}
+                                animate={{ 
+                                    opacity: [0.2 + (i*0.2), 1, 0.2 + (i*0.2)],
+                                    scale: [1, 1.2, 1]
+                                }}
+                                transition={{ 
+                                    duration: 2, 
+                                    repeat: Infinity, 
+                                    delay: i * 0.15,
+                                    ease: "easeInOut"
+                                }}
+                            ></motion.div>
+                        ))}
                     </div>
                 </div>
             </div>

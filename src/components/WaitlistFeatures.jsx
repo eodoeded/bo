@@ -22,13 +22,13 @@ export default function WaitlistFeatures() {
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-10 md:mb-20 border-b border-white/10 pb-8">
              <div>
-                <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-4">System Logic</span>
+                <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-4">SYSTEM_LOGIC</span>
                 <h2 className="font-montreal font-medium text-white text-4xl md:text-5xl tracking-tight leading-[0.9]">
                     Strict Constraints.<br/>Safe Execution.
                 </h2>
             </div>
             <div className="font-mono text-[10px] text-white/30 uppercase tracking-widest mt-8 md:mt-0">
-                System_v2.5
+                SYSTEM_v2.5
             </div>
         </div>
 

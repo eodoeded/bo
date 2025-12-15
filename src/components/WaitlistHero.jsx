@@ -156,13 +156,13 @@ export default function WaitlistHero() {
           }}></motion.div>
       </div>
 
-      {/* Decorative Floating Elements - Simplified */}
+      {/* System Status Indicators */}
       <div className="absolute top-8 left-8 md:left-12 font-mono text-[9px] text-white/20 uppercase tracking-widest hidden md:block">
-          System_OS v2.5
+          SYSTEM_OS v2.5
       </div>
       <div className="absolute top-8 right-8 md:right-12 font-mono text-[9px] text-white/20 uppercase tracking-widest hidden md:block text-right">
-          <span className="w-2 h-2 bg-[#E3E3FD] rounded-full inline-block mr-2 animate-pulse"></span>
-          Online
+          <span className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full inline-block mr-2 animate-pulse shadow-[0_0_8px_#E3E3FD]"></span>
+          ALL_MODULES_OPERATIONAL
       </div>
 
       {/* Node Graph Layer - Absolute on both, with mobile adjustments */}
@@ -260,7 +260,7 @@ export default function WaitlistHero() {
                 width="w-28 md:w-48"
             >
                     <div className="flex items-center gap-2 md:gap-3 text-white/60">
-                        <Database size={12} className="md:w-[14px] md:h-[14px]" />
+                        <Database size={12} className="md:w-[14px] md:h-[14px] text-white/30" />
                         <span className="font-mono text-[7px] md:text-[9px]">ASSETS_LOADED</span>
                     </div>
                     <div className="flex items-center gap-2 md:gap-3 text-white/60">
@@ -294,7 +294,21 @@ export default function WaitlistHero() {
                         <span className="font-mono text-[6px] md:text-[8px] text-white/40">GENERATING_ASSET_ID_8492</span>
                         <div className="flex gap-0.5">
                             {[1,2,3,4,5].map(i => (
-                                <div key={i} className="w-0.5 h-1.5 bg-[#E3E3FD] rounded-full" style={{opacity: 0.2 + (i*0.15)}}></div>
+                                <motion.div 
+                                    key={i} 
+                                    className="w-0.5 h-1.5 bg-[#E3E3FD] rounded-full" 
+                                    style={{opacity: 0.2 + (i*0.15)}}
+                                    animate={{ 
+                                        opacity: [0.2 + (i*0.15), 0.8, 0.2 + (i*0.15)],
+                                        scaleY: [1, 1.2, 1]
+                                    }}
+                                    transition={{ 
+                                        duration: 2, 
+                                        repeat: Infinity, 
+                                        delay: i * 0.1,
+                                        ease: "easeInOut"
+                                    }}
+                                ></motion.div>
                             ))}
                         </div>
                     </div>
@@ -310,12 +324,12 @@ export default function WaitlistHero() {
                 width="w-28 md:w-48"
             >
                     <div className="flex items-center gap-2 md:gap-3 text-white/60">
-                        <Layout size={12} className="md:w-[14px] md:h-[14px]" />
+                        <Layout size={12} className="md:w-[14px] md:h-[14px] text-white/30" />
                         <span className="font-mono text-[7px] md:text-[9px]">RENDER_COMPLETE</span>
                     </div>
                     <div className="flex items-center gap-2 md:gap-3 text-white/60">
                         <Zap size={12} className="text-[#E3E3FD] md:w-[14px] md:h-[14px]"/>
-                        <span className="font-mono text-[7px] md:text-[9px]">INSTANT_DELIVERY</span>
+                        <span className="font-mono text-[7px] md:text-[9px] text-[#E3E3FD]">INSTANT_DELIVERY</span>
                     </div>
             </Node>
           </div>
@@ -326,9 +340,15 @@ export default function WaitlistHero() {
         {/* Mobile Gradient Background */}
         <div className="md:hidden absolute inset-0 -z-10 bg-gradient-to-b from-[#261E19]/40 via-[#261E19]/60 to-[#261E19] rounded-t-3xl"></div>
         <div className="flex flex-col items-start text-left pointer-events-auto max-w-2xl relative">
-            <div className="flex items-center gap-3 mb-6">
-                <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest border border-[#E3E3FD]/20 bg-[#E3E3FD]/10 px-2 py-1 rounded-full">System_OS v2.5</span>
-            </div>
+            <motion.div
+                className="flex items-center gap-3 mb-6"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+            >
+                <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
+                <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest border border-[#E3E3FD]/20 bg-[#E3E3FD]/10 px-2 py-1 rounded-full">SYSTEM_OS v2.5</span>
+            </motion.div>
             
             <motion.h1
                 className="font-montreal font-medium text-5xl md:text-8xl leading-[0.9] tracking-tight mb-6 text-white"
@@ -381,11 +401,11 @@ export default function WaitlistHero() {
             </motion.form>
             <div className="mt-4 flex items-center gap-3">
                 <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest flex items-center gap-2">
-                    <div className="w-1.5 h-1.5 bg-[#E3E3FD] animate-pulse rounded-full"></div>
-                    Limited Studio Pilots
+                    <div className="w-1.5 h-1.5 bg-[#E3E3FD] animate-pulse rounded-full shadow-[0_0_8px_#E3E3FD]"></div>
+                    LIMITED_STUDIO_PILOTS
                 </span>
                 <span className="text-white/20 text-[9px] font-mono">|</span>
-                <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">Q1 2025 Cohort</span>
+                <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">Q1_2025_COHORT</span>
             </div>
 
              {status === 'success' && (

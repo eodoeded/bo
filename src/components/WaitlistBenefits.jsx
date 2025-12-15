@@ -14,7 +14,7 @@ export default function WaitlistBenefits() {
         {/* Header Block */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-12 md:mb-24 border-b border-white/10 pb-12">
             <div className="lg:col-span-8">
-                <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-6">For Studios & Agencies</span>
+                <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-6">FOR_STUDIOS_&_AGENCIES</span>
                 <h2 className="font-montreal font-medium text-white text-4xl md:text-6xl tracking-tight leading-[0.95] mb-6">
                     Stop selling hours.<br/>
                     <span className="text-[#E3E3FD]">Start selling systems.</span>

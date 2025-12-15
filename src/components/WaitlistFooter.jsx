@@ -11,8 +11,8 @@ export default function WaitlistFooter() {
                             A modular design system for automated brand governance. Empowering studios to create custom tools for their clients.
                         </p>
                         <div className="flex items-center gap-2">
-                            <div className="w-2 h-2 bg-[#E3E3FD] rounded-full animate-pulse"></div>
-                            <span className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">All Systems Operational</span>
+                            <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
+                            <span className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">ALL_SYSTEMS_OPERATIONAL</span>
                         </div>
                     </div>
                     
