@@ -81,33 +81,39 @@ export default function StudioDashboard() {
 
                 {/* Content */}
                 <div>
-                  <h3 className="font-montreal font-medium text-2xl mb-3 group-hover:text-[#E3E3FD] transition-colors">
+                  <h3 className="font-montreal font-medium text-2xl mb-4 group-hover:text-[#E3E3FD] transition-colors">
                     {tool.name}
                   </h3>
                   
                   {/* Technical Metadata */}
-                  <div className="space-y-2 mb-4">
+                  <div className="space-y-2.5 mb-4">
                     <div className="flex items-center gap-2 text-white/40">
-                      <Clock size={12} />
+                      <Clock size={12} className="text-white/30" />
                       <p className="font-mono text-[10px] uppercase tracking-widest">LAST_EDIT: {tool.lastEdited}</p>
                     </div>
                     {tool.status === 'Live' && (
                       <>
                         <div className="flex items-center gap-2 text-white/40">
-                          <Database size={12} />
+                          <Database size={12} className="text-white/30" />
                           <p className="font-mono text-[10px] uppercase tracking-widest">OUTPUTS: {tool.outputs.toLocaleString()}</p>
                         </div>
                         <div className="flex items-center gap-2 text-white/40">
-                          <Activity size={12} />
+                          <Activity size={12} className="text-white/30" />
                           <p className="font-mono text-[10px] uppercase tracking-widest">LATENCY: {tool.latency}</p>
                         </div>
                       </>
+                    )}
+                    {tool.status === 'Draft' && (
+                      <div className="flex items-center gap-2 text-white/20">
+                        <Cpu size={12} className="text-white/20" />
+                        <p className="font-mono text-[10px] uppercase tracking-widest">STATUS: DRAFT // NOT_DEPLOYED</p>
+                      </div>
                     )}
                   </div>
 
                   {/* Tool ID */}
                   <div className="pt-3 border-t border-white/5">
-                    <p className="font-mono text-[8px] text-white/20 uppercase tracking-widest">ID: {tool.id}</p>
+                    <p className="font-mono text-[8px] text-white/20 uppercase tracking-widest">TOOL_ID: {tool.id}</p>
                   </div>
                 </div>
               </Link>
@@ -136,22 +142,29 @@ export default function StudioDashboard() {
 
         {/* System Stats Footer */}
         <div className="mt-16 pt-8 border-t border-white/10">
+          <div className="mb-6">
+            <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-4">SYSTEM_METRICS</p>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="p-4 bg-white/[0.02] border border-white/5 rounded-2xl">
-              <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-2">TOTAL_TOOLS</p>
-              <p className="font-mono text-2xl text-white">{mockTools.length}</p>
+            <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl group hover:border-white/10 transition-colors">
+              <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-3">TOTAL_TOOLS</p>
+              <p className="font-mono text-3xl text-white mb-1">{mockTools.length}</p>
+              <p className="font-mono text-[8px] text-white/20 uppercase tracking-widest">REGISTERED_MODULES</p>
             </div>
-            <div className="p-4 bg-white/[0.02] border border-white/5 rounded-2xl">
-              <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-2">LIVE_TOOLS</p>
-              <p className="font-mono text-2xl text-[#E3E3FD]">{mockTools.filter(t => t.status === 'Live').length}</p>
+            <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl group hover:border-[#E3E3FD]/20 transition-colors">
+              <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-3">LIVE_TOOLS</p>
+              <p className="font-mono text-3xl text-[#E3E3FD] mb-1">{mockTools.filter(t => t.status === 'Live').length}</p>
+              <p className="font-mono text-[8px] text-white/20 uppercase tracking-widest">ACTIVE_DEPLOYMENTS</p>
             </div>
-            <div className="p-4 bg-white/[0.02] border border-white/5 rounded-2xl">
-              <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-2">TOTAL_OUTPUTS</p>
-              <p className="font-mono text-2xl text-white">{mockTools.reduce((sum, t) => sum + t.outputs, 0).toLocaleString()}</p>
+            <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl group hover:border-white/10 transition-colors">
+              <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-3">TOTAL_OUTPUTS</p>
+              <p className="font-mono text-3xl text-white mb-1">{mockTools.reduce((sum, t) => sum + t.outputs, 0).toLocaleString()}</p>
+              <p className="font-mono text-[8px] text-white/20 uppercase tracking-widest">ASSETS_GENERATED</p>
             </div>
-            <div className="p-4 bg-white/[0.02] border border-white/5 rounded-2xl">
-              <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-2">AVG_LATENCY</p>
-              <p className="font-mono text-2xl text-white">12ms</p>
+            <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl group hover:border-white/10 transition-colors">
+              <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-3">AVG_LATENCY</p>
+              <p className="font-mono text-3xl text-white mb-1">12ms</p>
+              <p className="font-mono text-[8px] text-white/20 uppercase tracking-widest">RESPONSE_TIME</p>
             </div>
           </div>
         </div>

@@ -747,11 +747,24 @@ export default function DesignSystem() {
                             <div className="w-14 h-14 border border-white/10 bg-white/5 flex items-center justify-center mb-8 group-hover:border-[#E3E3FD] transition-colors rounded-2xl">
                                 <Layout size={24} className="text-white/60 group-hover:text-[#E3E3FD] transition-colors" />
                             </div>
-                            <h3 className="font-montreal font-medium text-2xl mb-3 group-hover:text-[#E3E3FD] transition-colors">Social_Story_v1</h3>
-                            <div className="flex items-center gap-2 text-white/40">
-                                <Clock size={12} />
-                                <p className="font-mono text-[10px] uppercase tracking-widest">Last Edit: 2 mins ago</p>
-                         </div>
+                            <h3 className="font-montreal font-medium text-2xl mb-4 group-hover:text-[#E3E3FD] transition-colors">Social_Story_v1</h3>
+                            <div className="space-y-2.5 mb-4">
+                                <div className="flex items-center gap-2 text-white/40">
+                                    <Clock size={12} className="text-white/30" />
+                                    <p className="font-mono text-[10px] uppercase tracking-widest">LAST_EDIT: 2 mins ago</p>
+                                </div>
+                                <div className="flex items-center gap-2 text-white/40">
+                                    <Database size={12} className="text-white/30" />
+                                    <p className="font-mono text-[10px] uppercase tracking-widest">OUTPUTS: 1,247</p>
+                                </div>
+                                <div className="flex items-center gap-2 text-white/40">
+                                    <Activity size={12} className="text-white/30" />
+                                    <p className="font-mono text-[10px] uppercase tracking-widest">LATENCY: 12ms</p>
+                                </div>
+                            </div>
+                            <div className="pt-3 border-t border-white/5">
+                                <p className="font-mono text-[8px] text-white/20 uppercase tracking-widest">TOOL_ID: x9z-22a</p>
+                            </div>
                         </motion.div>
 
                         {/* Feature Card - Live */}
@@ -809,6 +822,127 @@ export default function DesignSystem() {
 
             </div>
       </section>
+
+        {/* 02c. Studio Dashboard Patterns */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+            <div className="md:col-span-4 sticky top-32 h-fit">
+                <SectionHeader title="Studio Dashboard" number="02c" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed mb-6">
+                    Mission control interface for brand governance. Technical density, system readouts, and modular tool cells.
+                </p>
+                <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg mb-8">
+                    <p className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest mb-2">Technical Density</p>
+                    <p className="font-montreal text-sm text-white/60 leading-relaxed">
+                        Dense information hierarchy. System labels, latency readouts, output counts. Feels like mission control software for an alien megastructure.
+                    </p>
+                </div>
+                <div className="flex gap-2 flex-wrap">
+                    <Badge className="bg-[#E3E3FD]/10 border-[#E3E3FD]/30 text-[#E3E3FD]">System Status</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">Tool Cards</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">Metrics</Badge>
+                </div>
+            </div>
+            
+            <div className="md:col-span-8 space-y-24">
+                
+                {/* System Status Header */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">System Status Header</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                        <div className="flex items-center gap-3 mb-4 pb-4 border-b border-white/5">
+                            <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
+                            <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">SYSTEM_OS v2.5</span>
+                            <span className="font-mono text-[9px] text-white/20">|</span>
+                            <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">ALL_MODULES_OPERATIONAL</span>
+                            <span className="font-mono text-[9px] text-white/20">|</span>
+                            <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">UPTIME: 99.9%</span>
+                        </div>
+                        <div className="space-y-2 font-mono text-[9px] text-white/40">
+                            <div className="flex justify-between">
+                                <span>Bioluminescent Indicator:</span>
+                                <code className="text-[#E3E3FD]">w-1.5 h-1.5 bg-[#E3E3FD] animate-pulse</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>System Labels:</span>
+                                <code className="text-[#E3E3FD]">font-mono text-[9px] uppercase tracking-widest</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Separator:</span>
+                                <code className="text-[#E3E3FD]">text-white/20</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Tool Card with Technical Metadata */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Tool Card (Studio Dashboard)</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-8 rounded-3xl relative group hover:border-[#E3E3FD]/50 hover:bg-[#2E2824] transition-colors">
+                        <div className="absolute top-6 right-6">
+                            <span className="font-mono text-[9px] uppercase tracking-widest px-2 py-1 border border-[#E3E3FD]/20 bg-[#E3E3FD]/10 text-[#E3E3FD] rounded-lg">Live</span>
+                        </div>
+                        <div className="w-14 h-14 border border-white/10 bg-white/5 flex items-center justify-center mb-8 group-hover:border-[#E3E3FD] transition-colors rounded-2xl">
+                            <Layout size={24} className="text-white/60 group-hover:text-[#E3E3FD] transition-colors" />
+                        </div>
+                        <h3 className="font-montreal font-medium text-2xl mb-4 group-hover:text-[#E3E3FD] transition-colors">Social_Story_v1</h3>
+                        <div className="space-y-2.5 mb-4">
+                            <div className="flex items-center gap-2 text-white/40">
+                                <Clock size={12} className="text-white/30" />
+                                <p className="font-mono text-[10px] uppercase tracking-widest">LAST_EDIT: 2 mins ago</p>
+                            </div>
+                            <div className="flex items-center gap-2 text-white/40">
+                                <Database size={12} className="text-white/30" />
+                                <p className="font-mono text-[10px] uppercase tracking-widest">OUTPUTS: 1,247</p>
+                            </div>
+                            <div className="flex items-center gap-2 text-white/40">
+                                <Activity size={12} className="text-white/30" />
+                                <p className="font-mono text-[10px] uppercase tracking-widest">LATENCY: 12ms</p>
+                            </div>
+                        </div>
+                        <div className="pt-3 border-t border-white/5">
+                            <p className="font-mono text-[8px] text-white/20 uppercase tracking-widest">TOOL_ID: x9z-22a</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* System Stats Footer */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">System Metrics Footer</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                        <div className="mb-6">
+                            <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-4">SYSTEM_METRICS</p>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                            {[
+                                { label: 'TOTAL_TOOLS', value: '2', sublabel: 'REGISTERED_MODULES' },
+                                { label: 'LIVE_TOOLS', value: '1', sublabel: 'ACTIVE_DEPLOYMENTS', highlight: true },
+                                { label: 'TOTAL_OUTPUTS', value: '1,247', sublabel: 'ASSETS_GENERATED' },
+                                { label: 'AVG_LATENCY', value: '12ms', sublabel: 'RESPONSE_TIME' }
+                            ].map((metric, i) => (
+                                <div key={i} className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl group hover:border-white/10 transition-colors">
+                                    <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-3">{metric.label}</p>
+                                    <p className={`font-mono text-3xl mb-1 ${metric.highlight ? 'text-[#E3E3FD]' : 'text-white'}`}>{metric.value}</p>
+                                    <p className="font-mono text-[8px] text-white/20 uppercase tracking-widest">{metric.sublabel}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
 
         {/* 02b. Buttons & Forms */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
