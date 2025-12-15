@@ -62,9 +62,10 @@ export default function WaitlistHero() {
   
   // Initial Positions (Percentages) - consistent across breakpoints so mobile mirrors desktop layout
   const [nodes, setNodes] = useState({
-      studio: { x: 72, y: 28 },
-      core:   { x: 56, y: 50 },
-      output: { x: 78, y: 64 }
+      // keep one compact node above the text, others to the right
+      output: { x: 36, y: 18 },   // small, above headline
+      studio: { x: 70, y: 42 },   // right cluster
+      core:   { x: 74, y: 62 }    // right cluster
   });
 
   const handleDragStart = (e, id) => {
@@ -320,7 +321,7 @@ export default function WaitlistHero() {
       </div>
 
       {/* Text Content */}
-      <div className="absolute bottom-0 left-0 w-full md:w-auto md:bottom-24 md:left-16 z-30 px-6 pb-12 pt-24 md:pt-0 md:pb-0 pointer-events-none bg-gradient-to-t from-[#261E19] via-[#261E19]/92 to-transparent">
+      <div className="absolute bottom-0 left-0 w-full md:w-auto md:bottom-24 md:left-16 z-30 px-6 pb-12 pt-24 md:pt-0 md:pb-0 pointer-events-none">
         <div className="flex flex-col items-start text-left pointer-events-auto max-w-2xl">
             <div className="flex items-center gap-3 mb-6">
                 <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest border border-[#E3E3FD]/20 bg-[#E3E3FD]/10 px-2 py-1 rounded-full">System_OS v2.5</span>
@@ -353,7 +354,7 @@ export default function WaitlistHero() {
                 onSubmit={handleJoin}
             >
                 <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center">
-                    <div className="relative flex flex-1 items-center bg-[#1A1614] border border-white/10 px-4 py-3 rounded-full">
+                    <div className="relative flex flex-1 items-center bg-[#1A1614] border border-white/12 px-4 py-3 rounded-md">
                         <Scan size={16} className="text-white/30 mr-3 shrink-0" />
                         <input 
                             type="email" 
@@ -367,7 +368,7 @@ export default function WaitlistHero() {
                     </div>
                     <button 
                         type="submit"
-                        className="bg-white text-black px-8 py-3 font-mono font-semibold text-[11px] tracking-[0.1em] hover:bg-[#E3E3FD] transition-colors whitespace-nowrap uppercase border border-transparent flex items-center gap-2 justify-center group/btn w-full md:w-auto rounded-full"
+                        className="bg-white text-black px-8 py-3 font-mono font-semibold text-[11px] tracking-[0.1em] hover:bg-[#E3E3FD] transition-colors whitespace-nowrap uppercase border border-transparent flex items-center gap-2 justify-center group/btn w-full md:w-auto rounded-md"
                         disabled={status === 'sending' || status === 'success'}
                     >
                         {status === 'sending' ? 'Sending...' : status === 'success' ? 'Joined' : 'Request Access'}
