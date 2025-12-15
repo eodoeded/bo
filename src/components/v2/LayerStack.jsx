@@ -3,9 +3,9 @@
 // Refined for alien ant-colony aesthetic: technical precision, cellular structures, distributed organism
 
 import React from 'react';
-import { Layers, Type, Image as ImageIcon, Box, GripVertical } from 'lucide-react';
+import { Layers, Type, Image as ImageIcon, Box, GripVertical, Trash2 } from 'lucide-react';
 
-const LayerItem = ({ layer, isSelected, onSelect }) => {
+const LayerItem = ({ layer, isSelected, onSelect, onDelete }) => {
     // Icon based on layer type
     const Icon = layer.type === 'text' ? Type : 
                  layer.type === 'image' ? ImageIcon : 
@@ -46,6 +46,22 @@ const LayerItem = ({ layer, isSelected, onSelect }) => {
                     : 'bg-transparent group-hover:bg-white/20'
             }`}></div>
             
+            {/* Delete Button (shown on hover/select) */}
+            {onDelete && (
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        if (window.confirm(`Delete layer "${layer.name}"?`)) {
+                            onDelete(layer.id);
+                        }
+                    }}
+                    className={`p-1 hover:bg-red-900/20 border border-red-500/20 rounded transition-all shrink-0 ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
+                    title="Delete layer (or press Delete key)"
+                >
+                    <Trash2 size={10} className="text-red-400" />
+                </button>
+            )}
+            
             {/* Connection Port - Right */}
             <div className={`absolute -right-[3px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full border transition-colors ${
                 isSelected 
@@ -56,7 +72,7 @@ const LayerItem = ({ layer, isSelected, onSelect }) => {
     );
 };
 
-export default function LayerStack({ layers, selectedId, onSelect, onAddLayer }) {
+export default function LayerStack({ layers, selectedId, onSelect, onAddLayer, onDeleteLayer }) {
     return (
         <div className="flex flex-col h-full">
             {/* Header */}
@@ -107,7 +123,8 @@ export default function LayerStack({ layers, selectedId, onSelect, onAddLayer })
                             key={layer.id} 
                             layer={layer} 
                             isSelected={layer.id === selectedId} 
-                            onSelect={onSelect} 
+                            onSelect={onSelect}
+                            onDelete={onDeleteLayer}
                         />
                     ))
                 )}

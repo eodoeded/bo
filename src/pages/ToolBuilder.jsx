@@ -110,6 +110,31 @@ export default function ToolBuilder() {
         ));
     };
 
+    const handleDeleteLayer = (layerId) => {
+        setLayers(prev => prev.filter(l => l.id !== layerId));
+        if (selectedLayerId === layerId) {
+            setSelectedLayerId(null);
+        }
+    };
+
+    // Keyboard shortcuts
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            // Delete key - delete selected layer
+            if ((e.key === 'Delete' || e.key === 'Backspace') && selectedLayerId && !e.target.matches('input, textarea')) {
+                e.preventDefault();
+                handleDeleteLayer(selectedLayerId);
+            }
+            // Escape - deselect
+            if (e.key === 'Escape' && selectedLayerId) {
+                setSelectedLayerId(null);
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [selectedLayerId]);
+
     const handleSave = async () => {
         if (id === 'new') return;
         
@@ -227,6 +252,7 @@ export default function ToolBuilder() {
                         selectedId={selectedLayerId} 
                         onSelect={setSelectedLayerId}
                         onAddLayer={handleAddLayer}
+                        onDeleteLayer={handleDeleteLayer}
                     />
                 </aside>
 
@@ -242,7 +268,13 @@ export default function ToolBuilder() {
                         <div className="absolute -top-6 md:-top-8 left-0 font-mono text-[8px] md:text-[9px] text-white/20 uppercase tracking-widest">
                             CANVAS: 400x500
                         </div>
-                        <PreviewCanvas layers={layers} />
+                        <PreviewCanvas 
+                            layers={layers} 
+                            selectedLayerId={selectedLayerId}
+                            onSelectLayer={setSelectedLayerId}
+                            onUpdateLayer={handleUpdateLayer}
+                            isStudio={true}
+                        />
                     </div>
                 </main>
 

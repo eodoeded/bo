@@ -232,7 +232,7 @@ export default function ToolRunner() {
                 {/* The "Stage" - Cannot be touched */}
                 <div className="relative shadow-2xl pointer-events-none select-none z-10" style={{ width: '400px', height: '500px', maxWidth: '100%' }}>
                     <div ref={previewRef}>
-                        <PreviewCanvas layers={layers} />
+                        <PreviewCanvas layers={layers} isStudio={false} />
                     </div>
                 </div>
             </main>
