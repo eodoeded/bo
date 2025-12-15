@@ -100,7 +100,7 @@ export default function StudioDashboard() {
 
       <main className="max-w-[1400px] mx-auto px-6 md:px-12 pt-20 md:pt-24 pb-20 relative z-10">
         {/* System Status Header */}
-        <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-8 pb-4 border-b border-white/5">
+        <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-8 pb-4 border-b border-white/10">
           <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
           <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">SYSTEM_OS v2.5</span>
           <span className="font-mono text-[9px] text-white/20 hidden sm:inline">|</span>
@@ -125,7 +125,7 @@ export default function StudioDashboard() {
           </div>
           <Link 
             to="/studio/builder/new" 
-            className="mt-6 md:mt-0 bg-[#E3E3FD] text-[#261E19] px-5 py-2.5 font-mono font-semibold text-[11px] uppercase tracking-widest hover:bg-white transition-colors flex items-center gap-2 rounded-lg"
+            className="mt-6 md:mt-0 bg-[#E3E3FD] text-[#261E19] px-5 py-2.5 font-mono font-semibold text-[11px] uppercase tracking-widest hover:bg-white transition-colors duration-300 flex items-center gap-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E3E3FD] focus:ring-offset-2 focus:ring-offset-[#261E19]"
           >
             <Plus size={14} />
             INITIALIZE_NEW_TOOL
@@ -170,7 +170,7 @@ export default function StudioDashboard() {
                   <button
                     onClick={(e) => handleDelete(tool.id, e)}
                     disabled={deletingId === tool.id}
-                    className="p-1.5 hover:bg-red-900/20 border border-red-500/20 rounded-lg transition-colors disabled:opacity-50"
+                    className="p-1.5 hover:bg-red-900/20 border border-red-500/20 rounded-lg transition-colors duration-300 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:ring-offset-2 focus:ring-offset-[#1A1614]"
                     title="Delete tool"
                   >
                     <Trash2 size={12} className="text-red-400" />
@@ -226,7 +226,7 @@ export default function StudioDashboard() {
           >
             <Link 
               to="/studio/builder/new" 
-              className="group block border border-dashed border-white/10 p-8 md:p-10 hover:border-[#E3E3FD]/30 hover:bg-[#E3E3FD]/5 transition-colors flex flex-col items-center justify-center gap-4 text-center cursor-pointer min-h-[280px] rounded-3xl"
+              className="group block border border-dashed border-white/10 p-8 md:p-10 hover:border-[#E3E3FD]/30 hover:bg-[#E3E3FD]/5 transition-colors duration-300 flex flex-col items-center justify-center gap-4 text-center cursor-pointer min-h-[280px] rounded-3xl focus:outline-none focus:ring-2 focus:ring-[#E3E3FD]/50 focus:ring-offset-2 focus:ring-offset-[#261E19]"
             >
               <div className="w-14 h-14 border border-white/10 bg-white/5 flex items-center justify-center text-white/40 group-hover:text-[#E3E3FD] group-hover:border-[#E3E3FD]/50 transition-colors rounded-2xl">
                 <Plus size={24} />
@@ -245,22 +245,22 @@ export default function StudioDashboard() {
             <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-4">SYSTEM_METRICS</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl group hover:border-white/10 transition-colors">
+            <div className="p-6 bg-white/[0.02] border border-white/10 rounded-2xl group hover:border-white/20 transition-colors duration-300">
               <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-3">TOTAL_TOOLS</p>
               <p className="font-mono text-3xl text-white mb-1">{tools.length}</p>
               <p className="font-mono text-[8px] text-white/20 uppercase tracking-widest">REGISTERED_MODULES</p>
             </div>
-            <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl group hover:border-[#E3E3FD]/20 transition-colors">
+            <div className="p-6 bg-white/[0.02] border border-white/10 rounded-2xl group hover:border-[#E3E3FD]/30 transition-colors duration-300">
               <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-3">LIVE_TOOLS</p>
               <p className="font-mono text-2xl md:text-3xl text-[#E3E3FD] mb-1">{tools.filter(t => t.status === 'Live').length}</p>
               <p className="font-mono text-[8px] text-white/20 uppercase tracking-widest">ACTIVE_DEPLOYMENTS</p>
             </div>
-            <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl group hover:border-white/10 transition-colors">
+            <div className="p-6 bg-white/[0.02] border border-white/10 rounded-2xl group hover:border-white/20 transition-colors duration-300">
               <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-3">TOTAL_OUTPUTS</p>
               <p className="font-mono text-2xl md:text-3xl text-white mb-1">{tools.reduce((sum, t) => sum + t.outputs, 0).toLocaleString()}</p>
               <p className="font-mono text-[8px] text-white/20 uppercase tracking-widest">ASSETS_GENERATED</p>
             </div>
-            <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl group hover:border-white/10 transition-colors">
+            <div className="p-6 bg-white/[0.02] border border-white/10 rounded-2xl group hover:border-white/20 transition-colors duration-300">
               <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-3">AVG_LATENCY</p>
               <p className="font-mono text-2xl md:text-3xl text-white mb-1">12ms</p>
               <p className="font-mono text-[8px] text-white/20 uppercase tracking-widest">RESPONSE_TIME</p>

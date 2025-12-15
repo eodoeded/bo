@@ -32,7 +32,7 @@ export default function FigmaProperties({ selectedLayer, onUpdateLayer, clientUI
                             onUpdateLayer(selectedLayer.id, { name: e.target.value });
                         }
                     }}
-                    className="w-full bg-white/5 border border-white/10 text-white font-montreal text-sm px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 transition-colors"
+                    className="w-full bg-white/5 border border-white/10 text-white font-montreal text-sm px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 transition-colors duration-300"
                     placeholder="Layer name"
                 />
             </div>
@@ -51,7 +51,7 @@ export default function FigmaProperties({ selectedLayer, onUpdateLayer, clientUI
                                     updateProperty('x', parseFloat(e.target.value) || 0);
                                 }
                             }}
-                            className="w-full bg-white/5 border border-white/10 text-white font-mono text-xs px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 transition-colors"
+                            className="w-full bg-white/5 border border-white/10 text-white font-mono text-xs px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 transition-colors duration-300"
                         />
                     </div>
                     <div>
@@ -64,7 +64,7 @@ export default function FigmaProperties({ selectedLayer, onUpdateLayer, clientUI
                                     updateProperty('y', parseFloat(e.target.value) || 0);
                                 }
                             }}
-                            className="w-full bg-white/5 border border-white/10 text-white font-mono text-xs px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 transition-colors"
+                            className="w-full bg-white/5 border border-white/10 text-white font-mono text-xs px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 transition-colors duration-300"
                         />
                     </div>
                 </div>
@@ -85,7 +85,7 @@ export default function FigmaProperties({ selectedLayer, onUpdateLayer, clientUI
                                         updateProperty('width', parseInt(e.target.value) || 0);
                                     }
                                 }}
-                                className="w-full bg-white/5 border border-white/10 text-white font-mono text-xs px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 transition-colors"
+                                className="w-full bg-white/5 border border-white/10 text-white font-mono text-xs px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 transition-colors duration-300"
                             />
                         </div>
                         <div>
@@ -98,7 +98,7 @@ export default function FigmaProperties({ selectedLayer, onUpdateLayer, clientUI
                                         updateProperty('height', parseInt(e.target.value) || 0);
                                     }
                                 }}
-                                className="w-full bg-white/5 border border-white/10 text-white font-mono text-xs px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 transition-colors"
+                                className="w-full bg-white/5 border border-white/10 text-white font-mono text-xs px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 transition-colors duration-300"
                             />
                         </div>
                     </div>
@@ -117,7 +117,7 @@ export default function FigmaProperties({ selectedLayer, onUpdateLayer, clientUI
                                     updateProperty('text', e.target.value);
                                 }
                             }}
-                            className="w-full bg-white/5 border border-white/10 text-white font-montreal text-sm px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 transition-colors min-h-[80px] resize-none"
+                            className="w-full bg-white/5 border border-white/10 text-white font-montreal text-sm px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 transition-colors duration-300 min-h-[80px] resize-none"
                             placeholder="Text content"
                         />
                     </div>
@@ -132,7 +132,7 @@ export default function FigmaProperties({ selectedLayer, onUpdateLayer, clientUI
                                         updateProperty('fontSize', parseInt(e.target.value) || 16);
                                     }
                                 }}
-                                className="w-full bg-white/5 border border-white/10 text-white font-mono text-xs px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 transition-colors"
+                                className="w-full bg-white/5 border border-white/10 text-white font-mono text-xs px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 transition-colors duration-300"
                             />
                         </div>
                         <div>
@@ -146,7 +146,7 @@ export default function FigmaProperties({ selectedLayer, onUpdateLayer, clientUI
                                             updateProperty('color', e.target.value);
                                         }
                                     }}
-                                    className="w-8 h-8 rounded border border-white/10 cursor-pointer"
+                                    className="w-8 h-8 rounded-lg border border-white/10 cursor-pointer transition-colors duration-300 hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-[#E3E3FD]/50 focus:ring-offset-2 focus:ring-offset-[#1A1614]"
                                 />
                                 <input
                                     type="text"
@@ -156,7 +156,7 @@ export default function FigmaProperties({ selectedLayer, onUpdateLayer, clientUI
                                             updateProperty('color', e.target.value);
                                         }
                                     }}
-                                    className="flex-1 bg-white/5 border border-white/10 text-white font-mono text-xs px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 transition-colors"
+                                    className="flex-1 bg-white/5 border border-white/10 text-white font-mono text-xs px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 transition-colors duration-300"
                                 />
                             </div>
                         </div>
@@ -176,7 +176,7 @@ export default function FigmaProperties({ selectedLayer, onUpdateLayer, clientUI
                                 updateProperty('src', e.target.value);
                             }
                         }}
-                        className="w-full bg-white/5 border border-white/10 text-white font-montreal text-sm px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 transition-colors"
+                        className="w-full bg-white/5 border border-white/10 text-white font-montreal text-sm px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 transition-colors duration-300"
                         placeholder="Image URL"
                     />
                 </div>
@@ -191,7 +191,7 @@ export default function FigmaProperties({ selectedLayer, onUpdateLayer, clientUI
                             type="color"
                             value={selectedLayer.properties.color || '#FFFFFF'}
                             onChange={(e) => updateProperty('color', e.target.value)}
-                            className="w-8 h-8 rounded border border-white/10 cursor-pointer"
+                            className="w-8 h-8 rounded-lg border border-white/10 cursor-pointer transition-colors duration-300 hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-[#E3E3FD]/50 focus:ring-offset-2 focus:ring-offset-[#1A1614]"
                         />
                         <input
                             type="text"
@@ -232,7 +232,7 @@ export default function FigmaProperties({ selectedLayer, onUpdateLayer, clientUI
                                                 onUpdateLayer(selectedLayer.id, { locks: newLocks });
                                             }
                                         }}
-                                        className="flex-1 bg-white/5 border border-white/10 text-white font-mono text-xs px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 transition-colors"
+                                        className="flex-1 bg-white/5 border border-white/10 text-white font-mono text-xs px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 transition-colors duration-300"
                                     >
                                         <option value="LOCKED">Locked</option>
                                         <option value="READ_ONLY">Read Only</option>
