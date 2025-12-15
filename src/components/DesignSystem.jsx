@@ -1,6 +1,15 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useState, useRef } from 'react';
+import { 
+    RefreshCw, Shield, Zap, CreditCard, Layout, Lock, Eye, Edit3, 
+    Type, Image as ImageIcon, Box, Layers, GripVertical, Plus, 
+    Database, Scan, ArrowRight, CheckCircle, AlertTriangle, Download,
+    MousePointer, Hand, Clock, Save, Cpu, Activity
+} from 'lucide-react';
 import UnifiedNav from './UnifiedNav';
+import Inspector from './v2/Inspector';
+import LayerStack from './v2/LayerStack';
 
 // Section Header Component
 const SectionHeader = ({ title, number }) => (
@@ -23,6 +32,25 @@ const Badge = ({ children, className = "", color = "text-[#E3E3FD]" }) => (
 );
 
 export default function DesignSystem() {
+    // State for interactive examples
+    const [selectedLayer, setSelectedLayer] = useState({
+        id: 'demo-1',
+        name: 'HEADLINE_TEXT',
+        type: 'text',
+        properties: { x: 50, y: 40, text: 'Sample Headline', fontSize: 42, color: '#FFFFFF' },
+        locks: { x: 'LOCKED', y: 'LOCKED', text: 'CLIENT_INPUT', fontSize: 'LOCKED', color: 'LOCKED' }
+    });
+    const [layers, setLayers] = useState([
+        { id: '1', name: 'HEADLINE_TEXT', type: 'text', zIndex: 10 },
+        { id: '2', name: 'BACKGROUND_IMG', type: 'image', zIndex: 0 },
+        { id: '3', name: 'LOGO', type: 'image', zIndex: 5 }
+    ]);
+    const [buttonHover, setButtonHover] = useState(null);
+    const [inputValue, setInputValue] = useState('');
+    const [nodePositions, setNodePositions] = useState({ studio: { x: 24, y: 22 }, core: { x: 58, y: 58 }, output: { x: 78, y: 34 } });
+    const [draggingNode, setDraggingNode] = useState(null);
+    const containerRef = useRef(null);
+
     return (
     <div className="min-h-screen bg-[#261E19] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal overflow-x-hidden relative">
       <div className="fixed inset-0 bg-[#261E19] z-0"></div>
@@ -206,8 +234,8 @@ export default function DesignSystem() {
                                     <div className="col-span-12 md:col-span-3 font-mono text-xs text-white/30 group-hover:text-[#E3E3FD] transition-colors mb-2 md:mb-0">{type.role}</div>
                                     <div className={`col-span-12 md:col-span-9 ${type.font} ${type.size} text-white leading-none`}>{type.sample}</div>
                                 </div>
-                            ))}
-                        </div>
+            ))}
+          </div>
                     </div>
                 </div>
 
@@ -270,7 +298,7 @@ export default function DesignSystem() {
                     </div>
                 </div>
 
-            </div>
+        </div>
         </section>
 
         {/* 01. Navigation */}
@@ -284,8 +312,8 @@ export default function DesignSystem() {
                     <Badge className="bg-[#E3E3FD]/10 border-[#E3E3FD]/30 text-[#E3E3FD]">UnifiedNav</Badge>
                     <Badge className="bg-white/10 border-white/20 text-white">Context-Aware</Badge>
                     <Badge className="bg-white/10 border-white/20 text-white">Fixed</Badge>
-                </div>
-            </div>
+        </div>
+    </div>
             
             <div className="md:col-span-8 space-y-24">
                 
@@ -309,17 +337,17 @@ export default function DesignSystem() {
                             {/* Visual Nav Example */}
                             <div className="bg-[#261E19] border border-white/10 rounded-2xl overflow-hidden mb-6">
                                 <div className="h-12 md:h-14 bg-[#261E19] border-b border-white/5 px-6 md:px-12 flex items-center justify-between">
-                                    <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4">
                                         <span className="font-mono text-sm tracking-widest text-white uppercase">[ BO ]</span>
                                         <div className="h-4 w-px bg-white/10"></div>
                                         <span className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">Studio</span>
-                                    </div>
+        </div>
                                     <div className="flex items-center gap-4">
                                         <button className="bg-white text-black px-5 py-2.5 font-mono font-semibold text-[11px] uppercase tracking-widest hover:bg-[#E3E3FD] transition-colors rounded-sm">
                                             Request Access
-                                        </button>
-                                    </div>
-                    </div>
+    </button>
+        </div>
+    </div>
         </div>
 
                             <div className="space-y-4">
@@ -403,7 +431,7 @@ export default function DesignSystem() {
                                     <button className="font-mono text-[11px] text-white/60 hover:text-white uppercase tracking-widest transition-colors relative w-full text-left">
                                         {link}
                                         <span className="absolute -bottom-1 left-0 w-0 h-px bg-[#E3E3FD] group-hover:w-full transition-all duration-300"></span>
-                                    </button>
+    </button>
                                     <div className="mt-2 p-3 bg-white/[0.02] rounded-lg border border-white/5">
                                         <code className="font-mono text-[9px] text-white/40">
                                             {`hover:text-white + underline animation`}
@@ -413,7 +441,7 @@ export default function DesignSystem() {
                                 ))}
                             </div>
                          </div>
-                </div>
+        </div>
 
                 {/* Mobile Menu */}
                 <div>
@@ -464,14 +492,14 @@ export default function DesignSystem() {
                             </p>
                         </div>
                     </div>
-                </div>
+        </div>
 
                 {/* Technical Specs */}
                 <div>
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Technical Specifications</span>
                         <div className="h-px flex-1 bg-white/10"></div>
-            </div>
+                            </div>
             
                     <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl space-y-4">
                         {[
@@ -484,12 +512,12 @@ export default function DesignSystem() {
                             <div key={i} className="flex items-center justify-between py-2 border-b border-white/5 last:border-0 group hover:bg-white/[0.02] transition-colors px-2 -mx-2 rounded-lg">
                                 <span className="font-mono text-xs text-white/70 group-hover:text-white transition-colors uppercase tracking-wider">{spec.prop}</span>
                                 <code className="font-mono text-[10px] text-[#E3E3FD]">{spec.value}</code>
-                        </div>
+                                </div>
                         ))}
-                    </div>
-                </div>
+                            </div>
+                        </div>
 
-            </div>
+                            </div>
       </section>
 
         {/* 02. Cards */}
@@ -515,24 +543,31 @@ export default function DesignSystem() {
                         <div className="h-px flex-1 bg-white/10"></div>
                     </div>
                     
-                    <div className="bg-[#1A1614] border border-white/10 p-10 rounded-3xl relative group hover:bg-[#2E2824] hover:border-[#E3E3FD]/50 transition-colors">
-                        {/* Icon Container */}
-                        <div className="w-14 h-14 border border-white/10 bg-white/5 flex items-center justify-center mb-8 group-hover:border-[#E3E3FD] transition-colors rounded-2xl">
-                            <div className="w-6 h-6 bg-white/20 rounded"></div>
-                        </div>
-                        
-                        {/* Badge */}
-                        <span className="font-mono text-xs text-[#E3E3FD] uppercase tracking-widest mb-4 block">01 // Category</span>
-                        
-                        {/* Title */}
-                        <h3 className="font-montreal font-medium text-2xl text-white mb-4">Card Title</h3>
-                        
-                        {/* Description */}
-                        <p className="text-white/50 font-montreal text-sm leading-relaxed">
-                            Card description text. This is the standard pattern used across benefit cards, feature cards, and tool cards.
-                        </p>
-                    </div>
-                    
+                    {/* Live Example */}
+                    <div className="mb-8">
+             <motion.div 
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="bg-[#1A1614] border border-white/10 p-10 rounded-3xl relative group hover:bg-[#2E2824] hover:border-[#E3E3FD]/50 transition-colors"
+                        >
+                            {/* Icon Container */}
+                            <div className="w-14 h-14 border border-white/10 bg-white/5 flex items-center justify-center mb-8 group-hover:border-[#E3E3FD] transition-colors rounded-2xl">
+                                <RefreshCw size={24} className="text-white/60 group-hover:text-[#E3E3FD] transition-colors" />
+        </div>
+
+                            {/* Badge */}
+                            <span className="font-mono text-xs text-[#E3E3FD] uppercase tracking-widest mb-4 block">01 // Revenue Model</span>
+                            
+                            {/* Title */}
+                            <h3 className="font-montreal font-medium text-2xl text-white mb-4">Productised Service</h3>
+                            
+                            {/* Description */}
+                            <p className="text-white/50 font-montreal text-sm leading-relaxed">
+                                Don't just bill for the setup. Sell the tool as a subscription. Create recurring revenue streams from a single design system implementation.
+                            </p>
+                        </motion.div>
+        </div>
+
                     <div className="mt-6 bg-[#261E19] border border-white/10 p-6 rounded-2xl">
                         <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">Structure Breakdown</p>
                         <div className="space-y-3 font-mono text-[9px] text-white/40">
@@ -543,7 +578,7 @@ export default function DesignSystem() {
                             <div className="flex justify-between">
                                 <span>Border:</span>
                                 <code className="text-[#E3E3FD]">border border-white/10</code>
-                            </div>
+                                </div>
                             <div className="flex justify-between">
                                 <span>Padding:</span>
                                 <code className="text-[#E3E3FD]">p-8 md:p-10</code>
@@ -551,7 +586,7 @@ export default function DesignSystem() {
                             <div className="flex justify-between">
                                 <span>Radius:</span>
                                 <code className="text-[#E3E3FD]">rounded-3xl</code>
-                            </div>
+                        </div>
                             <div className="flex justify-between">
                                 <span>Hover BG:</span>
                                 <code className="text-[#E3E3FD]">hover:bg-[#2E2824]</code>
@@ -569,37 +604,69 @@ export default function DesignSystem() {
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Card Variants</span>
                         <div className="h-px flex-1 bg-white/10"></div>
-            </div>
-            
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Benefit Card */}
-                        <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
-                            <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">Benefit Card</p>
-                            <div className="bg-[#261E19] border border-white/10 p-6 rounded-lg mb-4">
-                                <div className="w-12 h-12 border border-white/10 bg-white/5 rounded-2xl mb-4 flex items-center justify-center">
-                                    <div className="w-5 h-5 bg-white/20 rounded"></div>
-                                </div>
-                                <span className="font-mono text-[9px] text-[#E3E3FD] block mb-2">01 // Category</span>
-                                <h4 className="font-montreal font-medium text-xl text-white mb-2">Title</h4>
-                                <p className="text-white/50 font-montreal text-xs">Description text</p>
                             </div>
-                            <p className="font-mono text-[9px] text-white/30">Used in: WaitlistBenefits, feature sections</p>
-                        </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        {/* Benefit Card - Live */}
+                                    <motion.div 
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="bg-[#1A1614] border border-white/10 p-10 relative group hover:bg-[#2E2824] transition-colors rounded-3xl"
+                        >
+                            <div className="w-14 h-14 border border-white/10 bg-white/5 flex items-center justify-center mb-8 group-hover:border-[#E3E3FD] transition-colors rounded-2xl">
+                                <Shield size={24} className="text-white/60 group-hover:text-[#E3E3FD] transition-colors" />
+                            </div>
+                            <h3 className="font-mono text-xs text-[#E3E3FD] uppercase tracking-widest mb-4">02 // Governance</h3>
+                            <h4 className="font-montreal font-medium text-2xl text-white mb-4">Code-Enforced Brand</h4>
+                            <p className="text-white/50 font-montreal text-sm leading-relaxed">
+                                PDF guidelines are suggestions. Branded Objects are laws.
+                            </p>
+                        </motion.div>
 
-                        {/* Tool Card */}
-                        <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
-                            <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">Tool Card</p>
-                            <div className="bg-[#261E19] border border-white/10 p-6 rounded-lg mb-4 relative">
-                                <div className="absolute top-4 right-4">
-                                    <span className="font-mono text-[8px] border border-[#E3E3FD]/20 bg-[#E3E3FD]/10 text-[#E3E3FD] px-2 py-1 rounded-lg">Live</span>
-                                </div>
-                                <div className="w-12 h-12 border border-white/10 bg-white/5 rounded-2xl mb-4 flex items-center justify-center">
-                                    <div className="w-5 h-5 bg-white/20 rounded"></div>
-                                </div>
-                                <h4 className="font-montreal font-medium text-xl text-white mb-2">Tool_Name</h4>
-                                <p className="font-mono text-[9px] text-white/40">Last Edit: 2 mins ago</p>
+                        {/* Tool Card - Live */}
+                        <motion.div 
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.1 }}
+                            className="bg-[#1A1614] border border-white/10 p-8 md:p-10 hover:border-[#E3E3FD]/50 hover:bg-[#2E2824] transition-colors rounded-3xl relative group"
+                        >
+                            <div className="absolute top-6 right-6">
+                                <span className="font-mono text-[9px] uppercase tracking-widest px-2 py-1 border border-[#E3E3FD]/20 bg-[#E3E3FD]/10 text-[#E3E3FD] rounded-lg">Live</span>
                             </div>
-                            <p className="font-mono text-[9px] text-white/30">Used in: StudioDashboard</p>
+                            <div className="w-14 h-14 border border-white/10 bg-white/5 flex items-center justify-center mb-8 group-hover:border-[#E3E3FD] transition-colors rounded-2xl">
+                                <Layout size={24} className="text-white/60 group-hover:text-[#E3E3FD] transition-colors" />
+                            </div>
+                            <h3 className="font-montreal font-medium text-2xl mb-3 group-hover:text-[#E3E3FD] transition-colors">Social_Story_v1</h3>
+                            <div className="flex items-center gap-2 text-white/40">
+                                <Clock size={12} />
+                                <p className="font-mono text-[10px] uppercase tracking-widest">Last Edit: 2 mins ago</p>
+                         </div>
+                        </motion.div>
+
+                        {/* Feature Card - Live */}
+                        <motion.div 
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2 }}
+                            className="bg-[#1A1614] border border-white/10 p-10 relative group hover:bg-[#2E2824] transition-colors rounded-3xl"
+                        >
+                            <div className="w-14 h-14 border border-white/10 bg-white/5 flex items-center justify-center mb-8 group-hover:border-[#E3E3FD] transition-colors rounded-2xl">
+                                <Zap size={24} className="text-white/60 group-hover:text-[#E3E3FD] transition-colors" />
+                            </div>
+                            <h3 className="font-mono text-xs text-[#E3E3FD] uppercase tracking-widest mb-4">03 // Scale</h3>
+                            <h4 className="font-montreal font-medium text-2xl text-white mb-4">Infinite Output</h4>
+                            <p className="text-white/50 font-montreal text-sm leading-relaxed">
+                                Whether the client needs 5 assets or 5000, your effort remains zero.
+                            </p>
+                        </motion.div>
+                            </div>
+                    
+                    <div className="bg-[#261E19] border border-white/10 p-6 rounded-2xl">
+                        <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">Usage</p>
+                        <div className="space-y-2 font-mono text-[9px] text-white/40">
+                            <div>Benefit Card: WaitlistBenefits, feature sections</div>
+                            <div>Tool Card: StudioDashboard</div>
+                            <div>Feature Card: WaitlistFeatures</div>
                         </div>
                     </div>
                 </div>
@@ -609,14 +676,14 @@ export default function DesignSystem() {
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Icon Container</span>
                         <div className="h-px flex-1 bg-white/10"></div>
-                    </div>
+                </div>
                     
                     <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
                         <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-6">Standard Icon Container</p>
                         <div className="flex items-center gap-6 mb-6">
                             <div className="w-14 h-14 border border-white/10 bg-white/5 flex items-center justify-center group hover:border-[#E3E3FD] transition-colors rounded-2xl">
                                 <div className="w-6 h-6 bg-white/20 rounded"></div>
-                        </div>
+                </div>
                         <div>
                                 <p className="font-montreal text-white mb-1">w-14 h-14 (56px)</p>
                                 <code className="font-mono text-[9px] text-white/40">border border-white/10 bg-white/5 rounded-2xl</code>
@@ -625,6 +692,174 @@ export default function DesignSystem() {
                         <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
                             <p className="font-mono text-[9px] text-white/40 mb-2">Hover State</p>
                             <p className="font-montreal text-sm text-white/60">Border changes to <code className="text-[#E3E3FD]">border-[#E3E3FD]</code>, icon color shifts to lavender</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+      </section>
+
+        {/* 02b. Buttons & Forms */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+            <div className="md:col-span-4 sticky top-32 h-fit">
+                <SectionHeader title="Buttons & Forms" number="02b" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
+                    Interactive elements. Primary actions, inputs, and form controls. Every state must be clear and intentional.
+                </p>
+                <div className="flex gap-2 flex-wrap">
+                    <Badge className="bg-[#E3E3FD]/10 border-[#E3E3FD]/30 text-[#E3E3FD]">Primary</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">Secondary</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">Inputs</Badge>
+                </div>
+            </div>
+            
+            <div className="md:col-span-8 space-y-24">
+                
+                {/* Primary Button */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Primary Button</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="space-y-6">
+                        {/* Live Examples */}
+                        <div className="bg-[#1A1614] border border-white/10 p-8 rounded-2xl">
+                            <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-6">Button States</p>
+                            <div className="flex flex-wrap items-center gap-4">
+                                <button 
+                                    className="bg-white text-black px-5 py-2.5 font-mono font-semibold text-[11px] uppercase tracking-widest hover:bg-[#E3E3FD] transition-colors rounded-sm"
+                                    onMouseEnter={() => setButtonHover('primary')}
+                                    onMouseLeave={() => setButtonHover(null)}
+                                >
+                                    Request Access
+                                </button>
+                                <button 
+                                    className="bg-white text-black px-5 py-2.5 font-mono font-semibold text-[11px] uppercase tracking-widest bg-[#E3E3FD] rounded-sm cursor-default"
+                                >
+                                    Hover State
+                                </button>
+                                <button 
+                                    className="bg-white text-black px-5 py-2.5 font-mono font-semibold text-[11px] uppercase tracking-widest opacity-50 cursor-not-allowed rounded-sm"
+                                    disabled
+                                >
+                                    Disabled
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div className="bg-[#261E19] border border-white/10 p-6 rounded-2xl">
+                            <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">Specifications</p>
+                            <div className="space-y-2 font-mono text-[9px] text-white/40">
+                                <div className="flex justify-between">
+                                    <span>Background:</span>
+                                    <code className="text-[#E3E3FD]">bg-white</code>
+                                </div>
+                                <div className="flex justify-between">
+                                    <span>Text:</span>
+                                    <code className="text-[#E3E3FD]">text-black</code>
+                                </div>
+                                <div className="flex justify-between">
+                                    <span>Hover:</span>
+                                    <code className="text-[#E3E3FD]">hover:bg-[#E3E3FD]</code>
+                                </div>
+                                <div className="flex justify-between">
+                                    <span>Padding:</span>
+                                    <code className="text-[#E3E3FD]">px-5 py-2.5</code>
+                                </div>
+                                <div className="flex justify-between">
+                                    <span>Radius:</span>
+                                    <code className="text-[#E3E3FD]">rounded-sm</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Secondary Button */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Secondary Button</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-8 rounded-2xl">
+                        <div className="flex flex-wrap items-center gap-4">
+                            <button className="bg-[#E3E3FD] text-[#261E19] px-4 py-2 font-mono font-semibold text-[10px] uppercase tracking-widest hover:bg-white transition-colors rounded-sm">
+                                Create New
+                            </button>
+                            <button className="bg-[#E3E3FD] text-[#261E19] px-4 py-2 font-mono font-semibold text-[10px] uppercase tracking-widest bg-white rounded-sm cursor-default">
+                                Hover State
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Email Input */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Email Input</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-8 rounded-2xl">
+                        <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center max-w-md">
+                            <div className="relative flex flex-1 items-center bg-[#1A1614] border border-white/10 px-5 py-4 rounded-lg hover:border-white/20 transition-colors">
+                                <Scan size={18} className="text-white/40 mr-3 shrink-0" />
+                                <input 
+                                    type="email" 
+                                    placeholder="studio@agency.com" 
+                                    className="flex-1 bg-transparent text-white pr-2 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-[#E3E3FD] focus:ring-offset-2 focus:ring-offset-[#261E19] placeholder:text-white/30 tracking-wider"
+                                    value={inputValue}
+                                    onChange={(e) => setInputValue(e.target.value)}
+                                />
+                            </div>
+                            <button className="bg-white text-black px-8 py-4 font-mono font-semibold text-[11px] tracking-[0.1em] hover:bg-[#E3E3FD] transition-colors whitespace-nowrap uppercase rounded-lg flex items-center gap-2 justify-center">
+                                Request Access
+                                <ArrowRight size={14} />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Property Control (Inspector) */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Property Control</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                        <div className="space-y-3 max-w-sm">
+                            <div className="group p-3 border border-white/10 rounded-md bg-[#2E2824] hover:border-white/20 transition-colors relative">
+                                <div className="flex justify-between items-center mb-2">
+                                    <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">X (%)</span>
+                                    <button className="flex items-center gap-2 px-1.5 py-0.5 rounded hover:bg-white/5 transition-colors">
+                                        <span className="font-mono text-[8px] text-white/30 uppercase tracking-widest">LOCKED</span>
+                                        <Lock size={12} className="text-[#E3E3FD]" />
+                                    </button>
+                                </div>
+                                <input 
+                                    type="number"
+                                    value="50" 
+                                    className="w-full bg-[#3A3430] text-white font-montreal text-sm px-2 py-1.5 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#E3E3FD]"
+                                    disabled
+                                />
+                            </div>
+                            <div className="group p-3 border border-white/10 rounded-md bg-[#2E2824] hover:border-white/20 transition-colors relative">
+                                <div className="flex justify-between items-center mb-2">
+                                    <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">Content</span>
+                                    <button className="flex items-center gap-2 px-1.5 py-0.5 rounded hover:bg-white/5 transition-colors">
+                                        <span className="font-mono text-[8px] text-[#E3E3FD] uppercase tracking-widest">INPUT</span>
+                                        <Edit3 size={12} className="text-[#E3E3FD]" />
+                                    </button>
+                                </div>
+                                <input 
+                                    type="text"
+                                    value="Sample Headline" 
+                                    className="w-full bg-[#3A3430] text-white font-montreal text-sm px-2 py-1.5 rounded-sm focus:outline-none focus:ring-1 focus:ring-[#E3E3FD]"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -906,7 +1141,7 @@ export default function DesignSystem() {
         {/* 04. System States & Feedback */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div className="md:col-span-4 sticky top-32 h-fit">
-                <SectionHeader title="System States & Feedback" number="03" />
+                <SectionHeader title="System States & Feedback" number="04" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
                     The feedback layer. This is where "premium" vs "hacky" is felt. Every state must be intentional, clear, and consistent.
                 </p>
