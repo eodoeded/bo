@@ -526,6 +526,13 @@ export default function ToolBuilder() {
                         <FigmaProperties 
                             selectedLayer={selectedLayer} 
                             onUpdateLayer={handleUpdateLayer}
+                            clientUI={clientUI}
+                            onUpdateClientUI={(newClientUI) => {
+                                setClientUI(newClientUI);
+                                if (id !== 'new') {
+                                    updateTool(id, { client_ui: newClientUI }).catch(err => console.error('Failed to save client UI:', err));
+                                }
+                            }}
                         />
                     </div>
                     <div className="p-3 border-t border-white/10">

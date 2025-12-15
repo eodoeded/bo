@@ -3,7 +3,7 @@
 
 import React from 'react';
 
-export default function FigmaProperties({ selectedLayer, onUpdateLayer }) {
+export default function FigmaProperties({ selectedLayer, onUpdateLayer, clientUI, onUpdateClientUI }) {
     if (!selectedLayer) {
         return (
             <div className="flex flex-col items-center justify-center h-full text-white/20 p-8 text-center">
