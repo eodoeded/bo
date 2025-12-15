@@ -70,18 +70,33 @@ export default function ToolRunner() {
     }, [id]);
 
     const handleUpdateLayer = (layerId, propKey, newValue) => {
+        // CRITICAL: Lock Enforcement
+        // Find the layer and verify the property is CLIENT_INPUT
+        const layer = layers.find(l => l.id === layerId);
+        if (!layer) return; // Layer doesn't exist
+        
+        const lockState = layer.locks?.[propKey];
+        if (lockState !== 'CLIENT_INPUT') {
+            console.warn(`Attempted to edit locked property: ${propKey} (lock state: ${lockState})`);
+            return; // Reject - property is locked
+        }
+
         // Enforce basic validation
         // Text Length Limit (Hardcoded safety)
         if (typeof newValue === 'string' && newValue.length > 200) {
             return; // Reject input
         }
 
+        // Only update if lock check passes
         setLayers(prev => prev.map(l => {
             if (l.id === layerId) {
-                return {
-                    ...l,
-                    properties: { ...l.properties, [propKey]: newValue }
-                };
+                // Double-check lock state before updating
+                if (l.locks?.[propKey] === 'CLIENT_INPUT') {
+                    return {
+                        ...l,
+                        properties: { ...l.properties, [propKey]: newValue }
+                    };
+                }
             }
             return l;
         }));

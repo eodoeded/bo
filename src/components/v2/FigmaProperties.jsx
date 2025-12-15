@@ -166,21 +166,40 @@ export default function FigmaProperties({ selectedLayer, onUpdateLayer }) {
             <div className="pt-4 border-t border-white/10 space-y-2">
                 <div className="text-[10px] text-white/40 uppercase tracking-widest mb-2">Locks</div>
                 <div className="space-y-1">
-                    {Object.keys(selectedLayer.locks || {}).map(key => (
-                        <label key={key} className="flex items-center gap-2 text-xs text-white/60 cursor-pointer">
-                            <input
-                                type="checkbox"
-                                checked={selectedLayer.locks[key] === 'LOCKED'}
-                                onChange={(e) => {
-                                    const newLocks = { ...selectedLayer.locks };
-                                    newLocks[key] = e.target.checked ? 'LOCKED' : 'CLIENT_INPUT';
-                                    onUpdateLayer(selectedLayer.id, { locks: newLocks });
-                                }}
-                                className="w-3 h-3 rounded border-white/20 bg-white/5"
-                            />
-                            <span className="text-[10px]">{key}</span>
-                        </label>
-                    ))}
+                    {(() => {
+                        // Get all properties that can be locked
+                        const lockableProps = [];
+                        if (selectedLayer.properties.x !== undefined) lockableProps.push('x');
+                        if (selectedLayer.properties.y !== undefined) lockableProps.push('y');
+                        if (selectedLayer.properties.width !== undefined) lockableProps.push('width');
+                        if (selectedLayer.properties.height !== undefined) lockableProps.push('height');
+                        if (selectedLayer.properties.text !== undefined) lockableProps.push('text');
+                        if (selectedLayer.properties.fontSize !== undefined) lockableProps.push('fontSize');
+                        if (selectedLayer.properties.color !== undefined) lockableProps.push('color');
+                        if (selectedLayer.properties.src !== undefined) lockableProps.push('src');
+                        
+                        return lockableProps.map(key => {
+                            const currentLock = selectedLayer.locks?.[key] || 'LOCKED';
+                            return (
+                                <label key={key} className="flex items-center gap-2 text-xs text-white/60 cursor-pointer">
+                                    <select
+                                        value={currentLock}
+                                        onChange={(e) => {
+                                            const newLocks = { ...selectedLayer.locks };
+                                            newLocks[key] = e.target.value;
+                                            onUpdateLayer(selectedLayer.id, { locks: newLocks });
+                                        }}
+                                        className="flex-1 bg-white/5 border border-white/10 text-white text-xs px-2 py-1 rounded focus:outline-none focus:border-white/30"
+                                    >
+                                        <option value="LOCKED">Locked</option>
+                                        <option value="READ_ONLY">Read Only</option>
+                                        <option value="CLIENT_INPUT">Client Input</option>
+                                    </select>
+                                    <span className="text-[10px] w-20">{key}</span>
+                                </label>
+                            );
+                        });
+                    })()}
                 </div>
             </div>
         </div>
