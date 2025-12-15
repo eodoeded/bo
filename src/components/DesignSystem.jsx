@@ -977,7 +977,8 @@ export default function DesignSystem() {
                     <div className="bg-[#1A1614] border border-white/10 p-8 rounded-2xl space-y-6">
                         <div className="space-y-4">
                             <div className="flex items-center gap-3">
-                                <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest border border-[#E3E3FD]/20 bg-[#E3E3FD]/10 px-2 py-1 rounded-full">System_OS v2.5</span>
+                                <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
+                                <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest border border-[#E3E3FD]/20 bg-[#E3E3FD]/10 px-2 py-1 rounded-full">SYSTEM_OS v2.5</span>
                             </div>
                             <h1 className="font-montreal font-medium text-5xl md:text-8xl leading-[0.9] tracking-tight text-white">
                                 Intelligent <br/><span className="text-[#E3E3FD]">Design Systems.</span>

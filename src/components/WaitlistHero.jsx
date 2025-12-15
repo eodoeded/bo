@@ -394,7 +394,7 @@ export default function WaitlistHero() {
                         className="bg-white text-black px-8 py-4 font-mono font-semibold text-[11px] tracking-[0.1em] hover:bg-[#E3E3FD] transition-colors whitespace-nowrap uppercase border border-transparent flex items-center gap-2 justify-center group/btn w-full md:w-auto rounded-lg"
                         disabled={status === 'sending' || status === 'success'}
                     >
-                        {status === 'sending' ? 'Sending...' : status === 'success' ? 'Joined' : 'Request Access'}
+                        {status === 'sending' ? 'SENDING...' : status === 'success' ? 'JOINED' : 'REQUEST_ACCESS'}
                         {status === 'idle' && <ArrowRight size={14} className="group-hover/btn:translate-x-0.5 transition-transform" />}
                     </button>
                 </div>
@@ -415,7 +415,7 @@ export default function WaitlistHero() {
                     className="mt-4 font-mono text-[10px] text-[#E3E3FD] tracking-widest uppercase flex items-center gap-2"
                 >
                     <div className="w-1.5 h-1.5 bg-[#E3E3FD] animate-pulse rounded-full"></div>
-                    Added to secure waitlist.
+                    ADDED_TO_SECURE_WAITLIST
                 </motion.p>
             )}
              {status === 'error' && (
@@ -425,7 +425,7 @@ export default function WaitlistHero() {
                     className="mt-4 font-mono text-[10px] text-red-400 tracking-widest uppercase flex items-center gap-2"
                 >
                     <div className="w-1.5 h-1.5 bg-red-400 rounded-full"></div>
-                    Error. Please try again.
+                    ERROR // PLEASE_TRY_AGAIN
                 </motion.p>
             )}
         </div>
