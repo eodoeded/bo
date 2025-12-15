@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import { 
     RefreshCw, Shield, Zap, CreditCard, Layout, Lock, Eye, Edit3, 
     Type, Image as ImageIcon, Box, Layers, GripVertical, Plus, 
-    Database, Scan, ArrowRight, CheckCircle, AlertTriangle, Download,
+    Database, Scan, ArrowRight, CheckCircle, AlertTriangle, AlertCircle, Download,
     MousePointer, Hand, Clock, Save, Cpu, Activity
 } from 'lucide-react';
 import UnifiedNav from './UnifiedNav';

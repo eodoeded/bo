@@ -1,8 +1,5 @@
-// First, show something immediately
+// Initialize root element
 const rootElement = document.getElementById('root');
-if (rootElement) {
-  rootElement.innerHTML = '<div style="color: white; padding: 20px; font-size: 24px; background: red; position: fixed; top: 0; left: 0; z-index: 99999;">TEST: HTML is working. Loading React...</div>';
-}
 
 // Add comprehensive error handlers
 window.addEventListener('error', (e) => {
