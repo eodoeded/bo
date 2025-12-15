@@ -41,6 +41,6 @@ export { supabase };
 
 // Helper to check if Supabase is configured
 export const isSupabaseConfigured = () => {
-  return !!(supabaseUrl && supabaseAnonKey);
+  return !!(supabaseUrl && supabaseAnonKey && supabaseUrl !== '' && supabaseAnonKey !== '' && supabaseUrl !== 'https://placeholder.supabase.co');
 };
 
