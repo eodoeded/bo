@@ -139,11 +139,18 @@ const IconButton = ({ icon: Icon, active }) => (
 export default function BrandGuidelines() {
   const downloadRef1 = useRef(null);
 
+  // Simple test to verify component renders
+  console.log('BrandGuidelines component rendering');
+
   return (
     <div className="min-h-screen bg-[#261E19] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal overflow-x-hidden relative">
-      {/* Test: Route is working */}
-      <div className="fixed top-20 left-0 right-0 z-[9999] bg-red-500 text-white p-4 text-center font-mono">
-        BRAND GUIDELINES PAGE LOADED
+      {/* Test: Route is working - should be visible */}
+      <div className="fixed top-0 left-0 right-0 z-[99999] bg-red-600 text-white p-6 text-center font-mono text-xl font-bold">
+        ✅ BRAND GUIDELINES PAGE IS LOADING
+      </div>
+      <div className="pt-20 p-8">
+        <h1 className="text-4xl text-white mb-4">Brand Guidelines</h1>
+        <p className="text-white/80">If you can see this, the route is working!</p>
       </div>
       {/* Organic Background Noise */}
       <div className="fixed inset-0 pointer-events-none opacity-[0.03]" style={{ 
