@@ -62,9 +62,9 @@ export default function WaitlistHero() {
   
   // Initial Positions (Percentages) - consistent across breakpoints so mobile mirrors desktop layout
   const [nodes, setNodes] = useState({
-      studio: { x: 32, y: 38 },
-      core:   { x: 58, y: 52 },
-      output: { x: 78, y: 36 }
+      studio: { x: 72, y: 28 },
+      core:   { x: 56, y: 50 },
+      output: { x: 78, y: 64 }
   });
 
   const handleDragStart = (e, id) => {
@@ -320,7 +320,7 @@ export default function WaitlistHero() {
       </div>
 
       {/* Text Content */}
-      <div className="absolute bottom-0 left-0 w-full md:w-auto md:bottom-24 md:left-16 z-30 px-6 pb-12 pt-24 md:pt-0 md:pb-0 pointer-events-none bg-gradient-to-t from-[#261E19] via-[#261E19]/90 to-transparent md:bg-none">
+      <div className="absolute bottom-0 left-0 w-full md:w-auto md:bottom-24 md:left-16 z-30 px-6 pb-12 pt-24 md:pt-0 md:pb-0 pointer-events-none bg-gradient-to-t from-[#261E19] via-[#261E19]/92 to-transparent">
         <div className="flex flex-col items-start text-left pointer-events-auto max-w-2xl">
             <div className="flex items-center gap-3 mb-6">
                 <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest border border-[#E3E3FD]/20 bg-[#E3E3FD]/10 px-2 py-1 rounded-full">System_OS v2.5</span>
@@ -346,30 +346,28 @@ export default function WaitlistHero() {
             </motion.p>
             
             <motion.form
-                className="flex flex-col w-full max-w-full md:max-w-[440px] relative group"
+                className="w-full max-w-[520px] relative group"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.8 }}
                 onSubmit={handleJoin}
             >
-                <div className="relative flex flex-col w-full bg-[#1A1614] border border-white/10 p-1.5 rounded-full">
-                    
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 pl-4 pointer-events-none">
-                        <Scan size={16} className="text-white/30" />
+                <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center">
+                    <div className="relative flex flex-1 items-center bg-[#1A1614] border border-white/10 px-4 py-3 rounded-full">
+                        <Scan size={16} className="text-white/30 mr-3 shrink-0" />
+                        <input 
+                            type="email" 
+                            name="email"
+                            placeholder="studio@agency.com" 
+                            className="flex-1 bg-transparent text-white pr-2 font-mono text-xs focus:outline-none placeholder:text-white/20 tracking-wider"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
                     </div>
-
-                    <input 
-                        type="email" 
-                        name="email"
-                        placeholder="studio@agency.com" 
-                        className="flex-1 bg-transparent text-white pl-10 pr-6 py-4 font-mono text-xs focus:outline-none placeholder:text-white/20 tracking-wider w-full"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
                     <button 
                         type="submit"
-                        className="bg-white text-black px-8 py-4 font-mono font-semibold text-[11px] tracking-[0.1em] hover:bg-[#E3E3FD] transition-colors whitespace-nowrap uppercase border border-transparent flex items-center gap-2 justify-center group/btn mt-2 sm:mt-0 w-full sm:w-auto rounded-full"
+                        className="bg-white text-black px-8 py-3 font-mono font-semibold text-[11px] tracking-[0.1em] hover:bg-[#E3E3FD] transition-colors whitespace-nowrap uppercase border border-transparent flex items-center gap-2 justify-center group/btn w-full md:w-auto rounded-full"
                         disabled={status === 'sending' || status === 'success'}
                     >
                         {status === 'sending' ? 'Sending...' : status === 'success' ? 'Joined' : 'Request Access'}

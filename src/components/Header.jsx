@@ -47,10 +47,6 @@ export default function Header() {
                 Specs
                 <span className="absolute -bottom-1 left-0 w-0 h-px bg-[#E3E3FD] group-hover:w-full transition-all duration-300"></span>
             </button>
-            <Link to="/brandguidelines" className="font-mono text-[11px] text-white/60 hover:text-white uppercase tracking-widest transition-colors relative group">
-                Guidelines
-                <span className="absolute -bottom-1 left-0 w-0 h-px bg-[#E3E3FD] group-hover:w-full transition-all duration-300"></span>
-            </Link>
         </nav>
 
         {/* Right Side Actions */}
@@ -75,7 +71,6 @@ export default function Header() {
             <button onClick={() => scrollToSection('process')} className="py-4 border-b border-white/5 font-mono text-xs text-left uppercase tracking-widest text-white/60">Process</button>
              <button onClick={() => scrollToSection('value')} className="py-4 border-b border-white/5 font-mono text-xs text-left uppercase tracking-widest text-white/60">Value</button>
              <button onClick={() => scrollToSection('specs')} className="py-4 border-b border-white/5 font-mono text-xs text-left uppercase tracking-widest text-white/60">Specifications</button>
-             <Link to="/brandguidelines" className="py-4 font-mono text-xs text-left uppercase tracking-widest text-white/60">Guidelines</Link>
         </div>
       )}
     </header>
