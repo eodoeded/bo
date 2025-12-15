@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Save, Share2 } from 'lucide-react';
 import PreviewCanvas from '../components/v2/PreviewCanvas';
 import FigmaProperties from '../components/v2/FigmaProperties';
-import LayerStack from '../components/v2/LayerStack';
 import { getTool, updateTool, publishTool, createTool } from '../services/tools';
 import UnifiedNav from '../components/UnifiedNav';
 
@@ -376,30 +375,69 @@ export default function ToolBuilder() {
                 </div>
             </div>
 
-            <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
-                {/* Left: Layer Stack */}
-                <aside className="w-full md:w-64 lg:w-72 bg-[#1A1614] border-r border-white/10 flex flex-col z-10 shrink-0">
-                    <LayerStack 
-                        layers={layers} 
-                        selectedId={selectedLayerId} 
-                        onSelect={setSelectedLayerId}
-                        onAddLayer={handleAddLayer}
-                        onDeleteLayer={handleDeleteLayer}
-                    />
-                </aside>
-
-                {/* Center: Canvas Stage */}
-                <main className="flex-1 bg-[#0A0A0A] relative flex items-center justify-center p-4 md:p-8 overflow-hidden min-h-[400px]">
-                    {/* Subtle Grid Pattern */}
-                    <div className="absolute inset-0 opacity-[0.03]" style={{ 
-                        backgroundImage: 'radial-gradient(#E3E3FD 1px, transparent 1px)', 
-                        backgroundSize: '30px 30px' 
-                    }}></div>
-                    
-                    <div className="relative shadow-2xl transition-all duration-300" style={{ width: '400px', height: '500px', maxWidth: '100%' }}>
-                        <div className="absolute -top-6 md:-top-8 left-0 font-mono text-[8px] md:text-[9px] text-white/20 uppercase tracking-widest">
-                            CANVAS: 400x500
+            <div className="flex-1 flex overflow-hidden">
+                {/* Left: Layers (Collapsible) */}
+                {layersPanelOpen && (
+                    <aside className="w-64 bg-[#1A1614] border-r border-white/10 flex flex-col shrink-0">
+                        <div className="p-2 border-b border-white/10 flex items-center justify-between">
+                            <span className="text-xs text-white/60 font-mono uppercase tracking-widest">Layers</span>
+                            <button
+                                onClick={() => setLayersPanelOpen(false)}
+                                className="text-white/40 hover:text-white/60 text-xs"
+                            >
+                                ×
+                            </button>
                         </div>
+                        <div className="flex-1 overflow-y-auto p-2 space-y-1">
+                            {layers.map(layer => (
+                                <div
+                                    key={layer.id}
+                                    onClick={() => setSelectedLayerId(layer.id)}
+                                    className={`p-2 rounded cursor-pointer text-xs ${
+                                        selectedLayerId === layer.id 
+                                            ? 'bg-white/10 text-white' 
+                                            : 'text-white/60 hover:bg-white/5'
+                                    }`}
+                                >
+                                    {layer.name || layer.type}
+                                </div>
+                            ))}
+                            <div className="pt-2 border-t border-white/10 space-y-1">
+                                <button
+                                    onClick={() => handleAddLayer('text')}
+                                    className="w-full p-2 text-left text-xs text-white/40 hover:bg-white/5 rounded"
+                                >
+                                    + Text
+                                </button>
+                                <button
+                                    onClick={() => handleAddLayer('image')}
+                                    className="w-full p-2 text-left text-xs text-white/40 hover:bg-white/5 rounded"
+                                >
+                                    + Image
+                                </button>
+                                <button
+                                    onClick={() => handleAddLayer('rectangle')}
+                                    className="w-full p-2 text-left text-xs text-white/40 hover:bg-white/5 rounded"
+                                >
+                                    + Rectangle
+                                </button>
+                            </div>
+                        </div>
+                    </aside>
+                )}
+
+                {/* Center: Canvas */}
+                <main className="flex-1 bg-[#0A0A0A] relative flex items-center justify-center overflow-hidden">
+                    {!layersPanelOpen && (
+                        <button
+                            onClick={() => setLayersPanelOpen(true)}
+                            className="absolute top-4 left-4 z-20 bg-[#1A1614] border border-white/10 px-3 py-1.5 text-xs text-white/60 hover:text-white rounded"
+                        >
+                            Layers
+                        </button>
+                    )}
+                    
+                    <div className="relative" style={{ width: '400px', height: '500px', maxWidth: '100%' }}>
                         <PreviewCanvas 
                             layers={layers} 
                             selectedLayerId={selectedLayerId}
@@ -419,82 +457,20 @@ export default function ToolBuilder() {
                     </div>
                 </main>
 
-                {/* Right: Properties Panel with Tabs */}
-                <aside className="w-full md:w-80 lg:w-96 bg-[#1A1614] border-l border-white/10 flex flex-col z-10 shrink-0">
-                    {/* Tabs */}
-                    <div className="flex border-b border-white/10 bg-[#1A1614]">
-                        <button
-                            onClick={() => setActiveTab('design')}
-                            className={`flex-1 px-4 py-3 font-mono text-[9px] uppercase tracking-widest transition-colors ${
-                                activeTab === 'design' 
-                                    ? 'bg-[#261E19] text-[#E3E3FD] border-b-2 border-[#E3E3FD]' 
-                                    : 'text-white/40 hover:text-white/60'
-                            }`}
-                        >
-                            DESIGN
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('locks')}
-                            className={`flex-1 px-4 py-3 font-mono text-[9px] uppercase tracking-widest transition-colors ${
-                                activeTab === 'locks' 
-                                    ? 'bg-[#261E19] text-[#E3E3FD] border-b-2 border-[#E3E3FD]' 
-                                    : 'text-white/40 hover:text-white/60'
-                            }`}
-                        >
-                            LOCKS
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('client-ui')}
-                            className={`flex-1 px-4 py-3 font-mono text-[9px] uppercase tracking-widest transition-colors ${
-                                activeTab === 'client-ui' 
-                                    ? 'bg-[#261E19] text-[#E3E3FD] border-b-2 border-[#E3E3FD]' 
-                                    : 'text-white/40 hover:text-white/60'
-                            }`}
-                        >
-                            CLIENT UI
-                        </button>
+                {/* Right: Properties */}
+                <aside className="w-80 bg-[#1A1614] border-l border-white/10 flex flex-col shrink-0">
+                    <div className="p-3 border-b border-white/10">
+                        <span className="text-xs text-white/60 font-mono uppercase tracking-widest">Properties</span>
                     </div>
-                    
-                    {/* Tab Content */}
-                    <div className="flex-1 overflow-y-auto p-3 md:p-4">
-                        {activeTab === 'design' && (
-                            <DesignPanel 
-                                selectedLayer={selectedLayer} 
-                                onUpdateLayer={handleUpdateLayer}
-                            />
-                        )}
-                        {activeTab === 'locks' && (
-                            <LockPanel 
-                                selectedLayer={selectedLayer} 
-                                onUpdateLayer={handleUpdateLayer}
-                            />
-                        )}
-                        {activeTab === 'client-ui' && (
-                            <ClientUIPanel 
-                                toolId={id}
-                                clientUI={clientUI}
-                                onUpdateClientUI={(newClientUI) => {
-                                    setClientUI(newClientUI);
-                                    // Save to tool
-                                    if (id !== 'new') {
-                                        updateTool(id, { clientUI: newClientUI }).catch(err => console.error('Failed to save client UI:', err));
-                                    }
-                                }}
-                            />
-                        )}
+                    <div className="flex-1 overflow-y-auto">
+                        <FigmaProperties 
+                            selectedLayer={selectedLayer} 
+                            onUpdateLayer={handleUpdateLayer}
+                        />
                     </div>
-                    <div className="p-3 md:p-4 border-t border-white/10 bg-[#261E19]/50">
-                        <div className="flex gap-2.5 items-start">
-                            <div className="p-1.5 bg-[#E3E3FD]/10 border border-[#E3E3FD]/20 rounded-md shrink-0">
-                                <Share2 size={11} className="text-[#E3E3FD]"/>
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <p className="font-mono text-[9px] text-white/60 uppercase tracking-widest mb-1.5">RUNNER_LINK</p>
-                                <p className="font-mono text-[9px] text-[#E3E3FD] break-all select-all cursor-copy hover:text-white transition-colors">
-                                    /tool/{id}
-                                </p>
-                            </div>
-                        </div>
+                    <div className="p-3 border-t border-white/10">
+                        <div className="text-[10px] text-white/40 mb-1">Share</div>
+                        <div className="text-xs text-[#E3E3FD] font-mono">/tool/{id}</div>
                     </div>
                 </aside>
             </div>
