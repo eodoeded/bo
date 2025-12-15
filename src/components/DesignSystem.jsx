@@ -1339,6 +1339,273 @@ export default function DesignSystem() {
             </div>
         </section>
 
+        {/* 02e. Tool Builder Patterns */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
+            <div className="md:col-span-4 md:sticky md:top-32 h-fit">
+                <SectionHeader title="Tool Builder" number="02e" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed mb-6">
+                    Studio interface for building locked design tools. Three-panel layout: LayerStack, PreviewCanvas, Inspector. Cellular structures, connection ports, lock states as permissions.
+                </p>
+                <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg mb-8">
+                    <p className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest mb-2">Cellular Architecture</p>
+                    <p className="font-montreal text-sm text-white/60 leading-relaxed">
+                        Layers connect like living cells. Connection ports on each component. Lock states (LOCKED, READ_ONLY, CLIENT_INPUT) define cellular permissions. Feels like building a distributed organism—each layer is a cell with defined boundaries and communication protocols.
+                    </p>
+                </div>
+                <div className="flex gap-2 flex-wrap">
+                    <Badge className="bg-[#E3E3FD]/10 border-[#E3E3FD]/30 text-[#E3E3FD]">LayerStack</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">PreviewCanvas</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">Inspector</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">Lock States</Badge>
+                </div>
+            </div>
+            
+            <div className="md:col-span-8 space-y-24">
+                
+                {/* Secondary Toolbar */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Secondary Toolbar</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                        <div className="h-12 md:h-14 bg-[#1A1614] border-b border-white/10 flex items-center justify-between px-4 md:px-6 lg:px-12">
+                            <div className="flex items-center gap-3 md:gap-4">
+                                <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_6px_#E3E3FD]"></div>
+                                <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">
+                                    TOOL_ID: <span className="text-[#E3E3FD]">x9z-22a</span>
+                                </span>
+                                <span className="font-mono text-[9px] text-white/20 hidden sm:inline">|</span>
+                                <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest hidden sm:inline">BUILDER_MODE</span>
+                            </div>
+                            <button className="bg-[#E3E3FD] text-[#261E19] px-4 md:px-5 py-2 md:py-2.5 font-mono font-semibold text-[10px] md:text-[11px] uppercase tracking-widest hover:bg-white transition-colors flex items-center gap-2 rounded-lg">
+                                <Save size={12} className="md:w-[14px] md:h-[14px]" />
+                                PUBLISH
+                            </button>
+                        </div>
+                        <div className="mt-4 space-y-2 font-mono text-[9px] text-white/40">
+                            <div className="flex justify-between">
+                                <span>Height:</span>
+                                <code className="text-[#E3E3FD]">h-12 md:h-14</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>System Status:</span>
+                                <code className="text-[#E3E3FD]">Bioluminescent indicator + labels</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Action Button:</span>
+                                <code className="text-[#E3E3FD]">Primary button (PUBLISH)</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* LayerStack Component */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">LayerStack</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                        <div className="w-64 bg-[#1A1614] border border-white/10 rounded-lg overflow-hidden">
+                            <div className="p-3 md:p-4 border-b border-white/10 flex justify-between items-center bg-[#1A1614]">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_6px_#E3E3FD]"></div>
+                                    <h2 className="font-mono text-[9px] md:text-[10px] text-white/40 uppercase tracking-widest flex items-center gap-2">
+                                        <Layers size={11} className="text-white/30" />
+                                        LAYER_STACK
+                                    </h2>
+                                </div>
+                                <div className="flex gap-1">
+                                    <button className="p-1.5 hover:bg-white/5 rounded-md border border-transparent hover:border-white/10 text-white/40 hover:text-[#E3E3FD] transition-colors">
+                                        <Type size={12} />
+                                    </button>
+                                    <button className="p-1.5 hover:bg-white/5 rounded-md border border-transparent hover:border-white/10 text-white/40 hover:text-[#E3E3FD] transition-colors">
+                                        <ImageIcon size={12} />
+                                    </button>
+                                    <button className="p-1.5 hover:bg-white/5 rounded-md border border-transparent hover:border-white/10 text-white/40 hover:text-[#E3E3FD] transition-colors">
+                                        <Box size={12} />
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="p-2 md:p-3 space-y-1.5 bg-[#1A1614]">
+                                <div className="group flex items-center gap-2.5 p-2.5 md:p-3 rounded-lg cursor-pointer border bg-[#E3E3FD]/10 border-[#E3E3FD]/30 text-white relative">
+                                    <div className="absolute -left-[3px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full border bg-[#E3E3FD] border-[#E3E3FD] shadow-[0_0_4px_#E3E3FD]"></div>
+                                    <GripVertical size={11} className="text-white/20 shrink-0" />
+                                    <div className="p-1.5 rounded-md border bg-[#E3E3FD]/10 border-[#E3E3FD]/30 shrink-0">
+                                        <Type size={12} className="text-[#E3E3FD]" />
+                                    </div>
+                                    <span className="font-mono text-[9px] md:text-[10px] uppercase tracking-widest flex-1 truncate">Main Headline</span>
+                                    <div className="w-1.5 h-1.5 rounded-full bg-[#E3E3FD] shadow-[0_0_6px_#E3E3FD]"></div>
+                                    <div className="absolute -right-[3px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full border bg-[#E3E3FD] border-[#E3E3FD] shadow-[0_0_4px_#E3E3FD]"></div>
+                                </div>
+                                <div className="group flex items-center gap-2.5 p-2.5 md:p-3 rounded-lg cursor-pointer border bg-white/[0.02] border-white/5 hover:bg-white/[0.04] hover:border-white/10 text-white/60 hover:text-white relative">
+                                    <div className="absolute -left-[3px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full border bg-[#1A1614] border-white/20"></div>
+                                    <GripVertical size={11} className="text-white/20 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+                                    <div className="p-1.5 rounded-md border bg-white/5 border-white/10 shrink-0">
+                                        <Box size={12} className="text-white/40" />
+                                    </div>
+                                    <span className="font-mono text-[9px] md:text-[10px] uppercase tracking-widest flex-1 truncate">Background</span>
+                                    <div className="w-1.5 h-1.5 rounded-full bg-transparent"></div>
+                                    <div className="absolute -right-[3px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full border bg-[#1A1614] border-white/20"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mt-4 space-y-2 font-mono text-[9px] text-white/40">
+                            <div className="flex justify-between">
+                                <span>Connection Ports:</span>
+                                <code className="text-[#E3E3FD]">Left/right ports on each layer</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Status Indicator:</span>
+                                <code className="text-[#E3E3FD]">Bioluminescent dot when selected</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Icon Container:</span>
+                                <code className="text-[#E3E3FD]">Bordered container with layer type icon</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Inspector Component */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Inspector</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                        <div className="w-80 bg-[#1A1614] border border-white/10 rounded-lg p-4">
+                            <div className="pb-3 md:pb-4 border-b border-white/10 mb-2">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_6px_#E3E3FD]"></div>
+                                    <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">SELECTED_LAYER</span>
+                                </div>
+                                <h3 className="font-montreal text-base md:text-lg text-white">Main Headline</h3>
+                                <p className="font-mono text-[8px] text-white/20 uppercase tracking-widest mt-1">LAYER_ID: text-1</p>
+                            </div>
+                            <div className="space-y-3">
+                                <div className="p-3 md:p-4 border border-white/10 rounded-lg bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04] transition-colors relative">
+                                    <div className="absolute -left-[3px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full border bg-[#E3E3FD] border-[#E3E3FD] shadow-[0_0_4px_#E3E3FD]"></div>
+                                    <div className="flex justify-between items-center mb-2.5">
+                                        <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">Content</span>
+                                        <button className="flex items-center gap-1.5 px-2 py-1 rounded-full border border-[#E3E3FD]/30 bg-[#E3E3FD]/10 text-[#E3E3FD] transition-colors">
+                                            <span className="font-mono text-[8px] uppercase tracking-widest">CLIENT_INPUT</span>
+                                            <Edit3 size={11} className="text-[#E3E3FD]" />
+                                        </button>
+                                    </div>
+                                    <input 
+                                        type="text"
+                                        value="SYSTEM_OS v2.4" 
+                                        className="w-full bg-[#261E19] border border-white/10 text-white font-mono text-[10px] md:text-sm px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 placeholder:text-white/20"
+                                    />
+                                    <div className="absolute -right-[3px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full border bg-[#E3E3FD] border-[#E3E3FD] shadow-[0_0_4px_#E3E3FD]"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mt-4 space-y-2 font-mono text-[9px] text-white/40">
+                            <div className="flex justify-between">
+                                <span>Lock States:</span>
+                                <code className="text-[#E3E3FD]">LOCKED, READ_ONLY, CLIENT_INPUT</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Property Controls:</span>
+                                <code className="text-[#E3E3FD]">Connection ports + lock badges</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Input Styling:</span>
+                                <code className="text-[#E3E3FD]">bg-[#261E19] border-white/10</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* PreviewCanvas Component */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">PreviewCanvas</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                        <div className="relative" style={{ width: '400px', height: '500px', maxWidth: '100%', margin: '0 auto' }}>
+                            <div className="w-full h-full bg-[#050505] relative overflow-hidden flex flex-col justify-between border border-white/5 shadow-2xl rounded-lg">
+                                <div className="absolute inset-0 opacity-10 pointer-events-none">
+                                    <div className="absolute inset-0" style={{ 
+                                        backgroundImage: 'radial-gradient(#E3E3FD 1px, transparent 1px)', 
+                                        backgroundSize: '40px 40px' 
+                                    }}></div>
+                                </div>
+                                <div className="absolute bottom-3 left-3 font-mono text-[8px] text-white/20 z-[9999] pointer-events-none flex items-center gap-2">
+                                    <div className="w-1 h-1 bg-[#E3E3FD] rounded-full opacity-40"></div>
+                                    <span>GENERATED_BY_BO_SYSTEM_V2</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="mt-4 space-y-2 font-mono text-[9px] text-white/40">
+                            <div className="flex justify-between">
+                                <span>Background:</span>
+                                <code className="text-[#E3E3FD]">bg-[#050505] with radial grid</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Technical Overlay:</span>
+                                <code className="text-[#E3E3FD]">System branding (bottom-left)</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Layer Rendering:</span>
+                                <code className="text-[#E3E3FD]">Dynamic based on layer stack</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Lock States System */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Lock States (Cellular Permissions)</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="bg-[#1A1614] border border-white/10 p-4 rounded-lg">
+                            <div className="flex items-center gap-2 mb-3">
+                                <Lock size={11} className="text-[#E3E3FD]" />
+                                <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">LOCKED</span>
+                            </div>
+                            <p className="font-montreal text-sm text-white/60 mb-3">Property is hidden from client. Studio-only control.</p>
+                            <div className="px-2 py-1 border border-[#E3E3FD]/20 bg-[#E3E3FD]/10 text-[#E3E3FD] rounded-full inline-block">
+                                <span className="font-mono text-[8px] uppercase">LOCKED</span>
+                            </div>
+                        </div>
+                        <div className="bg-[#1A1614] border border-white/10 p-4 rounded-lg">
+                            <div className="flex items-center gap-2 mb-3">
+                                <Eye size={11} className="text-white/40" />
+                                <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">READ_ONLY</span>
+                            </div>
+                            <p className="font-montreal text-sm text-white/60 mb-3">Client can see but cannot modify. Display only.</p>
+                            <div className="px-2 py-1 border border-white/10 bg-white/5 text-white/40 rounded-full inline-block">
+                                <span className="font-mono text-[8px] uppercase">READ_ONLY</span>
+                            </div>
+                        </div>
+                        <div className="bg-[#1A1614] border border-white/10 p-4 rounded-lg">
+                            <div className="flex items-center gap-2 mb-3">
+                                <Edit3 size={11} className="text-[#E3E3FD]" />
+                                <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">CLIENT_INPUT</span>
+                            </div>
+                            <p className="font-montreal text-sm text-white/60 mb-3">Client can edit. Safe input field exposed in Runner.</p>
+                            <div className="px-2 py-1 border border-[#E3E3FD]/30 bg-[#E3E3FD]/10 text-[#E3E3FD] rounded-full inline-block">
+                                <span className="font-mono text-[8px] uppercase">CLIENT_INPUT</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
         {/* 03. System Nodes (Visual Storytelling) */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
             <div className="md:col-span-4 md:sticky md:top-32 h-fit">
