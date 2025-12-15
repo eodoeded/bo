@@ -23,7 +23,7 @@ const Badge = ({ children, className = "", color = "text-[#E3E3FD]" }) => (
 );
 
 export default function DesignSystem() {
-  return (
+    return (
     <div className="min-h-screen bg-[#261E19] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal overflow-x-hidden relative">
       <div className="fixed inset-0 bg-[#261E19] z-0"></div>
       
@@ -45,7 +45,7 @@ export default function DesignSystem() {
             <p className="font-montreal text-white/60 text-lg leading-relaxed max-w-md">
                 Complete documentation of the Branded Objects visual language. Every component, pattern, and rule.
             </p>
-            </div>
+              </div>
       </section>
 
       {/* Main Content */}
@@ -126,9 +126,9 @@ export default function DesignSystem() {
                                     <p className="font-mono text-[8px] text-white/30">{color.value}</p>
                                     <p className="font-mono text-[8px] text-white/20 mt-1">{color.usage}</p>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
+              ))}
+           </div>
+            </div>
 
                     {/* Text Opacity Scale */}
                     <div>
@@ -148,8 +148,8 @@ export default function DesignSystem() {
                                     </div>
                                     <code className="font-mono text-[9px] text-white/40">{level.opacity}</code>
                                 </div>
-                            ))}
-                        </div>
+            ))}
+          </div>
                     </div>
                 </div>
 
@@ -235,12 +235,12 @@ export default function DesignSystem() {
                                     <div>
                                         <p className="font-mono text-xs text-white/70 group-hover:text-white transition-colors uppercase tracking-wider">{spacing.name}</p>
                                         <p className="font-mono text-[9px] text-white/30 mt-1">{spacing.usage}</p>
-                                    </div>
+        </div>
                                     <div className="text-right">
                                         <code className="font-mono text-[10px] text-[#E3E3FD] block">{spacing.value}</code>
                                         <span className="font-mono text-[9px] text-white/40">{spacing.pixels}</span>
-                                    </div>
-                                </div>
+        </div>
+    </div>
                             ))}
                         </div>
                     </div>
@@ -301,8 +301,8 @@ export default function DesignSystem() {
                         <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{
                             backgroundImage: 'radial-gradient(circle at 2px 2px, #E3E3FD 1px, transparent 0)',
                             backgroundSize: '24px 24px'
-                        }}></div>
-                        
+      }}></div>
+
                         <div className="relative z-10">
                             <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-6">UnifiedNav Component</p>
                             
@@ -320,7 +320,7 @@ export default function DesignSystem() {
                                         </button>
                                     </div>
                     </div>
-                </div>
+        </div>
 
                             <div className="space-y-4">
                                 <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
@@ -338,14 +338,14 @@ export default function DesignSystem() {
                         </div>
                         </div>
                     </div>
-                </div>
+        </div>
 
                 {/* Context States */}
                 <div>
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Context States</span>
                         <div className="h-px flex-1 bg-white/10"></div>
-                    </div>
+                            </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* Landing State */}
@@ -353,7 +353,7 @@ export default function DesignSystem() {
                             <div className="flex items-center gap-2 mb-4">
                                 <div className="w-2 h-2 bg-[#E3E3FD] rounded-full"></div>
                                 <p className="font-mono text-[10px] text-white uppercase tracking-widest">Landing Page</p>
-                            </div>
+                                </div>
                             <div className="space-y-3 mb-4">
                                 <div className="h-10 bg-[#261E19] border border-white/10 rounded-lg flex items-center justify-between px-4">
                                     <span className="font-mono text-xs text-white/60">[ BO ]</span>
@@ -361,9 +361,9 @@ export default function DesignSystem() {
                                         <span className="font-mono text-[9px] text-white/40">Process</span>
                                         <span className="font-mono text-[9px] text-white/40">Value</span>
                                         <span className="font-mono text-[9px] text-white/40">Specs</span>
-                                    </div>
+                            </div>
                                     <button className="bg-white text-black px-3 py-1.5 font-mono text-[9px] uppercase rounded-sm">Request Access</button>
-                                </div>
+                        </div>
                             </div>
                             <p className="font-mono text-[9px] text-white/30">Shows center nav links + CTA button</p>
                         </div>
@@ -380,8 +380,8 @@ export default function DesignSystem() {
                                         <span className="font-mono text-xs text-white/60">[ BO ]</span>
                                         <div className="h-3 w-px bg-white/10"></div>
                                         <span className="font-mono text-[9px] text-[#E3E3FD]">Studio</span>
-                                    </div>
-                                </div>
+                            </div>
+                        </div>
                             </div>
                             <p className="font-mono text-[9px] text-white/30">Shows context divider (Studio/Builder)</p>
                         </div>
@@ -393,7 +393,7 @@ export default function DesignSystem() {
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Navigation Links</span>
                         <div className="h-px flex-1 bg-white/10"></div>
-            </div>
+                            </div>
             
                     <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
                         <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-6">Link Pattern</p>
@@ -410,9 +410,9 @@ export default function DesignSystem() {
                                         </code>
                                     </div>
                             </div>
-                        ))}
-                        </div>
-                    </div>
+                                ))}
+                            </div>
+                         </div>
                 </div>
 
                 {/* Mobile Menu */}
@@ -420,7 +420,7 @@ export default function DesignSystem() {
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Mobile Menu</span>
                         <div className="h-px flex-1 bg-white/10"></div>
-                    </div>
+                            </div>
                     
                     <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
                         <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-6">Mobile Overlay Pattern</p>
@@ -436,7 +436,7 @@ export default function DesignSystem() {
                             </button>
                             </div>
                         <p className="font-mono text-[9px] text-white/30 mt-4">Full-screen overlay from top, slides down on mobile</p>
-                    </div>
+                        </div>
                 </div>
 
                 {/* Brand Mark */}
@@ -450,7 +450,7 @@ export default function DesignSystem() {
                         <div className="flex items-center gap-6 mb-6">
                             <div className="p-4 bg-[#261E19] border border-white/10 rounded-lg">
                                 <span className="font-mono text-lg tracking-widest text-white hover:text-[#E3E3FD] transition-colors uppercase">[ BO ]</span>
-                            </div>
+                </div>
                             <div className="flex-1">
                                 <p className="font-montreal text-white mb-1">[ BO ]</p>
                                 <p className="font-mono text-[9px] text-white/40">font-mono text-sm tracking-widest uppercase</p>
@@ -490,7 +490,7 @@ export default function DesignSystem() {
                 </div>
 
             </div>
-        </section>
+      </section>
 
         {/* 02. Cards */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
@@ -632,7 +632,278 @@ export default function DesignSystem() {
             </div>
         </section>
 
-        {/* 03. System States & Feedback */}
+        {/* 03. System Nodes (Visual Storytelling) */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+            <div className="md:col-span-4 sticky top-32 h-fit">
+                <SectionHeader title="System Nodes" number="03" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
+                    Floating nodes represent the system architecture visually. Like cells in an organism or nodes in an ant colony—each connected, each purposeful. Used for illustration and storytelling only, never in production UI.
+                </p>
+                <div className="flex gap-2 flex-wrap">
+                    <Badge className="bg-[#E3E3FD]/10 border-[#E3E3FD]/30 text-[#E3E3FD]">Illustration</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">Marketing</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">Organic</Badge>
+                </div>
+            </div>
+            
+            <div className="md:col-span-8 space-y-24">
+                
+                {/* Purpose & Philosophy */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Purpose & Philosophy</span>
+                         <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl space-y-4">
+                        <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
+                            <p className="font-mono text-xs text-white/70 uppercase tracking-widest mb-2">Visual Storytelling</p>
+                            <p className="font-montreal text-sm text-white/60 leading-relaxed">
+                                Nodes illustrate the system architecture: Studio → Core → Output. They show data flow, connections, and the organic nature of the system.
+                            </p>
+                    </div>
+                        <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
+                            <p className="font-mono text-xs text-white/70 uppercase tracking-widest mb-2">Aesthetic Hybrid</p>
+                            <p className="font-montreal text-sm text-white/60 leading-relaxed">
+                                Cellular/ant colony (organic, connected) × Boston Robotics (technical, precise). The nodes embody this unique visual identity.
+                            </p>
+                        </div>
+                        <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+                            <p className="font-mono text-xs text-red-400 uppercase tracking-widest mb-2">Usage Restriction</p>
+                            <p className="font-montreal text-sm text-white/70 leading-relaxed">
+                                <strong>Marketing/Landing only.</strong> Never use in Studio, Builder, or Runner. They are illustration, not functional UI.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Node Structure */}
+              <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Node Structure</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                        {/* Visual Example */}
+                        <div className="bg-[#261E19] border border-white/10 p-6 rounded-lg mb-6 relative" style={{ minHeight: '200px' }}>
+                            <div className="absolute top-6 left-6 bg-[#1A1614]/90 border border-white/10 p-3 md:p-4 w-48 shadow-2xl backdrop-blur-xl rounded-2xl">
+                                <div className="flex justify-between items-center mb-3 pb-2 border-b border-white/5">
+                                    <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">Design_Studio</span>
+                                    <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full shadow-[0_0_8px_#E3E3FD]"></div>
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                    <div className="flex items-center gap-2 text-white/60">
+                                        <div className="w-3 h-3 bg-white/20 rounded"></div>
+                                        <span className="font-mono text-[9px]">ASSETS_LOADED</span>
+                                    </div>
+                                    <div className="flex items-center gap-2 text-white/60">
+                                        <div className="w-3 h-3 bg-[#E3E3FD]/20 rounded"></div>
+                                        <span className="font-mono text-[9px] text-[#E3E3FD]">RULES_LOCKED</span>
+                                    </div>
+                                </div>
+                                {/* Ports */}
+                                <div className="absolute -left-[4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-[#1A1614] border border-white/20 rounded-full"></div>
+                                <div className="absolute -right-[4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-[#1A1614] border border-white/20 rounded-full"></div>
+                            </div>
+                        </div>
+                        
+                        <div className="space-y-4">
+                            <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
+                                <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-2">Container</p>
+                                <code className="font-mono text-[10px] text-[#E3E3FD] block">bg-[#1A1614]/90 border border-white/10 rounded-2xl backdrop-blur-xl</code>
+                            </div>
+                            <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
+                                <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-2">Header</p>
+                                <code className="font-mono text-[10px] text-[#E3E3FD] block">Title (mono, uppercase) + Status dot (lavender, pulsing)</code>
+                            </div>
+                            <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
+                                <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-2">Content</p>
+                                <code className="font-mono text-[10px] text-[#E3E3FD] block">Icon + Label pairs (system status indicators)</code>
+                            </div>
+                            <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
+                                <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-2">Ports</p>
+                                <code className="font-mono text-[10px] text-[#E3E3FD] block">Circular connection points (left/right, hover: lavender)</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Connection Lines */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Connection Lines</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                        <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-6">Organic Bezier Curves</p>
+                        
+                        <div className="space-y-4 mb-6">
+                            <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
+                                <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-2">Base Path</p>
+                                <code className="font-mono text-[10px] text-[#E3E3FD] block mb-2">White, strokeOpacity 0.2, strokeWidth 0.05</code>
+                                <p className="font-montreal text-sm text-white/60">Static connection line (always visible)</p>
+                            </div>
+                            <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
+                                <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-2">Pulse Path</p>
+                                <code className="font-mono text-[10px] text-[#E3E3FD] block mb-2">Lavender (#E3E3FD), animated pathLength</code>
+                                <p className="font-montreal text-sm text-white/60">Animated pulse showing data flow (4s duration, infinite loop)</p>
+                            </div>
+                        </div>
+                        
+                        <div className="p-4 bg-[#261E19] border border-white/10 rounded-lg">
+                            <p className="font-mono text-[9px] text-white/40 mb-2">Animation Pattern</p>
+                            <div className="space-y-2 font-mono text-[9px] text-white/40">
+                                <div>pathLength: [0, 0.4, 0] (grows then shrinks)</div>
+                                <div>pathOffset: [0, 1, 1] (moves along path)</div>
+                                <div>opacity: [0, 1, 0] (fades in/out)</div>
+                                <div className="text-[#E3E3FD] mt-2">Duration: 4s, ease: easeInOut, infinite</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Floating Animation */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Floating Animation</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                        <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-6">Subtle Vertical Float</p>
+                        <div className="space-y-4">
+                            <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
+                                <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-2">Animation</p>
+                                <code className="font-mono text-[10px] text-[#E3E3FD] block mb-2">y: [0, -4, 0]</code>
+                                <p className="font-montreal text-sm text-white/60">Moves up 4px, returns to start</p>
+                            </div>
+                            <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
+                                <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-2">Timing</p>
+                                <code className="font-mono text-[10px] text-[#E3E3FD] block mb-2">Duration: 6s, ease: easeInOut, infinite</code>
+                                <p className="font-montreal text-sm text-white/60">Slow, organic breathing motion</p>
+                            </div>
+                            <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
+                                <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-2">Disabled on Drag</p>
+                                <code className="font-mono text-[10px] text-[#E3E3FD] block mb-2">isDragging ? {} : animate</code>
+                                <p className="font-montreal text-sm text-white/60">Animation pauses when user drags node</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Draggable Behavior */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Draggable Behavior</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                        <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-6">Interactive Positioning</p>
+                        <div className="space-y-4">
+                            <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
+                                <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-2">Cursor States</p>
+                                <code className="font-mono text-[10px] text-[#E3E3FD] block">cursor-grab (idle) → cursor-grabbing (active)</code>
+                            </div>
+                            <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
+                                <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-2">Position Storage</p>
+                                <code className="font-mono text-[10px] text-[#E3E3FD] block">Percentage-based (x%, y%) for responsive scaling</code>
+                            </div>
+                            <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
+                                <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-2">Boundary Constraints</p>
+                                <code className="font-mono text-[10px] text-[#E3E3FD] block">Nodes constrained to container bounds</code>
+                            </div>
+                        </div>
+                        <div className="mt-6 p-4 bg-white/[0.02] border border-white/5 rounded-lg">
+                            <p className="font-mono text-[9px] text-white/40 mb-2">Note</p>
+                            <p className="font-montreal text-sm text-white/60">
+                                Dragging is for engagement on landing page only. In production UI, nodes would be static or non-interactive.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Node Types */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Node Types</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {[
+                            { 
+                                name: 'Design_Studio', 
+                                width: 'w-28 md:w-48',
+                                content: 'ASSETS_LOADED, RULES_LOCKED',
+                                role: 'Input node - represents studio setup'
+                            },
+                            { 
+                                name: 'Branded_Objects', 
+                                width: 'w-40 md:w-64',
+                                content: 'Core processing node with visual element',
+                                role: 'Core node - system processing'
+                            },
+                            { 
+                                name: 'Client_Output', 
+                                width: 'w-28 md:w-48',
+                                content: 'RENDER_COMPLETE, INSTANT_DELIVERY',
+                                role: 'Output node - final delivery'
+                            }
+                        ].map((node, i) => (
+                            <div key={i} className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                                <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">{node.name}</p>
+                                <div className="space-y-2 mb-4">
+                                    <div className="p-3 bg-[#261E19] border border-white/10 rounded-lg">
+                                        <p className="font-mono text-[9px] text-white/60 mb-1">Width</p>
+                                        <code className="font-mono text-[9px] text-[#E3E3FD]">{node.width}</code>
+                                    </div>
+                                    <div className="p-3 bg-[#261E19] border border-white/10 rounded-lg">
+                                        <p className="font-mono text-[9px] text-white/60 mb-1">Content</p>
+                                        <p className="font-montreal text-xs text-white/60">{node.content}</p>
+                                    </div>
+                                </div>
+                                <p className="font-mono text-[9px] text-white/30">{node.role}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Visual Identity */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Visual Identity</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl space-y-4">
+                        <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
+                            <p className="font-mono text-xs text-white/70 uppercase tracking-widest mb-2">Cellular / Ant Colony</p>
+                            <p className="font-montreal text-sm text-white/60 leading-relaxed">
+                                Nodes represent individual cells or colony members—each connected, each part of a larger organism. The connections show communication and data flow.
+                            </p>
+                        </div>
+                        <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
+                            <p className="font-mono text-xs text-white/70 uppercase tracking-widest mb-2">Boston Robotics</p>
+                            <p className="font-montreal text-sm text-white/60 leading-relaxed">
+                                Technical precision, mechanical beauty. The nodes are precise, measured, but still feel organic—like Spot the robot: technical but alive.
+                            </p>
+                        </div>
+                        <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
+                            <p className="font-mono text-xs text-white/70 uppercase tracking-widest mb-2">System Architecture</p>
+                            <p className="font-montreal text-sm text-white/60 leading-relaxed">
+                                The three-node system (Studio → Core → Output) visually represents the product flow. It's not decoration—it's a diagram of how the system works.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        {/* 04. System States & Feedback */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div className="md:col-span-4 sticky top-32 h-fit">
                 <SectionHeader title="System States & Feedback" number="03" />
@@ -668,7 +939,7 @@ export default function DesignSystem() {
                                 </div>
                             </div>
                             <p className="font-mono text-[9px] text-white/30 mt-4">Used for: Tool list, card grids</p>
-                        </div>
+                </div>
 
                         {/* Inline Loader */}
                         <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
@@ -678,7 +949,7 @@ export default function DesignSystem() {
                                     <div className="w-3 h-3 border-2 border-black/20 border-t-black rounded-full animate-spin"></div>
                                     Rendering...
                                 </button>
-                            </div>
+                        </div>
                             <p className="font-mono text-[9px] text-white/30 mt-4">Used for: Export, save, async actions</p>
                         </div>
                     </div>
@@ -689,7 +960,7 @@ export default function DesignSystem() {
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Empty States</span>
                         <div className="h-px flex-1 bg-white/10"></div>
-                    </div>
+                            </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* No Tools */}
@@ -698,11 +969,11 @@ export default function DesignSystem() {
                             <div className="bg-[#261E19] border border-white/10 p-8 rounded-lg text-center">
                                 <div className="w-12 h-12 border border-white/10 bg-white/5 rounded-2xl mx-auto mb-4 flex items-center justify-center">
                                     <div className="w-5 h-5 bg-white/20 rounded"></div>
-                                </div>
+                        </div>
                                 <p className="font-montreal text-white/60 text-sm mb-2">No tools created</p>
                                 <p className="font-mono text-[9px] text-white/40">Create your first tool to get started</p>
                             </div>
-                        </div>
+                            </div>
 
                         {/* No Selection */}
                         <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
@@ -710,9 +981,9 @@ export default function DesignSystem() {
                             <div className="bg-[#261E19] border border-white/10 p-8 rounded-lg text-center">
                                 <p className="font-mono text-[10px] text-white/20 uppercase tracking-widest mb-2">No Layer Selected</p>
                                 <p className="font-montreal text-xs text-white/40">Select a layer to configure properties</p>
-                            </div>
                         </div>
                     </div>
+                </div>
                 </div>
 
                 {/* Error States */}
@@ -783,10 +1054,10 @@ export default function DesignSystem() {
             </div>
         </section>
 
-        {/* 04. Motion & Interaction Principles */}
+        {/* 05. Motion & Interaction Principles */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div className="md:col-span-4 sticky top-32 h-fit">
-                <SectionHeader title="Motion & Interaction" number="04" />
+                <SectionHeader title="Motion & Interaction" number="05" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
                     Formalized motion rules. Prevents random animations. Ensures consistent feel across all surfaces.
                 </p>
@@ -800,7 +1071,7 @@ export default function DesignSystem() {
             <div className="md:col-span-8 space-y-24">
                 
                 {/* Timing Rules */}
-                <div>
+                            <div>
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Timing Rules</span>
                         <div className="h-px flex-1 bg-white/10"></div>
@@ -904,10 +1175,10 @@ export default function DesignSystem() {
             </div>
         </section>
 
-        {/* 05. Role-Based UI Rules */}
+        {/* 06. Role-Based UI Rules */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div className="md:col-span-4 sticky top-32 h-fit">
-                <SectionHeader title="Role Separation" number="05" />
+                <SectionHeader title="Role Separation" number="06" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
                     Critical for Branded Objects. Studio UI is dense and technical. Client UI is simple and constrained. This directly supports the value prop.
                 </p>
@@ -924,7 +1195,7 @@ export default function DesignSystem() {
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Studio UI Principles</span>
                         <div className="h-px flex-1 bg-white/10"></div>
-                    </div>
+                            </div>
                     
                     <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl space-y-4">
                         {[
@@ -936,17 +1207,17 @@ export default function DesignSystem() {
                             <div key={i} className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
                                 <p className="font-mono text-xs text-white/70 uppercase tracking-widest mb-2">{item.principle}</p>
                                 <p className="font-montreal text-sm text-white/60">{item.description}</p>
-                            </div>
+                        </div>
                         ))}
+                        </div>
                     </div>
-                </div>
 
                 {/* Client UI Principles */}
                 <div>
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Client UI Principles</span>
                         <div className="h-px flex-1 bg-white/10"></div>
-                    </div>
+                </div>
                     
                     <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl space-y-4">
                         {[
@@ -1028,10 +1299,10 @@ export default function DesignSystem() {
             </div>
         </section>
 
-        {/* 06. Surface-Specific Themes */}
+        {/* 07. Surface-Specific Themes */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div className="md:col-span-4 sticky top-32 h-fit">
-                <SectionHeader title="Surface Variants" number="06" />
+                <SectionHeader title="Surface Variants" number="07" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
                     Marketing surfaces are more expressive. Product surfaces are dense and functional. Never blur the two.
                 </p>
@@ -1044,11 +1315,11 @@ export default function DesignSystem() {
             <div className="md:col-span-8 space-y-24">
                 
                 {/* Marketing Surfaces */}
-                <div>
+                        <div>
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Marketing Surfaces</span>
                         <div className="h-px flex-1 bg-white/10"></div>
-                    </div>
+                        </div>
                     
                     <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl space-y-4">
                         <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">Landing Page, Waitlist</p>
@@ -1067,11 +1338,11 @@ export default function DesignSystem() {
                 </div>
 
                 {/* Product Surfaces */}
-                <div>
+                        <div>
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Product Surfaces</span>
                         <div className="h-px flex-1 bg-white/10"></div>
-                    </div>
+                        </div>
                     
                     <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl space-y-4">
                         <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">Studio, Tool Builder, Runner</p>
@@ -1084,18 +1355,18 @@ export default function DesignSystem() {
                             <div key={i} className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
                                 <p className="font-mono text-xs text-white/70 uppercase tracking-widest mb-2">{item.rule}</p>
                                 <p className="font-montreal text-sm text-white/60">{item.description}</p>
-                            </div>
-                        ))}
                     </div>
+                        ))}
+                </div>
                 </div>
 
             </div>
         </section>
 
-        {/* 07. Accessibility & Contrast Rules */}
+        {/* 08. Accessibility & Contrast Rules */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div className="md:col-span-4 sticky top-32 h-fit">
-                <SectionHeader title="Accessibility Baselines" number="07" />
+                <SectionHeader title="Accessibility Baselines" number="08" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
                     Lightweight guardrails. Not WCAG theatre, but essential protection for larger studios and organizations.
                 </p>
@@ -1113,7 +1384,7 @@ export default function DesignSystem() {
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Minimum Contrast Ratios</span>
                         <div className="h-px flex-1 bg-white/10"></div>
-                    </div>
+                        </div>
                     
                     <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl space-y-4">
                         {[
@@ -1131,14 +1402,14 @@ export default function DesignSystem() {
                             </div>
                         ))}
                     </div>
-                </div>
-
+                    </div>
+                    
                 {/* Focus Rings */}
                 <div>
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Focus Ring Requirements</span>
                         <div className="h-px flex-1 bg-white/10"></div>
-                    </div>
+                            </div>
                     
                     <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
                         <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-6">Keyboard Navigation</p>
@@ -1148,7 +1419,7 @@ export default function DesignSystem() {
                                     Button with Focus Ring
                                 </button>
                                 <code className="font-mono text-[9px] text-white/40 block mt-2">focus:ring-2 focus:ring-[#E3E3FD]</code>
-                            </div>
+                        </div>
                             <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
                                 <input 
                                     type="text" 
@@ -1189,10 +1460,10 @@ export default function DesignSystem() {
             </div>
         </section>
 
-        {/* 08. Deprecation & Forbidden Patterns */}
+        {/* 09. Deprecation & Forbidden Patterns */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div className="md:col-span-4 sticky top-32 h-fit">
-                <SectionHeader title="Forbidden Patterns" number="08" />
+                <SectionHeader title="Forbidden Patterns" number="09" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
                     Expanded anti-patterns. These lock the system harder and prevent visual drift.
                 </p>
@@ -1208,7 +1479,7 @@ export default function DesignSystem() {
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Visual Forbidden Patterns</span>
                         <div className="h-px flex-1 bg-white/10"></div>
-                    </div>
+                        </div>
                     
                     <div className="bg-[#1A1614] border border-red-500/20 p-6 rounded-2xl space-y-3">
                         {[
@@ -1224,17 +1495,17 @@ export default function DesignSystem() {
                             <div key={i} className="flex items-center gap-3 p-3 bg-red-500/5 border border-red-500/10 rounded-lg">
                                 <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
                                 <p className="font-montreal text-sm text-white/70">{pattern}</p>
-                            </div>
+                        </div>
                         ))}
                     </div>
                 </div>
 
                 {/* Interaction Forbidden */}
-                <div>
+                        <div>
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Interaction Forbidden Patterns</span>
                         <div className="h-px flex-1 bg-white/10"></div>
-                    </div>
+                            </div>
                     
                     <div className="bg-[#1A1614] border border-red-500/20 p-6 rounded-2xl space-y-3">
                         {[
@@ -1250,7 +1521,7 @@ export default function DesignSystem() {
                             <div key={i} className="flex items-center gap-3 p-3 bg-red-500/5 border border-red-500/10 rounded-lg">
                                 <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
                                 <p className="font-montreal text-sm text-white/70">{pattern}</p>
-                            </div>
+                        </div>
                         ))}
                     </div>
                 </div>
