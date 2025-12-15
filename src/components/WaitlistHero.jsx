@@ -356,45 +356,27 @@ export default function WaitlistHero() {
                 transition={{ delay: 0.2, duration: 0.8 }}
                 onSubmit={handleJoin}
             >
-                <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#E3E3FD]/10 via-[#E3E3FD]/5 to-transparent rounded-lg blur-xl"></div>
-                    <div className="relative flex items-center gap-0 bg-[#1A1614]/80 backdrop-blur-sm border border-white/10 rounded-lg overflow-hidden group-hover:border-[#E3E3FD]/30 transition-all duration-300">
+                <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center">
+                    <div className="relative flex flex-1 items-center bg-[#1A1614] border border-white/12 px-4 py-3 rounded-md">
+                        <Scan size={16} className="text-white/30 mr-3 shrink-0" />
                         <input 
                             type="email" 
                             name="email"
-                            placeholder="Enter studio email" 
-                            className="flex-1 bg-transparent text-white px-5 py-4 font-mono text-sm focus:outline-none placeholder:text-white/30 tracking-wide"
+                            placeholder="studio@agency.com" 
+                            className="flex-1 bg-transparent text-white pr-2 font-mono text-xs focus:outline-none placeholder:text-white/20 tracking-wider"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
                         />
-                        <button 
-                            type="submit"
-                            className="px-6 py-4 bg-[#E3E3FD] text-[#261E19] font-mono font-medium text-[10px] tracking-widest uppercase hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shrink-0"
-                            disabled={status === 'sending' || status === 'success'}
-                        >
-                            {status === 'sending' ? (
-                                <span className="flex items-center gap-2">
-                                    <motion.div className="w-3 h-3 border-2 border-[#261E19]/30 border-t-[#261E19] rounded-full" animate={{ rotate: 360 }} transition={{ duration: 0.8, repeat: Infinity, ease: "linear" }}></motion.div>
-                                    Sending
-                                </span>
-                            ) : status === 'success' ? (
-                                <span className="flex items-center gap-2">
-                                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="w-3 h-3 bg-[#261E19] rounded-full flex items-center justify-center">
-                                        <motion.svg initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} className="w-2 h-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                                        </motion.svg>
-                                    </motion.div>
-                                    Joined
-                                </span>
-                            ) : (
-                                <>
-                                    Request Access
-                                    <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
-                                </>
-                            )}
-                        </button>
                     </div>
+                    <button 
+                        type="submit"
+                        className="bg-white text-black px-8 py-3 font-mono font-semibold text-[11px] tracking-[0.1em] hover:bg-[#E3E3FD] transition-colors whitespace-nowrap uppercase border border-transparent flex items-center gap-2 justify-center group/btn w-full md:w-auto rounded-md"
+                        disabled={status === 'sending' || status === 'success'}
+                    >
+                        {status === 'sending' ? 'Sending...' : status === 'success' ? 'Joined' : 'Request Access'}
+                        {status === 'idle' && <ArrowRight size={14} className="group-hover/btn:translate-x-0.5 transition-transform" />}
+                    </button>
                 </div>
             </motion.form>
             <div className="mt-4 flex items-center gap-3">
