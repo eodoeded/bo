@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Layout, Zap, Clock } from 'lucide-react';
+import { Plus, Layout, Zap, Clock, Activity, Database, Cpu } from 'lucide-react';
 import { motion } from 'framer-motion';
 import UnifiedNav from '../components/UnifiedNav';
 
 const mockTools = [
-    { id: 'x9z-22a', name: 'Social_Story_v1', lastEdited: '2 mins ago', status: 'Live', icon: Layout },
-    { id: 'b4b-99c', name: 'Event_Banner_Wide', lastEdited: '2 days ago', status: 'Draft', icon: Layout },
+    { id: 'x9z-22a', name: 'Social_Story_v1', lastEdited: '2 mins ago', status: 'Live', icon: Layout, outputs: 1247, latency: '12ms' },
+    { id: 'b4b-99c', name: 'Event_Banner_Wide', lastEdited: '2 days ago', status: 'Draft', icon: Layout, outputs: 0, latency: '—' },
 ];
 
 export default function StudioDashboard() {
@@ -22,21 +22,31 @@ export default function StudioDashboard() {
       }}></div>
 
       <main className="max-w-[1400px] mx-auto px-6 md:px-12 pt-20 md:pt-24 pb-20 relative z-10">
+        {/* System Status Header */}
+        <div className="flex items-center gap-3 mb-8 pb-4 border-b border-white/5">
+          <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
+          <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">SYSTEM_OS v2.5</span>
+          <span className="font-mono text-[9px] text-white/20">|</span>
+          <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">ALL_MODULES_OPERATIONAL</span>
+          <span className="font-mono text-[9px] text-white/20">|</span>
+          <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">UPTIME: 99.9%</span>
+        </div>
+
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-16 border-b border-white/10 pb-8">
           <div>
-            <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-4">Your Tools</span>
+            <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-4">TOOL_REGISTRY</span>
             <h1 className="font-montreal font-medium text-4xl md:text-5xl tracking-tight mb-2 text-white leading-[0.9]">
               Studio Dashboard
             </h1>
-            <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest">System Overview</p>
+            <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mt-2">SYSTEM_OVERVIEW // ACTIVE_TOOLS: {mockTools.length}</p>
           </div>
           <Link 
             to="/studio/builder/new" 
             className="mt-6 md:mt-0 bg-[#E3E3FD] text-[#261E19] px-5 py-2.5 font-mono font-semibold text-[11px] uppercase tracking-widest hover:bg-white transition-colors flex items-center gap-2 rounded-sm"
           >
             <Plus size={14} />
-            Create New
+            INITIALIZE_NEW
           </Link>
         </div>
 
@@ -74,9 +84,30 @@ export default function StudioDashboard() {
                   <h3 className="font-montreal font-medium text-2xl mb-3 group-hover:text-[#E3E3FD] transition-colors">
                     {tool.name}
                   </h3>
-                  <div className="flex items-center gap-2 text-white/40">
-                    <Clock size={12} />
-                    <p className="font-mono text-[10px] uppercase tracking-widest">Last Edit: {tool.lastEdited}</p>
+                  
+                  {/* Technical Metadata */}
+                  <div className="space-y-2 mb-4">
+                    <div className="flex items-center gap-2 text-white/40">
+                      <Clock size={12} />
+                      <p className="font-mono text-[10px] uppercase tracking-widest">LAST_EDIT: {tool.lastEdited}</p>
+                    </div>
+                    {tool.status === 'Live' && (
+                      <>
+                        <div className="flex items-center gap-2 text-white/40">
+                          <Database size={12} />
+                          <p className="font-mono text-[10px] uppercase tracking-widest">OUTPUTS: {tool.outputs.toLocaleString()}</p>
+                        </div>
+                        <div className="flex items-center gap-2 text-white/40">
+                          <Activity size={12} />
+                          <p className="font-mono text-[10px] uppercase tracking-widest">LATENCY: {tool.latency}</p>
+                        </div>
+                      </>
+                    )}
+                  </div>
+
+                  {/* Tool ID */}
+                  <div className="pt-3 border-t border-white/5">
+                    <p className="font-mono text-[8px] text-white/20 uppercase tracking-widest">ID: {tool.id}</p>
                   </div>
                 </div>
               </Link>
@@ -97,10 +128,32 @@ export default function StudioDashboard() {
                 <Plus size={24} />
               </div>
               <span className="font-mono text-[10px] text-white/40 group-hover:text-[#E3E3FD] uppercase tracking-widest transition-colors">
-                Initialize New Tool
+                INITIALIZE_NEW_TOOL
               </span>
             </Link>
           </motion.div>
+        </div>
+
+        {/* System Stats Footer */}
+        <div className="mt-16 pt-8 border-t border-white/10">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="p-4 bg-white/[0.02] border border-white/5 rounded-2xl">
+              <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-2">TOTAL_TOOLS</p>
+              <p className="font-mono text-2xl text-white">{mockTools.length}</p>
+            </div>
+            <div className="p-4 bg-white/[0.02] border border-white/5 rounded-2xl">
+              <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-2">LIVE_TOOLS</p>
+              <p className="font-mono text-2xl text-[#E3E3FD]">{mockTools.filter(t => t.status === 'Live').length}</p>
+            </div>
+            <div className="p-4 bg-white/[0.02] border border-white/5 rounded-2xl">
+              <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-2">TOTAL_OUTPUTS</p>
+              <p className="font-mono text-2xl text-white">{mockTools.reduce((sum, t) => sum + t.outputs, 0).toLocaleString()}</p>
+            </div>
+            <div className="p-4 bg-white/[0.02] border border-white/5 rounded-2xl">
+              <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-2">AVG_LATENCY</p>
+              <p className="font-mono text-2xl text-white">12ms</p>
+            </div>
+          </div>
         </div>
       </main>
     </div>
