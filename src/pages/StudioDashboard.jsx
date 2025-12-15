@@ -139,7 +139,6 @@ export default function StudioDashboard() {
             </Link>
           </motion.div>
         </div>
-        )}
 
         {/* System Stats Footer */}
         <div className="mt-16 pt-8 border-t border-white/10">
