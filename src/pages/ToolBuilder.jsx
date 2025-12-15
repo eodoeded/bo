@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Save, Share2 } from 'lucide-react';
 import PreviewCanvas from '../components/v2/PreviewCanvas';
 import Inspector from '../components/v2/Inspector';
 import LayerStack from '../components/v2/LayerStack';
+import { getTool, updateTool, publishTool, createTool } from '../services/tools';
 import UnifiedNav from '../components/UnifiedNav';
 
 // Default Template Layers
@@ -36,17 +37,53 @@ const DEFAULT_LAYERS = [
 
 export default function ToolBuilder() {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [layers, setLayers] = useState(DEFAULT_LAYERS);
     const [selectedLayerId, setSelectedLayerId] = useState(null);
     const [isSaving, setIsSaving] = useState(false);
+    const [toolName, setToolName] = useState('New Tool');
+    const [toolStatus, setToolStatus] = useState('draft');
+    const [isLoading, setIsLoading] = useState(true);
 
-    // Load "saved" state if it exists
+    // Load tool from database
     useEffect(() => {
-        const saved = localStorage.getItem(`bo_tool_${id}`);
-        if (saved) {
-            setLayers(JSON.parse(saved));
-        }
-    }, [id]);
+        const loadTool = async () => {
+            setIsLoading(true);
+            try {
+                if (id === 'new') {
+                    // Create new tool
+                    const newTool = await createTool('New Tool');
+                    navigate(`/studio/builder/${newTool.id}`, { replace: true });
+                    setLayers(newTool.layers || DEFAULT_LAYERS);
+                    setToolName(newTool.name);
+                    setToolStatus(newTool.status);
+                } else {
+                    // Load existing tool
+                    const tool = await getTool(id);
+                    if (tool) {
+                        setLayers(tool.layers || DEFAULT_LAYERS);
+                        setToolName(tool.name);
+                        setToolStatus(tool.status);
+                    } else {
+                        // Tool not found, create new
+                        const newTool = await createTool('New Tool');
+                        navigate(`/studio/builder/${newTool.id}`, { replace: true });
+                        setLayers(newTool.layers || DEFAULT_LAYERS);
+                        setToolName(newTool.name);
+                        setToolStatus(newTool.status);
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading tool:', error);
+                // Fallback to default layers
+                setLayers(DEFAULT_LAYERS);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        
+        loadTool();
+    }, [id, navigate]);
 
     const handleAddLayer = (type) => {
         const newLayer = {
@@ -73,15 +110,66 @@ export default function ToolBuilder() {
         ));
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
+        if (id === 'new') return;
+        
         setIsSaving(true);
-        setTimeout(() => {
-            localStorage.setItem(`bo_tool_${id}`, JSON.stringify(layers));
+        try {
+            await updateTool(id, {
+                layers,
+                name: toolName
+            });
+            // Small delay for UX
+            await new Promise(resolve => setTimeout(resolve, 500));
+        } catch (error) {
+            console.error('Error saving tool:', error);
+            alert('Failed to save tool. Please try again.');
+        } finally {
             setIsSaving(false);
-        }, 800);
+        }
+    };
+
+    const handlePublish = async () => {
+        if (id === 'new') return;
+        
+        setIsSaving(true);
+        try {
+            // First save the layers
+            await updateTool(id, { layers, name: toolName });
+            // Then publish
+            const published = await publishTool(id);
+            setToolStatus(published.status);
+        } catch (error) {
+            console.error('Error publishing tool:', error);
+            alert('Failed to publish tool. Please try again.');
+        } finally {
+            setIsSaving(false);
+        }
     };
 
     const selectedLayer = layers.find(l => l.id === selectedLayerId);
+
+    // Auto-save on layer changes (debounced)
+    useEffect(() => {
+        if (id === 'new' || isLoading) return;
+        
+        const timeoutId = setTimeout(() => {
+            updateTool(id, { layers }).catch(err => console.error('Auto-save failed:', err));
+        }, 2000); // Debounce 2 seconds
+        
+        return () => clearTimeout(timeoutId);
+    }, [layers, id, isLoading]);
+
+    if (isLoading) {
+        return (
+            <div className="h-screen bg-[#261E19] text-white font-montreal flex items-center justify-center">
+                <div className="text-center">
+                    <div className="w-8 h-8 border-2 border-[#E3E3FD]/20 border-t-[#E3E3FD] rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest">LOADING_TOOL...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="h-screen bg-[#261E19] text-white font-montreal flex flex-col overflow-hidden selection:bg-[#E3E3FD] selection:text-[#261E19] relative">
@@ -96,16 +184,18 @@ export default function ToolBuilder() {
                         TOOL_ID: <span className="text-[#E3E3FD]">{id}</span>
                     </span>
                     <span className="font-mono text-[9px] text-white/20 hidden sm:inline">|</span>
-                    <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest hidden sm:inline">BUILDER_MODE</span>
+                    <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest hidden sm:inline">
+                        {toolStatus === 'published' ? 'PUBLISHED' : 'DRAFT'} // BUILDER_MODE
+                    </span>
                 </div>
                 <div className="flex items-center gap-2 md:gap-3">
                     <button 
-                        onClick={handleSave}
+                        onClick={handlePublish}
                         className="bg-[#E3E3FD] text-[#261E19] px-4 md:px-5 py-2 md:py-2.5 font-mono font-semibold text-[10px] md:text-[11px] uppercase tracking-widest hover:bg-white transition-colors flex items-center gap-2 rounded-lg"
-                        disabled={isSaving}
+                        disabled={isSaving || id === 'new'}
                     >
                         <Save size={12} className="md:w-[14px] md:h-[14px]" />
-                        {isSaving ? 'PUBLISHING...' : 'PUBLISH'}
+                        {isSaving ? 'PUBLISHING...' : toolStatus === 'published' ? 'REPUBLISH' : 'PUBLISH'}
                     </button>
                 </div>
             </div>

@@ -1,15 +1,58 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Plus, Layout, Zap, Clock, Activity, Database, Cpu } from 'lucide-react';
+import { Plus, Layout, Clock, Activity, Database, Cpu } from 'lucide-react';
 import { motion } from 'framer-motion';
 import UnifiedNav from '../components/UnifiedNav';
+import { getTools } from '../services/tools';
 
-const mockTools = [
-    { id: 'x9z-22a', name: 'Social_Story_v1', lastEdited: '2 mins ago', status: 'Live', icon: Layout, outputs: 1247, latency: '12ms' },
-    { id: 'b4b-99c', name: 'Event_Banner_Wide', lastEdited: '2 days ago', status: 'Draft', icon: Layout, outputs: 0, latency: '—' },
-];
+// Format relative time (e.g., "2 mins ago")
+const formatRelativeTime = (dateString) => {
+  if (!dateString) return 'Never';
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffMs = now - date;
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+  
+  if (diffMins < 1) return 'Just now';
+  if (diffMins < 60) return `${diffMins} ${diffMins === 1 ? 'min' : 'mins'} ago`;
+  if (diffHours < 24) return `${diffHours} ${diffHours === 1 ? 'hour' : 'hours'} ago`;
+  if (diffDays < 7) return `${diffDays} ${diffDays === 1 ? 'day' : 'days'} ago`;
+  return date.toLocaleDateString();
+};
 
 export default function StudioDashboard() {
+  const [tools, setTools] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const loadTools = async () => {
+      setIsLoading(true);
+      try {
+        const fetchedTools = await getTools();
+        // Transform database tools to match UI format
+        const transformedTools = fetchedTools.map(tool => ({
+          id: tool.id,
+          name: tool.name,
+          lastEdited: formatRelativeTime(tool.updated_at),
+          status: tool.status === 'published' ? 'Live' : 'Draft',
+          icon: Layout,
+          outputs: tool.outputs_count || 0,
+          latency: '12ms' // TODO: Calculate real latency
+        }));
+        setTools(transformedTools);
+      } catch (error) {
+        console.error('Error loading tools:', error);
+        // Fallback to empty array
+        setTools([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    loadTools();
+  }, []);
   return (
     <div className="min-h-screen bg-[#261E19] text-white font-montreal selection:bg-[#E3E3FD] selection:text-[#261E19] relative">
       <div className="fixed inset-0 bg-[#261E19] z-0"></div>
@@ -41,8 +84,8 @@ export default function StudioDashboard() {
             </h1>
             <p className="font-mono text-[9px] md:text-[10px] text-white/40 uppercase tracking-widest mt-2 leading-relaxed">
               <span className="block sm:inline">SYSTEM_OVERVIEW // </span>
-              <span className="block sm:inline">ACTIVE_TOOLS: {mockTools.length} // </span>
-              <span className="block sm:inline">REGISTERED_MODULES: {mockTools.length} // </span>
+              <span className="block sm:inline">ACTIVE_TOOLS: {tools.length} // </span>
+              <span className="block sm:inline">REGISTERED_MODULES: {tools.length} // </span>
               <span className="block sm:inline">STATUS: OPERATIONAL</span>
             </p>
           </div>
@@ -56,8 +99,16 @@ export default function StudioDashboard() {
         </div>
 
         {/* Tools Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {mockTools.map((tool, i) => (
+        {isLoading ? (
+          <div className="flex items-center justify-center py-20">
+            <div className="text-center">
+              <div className="w-8 h-8 border-2 border-[#E3E3FD]/20 border-t-[#E3E3FD] rounded-full animate-spin mx-auto mb-4"></div>
+              <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest">LOADING_TOOLS...</p>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {tools.map((tool, i) => (
             <motion.div
               key={tool.id}
               initial={{ opacity: 0, y: 20 }}
@@ -129,7 +180,7 @@ export default function StudioDashboard() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: mockTools.length * 0.1 }}
+            transition={{ delay: tools.length * 0.1 }}
           >
             <Link 
               to="/studio/builder/new" 
@@ -144,6 +195,7 @@ export default function StudioDashboard() {
             </Link>
           </motion.div>
         </div>
+        )}
 
         {/* System Stats Footer */}
         <div className="mt-16 pt-8 border-t border-white/10">
@@ -153,17 +205,17 @@ export default function StudioDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl group hover:border-white/10 transition-colors">
               <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-3">TOTAL_TOOLS</p>
-              <p className="font-mono text-3xl text-white mb-1">{mockTools.length}</p>
+              <p className="font-mono text-3xl text-white mb-1">{tools.length}</p>
               <p className="font-mono text-[8px] text-white/20 uppercase tracking-widest">REGISTERED_MODULES</p>
             </div>
             <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl group hover:border-[#E3E3FD]/20 transition-colors">
               <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-3">LIVE_TOOLS</p>
-              <p className="font-mono text-2xl md:text-3xl text-[#E3E3FD] mb-1">{mockTools.filter(t => t.status === 'Live').length}</p>
+              <p className="font-mono text-2xl md:text-3xl text-[#E3E3FD] mb-1">{tools.filter(t => t.status === 'Live').length}</p>
               <p className="font-mono text-[8px] text-white/20 uppercase tracking-widest">ACTIVE_DEPLOYMENTS</p>
             </div>
             <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl group hover:border-white/10 transition-colors">
               <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-3">TOTAL_OUTPUTS</p>
-              <p className="font-mono text-2xl md:text-3xl text-white mb-1">{mockTools.reduce((sum, t) => sum + t.outputs, 0).toLocaleString()}</p>
+              <p className="font-mono text-2xl md:text-3xl text-white mb-1">{tools.reduce((sum, t) => sum + t.outputs, 0).toLocaleString()}</p>
               <p className="font-mono text-[8px] text-white/20 uppercase tracking-widest">ASSETS_GENERATED</p>
             </div>
             <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl group hover:border-white/10 transition-colors">

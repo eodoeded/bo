@@ -4,6 +4,7 @@ import { Download, CheckCircle, AlertTriangle } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import PreviewCanvas from '../components/v2/PreviewCanvas';
 import RunnerForm from '../components/v2/RunnerForm';
+import { getPublishedTool, trackAssetGeneration } from '../services/tools';
 
 // Default Template Layers (Fallback)
 const DEFAULT_LAYERS = [
@@ -30,14 +31,30 @@ export default function ToolRunner() {
     const [layers, setLayers] = useState(DEFAULT_LAYERS);
     const [isExporting, setIsExporting] = useState(false);
     const [status, setStatus] = useState('idle'); // idle | exporting | success | error
+    const [isLoading, setIsLoading] = useState(true);
     const previewRef = useRef(null);
 
-    // Hydrate from "DB" (localStorage)
+    // Load published tool from database
     useEffect(() => {
-        const saved = localStorage.getItem(`bo_tool_${id}`);
-        if (saved) {
-            setLayers(JSON.parse(saved));
-        }
+        const loadTool = async () => {
+            setIsLoading(true);
+            try {
+                const tool = await getPublishedTool(id);
+                if (tool && tool.layers) {
+                    setLayers(tool.layers);
+                } else {
+                    // Fallback to default if tool not found
+                    setLayers(DEFAULT_LAYERS);
+                }
+            } catch (error) {
+                console.error('Error loading tool:', error);
+                setLayers(DEFAULT_LAYERS);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        
+        loadTool();
     }, [id]);
 
     const handleUpdateLayer = (layerId, propKey, newValue) => {
@@ -81,6 +98,17 @@ export default function ToolRunner() {
                 link.href = canvas.toDataURL('image/png');
                 link.click();
                 
+                // Track asset generation
+                const clientInputs = {};
+                layers.forEach(layer => {
+                    Object.keys(layer.locks || {}).forEach(propKey => {
+                        if (layer.locks[propKey] === 'CLIENT_INPUT') {
+                            clientInputs[`${layer.id}.${propKey}`] = layer.properties[propKey];
+                        }
+                    });
+                });
+                await trackAssetGeneration(id, clientInputs, 'png');
+                
                 setStatus('success');
                 setTimeout(() => setStatus('idle'), 2000);
             } catch (err) {
@@ -91,6 +119,17 @@ export default function ToolRunner() {
             }
         }
     };
+
+    if (isLoading) {
+        return (
+            <div className="h-screen bg-[#261E19] text-white font-montreal flex items-center justify-center">
+                <div className="text-center">
+                    <div className="w-8 h-8 border-2 border-[#E3E3FD]/20 border-t-[#E3E3FD] rounded-full animate-spin mx-auto mb-4"></div>
+                    <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest">LOADING_TOOL...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="h-screen bg-[#261E19] text-white font-montreal flex flex-col md:flex-row overflow-hidden selection:bg-[#E3E3FD] selection:text-[#261E19] relative">
