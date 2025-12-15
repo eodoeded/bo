@@ -99,7 +99,7 @@ export default function WaitlistHowItWorks() {
                             </div>
                             <div className="flex flex-col">
                                 <span className="font-mono text-[10px] text-white/60">BACKGROUND_IMG</span>
-                                <span className="font-mono text-[8px] text-white/20">Asset_Pool_A (Fixed)</span>
+                                <span className="font-mono text-[8px] text-white/20">ASSET_POOL_A // FIXED</span>
                             </div>
                         </div>
                         <div className="flex items-center gap-2 px-3 py-1.5 bg-[#261E19] border border-white/5 rounded-full">

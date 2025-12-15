@@ -33,7 +33,7 @@ export default function StudioDashboard() {
         </div>
 
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-16 border-b border-white/10 pb-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-20 border-b border-white/10 pb-8">
           <div>
             <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-4">TOOL_REGISTRY</span>
             <h1 className="font-montreal font-medium text-4xl md:text-5xl tracking-tight mb-2 text-white leading-[0.9]">
