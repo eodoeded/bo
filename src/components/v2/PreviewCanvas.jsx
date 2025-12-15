@@ -296,17 +296,86 @@ const RectangleLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio 
     );
 };
 
-export default function PreviewCanvas({ layers, selectedLayerId, onSelectLayer, onUpdateLayer, isStudio = false }) {
+export default function PreviewCanvas({ layers, selectedLayerId, selectedLayerIds = new Set(), onSelectLayer, onSelectLayers, onUpdateLayer, isStudio = false }) {
+    const [boxSelectStart, setBoxSelectStart] = useState(null);
+    const [boxSelectEnd, setBoxSelectEnd] = useState(null);
+    const [isBoxSelecting, setIsBoxSelecting] = useState(false);
+
+    const handleCanvasPointerDown = (e) => {
+        if (!isStudio) return;
+        
+        // Only start box select if clicking on canvas background (not a layer)
+        if (e.target.id === 'preview-canvas' || e.target.closest('#preview-canvas') === e.currentTarget) {
+            const canvas = e.currentTarget;
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            setBoxSelectStart({ x, y });
+            setBoxSelectEnd({ x, y });
+            setIsBoxSelecting(true);
+            
+            const handlePointerMove = (moveEvent) => {
+                const newX = moveEvent.clientX - rect.left;
+                const newY = moveEvent.clientY - rect.top;
+                setBoxSelectEnd({ x: newX, y: newY });
+            };
+            
+            const handlePointerUp = () => {
+                setIsBoxSelecting(false);
+                
+                // Select layers within box
+                if (boxSelectStart && boxSelectEnd && onSelectLayers) {
+                    const minX = Math.min(boxSelectStart.x, boxSelectEnd.x);
+                    const maxX = Math.max(boxSelectStart.x, boxSelectEnd.x);
+                    const minY = Math.min(boxSelectStart.y, boxSelectEnd.y);
+                    const maxY = Math.max(boxSelectStart.y, boxSelectEnd.y);
+                    
+                    const canvasRect = canvas.getBoundingClientRect();
+                    const canvasWidth = canvasRect.width;
+                    const canvasHeight = canvasRect.height;
+                    
+                    const selectedIds = layers.filter(layer => {
+                        const layerXPercent = layer.properties.x;
+                        const layerYPercent = layer.properties.y;
+                        const layerXPixels = (layerXPercent / 100) * canvasWidth;
+                        const layerYPixels = (layerYPercent / 100) * canvasHeight;
+                        
+                        return layerXPixels >= minX && layerXPixels <= maxX &&
+                               layerYPixels >= minY && layerYPixels <= maxY;
+                    }).map(l => l.id);
+                    
+                    if (selectedIds.length > 0) {
+                        onSelectLayers(selectedIds);
+                    } else {
+                        onSelectLayer(null);
+                    }
+                } else {
+                    onSelectLayer(null);
+                }
+                
+                setBoxSelectStart(null);
+                setBoxSelectEnd(null);
+                document.removeEventListener('pointermove', handlePointerMove);
+                document.removeEventListener('pointerup', handlePointerUp);
+            };
+            
+            document.addEventListener('pointermove', handlePointerMove);
+            document.addEventListener('pointerup', handlePointerUp);
+        }
+    };
+
     return (
         <div 
             id="preview-canvas"
             className={`w-full h-full bg-[#050505] relative overflow-hidden flex flex-col justify-between border border-white/5 shadow-2xl ${isStudio ? 'cursor-default' : ''}`}
-            onClick={() => {
-                // Click canvas to deselect
-                if (isStudio && onSelectLayer) {
+            onClick={(e) => {
+                // Click canvas to deselect (only if not box selecting)
+                if (isStudio && onSelectLayer && !isBoxSelecting && e.target.id === 'preview-canvas') {
                     onSelectLayer(null);
                 }
             }}
+            onPointerDown={handleCanvasPointerDown}
         >
             {/* Background Generative Element (Static for now, could be a layer) */}
             <div className="absolute inset-0 opacity-10 pointer-events-none">
