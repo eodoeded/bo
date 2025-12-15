@@ -49,6 +49,7 @@ function App() {
   
   // Debug: Log current route
   useEffect(() => {
+    console.log('✅ App component mounted');
     console.log('Current route:', location.pathname);
     if (location.pathname === '/brandguidelines') {
       console.log('✅ BrandGuidelines route matched!');
@@ -56,7 +57,7 @@ function App() {
   }, [location.pathname]);
 
   return (
-    <>
+    <div style={{ minHeight: '100vh', position: 'relative', zIndex: 10 }}>
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -71,7 +72,7 @@ function App() {
         </Route>
         <Route path="/tool/:id" element={<ToolRunner />} />
       </Routes>
-    </>
+    </div>
   );
 }
 

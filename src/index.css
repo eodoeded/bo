@@ -39,11 +39,12 @@ body {
 
 #root {
   min-height: 100vh;
-  background-color: transparent;
+  background-color: transparent !important;
   position: relative;
   z-index: 1;
-  color: white;
+  color: white !important;
   width: 100%;
+  overflow-x: hidden;
 }
 
 .hero-media img {
