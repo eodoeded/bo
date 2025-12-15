@@ -535,7 +535,7 @@ export default function DesignSystem() {
             </div>
             
             <div className="md:col-span-8 space-y-24">
-                
+        
                 {/* Standard Card Structure */}
                 <div>
                     <div className="flex items-center gap-4 mb-8">
@@ -564,7 +564,7 @@ export default function DesignSystem() {
                             {/* Description */}
                             <p className="text-white/50 font-montreal text-sm leading-relaxed">
                                 Don't just bill for the setup. Sell the tool as a subscription. Create recurring revenue streams from a single design system implementation.
-                            </p>
+            </p>
                         </motion.div>
         </div>
 
@@ -1131,6 +1131,304 @@ export default function DesignSystem() {
                             <p className="font-montreal text-sm text-white/60 leading-relaxed">
                                 The three-node system (Studio → Core → Output) visually represents the product flow. It's not decoration—it's a diagram of how the system works.
                             </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Interactive Node Example */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Interactive Example</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-8 rounded-2xl relative" style={{ minHeight: '400px' }}>
+                        <div ref={containerRef} className="relative w-full h-full" style={{ minHeight: '350px' }}>
+                            {/* Connection Lines */}
+                            <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none" style={{zIndex: 10}}>
+                                <motion.path
+                                    d={`M ${nodePositions.studio.x} ${nodePositions.studio.y} 
+                                        C ${(nodePositions.studio.x + nodePositions.core.x) / 2} ${nodePositions.studio.y} 
+                                          ${(nodePositions.studio.x + nodePositions.core.x) / 2} ${nodePositions.core.y} 
+                                          ${nodePositions.core.x} ${nodePositions.core.y}`}
+                                    fill="none"
+                                    stroke="white"
+                                    strokeWidth="0.05"
+                                    strokeOpacity="0.2"
+                                    vectorEffect="non-scaling-stroke"
+                                />
+                                <motion.path
+                                    d={`M ${nodePositions.core.x} ${nodePositions.core.y} 
+                                        C ${(nodePositions.core.x + nodePositions.output.x) / 2} ${nodePositions.core.y} 
+                                          ${(nodePositions.core.x + nodePositions.output.x) / 2} ${nodePositions.output.y} 
+                                          ${nodePositions.output.x} ${nodePositions.output.y}`}
+                                    fill="none"
+                                    stroke="white"
+                                    strokeWidth="0.05"
+                                    strokeOpacity="0.2"
+                                    vectorEffect="non-scaling-stroke"
+                                />
+                                <motion.path
+                                    d={`M ${nodePositions.studio.x} ${nodePositions.studio.y} 
+                                        C ${(nodePositions.studio.x + nodePositions.core.x) / 2} ${nodePositions.studio.y} 
+                                          ${(nodePositions.studio.x + nodePositions.core.x) / 2} ${nodePositions.core.y} 
+                                          ${nodePositions.core.x} ${nodePositions.core.y}`}
+                                    fill="none"
+                                    stroke="#E3E3FD"
+                                    strokeWidth="0.15"
+                                    vectorEffect="non-scaling-stroke"
+                                    initial={{ pathLength: 0, pathOffset: 0, opacity: 0 }}
+                                    animate={{ 
+                                        pathLength: [0, 0.4, 0],
+                                        pathOffset: [0, 1, 1],
+                                        opacity: [0, 1, 0] 
+                                    }}
+                                    transition={{ 
+                                        duration: 4, 
+                                        ease: "easeInOut", 
+                                        repeat: Infinity,
+                                        repeatDelay: 0.5
+                                    }}
+                                />
+                            </svg>
+
+                            {/* Node 1: Studio */}
+                            <motion.div
+                                className="absolute z-20 cursor-grab active:cursor-grabbing"
+                                style={{ 
+                                    left: `${nodePositions.studio.x}%`, 
+                                    top: `${nodePositions.studio.y}%`,
+                                    transform: 'translate(-50%, -50%)'
+                                }}
+                                animate={draggingNode !== 'studio' ? { y: [0, -4, 0] } : {}}
+                                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                                onPointerDown={(e) => {
+                                    setDraggingNode('studio');
+                                    const container = containerRef.current;
+                                    if (!container) return;
+                                    const { width, height, left, top } = container.getBoundingClientRect();
+                                    const nodeX = (nodePositions.studio.x / 100) * width;
+                                    const nodeY = (nodePositions.studio.y / 100) * height;
+                                    const offsetX = (e.clientX - left) - nodeX;
+                                    const offsetY = (e.clientY - top) - nodeY;
+
+                                    const onMove = (moveEvent) => {
+                                        const newMouseX = moveEvent.clientX - left;
+                                        const newMouseY = moveEvent.clientY - top;
+                                        let newNodeX = newMouseX - offsetX;
+                                        let newNodeY = newMouseY - offsetY;
+                                        newNodeX = Math.max(0, Math.min(width, newNodeX));
+                                        newNodeY = Math.max(0, Math.min(height, newNodeY));
+                                        setNodePositions(prev => ({
+                                            ...prev,
+                                            studio: {
+                                                x: (newNodeX / width) * 100,
+                                                y: (newNodeY / height) * 100
+                                            }
+                                        }));
+                                    };
+
+                                    const onUp = () => {
+                                        setDraggingNode(null);
+                                        window.removeEventListener('pointermove', onMove);
+                                        window.removeEventListener('pointerup', onUp);
+                                    };
+
+                                    window.addEventListener('pointermove', onMove);
+                                    window.addEventListener('pointerup', onUp);
+                                }}
+                            >
+                                <div className="bg-[#1A1614]/90 border border-white/10 p-3 md:p-4 w-32 md:w-48 shadow-2xl backdrop-blur-xl group hover:border-[#E3E3FD]/50 transition-colors duration-500 relative rounded-2xl">
+                                    <div className="flex justify-between items-center mb-3 pb-2 border-b border-white/5">
+                                        <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">Design_Studio</span>
+                                        <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full shadow-[0_0_8px_#E3E3FD]"></div>
+                                    </div>
+                                    <div className="flex flex-col gap-2">
+                                        <div className="flex items-center gap-2 text-white/60">
+                                            <Database size={12} />
+                                            <span className="font-mono text-[9px]">ASSETS_LOADED</span>
+                                        </div>
+                                        <div className="flex items-center gap-2 text-white/60">
+                                            <Lock size={12} className="text-[#E3E3FD]"/>
+                                            <span className="font-mono text-[9px] text-[#E3E3FD]">RULES_LOCKED</span>
+                                        </div>
+                                    </div>
+                                    <div className="absolute -left-[4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-[#1A1614] border border-white/20 rounded-full group-hover:border-[#E3E3FD] transition-colors" />
+                                    <div className="absolute -right-[4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-[#1A1614] border border-white/20 rounded-full group-hover:border-[#E3E3FD] transition-colors" />
+                                </div>
+                            </motion.div>
+
+                            {/* Node 2: Core */}
+                            <motion.div
+                                className="absolute z-20 cursor-grab active:cursor-grabbing"
+                                style={{ 
+                                    left: `${nodePositions.core.x}%`, 
+                                    top: `${nodePositions.core.y}%`,
+                                    transform: 'translate(-50%, -50%)'
+                                }}
+                                animate={draggingNode !== 'core' ? { y: [0, -4, 0] } : {}}
+                                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                                onPointerDown={(e) => {
+                                    setDraggingNode('core');
+                                    const container = containerRef.current;
+                                    if (!container) return;
+                                    const { width, height, left, top } = container.getBoundingClientRect();
+                                    const nodeX = (nodePositions.core.x / 100) * width;
+                                    const nodeY = (nodePositions.core.y / 100) * height;
+                                    const offsetX = (e.clientX - left) - nodeX;
+                                    const offsetY = (e.clientY - top) - nodeY;
+
+                                    const onMove = (moveEvent) => {
+                                        const newMouseX = moveEvent.clientX - left;
+                                        const newMouseY = moveEvent.clientY - top;
+                                        let newNodeX = newMouseX - offsetX;
+                                        let newNodeY = newMouseY - offsetY;
+                                        newNodeX = Math.max(0, Math.min(width, newNodeX));
+                                        newNodeY = Math.max(0, Math.min(height, newNodeY));
+                                        setNodePositions(prev => ({
+                                            ...prev,
+                                            core: {
+                                                x: (newNodeX / width) * 100,
+                                                y: (newNodeY / height) * 100
+                                            }
+                                        }));
+                                    };
+
+                                    const onUp = () => {
+                                        setDraggingNode(null);
+                                        window.removeEventListener('pointermove', onMove);
+                                        window.removeEventListener('pointerup', onUp);
+                                    };
+
+                                    window.addEventListener('pointermove', onMove);
+                                    window.addEventListener('pointerup', onUp);
+                                }}
+                            >
+                                <div className="bg-[#1A1614]/90 border border-white/10 p-3 md:p-4 w-40 md:w-64 shadow-2xl backdrop-blur-xl group hover:border-[#E3E3FD]/50 transition-colors duration-500 relative rounded-2xl">
+                                    <div className="flex justify-between items-center mb-3 pb-2 border-b border-white/5">
+                                        <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">Branded_Objects</span>
+                                        <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full shadow-[0_0_8px_#E3E3FD]"></div>
+                                    </div>
+                                    <div className="h-20 md:h-32 w-full relative flex items-center justify-center overflow-hidden bg-[#261E19] border border-white/10 mb-2 rounded-lg">
+                                        <div className="flex gap-0.5">
+                                            {[1,2,3,4,5].map(i => (
+                                                <div key={i} className="w-0.5 h-4 bg-[#E3E3FD] rounded-full" style={{opacity: 0.2 + (i*0.15)}}></div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <span className="font-mono text-[8px] text-white/40">GENERATING_ASSET_ID_8492</span>
+                                    <div className="absolute -left-[4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-[#1A1614] border border-white/20 rounded-full group-hover:border-[#E3E3FD] transition-colors" />
+                                    <div className="absolute -right-[4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-[#1A1614] border border-white/20 rounded-full group-hover:border-[#E3E3FD] transition-colors" />
+                                </div>
+                            </motion.div>
+
+                            {/* Node 3: Output */}
+                            <motion.div
+                                className="absolute z-20 cursor-grab active:cursor-grabbing"
+                                style={{ 
+                                    left: `${nodePositions.output.x}%`, 
+                                    top: `${nodePositions.output.y}%`,
+                                    transform: 'translate(-50%, -50%)'
+                                }}
+                                animate={draggingNode !== 'output' ? { y: [0, -4, 0] } : {}}
+                                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                                onPointerDown={(e) => {
+                                    setDraggingNode('output');
+                                    const container = containerRef.current;
+                                    if (!container) return;
+                                    const { width, height, left, top } = container.getBoundingClientRect();
+                                    const nodeX = (nodePositions.output.x / 100) * width;
+                                    const nodeY = (nodePositions.output.y / 100) * height;
+                                    const offsetX = (e.clientX - left) - nodeX;
+                                    const offsetY = (e.clientY - top) - nodeY;
+
+                                    const onMove = (moveEvent) => {
+                                        const newMouseX = moveEvent.clientX - left;
+                                        const newMouseY = moveEvent.clientY - top;
+                                        let newNodeX = newMouseX - offsetX;
+                                        let newNodeY = newMouseY - offsetY;
+                                        newNodeX = Math.max(0, Math.min(width, newNodeX));
+                                        newNodeY = Math.max(0, Math.min(height, newNodeY));
+                                        setNodePositions(prev => ({
+                                            ...prev,
+                                            output: {
+                                                x: (newNodeX / width) * 100,
+                                                y: (newNodeY / height) * 100
+                                            }
+                                        }));
+                                    };
+
+                                    const onUp = () => {
+                                        setDraggingNode(null);
+                                        window.removeEventListener('pointermove', onMove);
+                                        window.removeEventListener('pointerup', onUp);
+                                    };
+
+                                    window.addEventListener('pointermove', onMove);
+                                    window.addEventListener('pointerup', onUp);
+                                }}
+                            >
+                                <div className="bg-[#1A1614]/90 border border-white/10 p-3 md:p-4 w-32 md:w-48 shadow-2xl backdrop-blur-xl group hover:border-[#E3E3FD]/50 transition-colors duration-500 relative rounded-2xl">
+                                    <div className="flex justify-between items-center mb-3 pb-2 border-b border-white/5">
+                                        <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">Client_Output</span>
+                                        <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full shadow-[0_0_8px_#E3E3FD]"></div>
+                                    </div>
+                                    <div className="flex flex-col gap-2">
+                                        <div className="flex items-center gap-2 text-white/60">
+                                            <Layout size={12} />
+                                            <span className="font-mono text-[9px]">RENDER_COMPLETE</span>
+                                        </div>
+                                        <div className="flex items-center gap-2 text-white/60">
+                                            <Zap size={12} className="text-[#E3E3FD]"/>
+                                            <span className="font-mono text-[9px]">INSTANT_DELIVERY</span>
+                                        </div>
+                                    </div>
+                                    <div className="absolute -left-[4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-[#1A1614] border border-white/20 rounded-full group-hover:border-[#E3E3FD] transition-colors" />
+                                    <div className="absolute -right-[4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-[#1A1614] border border-white/20 rounded-full group-hover:border-[#E3E3FD] transition-colors" />
+                                </div>
+                            </motion.div>
+                        </div>
+                        <p className="font-mono text-[9px] text-white/30 mt-4 text-center">Drag nodes to reposition. Connections update automatically.</p>
+                    </div>
+                </div>
+
+                {/* Node Variations */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Node Variations</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Minimal Node */}
+                        <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                            <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">Minimal Node</p>
+                            <div className="bg-[#261E19] border border-white/10 p-4 rounded-lg relative" style={{ minHeight: '120px' }}>
+                                <div className="absolute top-4 left-4 bg-[#1A1614]/90 border border-white/10 px-4 py-2 shadow-xl backdrop-blur-md rounded-2xl">
+                                    <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">Output</span>
+                                </div>
+                            </div>
+                            <p className="font-mono text-[9px] text-white/30 mt-4">Simplified version for final outputs</p>
+                        </div>
+
+                        {/* Full Node */}
+                        <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                            <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">Full Node</p>
+                            <div className="bg-[#261E19] border border-white/10 p-4 rounded-lg relative" style={{ minHeight: '120px' }}>
+                                <div className="absolute top-4 left-4 bg-[#1A1614]/90 border border-white/10 p-3 w-40 shadow-2xl backdrop-blur-xl rounded-2xl">
+                                    <div className="flex justify-between items-center mb-2 pb-2 border-b border-white/5">
+                                        <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">Design_Studio</span>
+                                        <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"></div>
+                                    </div>
+                                    <div className="flex flex-col gap-1.5">
+                                        <div className="flex items-center gap-2 text-white/60">
+                                            <div className="w-2 h-2 bg-white/20 rounded"></div>
+                                            <span className="font-mono text-[8px]">ASSETS_LOADED</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p className="font-mono text-[9px] text-white/30 mt-4">Full version with status indicators</p>
                         </div>
                     </div>
                 </div>
