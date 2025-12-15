@@ -55,7 +55,7 @@ function App() {
   }, [location.pathname]);
 
   return (
-    <div style={{ minHeight: '100vh', position: 'relative', zIndex: 1 }}>
+    <>
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -71,7 +71,7 @@ function App() {
         <Route path="/tool/:id" element={<ToolRunner />} />
       </Routes>
       <Analytics />
-    </div>
+    </>
   );
 }
 
