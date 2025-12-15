@@ -26,8 +26,8 @@ export default function UnifiedNav() {
   };
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 border-b border-white/5 bg-[#261E19]/90 backdrop-blur-md">
-      <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 h-16 md:h-20 flex items-center justify-between">
+    <header className="fixed top-0 left-0 w-full z-50 border-b border-white/5 bg-[#261E19] backdrop-blur-md">
+      <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 h-12 md:h-14 flex items-center justify-between">
         
         {/* Brand / Logo - Left */}
         <div className="flex items-center gap-4">
@@ -96,7 +96,7 @@ export default function UnifiedNav() {
 
       {/* Mobile Menu Overlay */}
       {isMenuOpen && isLanding && (
-        <div className="fixed inset-0 top-16 md:top-20 bg-[#261E19] z-40 flex flex-col p-6 border-t border-white/10 md:hidden">
+        <div className="fixed inset-0 top-12 md:top-14 bg-[#261E19] z-40 flex flex-col p-6 border-t border-white/10 md:hidden">
           <button onClick={() => scrollToSection('process')} className="py-4 border-b border-white/5 font-mono text-xs text-left uppercase tracking-widest text-white/60">Process</button>
           <button onClick={() => scrollToSection('value')} className="py-4 border-b border-white/5 font-mono text-xs text-left uppercase tracking-widest text-white/60">Value</button>
           <button onClick={() => scrollToSection('specs')} className="py-4 border-b border-white/5 font-mono text-xs text-left uppercase tracking-widest text-white/60">Specifications</button>

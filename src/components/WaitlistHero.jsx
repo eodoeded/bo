@@ -357,13 +357,13 @@ export default function WaitlistHero() {
                 onSubmit={handleJoin}
             >
                 <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center">
-                    <div className="relative flex flex-1 items-center bg-[#1A1614] border border-white/12 px-4 py-3 rounded-md">
-                        <Scan size={16} className="text-white/30 mr-3 shrink-0" />
+                    <div className="relative flex flex-1 items-center bg-[#1A1614] border border-white/10 px-5 py-4 rounded-lg hover:border-white/20 transition-colors">
+                        <Scan size={18} className="text-white/40 mr-3 shrink-0" />
                         <input 
                             type="email" 
                             name="email"
                             placeholder="studio@agency.com" 
-                            className="flex-1 bg-transparent text-white pr-2 font-mono text-xs focus:outline-none placeholder:text-white/20 tracking-wider"
+                            className="flex-1 bg-transparent text-white pr-2 font-mono text-sm focus:outline-none placeholder:text-white/30 tracking-wider"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -371,7 +371,7 @@ export default function WaitlistHero() {
                     </div>
                     <button 
                         type="submit"
-                        className="bg-white text-black px-8 py-3 font-mono font-semibold text-[11px] tracking-[0.1em] hover:bg-[#E3E3FD] transition-colors whitespace-nowrap uppercase border border-transparent flex items-center gap-2 justify-center group/btn w-full md:w-auto rounded-md"
+                        className="bg-white text-black px-8 py-4 font-mono font-semibold text-[11px] tracking-[0.1em] hover:bg-[#E3E3FD] transition-colors whitespace-nowrap uppercase border border-transparent flex items-center gap-2 justify-center group/btn w-full md:w-auto rounded-lg"
                         disabled={status === 'sending' || status === 'success'}
                     >
                         {status === 'sending' ? 'Sending...' : status === 'success' ? 'Joined' : 'Request Access'}

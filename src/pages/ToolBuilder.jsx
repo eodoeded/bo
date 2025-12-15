@@ -84,11 +84,12 @@ export default function ToolBuilder() {
     const selectedLayer = layers.find(l => l.id === selectedLayerId);
 
     return (
-        <div className="h-screen bg-[#261E19] text-white font-montreal flex flex-col overflow-hidden selection:bg-[#E3E3FD] selection:text-[#261E19]">
+        <div className="h-screen bg-[#261E19] text-white font-montreal flex flex-col overflow-hidden selection:bg-[#E3E3FD] selection:text-[#261E19] relative">
+            <div className="fixed inset-0 bg-[#261E19] z-0"></div>
             <UnifiedNav />
             
             {/* Secondary Toolbar */}
-            <div className="h-12 bg-[#1A1614] border-b border-white/10 flex items-center justify-between px-6 md:px-12 mt-16 md:mt-20 shrink-0">
+            <div className="h-12 bg-[#1A1614] border-b border-white/10 flex items-center justify-between px-6 md:px-12 mt-12 md:mt-14 shrink-0 relative z-10">
                 <div className="flex items-center gap-4">
                     <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">
                         Tool ID: <span className="text-[#E3E3FD]">{id}</span>

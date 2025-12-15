@@ -141,18 +141,19 @@ export default function BrandGuidelines() {
   const downloadRef1 = useRef(null);
 
   return (
-    <div className="min-h-screen bg-[#261E19] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal overflow-x-hidden">
+    <div className="min-h-screen bg-[#261E19] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal overflow-x-hidden relative">
+      <div className="fixed inset-0 bg-[#261E19] z-0"></div>
       
       <UnifiedNav />
       
       {/* Organic Background Noise */}
-      <div className="fixed inset-0 pointer-events-none opacity-[0.03]" style={{ 
+      <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-0" style={{ 
           backgroundImage: 'radial-gradient(#E3E3FD 1px, transparent 1px)', 
           backgroundSize: '30px 30px' 
       }}></div>
 
       {/* Hero: Advanced Node System */}
-      <section className="relative h-[90vh] w-full flex items-center justify-center overflow-hidden bg-[#261E19] mt-16 md:mt-20">
+      <section className="relative h-[90vh] w-full flex items-center justify-center overflow-hidden bg-[#261E19] mt-12 md:mt-14">
         
         {/* Generative Background */}
         <div className="absolute inset-0 pointer-events-none">
@@ -257,7 +258,7 @@ export default function BrandGuidelines() {
       </section>
 
       {/* Main Content */}
-      <div className="max-w-[1400px] mx-auto py-32 px-6 md:px-12 space-y-48 relative z-10 mt-16 md:mt-20">
+      <div className="max-w-[1400px] mx-auto py-32 px-6 md:px-12 space-y-48 relative z-10 mt-12 md:mt-14">
         
         {/* 01. Typography */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">

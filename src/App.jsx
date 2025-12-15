@@ -26,9 +26,10 @@ function ScrollToTop() {
 
 function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#261E19] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal">
+    <div className="min-h-screen bg-[#261E19] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal relative">
+      <div className="fixed inset-0 bg-[#261E19] z-0"></div>
       <UnifiedNav />
-      <main className="relative">
+      <main className="relative z-10">
         <WaitlistHero />
         <WaitlistHowItWorks />
         <WaitlistBenefits />

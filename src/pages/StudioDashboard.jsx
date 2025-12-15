@@ -11,16 +11,17 @@ const mockTools = [
 
 export default function StudioDashboard() {
   return (
-    <div className="min-h-screen bg-[#261E19] text-white font-montreal selection:bg-[#E3E3FD] selection:text-[#261E19]">
+    <div className="min-h-screen bg-[#261E19] text-white font-montreal selection:bg-[#E3E3FD] selection:text-[#261E19] relative">
+      <div className="fixed inset-0 bg-[#261E19] z-0"></div>
       <UnifiedNav />
       
       {/* Background Pattern */}
-      <div className="fixed inset-0 pointer-events-none opacity-[0.03]" style={{ 
+      <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-0" style={{ 
           backgroundImage: 'radial-gradient(#E3E3FD 1px, transparent 1px)', 
           backgroundSize: '30px 30px' 
       }}></div>
 
-      <main className="max-w-[1400px] mx-auto px-6 md:px-12 pt-24 md:pt-28 pb-20 relative z-10">
+      <main className="max-w-[1400px] mx-auto px-6 md:px-12 pt-20 md:pt-24 pb-20 relative z-10">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-16 border-b border-white/10 pb-8">
           <div>
