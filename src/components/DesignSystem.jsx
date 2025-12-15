@@ -64,21 +64,21 @@ export default function DesignSystem() {
       }}></div>
 
       {/* Hero Section */}
-      <section className="relative h-[70vh] w-full flex items-center justify-center overflow-hidden bg-[#261E19] mt-12 md:mt-14">
-        <div className="absolute bottom-12 left-6 md:left-12 max-w-2xl z-20 pointer-events-none">
-            <div className="flex items-center gap-3 mb-6">
+      <section className="relative min-h-[60vh] md:h-[70vh] w-full flex items-center justify-center overflow-hidden bg-[#261E19] mt-12 md:mt-14 py-12 md:py-0">
+        <div className="absolute bottom-6 md:bottom-12 left-6 md:left-12 max-w-2xl z-20 pointer-events-none px-4 md:px-0">
+            <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-6">
                 <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
                 <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">SYSTEM_OS v2.5</span>
-                <span className="font-mono text-[9px] text-white/20">|</span>
+                <span className="font-mono text-[9px] text-white/20 hidden sm:inline">|</span>
                 <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">ALL_MODULES_OPERATIONAL</span>
               </div>
-            <h1 className="font-montreal font-medium text-6xl md:text-8xl tracking-tight mb-6 text-white leading-[0.9]">
+            <h1 className="font-montreal font-medium text-4xl md:text-6xl lg:text-8xl tracking-tight mb-4 md:mb-6 text-white leading-[0.9]">
                 Design<br/><span className="text-[#E3E3FD]">System</span>
             </h1>
-            <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-4 leading-relaxed max-w-lg">
+            <p className="font-mono text-[9px] md:text-[10px] text-white/40 uppercase tracking-widest mb-4 leading-relaxed max-w-lg break-words">
                 MONO-MATERIAL ARCHITECTURE // GROWN RATHER THAN MANUFACTURED // ZERO TEXTURE VARIATION // BIOLUMINESCENT SIGNAL MARKERS
             </p>
-            <p className="font-montreal text-white/60 text-base leading-relaxed max-w-lg">
+            <p className="font-montreal text-white/60 text-sm md:text-base leading-relaxed max-w-lg">
                 Complete specification for the Branded Objects visual language. Every component, connection pattern, and constraint. Built for agencies automating brand governance at scale.
             </p>
         </div>

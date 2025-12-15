@@ -137,7 +137,7 @@ export default function WaitlistHowItWorks() {
                                 <span className="font-mono text-[8px] text-[#E3E3FD]/60">CLIENT_INPUT_ALLOWED</span>
                             </div>
                         </div>
-                        <div className="flex items-center gap-2 px-3 py-1.5 bg-[#E3E3FD]/10 border border-[#E3E3FD]/20 rounded-full">
+                        <div className="flex items-center gap-2 px-3 py-1.5 bg-[#E3E3FD]/10 border border-[#E3E3FD]/20 rounded-full self-start sm:self-auto">
                             <Edit3 size={10} className="text-[#E3E3FD]"/>
                             <span className="font-mono text-[8px] text-[#E3E3FD] uppercase">SAFE_EDIT</span>
                         </div>

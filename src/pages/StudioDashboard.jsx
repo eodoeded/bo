@@ -158,17 +158,17 @@ export default function StudioDashboard() {
             </div>
             <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl group hover:border-[#E3E3FD]/20 transition-colors">
               <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-3">LIVE_TOOLS</p>
-              <p className="font-mono text-3xl text-[#E3E3FD] mb-1">{mockTools.filter(t => t.status === 'Live').length}</p>
+              <p className="font-mono text-2xl md:text-3xl text-[#E3E3FD] mb-1">{mockTools.filter(t => t.status === 'Live').length}</p>
               <p className="font-mono text-[8px] text-white/20 uppercase tracking-widest">ACTIVE_DEPLOYMENTS</p>
             </div>
             <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl group hover:border-white/10 transition-colors">
               <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-3">TOTAL_OUTPUTS</p>
-              <p className="font-mono text-3xl text-white mb-1">{mockTools.reduce((sum, t) => sum + t.outputs, 0).toLocaleString()}</p>
+              <p className="font-mono text-2xl md:text-3xl text-white mb-1">{mockTools.reduce((sum, t) => sum + t.outputs, 0).toLocaleString()}</p>
               <p className="font-mono text-[8px] text-white/20 uppercase tracking-widest">ASSETS_GENERATED</p>
             </div>
             <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl group hover:border-white/10 transition-colors">
               <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-3">AVG_LATENCY</p>
-              <p className="font-mono text-3xl text-white mb-1">12ms</p>
+              <p className="font-mono text-2xl md:text-3xl text-white mb-1">12ms</p>
               <p className="font-mono text-[8px] text-white/20 uppercase tracking-widest">RESPONSE_TIME</p>
             </div>
           </div>
