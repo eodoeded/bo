@@ -65,27 +65,138 @@ export default function DesignSystem() {
 
       {/* Hero Section */}
       <section className="relative h-[70vh] w-full flex items-center justify-center overflow-hidden bg-[#261E19] mt-12 md:mt-14">
-        <div className="absolute bottom-12 left-6 md:left-12 max-w-xl z-20 pointer-events-none">
-            <Badge className="mb-4 text-[#E3E3FD] border-[#E3E3FD]/20 bg-[#E3E3FD]/5">Design System v2.5</Badge>
+        <div className="absolute bottom-12 left-6 md:left-12 max-w-2xl z-20 pointer-events-none">
+            <div className="flex items-center gap-3 mb-6">
+                <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
+                <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">SYSTEM_OS v2.5</span>
+                <span className="font-mono text-[9px] text-white/20">|</span>
+                <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">ALL_MODULES_OPERATIONAL</span>
+              </div>
             <h1 className="font-montreal font-medium text-6xl md:text-8xl tracking-tight mb-6 text-white leading-[0.9]">
                 Design<br/><span className="text-[#E3E3FD]">System</span>
             </h1>
-            <p className="font-montreal text-white/60 text-lg leading-relaxed max-w-md">
-                Complete documentation of the Branded Objects visual language. Every component, pattern, and rule.
+            <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-4 leading-relaxed max-w-lg">
+                MONO-MATERIAL ARCHITECTURE // GROWN RATHER THAN MANUFACTURED // ZERO TEXTURE VARIATION // BIOLUMINESCENT SIGNAL MARKERS
             </p>
-              </div>
+            <p className="font-montreal text-white/60 text-base leading-relaxed max-w-lg">
+                Complete specification for the Branded Objects visual language. Every component, connection pattern, and constraint. Built for agencies automating brand governance at scale.
+            </p>
+        </div>
       </section>
 
       {/* Main Content */}
       <div className="max-w-[1400px] mx-auto py-32 px-6 md:px-12 space-y-48 relative z-10 mt-12 md:mt-14">
         
-        {/* 00. Foundation */}
+        {/* 00. Material Philosophy */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div className="md:col-span-4 sticky top-32 h-fit">
-                <SectionHeader title="Foundation" number="00" />
+                <SectionHeader title="Material Philosophy" number="00" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
+                    The core aesthetic principle. Mono-material restraint creates premium through limitation. Grown, not manufactured.
+                </p>
+                <div className="flex gap-2 flex-wrap">
+                    <Badge className="bg-[#E3E3FD]/10 border-[#E3E3FD]/30 text-[#E3E3FD]">Mono-Material</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">Grown</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">Signal</Badge>
+                </div>
+            </div>
+            
+            <div className="md:col-span-8 space-y-24">
+                
+                {/* Mono-Material Restraint */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Mono-Material Restraint</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-8 rounded-3xl space-y-6">
+                        <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl">
+                            <p className="font-mono text-xs text-white/70 uppercase tracking-widest mb-3">Single Base Material</p>
+                            <p className="font-montreal text-base text-white/60 leading-relaxed mb-4">
+                                One dark brown-black canvas (#261E19) dominates every surface. Zero texture variation. No gradients, no patterns beyond the minimal grid. The material feels grown, not manufactured—like a subterranean hive structure extruded from a single substance.
+                            </p>
+                            <div className="flex items-center gap-3 mt-4">
+                                <div className="w-full h-16 rounded-lg bg-[#261E19] border border-white/10"></div>
+                                <div className="font-mono text-[9px] text-white/40 uppercase tracking-widest">#261E19</div>
+                            </div>
+                        </div>
+                        
+                        <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl">
+                            <p className="font-mono text-xs text-white/70 uppercase tracking-widest mb-3">Bioluminescent Signals</p>
+                            <p className="font-montreal text-base text-white/60 leading-relaxed mb-4">
+                                Lavender (#E3E3FD) appears only as signal markers—like bioluminescent navigation beacons in a dark alien hive. Maximum 10% of any view. Used for: active states, hover borders, status indicators, connection pulses. Never as background or decoration.
+                            </p>
+                            <div className="flex items-center gap-3 mt-4">
+                                <div className="w-full h-16 rounded-lg bg-[#E3E3FD] border border-[#E3E3FD]/20"></div>
+                                <div className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">#E3E3FD</div>
+                            </div>
+                        </div>
+                        
+                        <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl">
+                            <p className="font-mono text-xs text-white/70 uppercase tracking-widest mb-3">Opacity Layers for Depth</p>
+                            <p className="font-montreal text-base text-white/60 leading-relaxed mb-4">
+                                White text uses opacity layers (white → white/70 → white/60 → white/40) to create depth without breaking the mono-material illusion. No color variation, only opacity variation. Like layers of the same material at different densities.
+                            </p>
+                            <div className="space-y-2 mt-4">
+                                <div className="font-montreal text-white">Primary Text (white)</div>
+                                <div className="font-montreal text-white/70">Secondary Text (white/70)</div>
+                                <div className="font-montreal text-white/60">Tertiary Text (white/60)</div>
+                                <div className="font-montreal text-white/40">Quaternary Text (white/40)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Grown vs Manufactured */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Grown vs Manufactured</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-8 rounded-3xl space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="p-6 bg-red-500/10 border border-red-500/20 rounded-2xl">
+                                <p className="font-mono text-xs text-red-400 uppercase tracking-widest mb-3">❌ Manufactured</p>
+                                <ul className="space-y-2 font-montreal text-sm text-white/60">
+                                    <li>• Sharp corners, hard edges</li>
+                                    <li>• Gradients, textures, patterns</li>
+                                    <li>• Multiple materials, color variety</li>
+                                    <li>• Decoration for decoration's sake</li>
+                                    <li>• Human-friendly, warm, inviting</li>
+                                </ul>
+                            </div>
+                            <div className="p-6 bg-[#E3E3FD]/10 border border-[#E3E3FD]/20 rounded-2xl">
+                                <p className="font-mono text-xs text-[#E3E3FD] uppercase tracking-widest mb-3">✅ Grown</p>
+                                <ul className="space-y-2 font-montreal text-sm text-white/60">
+                                    <li>• Organic curves, cellular structures</li>
+                                    <li>• Mono-material, zero texture</li>
+                                    <li>• Single base color, opacity layers</li>
+                                    <li>• Every surface serves exact function</li>
+                                    <li>• Alien, optimized, non-human logic</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        {/* 00b. Foundation */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+            <div className="md:col-span-4 sticky top-32 h-fit">
+                <SectionHeader title="Foundation" number="00b" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed mb-6">
                     The core building blocks: colors, typography, spacing, and border radius. These are the atoms of the system.
                 </p>
+                <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg mb-8">
+                    <p className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest mb-2">Material Philosophy</p>
+                    <p className="font-montreal text-sm text-white/60 leading-relaxed">
+                        Mono-material restraint. One dark base dominates. Lavender as bioluminescent signal markers. Grown rather than manufactured. Zero texture variation.
+                    </p>
+                </div>
                 <div className="flex gap-2 flex-wrap">
                     <Badge className="bg-[#E3E3FD]/10 border-[#E3E3FD]/30 text-[#E3E3FD]">Colors</Badge>
                     <Badge className="bg-white/10 border-white/20 text-white">Typography</Badge>
@@ -117,8 +228,8 @@ export default function DesignSystem() {
                                 { 
                                     name: 'Signal', 
                                     value: '#E3E3FD', 
-                                    usage: 'Interactive / Status',
-                                    description: 'Lavender accent. Use sparingly for active states, hover borders, status indicators. Maximum 10% of any view.'
+                                    usage: 'Bioluminescent Marker',
+                                    description: 'Lavender bioluminescence. Use as signal markers in dark hive. Maximum 10% of any view. Feels like alien navigation beacons, not decoration.'
                                 },
                                 { 
                                     name: 'Ink', 
@@ -565,7 +676,7 @@ export default function DesignSystem() {
                             <p className="text-white/50 font-montreal text-sm leading-relaxed">
                                 Don't just bill for the setup. Sell the tool as a subscription. Create recurring revenue streams from a single design system implementation.
             </p>
-                        </motion.div>
+      </motion.div>
         </div>
 
                     <div className="mt-6 bg-[#261E19] border border-white/10 p-6 rounded-2xl">
@@ -871,13 +982,19 @@ export default function DesignSystem() {
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div className="md:col-span-4 sticky top-32 h-fit">
                 <SectionHeader title="System Nodes" number="03" />
-                <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
+                <p className="font-montreal text-white/60 text-lg leading-relaxed mb-6">
                     Floating nodes represent the system architecture visually. Like cells in an organism or nodes in an ant colony—each connected, each purposeful. Used for illustration and storytelling only, never in production UI.
                 </p>
+                <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg mb-8">
+                    <p className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest mb-2">Neural Network Architecture</p>
+                    <p className="font-montreal text-sm text-white/60 leading-relaxed">
+                        Nodes feel like a distributed organism where every part is aware of the others. Modular components snap together like living cells. Connection lines pulse with data flow like neural pathways.
+                    </p>
+                </div>
                 <div className="flex gap-2 flex-wrap">
-                    <Badge className="bg-[#E3E3FD]/10 border-[#E3E3FD]/30 text-[#E3E3FD]">Illustration</Badge>
-                    <Badge className="bg-white/10 border-white/20 text-white">Marketing</Badge>
-                    <Badge className="bg-white/10 border-white/20 text-white">Organic</Badge>
+                    <Badge className="bg-[#E3E3FD]/10 border-[#E3E3FD]/30 text-[#E3E3FD]">Cellular</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">Connected</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">Distributed</Badge>
                 </div>
             </div>
             
@@ -1146,12 +1263,12 @@ export default function DesignSystem() {
                         <div ref={containerRef} className="relative w-full h-full" style={{ minHeight: '350px' }}>
                             {/* Connection Lines */}
                             <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none" style={{zIndex: 10}}>
-                                <motion.path
+        <motion.path
                                     d={`M ${nodePositions.studio.x} ${nodePositions.studio.y} 
                                         C ${(nodePositions.studio.x + nodePositions.core.x) / 2} ${nodePositions.studio.y} 
                                           ${(nodePositions.studio.x + nodePositions.core.x) / 2} ${nodePositions.core.y} 
                                           ${nodePositions.core.x} ${nodePositions.core.y}`}
-                                    fill="none"
+            fill="none"
                                     stroke="white"
                                     strokeWidth="0.05"
                                     strokeOpacity="0.2"
@@ -1177,20 +1294,20 @@ export default function DesignSystem() {
                                     stroke="#E3E3FD"
                                     strokeWidth="0.15"
                                     vectorEffect="non-scaling-stroke"
-                                    initial={{ pathLength: 0, pathOffset: 0, opacity: 0 }}
-                                    animate={{ 
+            initial={{ pathLength: 0, pathOffset: 0, opacity: 0 }}
+            animate={{ 
                                         pathLength: [0, 0.4, 0],
-                                        pathOffset: [0, 1, 1],
-                                        opacity: [0, 1, 0] 
-                                    }}
-                                    transition={{ 
+                pathOffset: [0, 1, 1],
+                opacity: [0, 1, 0]
+            }}
+            transition={{ 
                                         duration: 4, 
-                                        ease: "easeInOut", 
-                                        repeat: Infinity,
-                                        repeatDelay: 0.5
-                                    }}
-                                />
-                            </svg>
+                ease: "easeInOut", 
+                repeat: Infinity,
+                repeatDelay: 0.5
+            }}
+        />
+    </svg>
 
                             {/* Node 1: Studio */}
                             <motion.div
@@ -1242,16 +1359,16 @@ export default function DesignSystem() {
                                     <div className="flex justify-between items-center mb-3 pb-2 border-b border-white/5">
                                         <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">Design_Studio</span>
                                         <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full shadow-[0_0_8px_#E3E3FD]"></div>
-                                    </div>
+        </div>
                                     <div className="flex flex-col gap-2">
                                         <div className="flex items-center gap-2 text-white/60">
                                             <Database size={12} />
                                             <span className="font-mono text-[9px]">ASSETS_LOADED</span>
-                                        </div>
+        </div>
                                         <div className="flex items-center gap-2 text-white/60">
                                             <Lock size={12} className="text-[#E3E3FD]"/>
                                             <span className="font-mono text-[9px] text-[#E3E3FD]">RULES_LOCKED</span>
-                                        </div>
+    </div>
                                     </div>
                                     <div className="absolute -left-[4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-[#1A1614] border border-white/20 rounded-full group-hover:border-[#E3E3FD] transition-colors" />
                                     <div className="absolute -right-[4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-[#1A1614] border border-white/20 rounded-full group-hover:border-[#E3E3FD] transition-colors" />
@@ -1323,9 +1440,9 @@ export default function DesignSystem() {
                             </motion.div>
 
                             {/* Node 3: Output */}
-                            <motion.div
+             <motion.div 
                                 className="absolute z-20 cursor-grab active:cursor-grabbing"
-                                style={{ 
+                style={{ 
                                     left: `${nodePositions.output.x}%`, 
                                     top: `${nodePositions.output.y}%`,
                                     transform: 'translate(-50%, -50%)'
@@ -1372,24 +1489,24 @@ export default function DesignSystem() {
                                     <div className="flex justify-between items-center mb-3 pb-2 border-b border-white/5">
                                         <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">Client_Output</span>
                                         <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full shadow-[0_0_8px_#E3E3FD]"></div>
-                                    </div>
+                            </div>
                                     <div className="flex flex-col gap-2">
                                         <div className="flex items-center gap-2 text-white/60">
                                             <Layout size={12} />
                                             <span className="font-mono text-[9px]">RENDER_COMPLETE</span>
-                                        </div>
+                                </div>
                                         <div className="flex items-center gap-2 text-white/60">
                                             <Zap size={12} className="text-[#E3E3FD]"/>
                                             <span className="font-mono text-[9px]">INSTANT_DELIVERY</span>
-                                        </div>
-                                    </div>
+                            </div>
+                        </div>
                                     <div className="absolute -left-[4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-[#1A1614] border border-white/20 rounded-full group-hover:border-[#E3E3FD] transition-colors" />
                                     <div className="absolute -right-[4px] top-1/2 -translate-y-1/2 w-2 h-2 bg-[#1A1614] border border-white/20 rounded-full group-hover:border-[#E3E3FD] transition-colors" />
-                                </div>
+                            </div>
                             </motion.div>
-                        </div>
+                            </div>
                         <p className="font-mono text-[9px] text-white/30 mt-4 text-center">Drag nodes to reposition. Connections update automatically.</p>
-                    </div>
+                        </div>
                 </div>
 
                 {/* Node Variations */}
@@ -1397,7 +1514,7 @@ export default function DesignSystem() {
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Node Variations</span>
                         <div className="h-px flex-1 bg-white/10"></div>
-                    </div>
+                            </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* Minimal Node */}
@@ -1406,8 +1523,8 @@ export default function DesignSystem() {
                             <div className="bg-[#261E19] border border-white/10 p-4 rounded-lg relative" style={{ minHeight: '120px' }}>
                                 <div className="absolute top-4 left-4 bg-[#1A1614]/90 border border-white/10 px-4 py-2 shadow-xl backdrop-blur-md rounded-2xl">
                                     <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">Output</span>
-                                </div>
                             </div>
+                         </div>
                             <p className="font-mono text-[9px] text-white/30 mt-4">Simplified version for final outputs</p>
                         </div>
 
@@ -1419,14 +1536,14 @@ export default function DesignSystem() {
                                     <div className="flex justify-between items-center mb-2 pb-2 border-b border-white/5">
                                         <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">Design_Studio</span>
                                         <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"></div>
-                                    </div>
+                            </div>
                                     <div className="flex flex-col gap-1.5">
                                         <div className="flex items-center gap-2 text-white/60">
                                             <div className="w-2 h-2 bg-white/20 rounded"></div>
                                             <span className="font-mono text-[8px]">ASSETS_LOADED</span>
-                                        </div>
-                                    </div>
-                                </div>
+                            </div>
+                        </div>
+                </div>
                             </div>
                             <p className="font-mono text-[9px] text-white/30 mt-4">Full version with status indicators</p>
                         </div>
@@ -1434,7 +1551,7 @@ export default function DesignSystem() {
                 </div>
 
             </div>
-        </section>
+      </section>
 
         {/* 04. System States & Feedback */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
@@ -1457,7 +1574,7 @@ export default function DesignSystem() {
                 <div>
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Loading States</span>
-                        <div className="h-px flex-1 bg-white/10"></div>
+                         <div className="h-px flex-1 bg-white/10"></div>
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1469,10 +1586,10 @@ export default function DesignSystem() {
                                 <div className="space-y-2">
                                     <div className="h-4 bg-white/5 rounded w-3/4 animate-pulse"></div>
                                     <div className="h-3 bg-white/5 rounded w-1/2 animate-pulse"></div>
-                                </div>
-                            </div>
+                    </div>
+                        </div>
                             <p className="font-mono text-[9px] text-white/30 mt-4">Used for: Tool list, card grids</p>
-                </div>
+                        </div>
 
                         {/* Inline Loader */}
                         <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
@@ -1489,11 +1606,11 @@ export default function DesignSystem() {
                 </div>
 
                 {/* Empty States */}
-                <div>
+              <div>
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Empty States</span>
                         <div className="h-px flex-1 bg-white/10"></div>
-                    </div>
+                            </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                         {/* No Tools - Dashed Border */}
@@ -1502,12 +1619,12 @@ export default function DesignSystem() {
                             <div className="border border-dashed border-white/10 p-8 md:p-10 hover:border-[#E3E3FD]/30 hover:bg-[#E3E3FD]/5 transition-colors flex flex-col items-center justify-center gap-4 text-center cursor-pointer min-h-[280px] rounded-3xl group">
                                 <div className="w-14 h-14 border border-white/10 bg-white/5 flex items-center justify-center text-white/40 group-hover:text-[#E3E3FD] group-hover:border-[#E3E3FD]/50 transition-colors rounded-2xl">
                                     <Plus size={24} />
-                                </div>
+                    </div>
                                 <span className="font-mono text-[10px] text-white/40 group-hover:text-[#E3E3FD] uppercase tracking-widest transition-colors">
                                     Initialize New Tool
                                 </span>
-                            </div>
-                        </div>
+                </div>
+            </div>
 
                         {/* No Selection */}
                         <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
@@ -1528,8 +1645,8 @@ export default function DesignSystem() {
                             </p>
                         </div>
                     </div>
-                </div>
-
+            </div>
+            
                 {/* Error States */}
                 <div>
                     <div className="flex items-center gap-4 mb-8">
@@ -1544,8 +1661,8 @@ export default function DesignSystem() {
                             <div className="bg-[#261E19] border border-red-500/20 p-4 rounded-lg">
                                 <p className="font-mono text-[9px] text-red-400 mb-1">TEXT_TOO_LONG</p>
                                 <p className="font-montreal text-xs text-white/60">Maximum 200 characters allowed</p>
-                            </div>
-                        </div>
+                    </div>
+                </div>
 
                         {/* System Error */}
                         <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
@@ -1554,7 +1671,7 @@ export default function DesignSystem() {
                                 <div className="flex items-center gap-2 mb-2">
                                     <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
                                     <p className="font-mono text-[9px] text-red-400 uppercase">Export Failed</p>
-                                </div>
+                        </div>
                                 <p className="font-montreal text-xs text-white/60">Unable to generate image. Please try again.</p>
                             </div>
                         </div>
@@ -1566,7 +1683,7 @@ export default function DesignSystem() {
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Success States</span>
                         <div className="h-px flex-1 bg-white/10"></div>
-                    </div>
+                            </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* Tool Published */}
@@ -1576,10 +1693,10 @@ export default function DesignSystem() {
                                 <div className="flex items-center gap-2 mb-2">
                                     <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"></div>
                                     <p className="font-mono text-[9px] text-[#E3E3FD] uppercase">Live</p>
-                                </div>
+                        </div>
                                 <p className="font-montreal text-xs text-white/70">Tool is now live and accessible to clients</p>
                             </div>
-                        </div>
+                            </div>
 
                         {/* Export Complete */}
                         <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
@@ -1588,10 +1705,10 @@ export default function DesignSystem() {
                                 <div className="flex items-center gap-2 mb-2">
                                     <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"></div>
                                     <p className="font-mono text-[9px] text-[#E3E3FD] uppercase">Download Complete</p>
-                                </div>
-                                <p className="font-montreal text-xs text-white/70">High-res PNG exported successfully</p>
-                            </div>
                         </div>
+                                <p className="font-montreal text-xs text-white/70">High-res PNG exported successfully</p>
+                    </div>
+                </div>
                     </div>
                 </div>
 
