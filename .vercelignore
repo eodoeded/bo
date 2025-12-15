@@ -1,0 +1,11 @@
+# Vercel ignore file
+# Only ignore build artifacts and dependencies
+
+node_modules/
+dist/
+*.log
+.DS_Store
+
+# Keep database folder for reference
+# database/
+
