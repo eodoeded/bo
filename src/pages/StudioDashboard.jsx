@@ -39,7 +39,7 @@ export default function StudioDashboard() {
             <h1 className="font-montreal font-medium text-4xl md:text-5xl tracking-tight mb-2 text-white leading-[0.9]">
               Studio Dashboard
             </h1>
-            <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mt-2">SYSTEM_OVERVIEW // ACTIVE_TOOLS: {mockTools.length} // REGISTERED_MODULES: {mockTools.length}</p>
+            <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mt-2">SYSTEM_OVERVIEW // ACTIVE_TOOLS: {mockTools.length} // REGISTERED_MODULES: {mockTools.length} // STATUS: OPERATIONAL</p>
           </div>
           <Link 
             to="/studio/builder/new" 

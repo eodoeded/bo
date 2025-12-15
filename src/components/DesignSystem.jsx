@@ -833,7 +833,7 @@ export default function DesignSystem() {
                 <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg mb-8">
                     <p className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest mb-2">Technical Density</p>
                     <p className="font-montreal text-sm text-white/60 leading-relaxed">
-                        Dense information hierarchy. System labels, latency readouts, output counts. Feels like mission control software for an alien megastructure.
+                        Dense information hierarchy. System labels, latency readouts, output counts, tool IDs. Every surface serves exact technical function. Feels like mission control software for an alien megastructure—no wasted space, no hand-holding, pure function.
                     </p>
                 </div>
                 <div className="flex gap-2 flex-wrap">
@@ -2000,10 +2000,10 @@ export default function DesignSystem() {
                     
                     <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl space-y-4">
                         {[
-                            { principle: 'Dense', description: 'More information per pixel. Tighter spacing.' },
-                            { principle: 'Technical', description: 'System labels, lock icons, layer names visible.' },
-                            { principle: 'Explicit', description: 'Show all controls, all states, all options.' },
-                            { principle: 'Functional', description: 'Zero decoration. Every element has purpose.' }
+                            { principle: 'Dense', description: 'More information per pixel. Tighter spacing. Like mission control software—every surface serves exact technical function.' },
+                            { principle: 'Technical', description: 'System labels, lock icons, layer names, latency readouts. Monospace for all system text. Feels like alien engineering interface.' },
+                            { principle: 'Explicit', description: 'Show all controls, all states, all options. No hidden functionality. Engineers of brand governance need full visibility.' },
+                            { principle: 'Functional', description: 'Zero decoration. Every element has purpose. Grown rather than manufactured—optimized to the extreme.' }
                         ].map((item, i) => (
                             <div key={i} className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
                                 <p className="font-mono text-xs text-white/70 uppercase tracking-widest mb-2">{item.principle}</p>
@@ -2022,10 +2022,10 @@ export default function DesignSystem() {
                     
                     <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl space-y-4">
                         {[
-                            { principle: 'Simple', description: 'Only safe inputs. No technical jargon.' },
-                            { principle: 'Constrained', description: 'Can only edit what studio allows.' },
-                            { principle: 'Non-Technical', description: 'No layer names, lock icons, or system labels.' },
-                            { principle: 'Clear', description: 'Plain language. "Change Headline" not "Edit TEXT_LAYER".' }
+                            { principle: 'Simple', description: 'Minimal interface. Only safe inputs visible. Like a simplified control panel—only what\'s needed, nothing more.' },
+                            { principle: 'Constrained', description: 'Cannot break layout. Cannot access locked properties. The system enforces brand rules—technically impossible to violate constraints.' },
+                            { principle: 'Non-Technical', description: 'No system labels, no lock icons, no layer names. Human-friendly labels only. Studio complexity hidden completely.' },
+                            { principle: 'Focused', description: 'One task: input authorized content, export asset. Single-purpose interface. No distractions, no options, just function.' }
                         ].map((item, i) => (
                             <div key={i} className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
                                 <p className="font-mono text-xs text-white/70 uppercase tracking-widest mb-2">{item.principle}</p>
