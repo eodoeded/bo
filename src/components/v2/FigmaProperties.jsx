@@ -1,0 +1,189 @@
+// Simple Figma-like Properties Panel
+// Clean, minimal, just the essentials
+
+import React from 'react';
+
+export default function FigmaProperties({ selectedLayer, onUpdateLayer }) {
+    if (!selectedLayer) {
+        return (
+            <div className="flex flex-col items-center justify-center h-full text-white/20 p-8 text-center">
+                <span className="font-mono text-[10px] uppercase tracking-widest mb-2">NO_SELECTION</span>
+                <p className="text-xs text-white/30">Select a layer to edit</p>
+            </div>
+        );
+    }
+
+    const updateProperty = (key, value) => {
+        onUpdateLayer(selectedLayer.id, {
+            properties: { ...selectedLayer.properties, [key]: value }
+        });
+    };
+
+    return (
+        <div className="p-4 space-y-4">
+            {/* Layer Name */}
+            <div>
+                <input
+                    type="text"
+                    value={selectedLayer.name || ''}
+                    onChange={(e) => onUpdateLayer(selectedLayer.id, { name: e.target.value })}
+                    className="w-full bg-transparent border-b border-white/10 text-white font-montreal text-sm px-0 py-1 focus:outline-none focus:border-white/30"
+                    placeholder="Layer name"
+                />
+            </div>
+
+            {/* Position */}
+            <div className="space-y-2">
+                <div className="text-[10px] text-white/40 uppercase tracking-widest mb-2">Position</div>
+                <div className="grid grid-cols-2 gap-2">
+                    <div>
+                        <label className="text-[10px] text-white/30 mb-1 block">X</label>
+                        <input
+                            type="number"
+                            value={selectedLayer.properties.x || 0}
+                            onChange={(e) => updateProperty('x', parseFloat(e.target.value))}
+                            className="w-full bg-white/5 border border-white/10 text-white text-xs px-2 py-1.5 rounded focus:outline-none focus:border-white/30"
+                        />
+                    </div>
+                    <div>
+                        <label className="text-[10px] text-white/30 mb-1 block">Y</label>
+                        <input
+                            type="number"
+                            value={selectedLayer.properties.y || 0}
+                            onChange={(e) => updateProperty('y', parseFloat(e.target.value))}
+                            className="w-full bg-white/5 border border-white/10 text-white text-xs px-2 py-1.5 rounded focus:outline-none focus:border-white/30"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            {/* Size (for image/rectangle) */}
+            {(selectedLayer.type === 'image' || selectedLayer.type === 'rectangle') && (
+                <div className="space-y-2">
+                    <div className="text-[10px] text-white/40 uppercase tracking-widest mb-2">Size</div>
+                    <div className="grid grid-cols-2 gap-2">
+                        <div>
+                            <label className="text-[10px] text-white/30 mb-1 block">W</label>
+                            <input
+                                type="number"
+                                value={selectedLayer.properties.width || 0}
+                                onChange={(e) => updateProperty('width', parseInt(e.target.value))}
+                                className="w-full bg-white/5 border border-white/10 text-white text-xs px-2 py-1.5 rounded focus:outline-none focus:border-white/30"
+                            />
+                        </div>
+                        <div>
+                            <label className="text-[10px] text-white/30 mb-1 block">H</label>
+                            <input
+                                type="number"
+                                value={selectedLayer.properties.height || 0}
+                                onChange={(e) => updateProperty('height', parseInt(e.target.value))}
+                                className="w-full bg-white/5 border border-white/10 text-white text-xs px-2 py-1.5 rounded focus:outline-none focus:border-white/30"
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Text Specific */}
+            {selectedLayer.type === 'text' && (
+                <>
+                    <div className="space-y-2">
+                        <div className="text-[10px] text-white/40 uppercase tracking-widest mb-2">Text</div>
+                        <textarea
+                            value={selectedLayer.properties.text || ''}
+                            onChange={(e) => updateProperty('text', e.target.value)}
+                            className="w-full bg-white/5 border border-white/10 text-white text-xs px-2 py-1.5 rounded focus:outline-none focus:border-white/30 min-h-[60px] resize-none"
+                            placeholder="Text content"
+                        />
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                        <div>
+                            <label className="text-[10px] text-white/30 mb-1 block">Size</label>
+                            <input
+                                type="number"
+                                value={selectedLayer.properties.fontSize || 16}
+                                onChange={(e) => updateProperty('fontSize', parseInt(e.target.value))}
+                                className="w-full bg-white/5 border border-white/10 text-white text-xs px-2 py-1.5 rounded focus:outline-none focus:border-white/30"
+                            />
+                        </div>
+                        <div>
+                            <label className="text-[10px] text-white/30 mb-1 block">Color</label>
+                            <div className="flex gap-1">
+                                <input
+                                    type="color"
+                                    value={selectedLayer.properties.color || '#FFFFFF'}
+                                    onChange={(e) => updateProperty('color', e.target.value)}
+                                    className="w-8 h-8 rounded border border-white/10 cursor-pointer"
+                                />
+                                <input
+                                    type="text"
+                                    value={selectedLayer.properties.color || '#FFFFFF'}
+                                    onChange={(e) => updateProperty('color', e.target.value)}
+                                    className="flex-1 bg-white/5 border border-white/10 text-white text-xs px-2 py-1.5 rounded focus:outline-none focus:border-white/30"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </>
+            )}
+
+            {/* Image Specific */}
+            {selectedLayer.type === 'image' && (
+                <div className="space-y-2">
+                    <div className="text-[10px] text-white/40 uppercase tracking-widest mb-2">Image</div>
+                    <input
+                        type="text"
+                        value={selectedLayer.properties.src || ''}
+                        onChange={(e) => updateProperty('src', e.target.value)}
+                        className="w-full bg-white/5 border border-white/10 text-white text-xs px-2 py-1.5 rounded focus:outline-none focus:border-white/30"
+                        placeholder="Image URL"
+                    />
+                </div>
+            )}
+
+            {/* Rectangle Specific */}
+            {selectedLayer.type === 'rectangle' && (
+                <div className="space-y-2">
+                    <div className="text-[10px] text-white/40 uppercase tracking-widest mb-2">Fill</div>
+                    <div className="flex gap-1">
+                        <input
+                            type="color"
+                            value={selectedLayer.properties.color || '#FFFFFF'}
+                            onChange={(e) => updateProperty('color', e.target.value)}
+                            className="w-8 h-8 rounded border border-white/10 cursor-pointer"
+                        />
+                        <input
+                            type="text"
+                            value={selectedLayer.properties.color || '#FFFFFF'}
+                            onChange={(e) => updateProperty('color', e.target.value)}
+                            className="flex-1 bg-white/5 border border-white/10 text-white text-xs px-2 py-1.5 rounded focus:outline-none focus:border-white/30"
+                        />
+                    </div>
+                </div>
+            )}
+
+            {/* Locks Section (Simple) */}
+            <div className="pt-4 border-t border-white/10 space-y-2">
+                <div className="text-[10px] text-white/40 uppercase tracking-widest mb-2">Locks</div>
+                <div className="space-y-1">
+                    {Object.keys(selectedLayer.locks || {}).map(key => (
+                        <label key={key} className="flex items-center gap-2 text-xs text-white/60 cursor-pointer">
+                            <input
+                                type="checkbox"
+                                checked={selectedLayer.locks[key] === 'LOCKED'}
+                                onChange={(e) => {
+                                    const newLocks = { ...selectedLayer.locks };
+                                    newLocks[key] = e.target.checked ? 'LOCKED' : 'CLIENT_INPUT';
+                                    onUpdateLayer(selectedLayer.id, { locks: newLocks });
+                                }}
+                                className="w-3 h-3 rounded border-white/20 bg-white/5"
+                            />
+                            <span className="text-[10px]">{key}</span>
+                        </label>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+}
+

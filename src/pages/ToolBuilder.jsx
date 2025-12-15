@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Save, Share2 } from 'lucide-react';
 import PreviewCanvas from '../components/v2/PreviewCanvas';
-import DesignPanel from '../components/v2/DesignPanel';
-import LockPanel from '../components/v2/LockPanel';
-import ClientUIPanel from '../components/v2/ClientUIPanel';
+import FigmaProperties from '../components/v2/FigmaProperties';
 import LayerStack from '../components/v2/LayerStack';
 import { getTool, updateTool, publishTool, createTool } from '../services/tools';
 import UnifiedNav from '../components/UnifiedNav';
@@ -47,7 +45,7 @@ export default function ToolBuilder() {
     const [toolName, setToolName] = useState('New Tool');
     const [toolStatus, setToolStatus] = useState('draft');
     const [isLoading, setIsLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState('design'); // 'design' | 'locks' | 'client-ui'
+    const [layersPanelOpen, setLayersPanelOpen] = useState(true);
     const [clientUI, setClientUI] = useState({
         logo: null,
         topNavBg: '#1A1614',
