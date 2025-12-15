@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { Database, Layout, ArrowRight, Lock, Scan, Zap } from 'lucide-react';
 import bottomComp from "../assets/bottom-comp.png";
 
@@ -60,37 +60,12 @@ export default function WaitlistHero() {
   const containerRef = useRef(null);
   const [draggingId, setDraggingId] = useState(null);
   
-  // Initial Positions (Percentages)
+  // Initial Positions (Percentages) - consistent across breakpoints so mobile mirrors desktop layout
   const [nodes, setNodes] = useState({
-      studio: { x: 20, y: 30 },
-      core: { x: 50, y: 55 },
-      output: { x: 80, y: 30 }
+      studio: { x: 32, y: 38 },
+      core:   { x: 58, y: 52 },
+      output: { x: 78, y: 36 }
   });
-
-  // Responsive Node Positioning
-  useEffect(() => {
-      const handleResize = () => {
-          if (window.innerWidth < 768) {
-              // Vertical Stack for Mobile
-              setNodes({
-                  studio: { x: 50, y: 15 },
-                  core: { x: 50, y: 45 },
-                  output: { x: 50, y: 75 }
-              });
-          } else {
-              // Horizontal Layout for Desktop
-              setNodes({
-                  studio: { x: 20, y: 30 },
-                  core: { x: 50, y: 55 },
-                  output: { x: 80, y: 30 }
-              });
-          }
-      };
-      
-      handleResize();
-      window.addEventListener('resize', handleResize);
-      return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   const handleDragStart = (e, id) => {
       e.preventDefault();
