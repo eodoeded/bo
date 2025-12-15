@@ -87,10 +87,11 @@ export default function UnifiedNav() {
 
           {/* Mobile Menu Toggle */}
           <button 
-            className="md:hidden text-white/60 hover:text-white transition-colors" 
+            className="md:hidden text-white hover:text-[#E3E3FD] transition-colors z-50 relative" 
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
           >
-            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            {isMenuOpen ? <X size={20} className="text-white" /> : <Menu size={20} className="text-white" />}
           </button>
         </div>
       </div>

@@ -336,9 +336,9 @@ export default function WaitlistHero() {
       </div>
 
       {/* Text Content */}
-      <div className="absolute bottom-0 left-0 w-full md:w-auto md:bottom-24 md:left-16 z-30 px-6 pb-12 pt-24 md:pt-0 md:pb-0 pointer-events-none">
+      <div className="absolute bottom-0 left-0 w-full md:w-auto md:bottom-24 md:left-16 z-30 px-4 md:px-6 pb-8 md:pb-12 pt-20 md:pt-0 pointer-events-none">
         {/* Mobile Gradient Background */}
-        <div className="md:hidden absolute inset-0 -z-10 bg-gradient-to-b from-[#261E19]/40 via-[#261E19]/60 to-[#261E19] rounded-t-3xl"></div>
+        <div className="md:hidden absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-[#261E19]/60 to-[#261E19]"></div>
         <div className="flex flex-col items-start text-left pointer-events-auto max-w-2xl relative">
             <motion.div
                 className="flex items-center gap-3 mb-6"
