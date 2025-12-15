@@ -8,19 +8,19 @@ const Corner = ({ className = "" }) => (
 const steps = [
   {
     number: "01",
-    title: "DEFINE THE LOGIC",
+    title: "DEFINE_THE_LOGIC",
     description: "Designers set the rules.",
     detail: "You build the master system. Lock fonts, positioning, and style. Define exactly what can change and what must stay fixed."
   },
   {
     number: "02",
-    title: "EXPOSE SAFE CONTROLS",
+    title: "EXPOSE_SAFE_CONTROLS",
     description: "Clients get a simple UI.",
     detail: "They can't break the layout. They only see safe inputs: 'Change Headline', 'Swap Product Image', 'Generate Background'."
   },
   {
     number: "03",
-    title: "AUTOMATE & SCALE",
+    title: "AUTOMATE_&_SCALE",
     description: "Perfect assets, instantly.",
     detail: "The system generates on-brand outputs automatically. No approval chains. No manual resizing. Just correct files."
   }
@@ -41,7 +41,7 @@ export default function WaitlistHowItWorks() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="mb-12 md:mb-16 border-l border-white/20 pl-6"
+                className="mb-12 md:mb-20 border-l border-white/20 pl-6"
             >
                 <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-4">THE_MECHANISM</span>
                 <h2 className="font-montreal font-medium text-white text-3xl md:text-4xl lg:text-5xl tracking-tight leading-tight">

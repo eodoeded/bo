@@ -454,7 +454,7 @@ export default function DesignSystem() {
                                         <span className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">Studio</span>
         </div>
                                     <div className="flex items-center gap-4">
-                                        <button className="bg-white text-black px-5 py-2.5 font-mono font-semibold text-[11px] uppercase tracking-widest hover:bg-[#E3E3FD] transition-colors rounded-sm">
+                                        <button className="bg-white text-black px-5 py-2.5 font-mono font-semibold text-[11px] uppercase tracking-widest hover:bg-[#E3E3FD] transition-colors rounded-lg">
                                             Request Access
     </button>
         </div>
@@ -501,7 +501,7 @@ export default function DesignSystem() {
                                         <span className="font-mono text-[9px] text-white/40">Value</span>
                                         <span className="font-mono text-[9px] text-white/40">Specs</span>
                             </div>
-                                    <button className="bg-white text-black px-3 py-1.5 font-mono text-[9px] uppercase rounded-sm">Request Access</button>
+                                    <button className="bg-white text-black px-3 py-1.5 font-mono text-[9px] uppercase rounded-lg">Request Access</button>
                         </div>
                             </div>
                             <p className="font-mono text-[9px] text-white/30">Shows center nav links + CTA button</p>
@@ -1200,19 +1200,19 @@ export default function DesignSystem() {
                             <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-6">Button States</p>
                             <div className="flex flex-wrap items-center gap-4">
                                 <button 
-                                    className="bg-white text-black px-5 py-2.5 font-mono font-semibold text-[11px] uppercase tracking-widest hover:bg-[#E3E3FD] transition-colors rounded-sm"
+                                    className="bg-white text-black px-5 py-2.5 font-mono font-semibold text-[11px] uppercase tracking-widest hover:bg-[#E3E3FD] transition-colors rounded-lg"
                                     onMouseEnter={() => setButtonHover('primary')}
                                     onMouseLeave={() => setButtonHover(null)}
                                 >
                                     Request Access
                                 </button>
                                 <button 
-                                    className="bg-white text-black px-5 py-2.5 font-mono font-semibold text-[11px] uppercase tracking-widest bg-[#E3E3FD] rounded-sm cursor-default"
+                                    className="bg-white text-black px-5 py-2.5 font-mono font-semibold text-[11px] uppercase tracking-widest bg-[#E3E3FD] rounded-lg cursor-default"
                                 >
                                     Hover State
                                 </button>
                                 <button 
-                                    className="bg-white text-black px-5 py-2.5 font-mono font-semibold text-[11px] uppercase tracking-widest opacity-50 cursor-not-allowed rounded-sm"
+                                    className="bg-white text-black px-5 py-2.5 font-mono font-semibold text-[11px] uppercase tracking-widest opacity-50 cursor-not-allowed rounded-lg"
                                     disabled
                                 >
                                     Disabled
@@ -1241,7 +1241,7 @@ export default function DesignSystem() {
                                 </div>
                                 <div className="flex justify-between">
                                     <span>Radius:</span>
-                                    <code className="text-[#E3E3FD]">rounded-sm</code>
+                                    <code className="text-[#E3E3FD]">rounded-lg</code>
                                 </div>
                             </div>
                         </div>
@@ -1257,10 +1257,10 @@ export default function DesignSystem() {
                     
                     <div className="bg-[#1A1614] border border-white/10 p-8 rounded-2xl">
                         <div className="flex flex-wrap items-center gap-4">
-                            <button className="bg-[#E3E3FD] text-[#261E19] px-4 py-2 font-mono font-semibold text-[10px] uppercase tracking-widest hover:bg-white transition-colors rounded-sm">
+                            <button className="bg-[#E3E3FD] text-[#261E19] px-4 py-2 font-mono font-semibold text-[10px] uppercase tracking-widest hover:bg-white transition-colors rounded-lg">
                                 Create New
                             </button>
-                            <button className="bg-[#E3E3FD] text-[#261E19] px-4 py-2 font-mono font-semibold text-[10px] uppercase tracking-widest bg-white rounded-sm cursor-default">
+                            <button className="bg-[#E3E3FD] text-[#261E19] px-4 py-2 font-mono font-semibold text-[10px] uppercase tracking-widest bg-white rounded-lg cursor-default">
                                 Hover State
                             </button>
                         </div>
@@ -1598,6 +1598,277 @@ export default function DesignSystem() {
                             <p className="font-montreal text-sm text-white/60 mb-3">Client can edit. Safe input field exposed in Runner.</p>
                             <div className="px-2 py-1 border border-[#E3E3FD]/30 bg-[#E3E3FD]/10 text-[#E3E3FD] rounded-full inline-block">
                                 <span className="font-mono text-[8px] uppercase">CLIENT_INPUT</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        {/* 02g. Authentication Pages */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
+            <div className="md:col-span-4 md:sticky md:top-32 h-fit">
+                <SectionHeader title="Authentication Pages" number="02g" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed mb-6">
+                    Studio access control. Login and sign-up pages with system status indicators, error handling, and fallback mode detection.
+                </p>
+                <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg mb-8">
+                    <p className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest mb-2">Access Control</p>
+                    <p className="font-montreal text-sm text-white/60 leading-relaxed">
+                        Authentication pages protect Studio routes. Clean, centered layouts with system status indicators. Error states use red signal color. Fallback mode warning for development.
+                    </p>
+                </div>
+                <div className="flex gap-2 flex-wrap">
+                    <Badge className="bg-[#E3E3FD]/10 border-[#E3E3FD]/30 text-[#E3E3FD]">Login</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">SignUp</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">Error States</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">Loading</Badge>
+                </div>
+            </div>
+            
+            <div className="md:col-span-8 space-y-24">
+                
+                {/* Login Page Pattern */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Login Page</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                        <div className="max-w-md mx-auto bg-[#1A1614] border border-white/10 p-8 md:p-12 rounded-3xl relative z-10 shadow-2xl mb-6">
+                            {/* Header */}
+                            <div className="mb-8">
+                                <div className="flex items-center gap-3 mb-6">
+                                    <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
+                                    <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">STUDIO_ACCESS</span>
+                                </div>
+                                <h1 className="font-montreal font-medium text-3xl md:text-4xl tracking-tight mb-3 text-white">
+                                    Sign In
+                                </h1>
+                                <p className="font-montreal text-white/50 text-sm">
+                                    Access your studio dashboard and tools.
+                                </p>
+                            </div>
+
+                            {/* Form */}
+                            <form className="space-y-6">
+                                <div>
+                                    <label className="block font-mono text-[10px] text-white/60 uppercase tracking-widest mb-2">
+                                        EMAIL
+                                    </label>
+                                    <input
+                                        type="email"
+                                        className="w-full bg-[#261E19] border border-white/10 px-4 py-3 rounded-lg font-mono text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#E3E3FD]/50 transition-colors"
+                                        placeholder="studio@agency.com"
+                                        readOnly
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block font-mono text-[10px] text-white/60 uppercase tracking-widest mb-2">
+                                        PASSWORD
+                                    </label>
+                                    <input
+                                        type="password"
+                                        className="w-full bg-[#261E19] border border-white/10 px-4 py-3 rounded-lg font-mono text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#E3E3FD]/50 transition-colors"
+                                        placeholder="••••••••"
+                                        readOnly
+                                    />
+                                </div>
+
+                                <button
+                                    type="button"
+                                    className="w-full bg-[#E3E3FD] text-[#261E19] px-6 py-3 font-mono font-semibold text-[11px] uppercase tracking-widest hover:bg-white transition-colors flex items-center justify-center gap-2 rounded-lg"
+                                >
+                                    SIGN_IN
+                                    <ArrowRight size={14} />
+                                </button>
+                            </form>
+
+                            {/* Sign Up Link */}
+                            <div className="mt-8 pt-6 border-t border-white/10">
+                                <p className="font-mono text-[10px] text-white/40 text-center mb-3">
+                                    NEED_AN_ACCOUNT?
+                                </p>
+                                <button className="block w-full text-center bg-white/5 border border-white/10 px-6 py-3 font-mono text-[10px] uppercase tracking-widest hover:bg-white/10 transition-colors rounded-lg">
+                                    CREATE_STUDIO_ACCOUNT
+                                </button>
+                            </div>
+                        </div>
+                        <div className="space-y-2 font-mono text-[9px] text-white/40">
+                            <div className="flex justify-between">
+                                <span>Layout:</span>
+                                <code className="text-[#E3E3FD]">Centered card, max-w-md</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Card:</span>
+                                <code className="text-[#E3E3FD]">bg-[#1A1614] border-white/10 rounded-3xl</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Header:</span>
+                                <code className="text-[#E3E3FD]">System status + title + description</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Inputs:</span>
+                                <code className="text-[#E3E3FD]">bg-[#261E19] border-white/10 rounded-lg</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Button:</span>
+                                <code className="text-[#E3E3FD]">bg-[#E3E3FD] text-[#261E19] rounded-lg</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Error State Pattern */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Error State</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                        <div className="mb-6 p-4 bg-red-900/20 border border-red-500/30 rounded-lg flex items-start gap-3">
+                            <AlertCircle size={16} className="text-red-400 shrink-0 mt-0.5" />
+                            <p className="font-mono text-[10px] text-red-400 flex-1">Invalid email or password</p>
+                        </div>
+                        <div className="space-y-2 font-mono text-[9px] text-white/40">
+                            <div className="flex justify-between">
+                                <span>Container:</span>
+                                <code className="text-[#E3E3FD]">bg-red-900/20 border-red-500/30</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Icon:</span>
+                                <code className="text-[#E3E3FD]">AlertCircle, text-red-400</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Text:</span>
+                                <code className="text-[#E3E3FD]">font-mono text-[10px] text-red-400</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Loading State Pattern */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Loading State</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                        <button
+                            type="button"
+                            disabled
+                            className="w-full bg-[#E3E3FD] text-[#261E19] px-6 py-3 font-mono font-semibold text-[11px] uppercase tracking-widest flex items-center justify-center gap-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed mb-4"
+                        >
+                            <div className="w-4 h-4 border-2 border-[#261E19]/20 border-t-[#261E19] rounded-full animate-spin"></div>
+                            AUTHENTICATING...
+                        </button>
+                        <div className="space-y-2 font-mono text-[9px] text-white/40">
+                            <div className="flex justify-between">
+                                <span>Spinner:</span>
+                                <code className="text-[#E3E3FD]">border-2 border-t-[#261E19] animate-spin</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Disabled State:</span>
+                                <code className="text-[#E3E3FD]">opacity-50 cursor-not-allowed</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* SignUp Page Pattern */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">SignUp Page</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                        <div className="max-w-md mx-auto bg-[#1A1614] border border-white/10 p-8 md:p-12 rounded-3xl relative z-10 shadow-2xl mb-6">
+                            {/* Header */}
+                            <div className="mb-8">
+                                <div className="flex items-center gap-3 mb-6">
+                                    <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
+                                    <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">STUDIO_REGISTRATION</span>
+                                </div>
+                                <h1 className="font-montreal font-medium text-3xl md:text-4xl tracking-tight mb-3 text-white">
+                                    Create Studio Account
+                                </h1>
+                                <p className="font-montreal text-white/50 text-sm">
+                                    Register to build and manage your design tools.
+                                </p>
+                            </div>
+
+                            {/* Form */}
+                            <form className="space-y-6">
+                                <div>
+                                    <label className="block font-mono text-[10px] text-white/60 uppercase tracking-widest mb-2">
+                                        EMAIL
+                                    </label>
+                                    <input
+                                        type="email"
+                                        className="w-full bg-[#261E19] border border-white/10 px-4 py-3 rounded-lg font-mono text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#E3E3FD]/50 transition-colors"
+                                        placeholder="studio@agency.com"
+                                        readOnly
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block font-mono text-[10px] text-white/60 uppercase tracking-widest mb-2">
+                                        PASSWORD
+                                    </label>
+                                    <input
+                                        type="password"
+                                        className="w-full bg-[#261E19] border border-white/10 px-4 py-3 rounded-lg font-mono text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#E3E3FD]/50 transition-colors"
+                                        placeholder="••••••••"
+                                        readOnly
+                                    />
+                                    <p className="mt-2 font-mono text-[9px] text-white/30">Minimum 6 characters</p>
+                                </div>
+
+                                <div>
+                                    <label className="block font-mono text-[10px] text-white/60 uppercase tracking-widest mb-2">
+                                        CONFIRM_PASSWORD
+                                    </label>
+                                    <input
+                                        type="password"
+                                        className="w-full bg-[#261E19] border border-white/10 px-4 py-3 rounded-lg font-mono text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#E3E3FD]/50 transition-colors"
+                                        placeholder="••••••••"
+                                        readOnly
+                                    />
+                                </div>
+
+                                <button
+                                    type="button"
+                                    className="w-full bg-[#E3E3FD] text-[#261E19] px-6 py-3 font-mono font-semibold text-[11px] uppercase tracking-widest hover:bg-white transition-colors flex items-center justify-center gap-2 rounded-lg"
+                                >
+                                    REGISTER_STUDIO
+                                    <ArrowRight size={14} />
+                                </button>
+                            </form>
+
+                            {/* Sign In Link */}
+                            <div className="mt-8 pt-6 border-t border-white/10">
+                                <p className="font-mono text-[10px] text-white/40 text-center mb-3">
+                                    ALREADY_HAVE_AN_ACCOUNT?
+                                </p>
+                                <button className="block w-full text-center bg-white/5 border border-white/10 px-6 py-3 font-mono text-[10px] uppercase tracking-widest hover:bg-white/10 transition-colors rounded-lg">
+                                    SIGN_IN
+                                </button>
+                            </div>
+                        </div>
+                        <div className="space-y-2 font-mono text-[9px] text-white/40">
+                            <div className="flex justify-between">
+                                <span>Difference from Login:</span>
+                                <code className="text-[#E3E3FD]">CONFIRM_PASSWORD field + helper text</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Helper Text:</span>
+                                <code className="text-[#E3E3FD]">font-mono text-[9px] text-white/30</code>
                             </div>
                         </div>
                     </div>
@@ -2479,7 +2750,7 @@ export default function DesignSystem() {
                         <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
                             <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">Inline Loader (Button)</p>
                             <div className="bg-[#261E19] border border-white/10 p-6 rounded-lg">
-                                <button className="bg-white text-black px-5 py-2.5 font-mono text-[11px] uppercase tracking-widest rounded-sm opacity-50 cursor-not-allowed flex items-center gap-2">
+                                <button className="bg-white text-black px-5 py-2.5 font-mono text-[11px] uppercase tracking-widest rounded-lg opacity-50 cursor-not-allowed flex items-center gap-2">
                                     <div className="w-3 h-3 border-2 border-black/20 border-t-black rounded-full animate-spin"></div>
                                     Rendering...
                                 </button>
@@ -2966,7 +3237,7 @@ export default function DesignSystem() {
                         <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-6">Keyboard Navigation</p>
                         <div className="space-y-4">
                             <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
-                                <button className="bg-white text-black px-5 py-2.5 font-mono text-[11px] uppercase tracking-widest rounded-sm focus:outline-none focus:ring-2 focus:ring-[#E3E3FD] focus:ring-offset-2 focus:ring-offset-[#261E19]">
+                                <button className="bg-white text-black px-5 py-2.5 font-mono text-[11px] uppercase tracking-widest rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E3E3FD] focus:ring-offset-2 focus:ring-offset-[#261E19]">
                                     Button with Focus Ring
                                 </button>
                                 <code className="font-mono text-[9px] text-white/40 block mt-2">focus:ring-2 focus:ring-[#E3E3FD]</code>
@@ -3117,7 +3388,7 @@ export default function DesignSystem() {
                     </p>
                     <div className="flex items-center gap-2">
                         <div className="w-2 h-2 bg-[#E3E3FD] rounded-full animate-pulse"></div>
-                        <span className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">All Systems Operational</span>
+                        <span className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">ALL_SYSTEMS_OPERATIONAL</span>
                     </div>
                 </div>
                 

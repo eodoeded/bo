@@ -20,7 +20,7 @@ export default function WaitlistFeatures() {
       <div className="max-w-[1400px] mx-auto">
         
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-20 border-b border-white/10 pb-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-20 border-b border-white/10 pb-8">
              <div>
                 <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-4">SYSTEM_LOGIC</span>
                 <h2 className="font-montreal font-medium text-white text-3xl md:text-4xl lg:text-5xl tracking-tight leading-[0.9]">
@@ -65,7 +65,7 @@ export default function WaitlistFeatures() {
             <div className="bg-[#1A1614] p-8 md:p-12 relative flex flex-col justify-between rounded-3xl border border-white/5">
                 
                 <div>
-                    <h3 className="font-mono text-sm text-white/40 uppercase tracking-widest mb-8">PHILOSOPHY</h3>
+                    <h3 className="font-mono text-sm text-white/40 uppercase tracking-widest mb-8">THE_PHILOSOPHY</h3>
                     <p className="font-montreal text-lg text-white/60 leading-relaxed mb-8">
                         We don't believe in "magic" buttons. We believe in defined logic. Studios upload the design rules and assets, whilst clients interact only with the safe parameters you define.
                     </p>

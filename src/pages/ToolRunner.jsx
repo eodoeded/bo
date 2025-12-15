@@ -155,10 +155,10 @@ export default function ToolRunner() {
                             <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_6px_#E3E3FD]"></div>
                             <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">CLIENT_INPUT_MODE</span>
                         </div>
-                        <h1 className="font-montreal font-medium text-xl md:text-2xl mb-2 text-white">Asset Configuration</h1>
+                        <h1 className="font-montreal font-medium text-xl md:text-2xl mb-2 text-white">ASSET_CONFIGURATION</h1>
                         <p className="font-montreal text-white/40 text-sm leading-relaxed">
-                            Input authorized content below. <br className="hidden sm:inline"/>
-                            Layout and styling are governed by Studio rules.
+                            INPUT_AUTHORIZED_CONTENT_BELOW. <br className="hidden sm:inline"/>
+                            LAYOUT_&_STYLING_GOVERNED_BY_STUDIO_RULES.
                         </p>
                     </div>
                     <RunnerForm layers={layers} onUpdateLayer={handleUpdateLayer} />

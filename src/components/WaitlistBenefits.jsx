@@ -12,7 +12,7 @@ export default function WaitlistBenefits() {
       <div className="max-w-[1400px] mx-auto relative z-10">
         
         {/* Header Block */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-12 md:mb-24 border-b border-white/10 pb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-12 md:mb-20 border-b border-white/10 pb-12">
             <div className="lg:col-span-8">
                 <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-6">FOR_STUDIOS_&_AGENCIES</span>
                 <h2 className="font-montreal font-medium text-white text-3xl md:text-4xl lg:text-6xl tracking-tight leading-[0.95] mb-6">
