@@ -1,9 +1,10 @@
 // V2 Shared Component: PreviewCanvas
 // Renders the "mini-tool" based on dynamic layer list
-// In Studio mode: Interactive (clickable, draggable)
+// In Studio mode: Interactive (clickable, draggable, resizable)
 // In Client mode: Read-only preview
 
 import React, { useState, useRef } from 'react';
+import ResizeHandles from './ResizeHandles';
 
 // Layer Components
 const TextLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio = false }) => {
@@ -97,6 +98,9 @@ const TextLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio = fal
             onPointerDown={handlePointerDown}
         >
             {layer.properties.text}
+            {isSelected && isStudio && (
+                <ResizeHandles layer={layer} onUpdate={onUpdate} isStudio={isStudio} />
+            )}
         </div>
     );
 };
@@ -195,6 +199,9 @@ const ImageLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio = fa
                      <span className="font-mono text-[9px] text-white/20 uppercase tracking-widest">Image Area</span>
                 </div>
             )}
+            {isSelected && isStudio && (
+                <ResizeHandles layer={layer} onUpdate={onUpdate} isStudio={isStudio} />
+            )}
         </div>
     );
 };
@@ -281,7 +288,11 @@ const RectangleLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio 
                 }
             }}
             onPointerDown={handlePointerDown}
-        />
+        >
+            {isSelected && isStudio && (
+                <ResizeHandles layer={layer} onUpdate={onUpdate} isStudio={isStudio} />
+            )}
+        </div>
     );
 };
 
@@ -305,13 +316,46 @@ export default function PreviewCanvas({ layers, selectedLayerId, onSelectLayer, 
                     }}></div>
             </div>
 
+            {/* Box Selection Overlay */}
+            {isBoxSelecting && boxSelectStart && boxSelectEnd && (
+                <div
+                    className="absolute border border-[#E3E3FD] bg-[#E3E3FD]/10 pointer-events-none z-[9998]"
+                    style={{
+                        left: `${Math.min(boxSelectStart.x, boxSelectEnd.x)}px`,
+                        top: `${Math.min(boxSelectStart.y, boxSelectEnd.y)}px`,
+                        width: `${Math.abs(boxSelectEnd.x - boxSelectStart.x)}px`,
+                        height: `${Math.abs(boxSelectEnd.y - boxSelectStart.y)}px`,
+                    }}
+                />
+            )}
+
             {/* Dynamic Layers */}
             {layers.map(layer => {
                 const isSelected = layer.id === selectedLayerId;
+                const isMultiSelected = selectedLayerIds.has(layer.id);
+                const handleLayerClick = (e) => {
+                    if (!isStudio || !onSelectLayer) return;
+                    e.stopPropagation();
+                    
+                    if (e.shiftKey && onSelectLayers) {
+                        // Multi-select: add to selection
+                        const newIds = new Set(selectedLayerIds);
+                        if (newIds.has(layer.id)) {
+                            newIds.delete(layer.id);
+                        } else {
+                            newIds.add(layer.id);
+                        }
+                        onSelectLayers(Array.from(newIds));
+                    } else {
+                        // Single select
+                        onSelectLayer(layer.id);
+                    }
+                };
+                
                 switch(layer.type) {
-                    case 'text': return <TextLayerRender key={layer.id} layer={layer} isSelected={isSelected} onSelect={onSelectLayer} onUpdate={onUpdateLayer} isStudio={isStudio} />;
-                    case 'image': return <ImageLayerRender key={layer.id} layer={layer} isSelected={isSelected} onSelect={onSelectLayer} onUpdate={onUpdateLayer} isStudio={isStudio} />;
-                    case 'rectangle': return <RectangleLayerRender key={layer.id} layer={layer} isSelected={isSelected} onSelect={onSelectLayer} onUpdate={onUpdateLayer} isStudio={isStudio} />;
+                    case 'text': return <TextLayerRender key={layer.id} layer={layer} isSelected={isSelected || isMultiSelected} onSelect={handleLayerClick} onUpdate={onUpdateLayer} isStudio={isStudio} />;
+                    case 'image': return <ImageLayerRender key={layer.id} layer={layer} isSelected={isSelected || isMultiSelected} onSelect={handleLayerClick} onUpdate={onUpdateLayer} isStudio={isStudio} />;
+                    case 'rectangle': return <RectangleLayerRender key={layer.id} layer={layer} isSelected={isSelected || isMultiSelected} onSelect={handleLayerClick} onUpdate={onUpdateLayer} isStudio={isStudio} />;
                     default: return null;
                 }
             })}

@@ -40,6 +40,7 @@ export default function ToolBuilder() {
     const navigate = useNavigate();
     const [layers, setLayers] = useState(DEFAULT_LAYERS);
     const [selectedLayerId, setSelectedLayerId] = useState(null);
+    const [selectedLayerIds, setSelectedLayerIds] = useState(new Set()); // Multi-select
     const [isSaving, setIsSaving] = useState(false);
     const [toolName, setToolName] = useState('New Tool');
     const [toolStatus, setToolStatus] = useState('draft');
@@ -102,6 +103,55 @@ export default function ToolBuilder() {
         };
         setLayers(prev => [...prev, newLayer]);
         setSelectedLayerId(newLayer.id);
+        setSelectedLayerIds(new Set([newLayer.id]));
+    };
+
+    const handleDuplicateLayer = (layerId) => {
+        const layer = layers.find(l => l.id === layerId);
+        if (!layer) return;
+        
+        const duplicated = {
+            ...layer,
+            id: `${layer.type}-${Date.now()}`,
+            name: `${layer.name} Copy`,
+            properties: {
+                ...layer.properties,
+                x: layer.properties.x + 5, // Offset slightly
+                y: layer.properties.y + 5
+            }
+        };
+        setLayers(prev => [...prev, duplicated]);
+        setSelectedLayerId(duplicated.id);
+        setSelectedLayerIds(new Set([duplicated.id]));
+    };
+
+    const handleCopyLayer = (layerId) => {
+        const layer = layers.find(l => l.id === layerId);
+        if (layer) {
+            navigator.clipboard.writeText(JSON.stringify(layer));
+        }
+    };
+
+    const handlePasteLayer = async () => {
+        try {
+            const text = await navigator.clipboard.readText();
+            const pasted = JSON.parse(text);
+            const newLayer = {
+                ...pasted,
+                id: `${pasted.type}-${Date.now()}`,
+                name: `${pasted.name} Copy`,
+                properties: {
+                    ...pasted.properties,
+                    x: pasted.properties.x + 5,
+                    y: pasted.properties.y + 5
+                }
+            };
+            setLayers(prev => [...prev, newLayer]);
+            setSelectedLayerId(newLayer.id);
+            setSelectedLayerIds(new Set([newLayer.id]));
+        } catch (error) {
+            console.error('Failed to paste layer:', error);
+        }
     };
 
     const handleUpdateLayer = (layerId, updates) => {
@@ -120,20 +170,89 @@ export default function ToolBuilder() {
     // Keyboard shortcuts
     useEffect(() => {
         const handleKeyDown = (e) => {
+            // Don't handle shortcuts if typing in input/textarea
+            if (e.target.matches('input, textarea')) return;
+            
+            const selectedLayer = layers.find(l => l.id === selectedLayerId);
+            if (!selectedLayer) {
+                // Global shortcuts (no selection needed)
+                if (e.key === 'Escape') {
+                    setSelectedLayerId(null);
+                }
+                return;
+            }
+            
             // Delete key - delete selected layer
-            if ((e.key === 'Delete' || e.key === 'Backspace') && selectedLayerId && !e.target.matches('input, textarea')) {
+            if (e.key === 'Delete' || e.key === 'Backspace') {
                 e.preventDefault();
                 handleDeleteLayer(selectedLayerId);
             }
             // Escape - deselect
-            if (e.key === 'Escape' && selectedLayerId) {
+            else if (e.key === 'Escape') {
                 setSelectedLayerId(null);
+            }
+            // Arrow keys - nudge layer (1px, Shift = 10px)
+            else if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+                e.preventDefault();
+                const nudgeAmount = e.shiftKey ? 10 : 1;
+                const isXLocked = selectedLayer.locks?.x === 'LOCKED';
+                const isYLocked = selectedLayer.locks?.y === 'LOCKED';
+                
+                let deltaX = 0;
+                let deltaY = 0;
+                
+                if (e.key === 'ArrowLeft' && !isXLocked) deltaX = -nudgeAmount;
+                else if (e.key === 'ArrowRight' && !isXLocked) deltaX = nudgeAmount;
+                else if (e.key === 'ArrowUp' && !isYLocked) deltaY = -nudgeAmount;
+                else if (e.key === 'ArrowDown' && !isYLocked) deltaY = nudgeAmount;
+                
+                if (deltaX !== 0 || deltaY !== 0) {
+                    // Convert pixel nudge to percentage (canvas is 400x500)
+                    const canvasWidth = 400;
+                    const canvasHeight = 500;
+                    const percentDeltaX = (deltaX / canvasWidth) * 100;
+                    const percentDeltaY = (deltaY / canvasHeight) * 100;
+                    
+                    const newX = Math.max(0, Math.min(100, selectedLayer.properties.x + percentDeltaX));
+                    const newY = Math.max(0, Math.min(100, selectedLayer.properties.y + percentDeltaY));
+                    
+                    handleUpdateLayer(selectedLayerId, {
+                        properties: {
+                            ...selectedLayer.properties,
+                            x: newX,
+                            y: newY
+                        }
+                    });
+                }
+            }
+            // Cmd+D / Ctrl+D - Duplicate
+            else if ((e.metaKey || e.ctrlKey) && e.key === 'd') {
+                e.preventDefault();
+                handleDuplicateLayer(selectedLayerId);
+            }
+            // Cmd+C / Ctrl+C - Copy
+            else if ((e.metaKey || e.ctrlKey) && e.key === 'c') {
+                e.preventDefault();
+                handleCopyLayer(selectedLayerId);
+            }
+            // Cmd+V / Ctrl+V - Paste
+            else if ((e.metaKey || e.ctrlKey) && e.key === 'v') {
+                e.preventDefault();
+                handlePasteLayer();
+            }
+            // Cmd+A / Ctrl+A - Select all
+            else if ((e.metaKey || e.ctrlKey) && e.key === 'a') {
+                e.preventDefault();
+                setSelectedLayerIds(new Set(layers.map(l => l.id)));
+                if (layers.length > 0) {
+                    setSelectedLayerId(layers[layers.length - 1].id); // Select last layer as primary
+                }
             }
         };
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [selectedLayerId]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [selectedLayerId, layers]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const handleSave = async () => {
         if (id === 'new') return;
@@ -271,7 +390,16 @@ export default function ToolBuilder() {
                         <PreviewCanvas 
                             layers={layers} 
                             selectedLayerId={selectedLayerId}
-                            onSelectLayer={setSelectedLayerId}
+                            selectedLayerIds={selectedLayerIds}
+                            onSelectLayer={(id) => {
+                                setSelectedLayerId(id);
+                                setSelectedLayerIds(id ? new Set([id]) : new Set());
+                            }}
+                            onSelectLayers={(ids) => {
+                                const idsSet = new Set(ids);
+                                setSelectedLayerIds(idsSet);
+                                setSelectedLayerId(ids.length > 0 ? ids[ids.length - 1] : null);
+                            }}
                             onUpdateLayer={handleUpdateLayer}
                             isStudio={true}
                         />
