@@ -59,7 +59,7 @@ export default function ToolBuilder() {
             const loadTool = async () => {
                 setIsLoading(true);
                 try {
-                if (id === 'new') {
+                    if (id === 'new') {
                     // Create new tool
                     const newTool = await createTool('New Tool');
                     navigate(`/studio/builder/${newTool.id}`, { replace: true });
@@ -96,8 +96,9 @@ export default function ToolBuilder() {
                 setIsLoading(false);
             }
         };
-        
         loadTool();
+        }, 50);
+        return () => clearTimeout(timer);
     }, [id, navigate]);
 
     const handleAddLayer = (type) => {

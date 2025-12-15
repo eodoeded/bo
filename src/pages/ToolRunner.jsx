@@ -47,7 +47,7 @@ export default function ToolRunner() {
             const loadTool = async () => {
                 setIsLoading(true);
                 try {
-                const tool = await getPublishedTool(id);
+                    const tool = await getPublishedTool(id);
                 if (tool && tool.layers) {
                     // CRITICAL: Verify tool is published before loading
                     if (tool.status !== 'published') {
@@ -75,8 +75,9 @@ export default function ToolRunner() {
                 setIsLoading(false);
             }
         };
-        
         loadTool();
+        }, 50);
+        return () => clearTimeout(timer);
     }, [id]);
 
     const handleUpdateLayer = (layerId, propKey, newValue) => {
