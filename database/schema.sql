@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS tools (
   canvas_width INTEGER DEFAULT 400,
   canvas_height INTEGER DEFAULT 500,
   layers JSONB NOT NULL DEFAULT '[]'::jsonb, -- Array of layer objects
+  client_ui JSONB DEFAULT '{"logo": null, "topNavBg": "#1A1614", "topNavText": "#FFFFFF", "accentColor": "#E3E3FD"}'::jsonb, -- Client UI customization
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW(),
   published_at TIMESTAMPTZ,

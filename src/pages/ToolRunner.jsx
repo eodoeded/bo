@@ -32,6 +32,12 @@ export default function ToolRunner() {
     const [isExporting, setIsExporting] = useState(false);
     const [status, setStatus] = useState('idle'); // idle | exporting | success | error
     const [isLoading, setIsLoading] = useState(true);
+    const [clientUI, setClientUI] = useState({
+        logo: null,
+        topNavBg: '#1A1614',
+        topNavText: '#FFFFFF',
+        accentColor: '#E3E3FD'
+    });
     const previewRef = useRef(null);
 
     // Load published tool from database
@@ -42,6 +48,12 @@ export default function ToolRunner() {
                 const tool = await getPublishedTool(id);
                 if (tool && tool.layers) {
                     setLayers(tool.layers);
+                    setClientUI(tool.client_ui || tool.clientUI || {
+                        logo: null,
+                        topNavBg: '#1A1614',
+                        topNavText: '#FFFFFF',
+                        accentColor: '#E3E3FD'
+                    });
                 } else {
                     // Fallback to default if tool not found
                     setLayers(DEFAULT_LAYERS);

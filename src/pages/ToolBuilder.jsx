@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Save, Share2 } from 'lucide-react';
 import PreviewCanvas from '../components/v2/PreviewCanvas';
-import Inspector from '../components/v2/Inspector';
+import DesignPanel from '../components/v2/DesignPanel';
+import LockPanel from '../components/v2/LockPanel';
+import ClientUIPanel from '../components/v2/ClientUIPanel';
 import LayerStack from '../components/v2/LayerStack';
 import { getTool, updateTool, publishTool, createTool } from '../services/tools';
 import UnifiedNav from '../components/UnifiedNav';
@@ -45,6 +47,13 @@ export default function ToolBuilder() {
     const [toolName, setToolName] = useState('New Tool');
     const [toolStatus, setToolStatus] = useState('draft');
     const [isLoading, setIsLoading] = useState(true);
+    const [activeTab, setActiveTab] = useState('design'); // 'design' | 'locks' | 'client-ui'
+    const [clientUI, setClientUI] = useState({
+        logo: null,
+        topNavBg: '#1A1614',
+        topNavText: '#FFFFFF',
+        accentColor: '#E3E3FD'
+    });
 
     // Load tool from database
     useEffect(() => {
@@ -65,6 +74,12 @@ export default function ToolBuilder() {
                         setLayers(tool.layers || DEFAULT_LAYERS);
                         setToolName(tool.name);
                         setToolStatus(tool.status);
+                        setClientUI(tool.clientUI || {
+                            logo: null,
+                            topNavBg: '#1A1614',
+                            topNavText: '#FFFFFF',
+                            accentColor: '#E3E3FD'
+                        });
                     } else {
                         // Tool not found, create new
                         const newTool = await createTool('New Tool');
@@ -406,19 +421,69 @@ export default function ToolBuilder() {
                     </div>
                 </main>
 
-                {/* Right: Inspector */}
+                {/* Right: Properties Panel with Tabs */}
                 <aside className="w-full md:w-80 lg:w-96 bg-[#1A1614] border-l border-white/10 flex flex-col z-10 shrink-0">
-                    <div className="p-3 md:p-4 border-b border-white/10 bg-[#1A1614]">
-                        <div className="flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_6px_#E3E3FD]"></div>
-                            <h2 className="font-mono text-[9px] md:text-[10px] text-white/40 uppercase tracking-widest">PROPERTIES</h2>
-                        </div>
+                    {/* Tabs */}
+                    <div className="flex border-b border-white/10 bg-[#1A1614]">
+                        <button
+                            onClick={() => setActiveTab('design')}
+                            className={`flex-1 px-4 py-3 font-mono text-[9px] uppercase tracking-widest transition-colors ${
+                                activeTab === 'design' 
+                                    ? 'bg-[#261E19] text-[#E3E3FD] border-b-2 border-[#E3E3FD]' 
+                                    : 'text-white/40 hover:text-white/60'
+                            }`}
+                        >
+                            DESIGN
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('locks')}
+                            className={`flex-1 px-4 py-3 font-mono text-[9px] uppercase tracking-widest transition-colors ${
+                                activeTab === 'locks' 
+                                    ? 'bg-[#261E19] text-[#E3E3FD] border-b-2 border-[#E3E3FD]' 
+                                    : 'text-white/40 hover:text-white/60'
+                            }`}
+                        >
+                            LOCKS
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('client-ui')}
+                            className={`flex-1 px-4 py-3 font-mono text-[9px] uppercase tracking-widest transition-colors ${
+                                activeTab === 'client-ui' 
+                                    ? 'bg-[#261E19] text-[#E3E3FD] border-b-2 border-[#E3E3FD]' 
+                                    : 'text-white/40 hover:text-white/60'
+                            }`}
+                        >
+                            CLIENT UI
+                        </button>
                     </div>
+                    
+                    {/* Tab Content */}
                     <div className="flex-1 overflow-y-auto p-3 md:p-4">
-                        <Inspector 
-                            selectedLayer={selectedLayer} 
-                            onUpdateLayer={handleUpdateLayer}
-                        />
+                        {activeTab === 'design' && (
+                            <DesignPanel 
+                                selectedLayer={selectedLayer} 
+                                onUpdateLayer={handleUpdateLayer}
+                            />
+                        )}
+                        {activeTab === 'locks' && (
+                            <LockPanel 
+                                selectedLayer={selectedLayer} 
+                                onUpdateLayer={handleUpdateLayer}
+                            />
+                        )}
+                        {activeTab === 'client-ui' && (
+                            <ClientUIPanel 
+                                toolId={id}
+                                clientUI={clientUI}
+                                onUpdateClientUI={(newClientUI) => {
+                                    setClientUI(newClientUI);
+                                    // Save to tool
+                                    if (id !== 'new') {
+                                        updateTool(id, { clientUI: newClientUI }).catch(err => console.error('Failed to save client UI:', err));
+                                    }
+                                }}
+                            />
+                        )}
                     </div>
                     <div className="p-3 md:p-4 border-t border-white/10 bg-[#261E19]/50">
                         <div className="flex gap-2.5 items-start">
