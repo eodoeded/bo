@@ -99,6 +99,13 @@ export default function ToolBuilder() {
     }, [id, navigate]);
 
     const handleAddLayer = (type) => {
+        // Default locks based on type
+        const defaultLocks = type === 'text' 
+            ? { x: 'LOCKED', y: 'LOCKED', fontSize: 'LOCKED', color: 'LOCKED', text: 'CLIENT_INPUT' }
+            : type === 'image'
+            ? { x: 'LOCKED', y: 'LOCKED', width: 'LOCKED', height: 'LOCKED', src: 'CLIENT_INPUT' }
+            : { x: 'LOCKED', y: 'LOCKED', width: 'LOCKED', height: 'LOCKED', color: 'LOCKED' };
+        
         const newLayer = {
             id: `${type}-${Date.now()}`,
             type,
@@ -107,11 +114,11 @@ export default function ToolBuilder() {
             properties: {
                 x: 50, 
                 y: 50, 
-                ...(type === 'text' ? { text: 'New Text', fontSize: 24, color: '#FFFFFF' } : {}),
+                ...(type === 'text' ? { text: 'New Text', fontSize: 24, color: '#FFFFFF', textAlign: 'center' } : {}),
                 ...(type === 'image' ? { src: '', width: 200, height: 200 } : {}),
                 ...(type === 'rectangle' ? { width: 200, height: 200, color: '#333333' } : {})
             },
-            locks: {} // Default locks
+            locks: defaultLocks
         };
         setLayers(prev => [...prev, newLayer]);
         setSelectedLayerId(newLayer.id);
@@ -147,22 +154,75 @@ export default function ToolBuilder() {
     const handlePasteLayer = async () => {
         try {
             const text = await navigator.clipboard.readText();
-            const pasted = JSON.parse(text);
-            const newLayer = {
-                ...pasted,
-                id: `${pasted.type}-${Date.now()}`,
-                name: `${pasted.name} Copy`,
-                properties: {
-                    ...pasted.properties,
-                    x: pasted.properties.x + 5,
-                    y: pasted.properties.y + 5
+            
+            // Try to parse as JSON (internal paste)
+            try {
+                const pasted = JSON.parse(text);
+                if (pasted.type && pasted.properties) {
+                    const newLayer = {
+                        ...pasted,
+                        id: `${pasted.type}-${Date.now()}`,
+                        name: `${pasted.name || 'Pasted'} Copy`,
+                        properties: {
+                            ...pasted.properties,
+                            x: (pasted.properties.x || 50) + 5,
+                            y: (pasted.properties.y || 50) + 5
+                        }
+                    };
+                    setLayers(prev => [...prev, newLayer]);
+                    setSelectedLayerId(newLayer.id);
+                    setSelectedLayerIds(new Set([newLayer.id]));
+                    return;
                 }
+            } catch (e) {
+                // Not JSON, continue
+            }
+            
+            // Try to parse as SVG
+            if (text.trim().startsWith('<svg') || text.trim().startsWith('<?xml')) {
+                const svgBlob = new Blob([text], { type: 'image/svg+xml' });
+                const svgUrl = URL.createObjectURL(svgBlob);
+                
+                const newLayer = {
+                    id: `image-${Date.now()}`,
+                    type: 'image',
+                    name: 'Pasted SVG',
+                    zIndex: layers.length * 10,
+                    properties: {
+                        x: 50,
+                        y: 50,
+                        src: svgUrl,
+                        width: 200,
+                        height: 200
+                    },
+                    locks: {}
+                };
+                setLayers(prev => [...prev, newLayer]);
+                setSelectedLayerId(newLayer.id);
+                setSelectedLayerIds(new Set([newLayer.id]));
+                return;
+            }
+            
+            // Fallback: create text layer
+            const newLayer = {
+                id: `text-${Date.now()}`,
+                type: 'text',
+                name: 'Pasted Content',
+                zIndex: layers.length * 10,
+                properties: {
+                    x: 50,
+                    y: 50,
+                    text: text.substring(0, 100),
+                    fontSize: 24,
+                    color: '#FFFFFF'
+                },
+                locks: {}
             };
             setLayers(prev => [...prev, newLayer]);
             setSelectedLayerId(newLayer.id);
             setSelectedLayerIds(new Set([newLayer.id]));
         } catch (error) {
-            console.error('Failed to paste layer:', error);
+            console.error('Failed to paste:', error);
         }
     };
 

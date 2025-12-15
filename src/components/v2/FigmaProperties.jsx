@@ -66,8 +66,8 @@ export default function FigmaProperties({ selectedLayer, onUpdateLayer }) {
                             <label className="text-[10px] text-white/30 mb-1 block">W</label>
                             <input
                                 type="number"
-                                value={selectedLayer.properties.width || 0}
-                                onChange={(e) => updateProperty('width', parseInt(e.target.value))}
+                                value={selectedLayer.properties.width ?? 0}
+                                onChange={(e) => updateProperty('width', parseInt(e.target.value) || 0)}
                                 className="w-full bg-white/5 border border-white/10 text-white text-xs px-2 py-1.5 rounded focus:outline-none focus:border-white/30"
                             />
                         </div>
@@ -75,8 +75,8 @@ export default function FigmaProperties({ selectedLayer, onUpdateLayer }) {
                             <label className="text-[10px] text-white/30 mb-1 block">H</label>
                             <input
                                 type="number"
-                                value={selectedLayer.properties.height || 0}
-                                onChange={(e) => updateProperty('height', parseInt(e.target.value))}
+                                value={selectedLayer.properties.height ?? 0}
+                                onChange={(e) => updateProperty('height', parseInt(e.target.value) || 0)}
                                 className="w-full bg-white/5 border border-white/10 text-white text-xs px-2 py-1.5 rounded focus:outline-none focus:border-white/30"
                             />
                         </div>
@@ -101,8 +101,8 @@ export default function FigmaProperties({ selectedLayer, onUpdateLayer }) {
                             <label className="text-[10px] text-white/30 mb-1 block">Size</label>
                             <input
                                 type="number"
-                                value={selectedLayer.properties.fontSize || 16}
-                                onChange={(e) => updateProperty('fontSize', parseInt(e.target.value))}
+                                value={selectedLayer.properties.fontSize ?? 16}
+                                onChange={(e) => updateProperty('fontSize', parseInt(e.target.value) || 16)}
                                 className="w-full bg-white/5 border border-white/10 text-white text-xs px-2 py-1.5 rounded focus:outline-none focus:border-white/30"
                             />
                         </div>
