@@ -273,6 +273,225 @@ export default function DesignSystem() {
             </div>
         </section>
 
+        {/* 01. Navigation */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+            <div className="md:col-span-4 sticky top-32 h-fit">
+                <SectionHeader title="Navigation" number="01" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
+                    The fixed navigation system. Context-aware, minimal, always present. Like a nervous system—always active, adapting to context.
+                </p>
+                <div className="flex gap-2 flex-wrap">
+                    <Badge className="bg-[#E3E3FD]/10 border-[#E3E3FD]/30 text-[#E3E3FD]">UnifiedNav</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">Context-Aware</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">Fixed</Badge>
+                </div>
+            </div>
+            
+            <div className="md:col-span-8 space-y-24">
+                
+                {/* Component Overview */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Component Structure</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-8 rounded-3xl relative overflow-hidden">
+                        {/* Organic background pattern */}
+                        <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{
+                            backgroundImage: 'radial-gradient(circle at 2px 2px, #E3E3FD 1px, transparent 0)',
+                            backgroundSize: '24px 24px'
+                        }}></div>
+                        
+                        <div className="relative z-10">
+                            <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-6">UnifiedNav Component</p>
+                            
+                            {/* Visual Nav Example */}
+                            <div className="bg-[#261E19] border border-white/10 rounded-2xl overflow-hidden mb-6">
+                                <div className="h-12 md:h-14 bg-[#261E19] border-b border-white/5 px-6 md:px-12 flex items-center justify-between">
+                                    <div className="flex items-center gap-4">
+                                        <span className="font-mono text-sm tracking-widest text-white uppercase">[ BO ]</span>
+                                        <div className="h-4 w-px bg-white/10"></div>
+                                        <span className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">Studio</span>
+                                    </div>
+                                    <div className="flex items-center gap-4">
+                                        <button className="bg-white text-black px-5 py-2.5 font-mono font-semibold text-[11px] uppercase tracking-widest hover:bg-[#E3E3FD] transition-colors rounded-sm">
+                                            Request Access
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div className="space-y-4">
+                                <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
+                                    <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-2">Height</p>
+                                    <p className="font-montreal text-sm text-white/70">h-12 md:h-14 (48px / 56px)</p>
+                                </div>
+                                <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
+                                    <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-2">Background</p>
+                                    <p className="font-montreal text-sm text-white/70">bg-[#261E19] with backdrop-blur-md</p>
+                                </div>
+                                <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
+                                    <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-2">Border</p>
+                                    <p className="font-montreal text-sm text-white/70">border-b border-white/5</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Context States */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Context States</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Landing State */}
+                        <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl hover:border-[#E3E3FD]/30 transition-colors">
+                            <div className="flex items-center gap-2 mb-4">
+                                <div className="w-2 h-2 bg-[#E3E3FD] rounded-full"></div>
+                                <p className="font-mono text-[10px] text-white uppercase tracking-widest">Landing Page</p>
+                            </div>
+                            <div className="space-y-3 mb-4">
+                                <div className="h-10 bg-[#261E19] border border-white/10 rounded-lg flex items-center justify-between px-4">
+                                    <span className="font-mono text-xs text-white/60">[ BO ]</span>
+                                    <div className="flex items-center gap-3">
+                                        <span className="font-mono text-[9px] text-white/40">Process</span>
+                                        <span className="font-mono text-[9px] text-white/40">Value</span>
+                                        <span className="font-mono text-[9px] text-white/40">Specs</span>
+                                    </div>
+                                    <button className="bg-white text-black px-3 py-1.5 font-mono text-[9px] uppercase rounded-sm">Request Access</button>
+                                </div>
+                            </div>
+                            <p className="font-mono text-[9px] text-white/30">Shows center nav links + CTA button</p>
+                        </div>
+
+                        {/* Studio State */}
+                        <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl hover:border-[#E3E3FD]/30 transition-colors">
+                            <div className="flex items-center gap-2 mb-4">
+                                <div className="w-2 h-2 bg-white/20 rounded-full"></div>
+                                <p className="font-mono text-[10px] text-white uppercase tracking-widest">Studio / Builder</p>
+                            </div>
+                            <div className="space-y-3 mb-4">
+                                <div className="h-10 bg-[#261E19] border border-white/10 rounded-lg flex items-center justify-between px-4">
+                                    <div className="flex items-center gap-3">
+                                        <span className="font-mono text-xs text-white/60">[ BO ]</span>
+                                        <div className="h-3 w-px bg-white/10"></div>
+                                        <span className="font-mono text-[9px] text-[#E3E3FD]">Studio</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p className="font-mono text-[9px] text-white/30">Shows context divider (Studio/Builder)</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Navigation Links */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Navigation Links</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                        <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-6">Link Pattern</p>
+                        <div className="space-y-4">
+                            {['Process', 'Value', 'Specs'].map((link, i) => (
+                                <div key={i} className="group relative">
+                                    <button className="font-mono text-[11px] text-white/60 hover:text-white uppercase tracking-widest transition-colors relative w-full text-left">
+                                        {link}
+                                        <span className="absolute -bottom-1 left-0 w-0 h-px bg-[#E3E3FD] group-hover:w-full transition-all duration-300"></span>
+                                    </button>
+                                    <div className="mt-2 p-3 bg-white/[0.02] rounded-lg border border-white/5">
+                                        <code className="font-mono text-[9px] text-white/40">
+                                            {`hover:text-white + underline animation`}
+                                        </code>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Mobile Menu */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Mobile Menu</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                        <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-6">Mobile Overlay Pattern</p>
+                        <div className="space-y-2 border border-white/10 rounded-lg overflow-hidden">
+                            <button className="w-full py-4 px-6 border-b border-white/5 font-mono text-xs text-left uppercase tracking-widest text-white/60 hover:text-white hover:bg-white/[0.02] transition-colors">
+                                Process
+                            </button>
+                            <button className="w-full py-4 px-6 border-b border-white/5 font-mono text-xs text-left uppercase tracking-widest text-white/60 hover:text-white hover:bg-white/[0.02] transition-colors">
+                                Value
+                            </button>
+                            <button className="w-full py-4 px-6 font-mono text-xs text-left uppercase tracking-widest text-white/60 hover:text-white hover:bg-white/[0.02] transition-colors">
+                                Specifications
+                            </button>
+                        </div>
+                        <p className="font-mono text-[9px] text-white/30 mt-4">Full-screen overlay from top, slides down on mobile</p>
+                    </div>
+                </div>
+
+                {/* Brand Mark */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Brand Mark</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                        <div className="flex items-center gap-6 mb-6">
+                            <div className="p-4 bg-[#261E19] border border-white/10 rounded-lg">
+                                <span className="font-mono text-lg tracking-widest text-white hover:text-[#E3E3FD] transition-colors uppercase">[ BO ]</span>
+                            </div>
+                            <div className="flex-1">
+                                <p className="font-montreal text-white mb-1">[ BO ]</p>
+                                <p className="font-mono text-[9px] text-white/40">font-mono text-sm tracking-widest uppercase</p>
+                                <p className="font-mono text-[9px] text-white/30 mt-1">Hover: text-[#E3E3FD]</p>
+                            </div>
+                        </div>
+                        <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
+                            <p className="font-mono text-[9px] text-white/40 mb-2">Usage</p>
+                            <p className="font-montreal text-sm text-white/60 leading-relaxed">
+                                Always left-aligned. Links to home. The brackets create a "system" feel—like a command or identifier.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Technical Specs */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Technical Specifications</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl space-y-4">
+                        {[
+                            { prop: 'Position', value: 'fixed top-0 left-0 w-full z-50' },
+                            { prop: 'Max Width', value: '1400px (centered)' },
+                            { prop: 'Padding', value: 'px-6 md:px-12' },
+                            { prop: 'Backdrop', value: 'backdrop-blur-md' },
+                            { prop: 'Transition', value: '300ms ease-in-out' }
+                        ].map((spec, i) => (
+                            <div key={i} className="flex items-center justify-between py-2 border-b border-white/5 last:border-0 group hover:bg-white/[0.02] transition-colors px-2 -mx-2 rounded-lg">
+                                <span className="font-mono text-xs text-white/70 group-hover:text-white transition-colors uppercase tracking-wider">{spec.prop}</span>
+                                <code className="font-mono text-[10px] text-[#E3E3FD]">{spec.value}</code>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
       </div>
       
       {/* Footer */}
