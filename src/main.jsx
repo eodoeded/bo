@@ -14,10 +14,11 @@ if (rootElement) {
     <StrictMode>
       <BrowserRouter>
         <App />
+        <Analytics />
       </BrowserRouter>
-      <Analytics />
     </StrictMode>
   );
 } else {
   console.error('Root element not found!');
+  document.body.innerHTML = '<div style="color: white; padding: 20px;">Error: Root element not found!</div>';
 }
