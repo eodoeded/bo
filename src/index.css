@@ -38,6 +38,13 @@ body {
   overflow-x: hidden;
   background-color: #261E19;
   background-attachment: fixed;
+  /* Prevent FOUC - opacity controlled by inline styles in index.html */
+  opacity: 0;
+  transition: opacity 0.1s ease-in;
+}
+
+body.loaded {
+  opacity: 1;
 }
 
 #root {
@@ -48,22 +55,14 @@ body {
   color: white !important;
   width: 100%;
   overflow-x: hidden;
+  /* Prevent flash */
+  contain: layout style paint;
 }
 
 /* Performance optimizations */
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* Prevent layout shifts during load - use opacity instead of visibility */
-body:not(.loaded) {
-  opacity: 0;
-  transition: opacity 0.1s ease-in;
-}
-
-body.loaded {
-  opacity: 1;
 }
 
 /* Optimize animations */
