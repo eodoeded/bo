@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Plus, Layout, Clock, Activity, Database, Cpu } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Plus, Layout, Clock, Activity, Database, Cpu, Trash2, Archive } from 'lucide-react';
 import { motion } from 'framer-motion';
 import UnifiedNav from '../components/UnifiedNav';
-import { getTools } from '../services/tools';
+import { getTools, archiveTool, deleteTool } from '../services/tools';
 
 // Format relative time (e.g., "2 mins ago")
 const formatRelativeTime = (dateString) => {
@@ -23,36 +23,61 @@ const formatRelativeTime = (dateString) => {
 };
 
 export default function StudioDashboard() {
+  const navigate = useNavigate();
   const [tools, setTools] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState(null);
+
+  const loadTools = async () => {
+    setIsLoading(true);
+    try {
+      const fetchedTools = await getTools();
+      // Filter out archived tools
+      const activeTools = fetchedTools.filter(t => t.status !== 'archived');
+      // Transform database tools to match UI format
+      const transformedTools = activeTools.map(tool => ({
+        id: tool.id,
+        name: tool.name,
+        lastEdited: formatRelativeTime(tool.updated_at),
+        status: tool.status === 'published' ? 'Live' : 'Draft',
+        icon: Layout,
+        outputs: tool.outputs_count || 0,
+        latency: '12ms' // TODO: Calculate real latency
+      }));
+      setTools(transformedTools);
+    } catch (error) {
+      console.error('Error loading tools:', error);
+      // Fallback to empty array
+      setTools([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const loadTools = async () => {
-      setIsLoading(true);
-      try {
-        const fetchedTools = await getTools();
-        // Transform database tools to match UI format
-        const transformedTools = fetchedTools.map(tool => ({
-          id: tool.id,
-          name: tool.name,
-          lastEdited: formatRelativeTime(tool.updated_at),
-          status: tool.status === 'published' ? 'Live' : 'Draft',
-          icon: Layout,
-          outputs: tool.outputs_count || 0,
-          latency: '12ms' // TODO: Calculate real latency
-        }));
-        setTools(transformedTools);
-      } catch (error) {
-        console.error('Error loading tools:', error);
-        // Fallback to empty array
-        setTools([]);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
     loadTools();
   }, []);
+
+  const handleDelete = async (toolId, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!confirm('Are you sure you want to delete this tool? This cannot be undone.')) {
+      return;
+    }
+
+    setDeletingId(toolId);
+    try {
+      await deleteTool(toolId);
+      // Reload tools
+      await loadTools();
+    } catch (error) {
+      console.error('Error deleting tool:', error);
+      alert('Failed to delete tool. Please try again.');
+    } finally {
+      setDeletingId(null);
+    }
+  };
   return (
     <div className="min-h-screen bg-[#261E19] text-white font-montreal selection:bg-[#E3E3FD] selection:text-[#261E19] relative">
       <div className="fixed inset-0 bg-[#261E19] z-0"></div>
@@ -124,8 +149,8 @@ export default function StudioDashboard() {
                   <tool.icon size={24} className="text-white/60 group-hover:text-[#E3E3FD] transition-colors" />
                 </div>
 
-                {/* Status Badge */}
-                <div className="absolute top-6 right-6">
+                {/* Status Badge & Actions */}
+                <div className="absolute top-6 right-6 flex items-center gap-2">
                   <span className={`font-mono text-[9px] uppercase tracking-widest px-2 py-1 border rounded-full ${
                     tool.status === 'Live' 
                       ? 'border-[#E3E3FD]/20 bg-[#E3E3FD]/10 text-[#E3E3FD]' 
@@ -133,6 +158,14 @@ export default function StudioDashboard() {
                   }`}>
                     {tool.status}
                   </span>
+                  <button
+                    onClick={(e) => handleDelete(tool.id, e)}
+                    disabled={deletingId === tool.id}
+                    className="p-1.5 hover:bg-red-900/20 border border-red-500/20 rounded-lg transition-colors disabled:opacity-50"
+                    title="Delete tool"
+                  >
+                    <Trash2 size={12} className="text-red-400" />
+                  </button>
                 </div>
 
                 {/* Content */}

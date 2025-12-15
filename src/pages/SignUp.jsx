@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, AlertCircle } from 'lucide-react';
-import { signIn } from '../services/auth';
+import { signUp } from '../services/auth';
 import { isSupabaseConfigured } from '../lib/supabase';
 
-export default function Login() {
+export default function SignUp() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -16,17 +17,26 @@ export default function Login() {
     setError('');
 
     if (!isSupabaseConfigured()) {
-      // Fallback mode - allow access without auth
-      navigate('/studio');
+      setError('Supabase not configured. Please set up your .env file.');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters');
       return;
     }
 
     setIsLoading(true);
     try {
-      const { user, error: signInError } = await signIn(email, password);
+      const { user, error: signUpError } = await signUp(email, password);
       
-      if (signInError) {
-        setError(signInError.message || 'Invalid email or password');
+      if (signUpError) {
+        setError(signUpError.message || 'Failed to create account');
         return;
       }
 
@@ -54,13 +64,13 @@ export default function Login() {
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
-            <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">STUDIO_ACCESS</span>
+            <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">STUDIO_REGISTRATION</span>
           </div>
           <h1 className="font-montreal font-medium text-3xl md:text-4xl tracking-tight mb-3 text-white">
-            Sign In
+            Create Studio Account
           </h1>
           <p className="font-montreal text-white/50 text-sm">
-            Access your studio dashboard and tools.
+            Register to build and manage your design tools.
           </p>
         </div>
 
@@ -97,6 +107,23 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              minLength={6}
+              className="w-full bg-[#261E19] border border-white/10 px-4 py-3 rounded-lg font-mono text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#E3E3FD]/50 transition-colors"
+              placeholder="••••••••"
+            />
+            <p className="mt-2 font-mono text-[9px] text-white/30">Minimum 6 characters</p>
+          </div>
+
+          <div>
+            <label className="block font-mono text-[10px] text-white/60 uppercase tracking-widest mb-2">
+              CONFIRM_PASSWORD
+            </label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              minLength={6}
               className="w-full bg-[#261E19] border border-white/10 px-4 py-3 rounded-lg font-mono text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-[#E3E3FD]/50 transition-colors"
               placeholder="••••••••"
             />
@@ -110,41 +137,31 @@ export default function Login() {
             {isLoading ? (
               <>
                 <div className="w-4 h-4 border-2 border-[#261E19]/20 border-t-[#261E19] rounded-full animate-spin"></div>
-                AUTHENTICATING...
+                CREATING_ACCOUNT...
               </>
             ) : (
               <>
-                SIGN_IN
+                REGISTER_STUDIO
                 <ArrowRight size={14} />
               </>
             )}
           </button>
         </form>
 
-        {/* Sign Up Link */}
+        {/* Sign In Link */}
         <div className="mt-8 pt-6 border-t border-white/10">
           <p className="font-mono text-[10px] text-white/40 text-center mb-3">
-            NEED_AN_ACCOUNT?
+            ALREADY_HAVE_AN_ACCOUNT?
           </p>
           <Link
-            to="/signup"
+            to="/login"
             className="block w-full text-center bg-white/5 border border-white/10 px-6 py-3 font-mono text-[10px] uppercase tracking-widest hover:bg-white/10 transition-colors rounded-lg"
           >
-            CREATE_STUDIO_ACCOUNT
+            SIGN_IN
           </Link>
         </div>
-
-        {/* Fallback Mode Notice */}
-        {!isSupabaseConfigured() && (
-          <div className="mt-6 p-4 bg-yellow-900/20 border border-yellow-500/30 rounded-lg">
-            <p className="font-mono text-[9px] text-yellow-400 text-center">
-              ⚠️ SUPABASE_NOT_CONFIGURED // USING_LOCALSTORAGE_MODE
-            </p>
-          </div>
-        )}
       </div>
     </div>
   );
 }
-
 

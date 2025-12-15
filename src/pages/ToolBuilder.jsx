@@ -180,13 +180,32 @@ export default function ToolBuilder() {
             <div className="h-12 md:h-14 bg-[#1A1614] border-b border-white/10 flex items-center justify-between px-4 md:px-6 lg:px-12 mt-12 md:mt-14 shrink-0 relative z-10">
                 <div className="flex items-center gap-3 md:gap-4">
                     <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_6px_#E3E3FD]"></div>
-                    <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">
-                        TOOL_ID: <span className="text-[#E3E3FD]">{id}</span>
-                    </span>
-                    <span className="font-mono text-[9px] text-white/20 hidden sm:inline">|</span>
-                    <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest hidden sm:inline">
-                        {toolStatus === 'published' ? 'PUBLISHED' : 'DRAFT'} // BUILDER_MODE
-                    </span>
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                        <input
+                            type="text"
+                            value={toolName}
+                            onChange={(e) => {
+                                setToolName(e.target.value);
+                                // Auto-save name (debounced)
+                                if (id !== 'new') {
+                                    clearTimeout(window.toolNameSaveTimeout);
+                                    window.toolNameSaveTimeout = setTimeout(() => {
+                                        updateTool(id, { name: e.target.value }).catch(err => console.error('Auto-save name failed:', err));
+                                    }, 1000);
+                                }
+                            }}
+                            className="bg-transparent border-none font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest focus:outline-none focus:bg-white/5 px-2 py-1 rounded max-w-[200px] min-w-0 flex-1"
+                            placeholder="TOOL_NAME"
+                        />
+                        <span className="font-mono text-[9px] text-white/20 hidden sm:inline">|</span>
+                        <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">
+                            TOOL_ID: <span className="text-[#E3E3FD]">{id}</span>
+                        </span>
+                        <span className="font-mono text-[9px] text-white/20 hidden sm:inline">|</span>
+                        <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest hidden sm:inline">
+                            {toolStatus === 'published' ? 'PUBLISHED' : 'DRAFT'} // BUILDER_MODE
+                        </span>
+                    </div>
                 </div>
                 <div className="flex items-center gap-2 md:gap-3">
                     <button 

@@ -1,13 +1,41 @@
-import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
-import { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, X, LogOut } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { signOut, getCurrentUser } from '../services/auth';
+import { isSupabaseConfigured } from '../lib/supabase';
 
 export default function UnifiedNav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const isLanding = location.pathname === '/';
   const isGuidelines = location.pathname === '/brandguidelines' || location.pathname === '/brand-guidelines';
   const isStudio = location.pathname.startsWith('/studio');
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      if (isSupabaseConfigured()) {
+        const user = await getCurrentUser();
+        setIsAuthenticated(!!user);
+      } else {
+        setIsAuthenticated(true); // Fallback mode
+      }
+    };
+    checkAuth();
+  }, [location.pathname]);
+
+  const handleSignOut = async () => {
+    try {
+      if (isSupabaseConfigured()) {
+        await signOut();
+      }
+      navigate('/login');
+    } catch (error) {
+      console.error('Sign out error:', error);
+      navigate('/login');
+    }
+  };
 
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
@@ -83,6 +111,16 @@ export default function UnifiedNav() {
             >
               Back to Home
             </Link>
+          )}
+
+          {isStudio && isAuthenticated && (
+            <button
+              onClick={handleSignOut}
+              className="font-mono text-[10px] text-white/60 hover:text-white uppercase tracking-widest transition-colors flex items-center gap-2"
+            >
+              <LogOut size={14} />
+              <span className="hidden sm:inline">SIGN_OUT</span>
+            </button>
           )}
 
           {/* Mobile Menu Toggle */}

@@ -12,6 +12,9 @@ import DesignSystem from './components/DesignSystem';
 import StudioDashboard from './pages/StudioDashboard';
 import ToolBuilder from './pages/ToolBuilder';
 import ToolRunner from './pages/ToolRunner';
+import Login from './pages/Login';
+import SignUp from './pages/SignUp';
+import ProtectedRoute from './components/ProtectedRoute';
 
 // App entry point
 function ScrollToTop() {
@@ -59,8 +62,10 @@ function App() {
         <Route path="/designsystem" element={<DesignSystem />} />
         <Route path="/brandguidelines" element={<DesignSystem />} />
         <Route path="/brand-guidelines" element={<DesignSystem />} />
-        <Route path="/studio" element={<StudioDashboard />} />
-        <Route path="/studio/builder/:id" element={<ToolBuilder />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/studio" element={<ProtectedRoute><StudioDashboard /></ProtectedRoute>} />
+        <Route path="/studio/builder/:id" element={<ProtectedRoute><ToolBuilder /></ProtectedRoute>} />
         <Route path="/tool/:id" element={<ToolRunner />} />
       </Routes>
       <Analytics />

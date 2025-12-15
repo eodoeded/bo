@@ -313,3 +313,49 @@ export const trackAssetGeneration = async (toolId, clientInputs = {}, format = '
   // outputs_count is auto-incremented by trigger
 };
 
+/**
+ * Delete a tool (soft delete - set status to archived)
+ */
+export const archiveTool = async (toolId) => {
+  if (!isSupabaseConfigured()) {
+    // Fallback: Remove from localStorage
+    localStorage.removeItem(`bo_tool_${toolId}`);
+    return { id: toolId, status: 'archived' };
+  }
+  
+  const { data, error } = await supabase
+    .from('tools')
+    .update({ status: 'archived' })
+    .eq('id', toolId)
+    .select()
+    .single();
+  
+  if (error) {
+    console.error('Error archiving tool:', error);
+    throw error;
+  }
+  
+  return data;
+};
+
+/**
+ * Delete a tool permanently (hard delete)
+ */
+export const deleteTool = async (toolId) => {
+  if (!isSupabaseConfigured()) {
+    // Fallback: Remove from localStorage
+    localStorage.removeItem(`bo_tool_${toolId}`);
+    return;
+  }
+  
+  const { error } = await supabase
+    .from('tools')
+    .delete()
+    .eq('id', toolId);
+  
+  if (error) {
+    console.error('Error deleting tool:', error);
+    throw error;
+  }
+};
+
