@@ -28,8 +28,8 @@ function ScrollToTop() {
 
 function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#261E19] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal relative" style={{ minHeight: '100vh', position: 'relative', zIndex: 1 }}>
-      <div className="fixed inset-0 bg-[#261E19] z-0"></div>
+    <div className="min-h-screen bg-[#261E19] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal relative" style={{ minHeight: '100vh', position: 'relative', zIndex: 1, contain: 'layout style paint' }}>
+      <div className="fixed inset-0 bg-[#261E19] z-0" style={{ willChange: 'auto' }}></div>
       <div className="relative z-10">
         <UnifiedNav />
         <main className="relative z-10">

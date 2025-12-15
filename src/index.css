@@ -6,6 +6,7 @@
   src: url('/Inter_28pt-Light.ttf') format('truetype');
   font-weight: 300;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -13,6 +14,7 @@
   src: url('/PPNeueMontreal-Book.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -20,6 +22,7 @@
   src: url('/PPNeueMontreal-Medium.otf') format('opentype');
   font-weight: 500;
   font-style: normal;
+  font-display: swap;
 }
 
 html {
@@ -53,13 +56,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Prevent layout shifts during load */
-body {
-  visibility: hidden;
+/* Prevent layout shifts during load - use opacity instead of visibility */
+body:not(.loaded) {
+  opacity: 0;
+  transition: opacity 0.1s ease-in;
 }
 
 body.loaded {
-  visibility: visible;
+  opacity: 1;
 }
 
 /* Optimize animations */

@@ -43,32 +43,21 @@ try {
     
     const root = document.getElementById('root');
     if (root) {
-      // Use requestIdleCallback for smoother initial render
-      if (window.requestIdleCallback) {
-        requestIdleCallback(() => {
-          createRoot(root).render(
-            createElement(StrictMode, null,
-              createElement(BrowserRouter, null,
-                createElement(App, null)
-              )
-            )
-          );
-          // Mark body as loaded to prevent layout shifts
+      // Render immediately but mark as loaded after a microtask
+      createRoot(root).render(
+        createElement(StrictMode, null,
+          createElement(BrowserRouter, null,
+            createElement(App, null)
+          )
+        )
+      );
+      
+      // Mark body as loaded after render to prevent flash
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
           document.body.classList.add('loaded');
-        }, { timeout: 100 });
-      } else {
-        // Fallback for browsers without requestIdleCallback
-        setTimeout(() => {
-          createRoot(root).render(
-            createElement(StrictMode, null,
-              createElement(BrowserRouter, null,
-                createElement(App, null)
-              )
-            )
-          );
-          document.body.classList.add('loaded');
-        }, 0);
-      }
+        });
+      });
       console.log('✅ React app mounted successfully');
     }
   }).catch(err => {

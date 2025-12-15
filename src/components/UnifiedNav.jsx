@@ -58,7 +58,7 @@ export default function UnifiedNav() {
   };
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 border-b border-white/5 bg-[#261E19] backdrop-blur-md">
+    <header className="fixed top-0 left-0 w-full z-50 border-b border-white/5 bg-[#261E19] backdrop-blur-md" style={{ willChange: 'transform' }}>
       <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 h-12 md:h-14 flex items-center justify-between">
         
         {/* Brand / Logo - Left */}

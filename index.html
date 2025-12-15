@@ -30,6 +30,27 @@
       display: none !important;
       visibility: hidden !important;
     }
+    /* Prevent flash of unstyled content */
+    body {
+      background-color: #261E19;
+      color: white;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      opacity: 0;
+      transition: opacity 0.1s ease-in;
+    }
+    body.loaded {
+      opacity: 1;
+    }
+    #root {
+      min-height: 100vh;
+      position: relative;
+      z-index: 10;
+      color: white;
+      background-color: transparent;
+    }
   </style>
 
   <!-- Cal element-click embed code begins -->
