@@ -10,7 +10,6 @@ const TextLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio = fal
     const isPositionLocked = layer.locks?.x === 'LOCKED' && layer.locks?.y === 'LOCKED';
     const [isDragging, setIsDragging] = useState(false);
     const dragStartRef = useRef({ x: 0, y: 0, layerX: 0, layerY: 0 });
-    const canvasRef = useRef(null);
 
     const handlePointerDown = (e) => {
         if (!isStudio || isPositionLocked || !onUpdate) return;
