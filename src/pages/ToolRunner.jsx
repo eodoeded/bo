@@ -47,6 +47,14 @@ export default function ToolRunner() {
             try {
                 const tool = await getPublishedTool(id);
                 if (tool && tool.layers) {
+                    // CRITICAL: Verify tool is published before loading
+                    if (tool.status !== 'published') {
+                        console.error('Tool is not published');
+                        setLayers([]); // Empty layers = show error
+                        setIsLoading(false);
+                        return;
+                    }
+                    
                     setLayers(tool.layers);
                     setClientUI(tool.client_ui || tool.clientUI || {
                         logo: null,
@@ -55,12 +63,12 @@ export default function ToolRunner() {
                         accentColor: '#E3E3FD'
                     });
                 } else {
-                    // Fallback to default if tool not found
-                    setLayers(DEFAULT_LAYERS);
+                    // Tool not found or not published
+                    setLayers([]); // Empty = show error
                 }
             } catch (error) {
                 console.error('Error loading tool:', error);
-                setLayers(DEFAULT_LAYERS);
+                setLayers([]); // Empty = show error
             } finally {
                 setIsLoading(false);
             }
