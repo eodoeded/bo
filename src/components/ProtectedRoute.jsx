@@ -1,9 +1,9 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { getCurrentUser } from '../services/auth';
 import { isSupabaseConfigured } from '../lib/supabase';
 
-export default function ProtectedRoute({ children }) {
+export default function ProtectedRoute() {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -45,6 +45,6 @@ export default function ProtectedRoute({ children }) {
     return <Navigate to="/login" replace />;
   }
 
-  return children;
+  return <Outlet />;
 }
 

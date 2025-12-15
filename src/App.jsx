@@ -64,8 +64,10 @@ function App() {
         <Route path="/brand-guidelines" element={<DesignSystem />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/studio" element={<ProtectedRoute><StudioDashboard /></ProtectedRoute>} />
-        <Route path="/studio/builder/:id" element={<ProtectedRoute><ToolBuilder /></ProtectedRoute>} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/studio" element={<StudioDashboard />} />
+          <Route path="/studio/builder/:id" element={<ToolBuilder />} />
+        </Route>
         <Route path="/tool/:id" element={<ToolRunner />} />
       </Routes>
       <Analytics />

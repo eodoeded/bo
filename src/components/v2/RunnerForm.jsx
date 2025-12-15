@@ -90,11 +90,23 @@ export default function RunnerForm({ layers, onUpdateLayer }) {
 
         // CLIENT_INPUT -> Render interactive control
         if (lockState === 'CLIENT_INPUT') {
+            // Special handling for image src
+            if (propKey === 'src' && layer.type === 'image') {
+                return (
+                    <ClientInput 
+                        key={uniqueKey}
+                        label={label}
+                        value={value || ''}
+                        type="text"
+                        onChange={(val) => onUpdateLayer(layer.id, propKey, val)}
+                    />
+                );
+            }
             return (
                 <ClientInput 
                     key={uniqueKey}
                     label={label}
-                    value={value}
+                    value={value || ''}
                     type={propKey === 'text' ? 'long-text' : 'text'}
                     onChange={(val) => onUpdateLayer(layer.id, propKey, val)}
                 />
