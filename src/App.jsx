@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useLocation, Routes, Route } from 'react-router-dom';
-import { Analytics } from "@vercel/analytics/react";
 
 import UnifiedNav from './components/UnifiedNav';
 import WaitlistHero from './components/WaitlistHero';
@@ -70,7 +69,6 @@ function App() {
         </Route>
         <Route path="/tool/:id" element={<ToolRunner />} />
       </Routes>
-      <Analytics />
     </>
   );
 }
