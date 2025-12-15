@@ -1840,9 +1840,15 @@ export default function DesignSystem() {
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div className="md:col-span-4 sticky top-32 h-fit">
                 <SectionHeader title="Role Separation" number="06" />
-                <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
-                    Critical for Branded Objects. Studio UI is dense and technical. Client UI is simple and constrained. This directly supports the value prop.
+                <p className="font-montreal text-white/60 text-lg leading-relaxed mb-6">
+                    Critical for Branded Objects. Studio UI is dense and technical—mission control for brand governance. Client UI is simple and constrained—safe inputs only.
                 </p>
+                <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg mb-8">
+                    <p className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest mb-2">Technical Density</p>
+                    <p className="font-montreal text-sm text-white/60 leading-relaxed">
+                        Studio UI feels like mission control software for an alien megastructure. Dense information hierarchy, monospace system labels, lock states, latency readouts. No wasted space, no hand-holding, pure function.
+                    </p>
+                </div>
                 <div className="flex gap-2 flex-wrap">
                     <Badge className="bg-[#E3E3FD]/10 border-[#E3E3FD]/30 text-[#E3E3FD]">Studio</Badge>
                     <Badge className="bg-white/10 border-white/20 text-white">Client</Badge>
