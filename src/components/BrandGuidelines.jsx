@@ -141,6 +141,10 @@ export default function BrandGuidelines() {
 
   return (
     <div className="min-h-screen bg-[#261E19] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal overflow-x-hidden relative">
+      {/* Test: Route is working */}
+      <div className="fixed top-20 left-0 right-0 z-[9999] bg-red-500 text-white p-4 text-center font-mono">
+        BRAND GUIDELINES PAGE LOADED
+      </div>
       {/* Organic Background Noise */}
       <div className="fixed inset-0 pointer-events-none opacity-[0.03]" style={{ 
           backgroundImage: 'radial-gradient(#E3E3FD 1px, transparent 1px)', 
