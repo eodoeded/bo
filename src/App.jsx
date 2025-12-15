@@ -40,12 +40,23 @@ function LandingPage() {
 }
 
 function App() {
+  const location = useLocation();
+  
+  // Debug: Log current route
+  useEffect(() => {
+    console.log('Current route:', location.pathname);
+    if (location.pathname === '/brandguidelines') {
+      console.log('✅ BrandGuidelines route matched!');
+    }
+  }, [location.pathname]);
+
   return (
     <>
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/brandguidelines" element={<BrandGuidelines />} />
+        <Route path="/brand-guidelines" element={<BrandGuidelines />} />
         <Route path="/studio" element={<StudioDashboard />} />
         <Route path="/studio/builder/:id" element={<ToolBuilder />} />
         <Route path="/tool/:id" element={<ToolRunner />} />
