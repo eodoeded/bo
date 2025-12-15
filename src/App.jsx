@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useLocation, Routes, Route } from 'react-router-dom';
 import { Analytics } from "@vercel/analytics/react";
 
-import Header from './components/Header';
+import UnifiedNav from './components/UnifiedNav';
 import WaitlistHero from './components/WaitlistHero';
 import WaitlistHowItWorks from './components/WaitlistHowItWorks';
 import WaitlistBenefits from './components/WaitlistBenefits';
@@ -27,7 +27,7 @@ function ScrollToTop() {
 function LandingPage() {
   return (
     <div className="min-h-screen bg-[#261E19] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal">
-      <Header />
+      <UnifiedNav />
       <main className="relative">
         <WaitlistHero />
         <WaitlistHowItWorks />

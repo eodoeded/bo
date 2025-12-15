@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Save, Share2 } from 'lucide-react';
+import { useParams } from 'react-router-dom';
+import { Save, Share2 } from 'lucide-react';
 import PreviewCanvas from '../components/v2/PreviewCanvas';
 import Inspector from '../components/v2/Inspector';
 import LayerStack from '../components/v2/LayerStack';
+import UnifiedNav from '../components/UnifiedNav';
 
 // Default Template Layers
 const DEFAULT_LAYERS = [
@@ -84,32 +85,32 @@ export default function ToolBuilder() {
 
     return (
         <div className="h-screen bg-[#261E19] text-white font-montreal flex flex-col overflow-hidden selection:bg-[#E3E3FD] selection:text-[#261E19]">
-            {/* Toolbar */}
-            <header className="h-14 bg-[#1A1614] border-b border-white/10 flex items-center justify-between px-4 z-20 shrink-0">
+            <UnifiedNav />
+            
+            {/* Secondary Toolbar */}
+            <div className="h-12 bg-[#1A1614] border-b border-white/10 flex items-center justify-between px-6 md:px-12 mt-16 md:mt-20 shrink-0">
                 <div className="flex items-center gap-4">
-                    <Link to="/studio" className="p-2 text-white/40 hover:text-white transition-colors">
-                        <ArrowLeft size={16} />
-                    </Link>
-                    <div className="h-4 w-px bg-white/10"></div>
-                    <span className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">
-                        Builder <span className="text-white/20">//</span> {id}
+                    <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">
+                        Tool ID: <span className="text-[#E3E3FD]">{id}</span>
                     </span>
                 </div>
                 <div className="flex items-center gap-3">
                     <button 
                         onClick={handleSave}
-                        className="bg-[#E3E3FD] text-[#261E19] px-4 py-1.5 font-mono text-[10px] uppercase tracking-widest hover:bg-white transition-colors flex items-center gap-2"
+                        className="bg-[#E3E3FD] text-[#261E19] px-4 py-1.5 font-mono font-semibold text-[10px] uppercase tracking-widest hover:bg-white transition-colors flex items-center gap-2 rounded-sm"
                     >
                         <Save size={12} />
                         {isSaving ? 'Saving...' : 'Publish'}
                     </button>
                 </div>
-            </header>
+            </div>
 
             <div className="flex-1 flex overflow-hidden">
-                
                 {/* Left: Layer Stack */}
                 <aside className="w-64 bg-[#1A1614] border-r border-white/10 flex flex-col z-10">
+                    <div className="p-4 border-b border-white/10">
+                        <h2 className="font-mono text-[10px] text-white/40 uppercase tracking-widest">Layers</h2>
+                    </div>
                     <LayerStack 
                         layers={layers} 
                         selectedId={selectedLayerId} 
@@ -120,13 +121,16 @@ export default function ToolBuilder() {
 
                 {/* Center: Canvas Stage */}
                 <main className="flex-1 bg-[#0A0A0A] relative flex items-center justify-center p-8 overflow-hidden">
-                     <div className="absolute inset-0 opacity-[0.05]" style={{ 
-                        backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', 
+                    {/* Subtle Grid Pattern */}
+                    <div className="absolute inset-0 opacity-[0.03]" style={{ 
+                        backgroundImage: 'linear-gradient(rgba(227, 227, 253, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(227, 227, 253, 0.1) 1px, transparent 1px)', 
                         backgroundSize: '40px 40px' 
                     }}></div>
                     
                     <div className="relative shadow-2xl transition-all duration-300" style={{ width: '400px', height: '500px' }}>
-                        <div className="absolute -top-8 left-0 font-mono text-[9px] text-white/20 uppercase tracking-widest">Canvas: 400x500 (Scale)</div>
+                        <div className="absolute -top-8 left-0 font-mono text-[9px] text-white/20 uppercase tracking-widest">
+                            Canvas: 400x500
+                        </div>
                         <PreviewCanvas layers={layers} />
                     </div>
                 </main>

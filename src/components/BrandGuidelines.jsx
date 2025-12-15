@@ -1,9 +1,10 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Box, Layout, Type, MousePointer, CreditCard, Layers, Grid as GridIcon, Database, Cpu, Activity, User, Mail, Send, ChevronDown, Check, AlertCircle, Terminal, BarChart2, CornerDownRight, Zap, Move, Eye, Code, Command, Github, Twitter, Disc, Lock, Unlock, Edit3, Image as ImageIcon, Linkedin, Download, Share2, Sliders, Hand, ZoomIn, MoreHorizontal, Shield } from 'lucide-react';
+import { ArrowLeft, Box, Layout, Type, MousePointer, CreditCard, Layers, Grid as GridIcon, Database, Cpu, Activity, User, Mail, Send, ChevronDown, Check, AlertCircle, Terminal, BarChart2, CornerDownRight, Zap, Move, Eye, Code, Command, Github, Twitter, Disc, Lock, Unlock, Edit3, Image as ImageIcon, Linkedin, Download, Share2, Sliders, Hand, ZoomIn, MoreHorizontal, Shield, Plus, Clock, Save } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState, useRef } from 'react';
 import html2canvas from 'html2canvas';
 import bottomComp from "../assets/bottom-comp.png";
+import UnifiedNav from './UnifiedNav';
 
 // Decorative Corner Component
 const Corner = ({ className = "" }) => (
@@ -142,30 +143,16 @@ export default function BrandGuidelines() {
   return (
     <div className="min-h-screen bg-[#261E19] text-white selection:bg-[#E3E3FD] selection:text-black font-montreal overflow-x-hidden">
       
+      <UnifiedNav />
+      
       {/* Organic Background Noise */}
       <div className="fixed inset-0 pointer-events-none opacity-[0.03]" style={{ 
           backgroundImage: 'radial-gradient(#E3E3FD 1px, transparent 1px)', 
           backgroundSize: '30px 30px' 
       }}></div>
 
-      {/* Nav */}
-      <nav className="fixed top-0 left-0 w-full p-6 z-50 flex justify-between items-center bg-[#261E19]/90 backdrop-blur-md border-b border-white/5">
-        <Link to="/" className="flex items-center gap-3 text-white/50 hover:text-white transition-colors group">
-            <div className="w-8 h-8 bg-white/5 flex items-center justify-center border border-white/10 rounded-full group-hover:border-[#E3E3FD] group-hover:text-[#E3E3FD] transition-colors">
-                <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
-            </div>
-            <span className="font-mono text-[10px] uppercase tracking-widest group-hover:text-[#E3E3FD] transition-colors">[ BACK ]</span>
-        </Link>
-        <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 border border-white/10 hover:border-[#E3E3FD]/50 transition-colors rounded-full">
-                <span className="w-1.5 h-1.5 bg-[#E3E3FD] animate-pulse shadow-[0_0_8px_#E3E3FD] rounded-full"></span>
-                <span className="font-mono text-[10px] text-white/60 uppercase tracking-widest">System V2.5</span>
-            </div>
-        </div>
-      </nav>
-
       {/* Hero: Advanced Node System */}
-      <section className="relative h-[90vh] w-full flex items-center justify-center overflow-hidden bg-[#261E19]">
+      <section className="relative h-[90vh] w-full flex items-center justify-center overflow-hidden bg-[#261E19] mt-16 md:mt-20">
         
         {/* Generative Background */}
         <div className="absolute inset-0 pointer-events-none">
@@ -270,7 +257,7 @@ export default function BrandGuidelines() {
       </section>
 
       {/* Main Content */}
-      <div className="max-w-[1400px] mx-auto py-32 px-6 md:px-12 space-y-48 relative z-10">
+      <div className="max-w-[1400px] mx-auto py-32 px-6 md:px-12 space-y-48 relative z-10 mt-16 md:mt-20">
         
         {/* 01. Typography */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
@@ -309,7 +296,7 @@ export default function BrandGuidelines() {
                 </div>
 
                 {/* Scale */}
-                <div>
+              <div>
                     <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest mb-12 block uppercase">Hierarchy Scale</span>
                     <div className="space-y-12">
                         {[
@@ -391,6 +378,123 @@ export default function BrandGuidelines() {
             </div>
         </section>
 
+        {/* 02. Color System */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+            <div className="md:col-span-4 sticky top-32 h-fit">
+                <SectionHeader title="Color System" number="02" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
+                    A dark, moody palette with high-contrast white text and lavender signal accents.
+                </p>
+            </div>
+            
+            <div className="md:col-span-8 space-y-12">
+                {/* Primary Palette */}
+                            <div>
+                    <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-6">Primary Palette</span>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {[
+                            { name: 'Background', value: '#261E19', usage: 'Main surface / Backdrop' },
+                            { name: 'Signal', value: '#E3E3FD', usage: 'Accents / Status / Interactive' },
+                            { name: 'Ink', value: '#FFFFFF', usage: 'Copy / Inputs / Primary Text' }
+                        ].map((color) => (
+                            <div key={color.name} className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                                <div className="w-full h-24 rounded-lg mb-4 border border-white/10" style={{ backgroundColor: color.value }}></div>
+                                <p className="font-montreal text-white mb-1">{color.name}</p>
+                                <p className="font-mono text-[10px] text-white/40 mb-2">{color.value}</p>
+                                <p className="font-mono text-[9px] text-white/30 uppercase tracking-widest">{color.usage}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Secondary Palette */}
+                <div>
+                    <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-6">Secondary Palette</span>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {[
+                            { name: 'Card BG', value: '#1A1614' },
+                            { name: 'Deep BG', value: '#0A0A0A' },
+                            { name: 'Hover', value: '#2E2824' },
+                            { name: 'Border', value: 'rgba(255,255,255,0.1)' }
+                        ].map((color) => (
+                            <div key={color.name} className="bg-[#1A1614] border border-white/10 p-4 rounded-lg">
+                                <div className="w-full h-16 rounded mb-3 border border-white/10" style={{ backgroundColor: color.value }}></div>
+                                <p className="font-mono text-[9px] text-white/60">{color.name}</p>
+                                <p className="font-mono text-[8px] text-white/30">{color.value}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {/* 03. Navigation */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+            <div className="md:col-span-4 sticky top-32 h-fit">
+                <SectionHeader title="Navigation" number="03" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
+                    Unified navigation component used across all pages. Context-aware with backdrop blur.
+                </p>
+            </div>
+            
+            <div className="md:col-span-8 space-y-12">
+                {/* Nav Spec */}
+                <div className="bg-[#1A1614] border border-white/10 p-8 rounded-3xl">
+                    <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-4">Top Navigation</span>
+                    <div className="bg-[#261E19] border border-white/10 p-4 rounded-2xl">
+                        <div className="flex items-center justify-between mb-4 pb-4 border-b border-white/5">
+                            <span className="font-mono text-sm tracking-widest text-white uppercase">[ BO ]</span>
+                            <div className="flex items-center gap-4">
+                                <span className="font-mono text-[10px] text-white/40 uppercase tracking-widest">Process</span>
+                                <span className="font-mono text-[10px] text-white/40 uppercase tracking-widest">Value</span>
+                                <span className="font-mono text-[10px] text-white/40 uppercase tracking-widest">Specs</span>
+                            </div>
+                            <button className="bg-white text-black px-4 py-2 font-mono text-[10px] uppercase tracking-widest rounded-sm">
+                                Request Access
+                            </button>
+                        </div>
+                        <div className="space-y-2">
+                            <p className="font-mono text-[9px] text-white/40">Height: 64px (md: 80px)</p>
+                            <p className="font-mono text-[9px] text-white/40">Background: #261E19/90 with backdrop-blur-md</p>
+                            <p className="font-mono text-[9px] text-white/40">Border: rgba(255,255,255,0.05)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {/* 04. Buttons */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+            <div className="md:col-span-4 sticky top-32 h-fit">
+                <SectionHeader title="Buttons" number="04" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
+                    Primary and secondary button styles. High contrast, mono font, uppercase.
+                </p>
+            </div>
+            
+            <div className="md:col-span-8 space-y-12">
+                <div className="bg-[#1A1614] border border-white/10 p-8 rounded-3xl">
+                    <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-6">Button Variants</span>
+                    <div className="space-y-6">
+                        <div>
+                            <p className="font-mono text-[9px] text-white/40 mb-3">Primary</p>
+                            <button className="bg-white text-black px-5 py-2.5 font-mono font-semibold text-[11px] uppercase tracking-widest hover:bg-[#E3E3FD] transition-colors rounded-sm">
+                                Request Access
+                            </button>
+                            <p className="font-mono text-[8px] text-white/30 mt-2">bg-white, text-black, hover:bg-[#E3E3FD]</p>
+                        </div>
+                        <div>
+                            <p className="font-mono text-[9px] text-white/40 mb-3">Secondary (Lavender)</p>
+                            <button className="bg-[#E3E3FD] text-[#261E19] px-4 py-2 font-mono font-semibold text-[10px] uppercase tracking-widest hover:bg-white transition-colors rounded-sm">
+                                Publish
+                            </button>
+                            <p className="font-mono text-[8px] text-white/30 mt-2">bg-[#E3E3FD], text-[#261E19], hover:bg-white</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         {/* 14. Marketing Components */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
             <div className="md:col-span-4 sticky top-32 h-fit">
@@ -403,13 +507,11 @@ export default function BrandGuidelines() {
             <div className="md:col-span-8 space-y-12">
                 {/* Benefit Card */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="bg-[#261E19] border border-white/10 p-8 relative group hover:bg-[#2E2824] transition-colors rounded-3xl">
-                        
-                        <div className="w-12 h-12 border border-white/10 bg-white/5 flex items-center justify-center mb-8 group-hover:border-[#E3E3FD] transition-colors rounded-2xl">
-                            <CreditCard size={20} className="text-white/60 group-hover:text-[#E3E3FD] transition-colors" />
+                    <div className="bg-[#1A1614] border border-white/10 p-8 md:p-10 relative group hover:bg-[#2E2824] transition-colors rounded-3xl">
+                        <div className="w-14 h-14 border border-white/10 bg-white/5 flex items-center justify-center mb-8 group-hover:border-[#E3E3FD] transition-colors rounded-2xl">
+                            <CreditCard size={24} className="text-white/60 group-hover:text-[#E3E3FD] transition-colors" />
                         </div>
-                        
-                        <h3 className="font-mono text-sm text-[#E3E3FD] uppercase tracking-widest mb-3">01 // Revenue</h3>
+                        <h3 className="font-mono text-xs text-[#E3E3FD] uppercase tracking-widest mb-4">01 // Revenue</h3>
                         <h4 className="font-montreal font-medium text-2xl text-white mb-4">Productised Service</h4>
                         <p className="text-white/50 font-montreal text-sm leading-relaxed">
                             Don't just bill for hours. Sell the tool as a subscription.
@@ -417,7 +519,7 @@ export default function BrandGuidelines() {
                     </div>
                     
                     {/* Feature Row */}
-                    <div className="bg-[#261E19] p-8 relative flex flex-col justify-center rounded-3xl border border-white/10">
+                    <div className="bg-[#1A1614] p-8 relative flex flex-col justify-center rounded-3xl border border-white/10">
                         <div className="flex items-center justify-between py-3 border-b border-white/5 group hover:bg-white/[0.02] transition-colors px-2">
                             <div className="flex items-center gap-4">
                                 <Cpu size={14} className="text-[#E3E3FD]/50 group-hover:text-[#E3E3FD] transition-colors" />
@@ -431,6 +533,41 @@ export default function BrandGuidelines() {
                                 <span className="font-mono text-xs text-white/70 group-hover:text-white transition-colors uppercase tracking-wider">LOCKING</span>
                             </div>
                             <span className="font-mono text-[10px] text-[#E3E3FD]">Strict</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {/* 15. Studio Dashboard Card */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
+            <div className="md:col-span-4 sticky top-32 h-fit">
+                <SectionHeader title="Studio Dashboard" number="15" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
+                    Tool card component used in the Studio Dashboard. Modular, floating aesthetic.
+                </p>
+            </div>
+            
+            <div className="md:col-span-8 space-y-12">
+                <div className="bg-[#1A1614] border border-white/10 p-8 rounded-3xl">
+                    <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest block mb-6">Tool Card</span>
+                    <div className="bg-[#1A1614] border border-white/10 p-8 md:p-10 hover:border-[#E3E3FD]/50 hover:bg-[#2E2824] transition-colors rounded-3xl relative group">
+                        <div className="w-14 h-14 border border-white/10 bg-white/5 flex items-center justify-center mb-8 group-hover:border-[#E3E3FD] transition-colors rounded-2xl">
+                            <Layout size={24} className="text-white/60 group-hover:text-[#E3E3FD] transition-colors" />
+                        </div>
+                        <div className="absolute top-6 right-6">
+                            <span className="font-mono text-[9px] uppercase tracking-widest px-2 py-1 border border-[#E3E3FD]/20 bg-[#E3E3FD]/10 text-[#E3E3FD] rounded-lg">
+                                Live
+                            </span>
+                        </div>
+                        <div>
+                            <h3 className="font-montreal font-medium text-2xl mb-3 group-hover:text-[#E3E3FD] transition-colors">
+                                Social_Story_v1
+                            </h3>
+                            <div className="flex items-center gap-2 text-white/40">
+                                <Clock size={12} />
+                                <p className="font-mono text-[10px] uppercase tracking-widest">Last Edit: 2 mins ago</p>
+                            </div>
                         </div>
                     </div>
                 </div>
