@@ -60,12 +60,12 @@ export default function WaitlistHero() {
   const containerRef = useRef(null);
   const [draggingId, setDraggingId] = useState(null);
   
-  // Initial Positions (Percentages) - consistent across breakpoints so mobile mirrors desktop layout
+  // Initial Positions (Percentages) - spaced around hero text
   const [nodes, setNodes] = useState({
-      // keep one compact node above the text, others to the right
-      output: { x: 36, y: 18 },   // small, above headline
-      studio: { x: 70, y: 42 },   // right cluster
-      core:   { x: 74, y: 62 }    // right cluster
+      // small top-left, large middle-right, medium upper-right
+      output: { x: 24, y: 22 },
+      core:   { x: 58, y: 58 },
+      studio: { x: 78, y: 34 }
   });
 
   const handleDragStart = (e, id) => {
