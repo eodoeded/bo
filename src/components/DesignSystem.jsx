@@ -1606,6 +1606,262 @@ export default function DesignSystem() {
             </div>
         </section>
 
+        {/* 02f. Tool Runner Patterns */}
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
+            <div className="md:col-span-4 md:sticky md:top-32 h-fit">
+                <SectionHeader title="Tool Runner" number="02f" />
+                <p className="font-montreal text-white/60 text-lg leading-relaxed mb-6">
+                    Client-facing interface for using tools. Simplified, constrained, safe. Only CLIENT_INPUT properties visible. Everything else is hidden or read-only.
+                </p>
+                <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg mb-8">
+                    <p className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest mb-2">Client Isolation</p>
+                    <p className="font-montreal text-sm text-white/60 leading-relaxed">
+                        Clients see a simplified interface. No technical labels, no lock icons, no layer names. Only safe inputs (CLIENT_INPUT) are editable. LOCKED properties are completely hidden. READ_ONLY properties are displayed but not editable.
+                    </p>
+                </div>
+                <div className="flex gap-2 flex-wrap">
+                    <Badge className="bg-[#E3E3FD]/10 border-[#E3E3FD]/30 text-[#E3E3FD]">RunnerForm</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">ClientInput</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">ReadOnlyField</Badge>
+                    <Badge className="bg-white/10 border-white/20 text-white">Export</Badge>
+                </div>
+            </div>
+            
+            <div className="md:col-span-8 space-y-24">
+                
+                {/* Tool Runner Layout */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Tool Runner Layout</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                            {/* Left Panel */}
+                            <div className="bg-[#261E19] border border-white/10 rounded-lg overflow-hidden">
+                                <div className="h-12 md:h-14 border-b border-white/10 flex items-center px-4 bg-[#1A1614]">
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_6px_#E3E3FD]"></div>
+                                        <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">TOOL_RUNNER</span>
+                                    </div>
+                                </div>
+                                <div className="p-4 space-y-3">
+                                    <div className="p-4 border border-white/10 rounded-lg bg-white/[0.02]">
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <div className="p-1 bg-[#E3E3FD]/10 border border-[#E3E3FD]/20 rounded-md">
+                                                <Edit3 size={10} className="text-[#E3E3FD]" />
+                                            </div>
+                                            <span className="font-mono text-[9px] text-[#E3E3FD] uppercase">Main Headline - Content</span>
+                                        </div>
+                                        <input 
+                                            type="text" 
+                                            value="SYSTEM_OS v2.4" 
+                                            className="w-full bg-[#261E19] border border-white/10 text-white font-montreal text-sm px-3 py-2 rounded-lg"
+                                            readOnly
+                                        />
+                                    </div>
+                                    <button className="w-full h-12 bg-[#E3E3FD] text-[#261E19] font-mono text-[10px] uppercase tracking-widest rounded-lg">
+                                        EXPORT_PRODUCTION_PNG
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            {/* Right Panel */}
+                            <div className="bg-[#0A0A0A] border border-white/10 rounded-lg p-4 flex items-center justify-center relative min-h-[300px]">
+                                <div className="absolute top-2 right-2">
+                                    <div className="px-2 py-1 bg-white/[0.02] border border-white/10 rounded-lg flex items-center gap-2">
+                                        <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse"></div>
+                                        <span className="font-mono text-[8px] text-white/40 uppercase">LIVE_PREVIEW</span>
+                                    </div>
+                                </div>
+                                <div className="w-full h-48 bg-[#050505] border border-white/5 rounded-lg flex items-center justify-center">
+                                    <span className="font-mono text-[8px] text-white/20">Preview Canvas</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="space-y-2 font-mono text-[9px] text-white/40">
+                            <div className="flex justify-between">
+                                <span>Layout:</span>
+                                <code className="text-[#E3E3FD]">Two-panel (Inputs | Preview)</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Left Panel:</span>
+                                <code className="text-[#E3E3FD]">w-full md:w-[400px] lg:w-[420px]</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Right Panel:</span>
+                                <code className="text-[#E3E3FD]">flex-1 (Live Preview)</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* ClientInput Component */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">ClientInput</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                        <div className="p-4 md:p-5 border border-white/10 rounded-lg bg-white/[0.02] hover:border-[#E3E3FD]/30 hover:bg-white/[0.04] transition-colors relative mb-4">
+                            <div className="absolute -left-[3px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full border bg-[#E3E3FD] border-[#E3E3FD] shadow-[0_0_4px_#E3E3FD]"></div>
+                            <div className="flex justify-between items-center mb-2.5">
+                                <div className="flex items-center gap-2">
+                                    <div className="p-1 bg-[#E3E3FD]/10 border border-[#E3E3FD]/20 rounded-md">
+                                        <Edit3 size={10} className="text-[#E3E3FD]" />
+                                    </div>
+                                    <span className="font-mono text-[9px] md:text-[10px] text-[#E3E3FD] uppercase tracking-widest">Main Headline - Content</span>
+                                </div>
+                                <span className="font-mono text-[8px] text-[#E3E3FD]/60 uppercase tracking-widest border border-[#E3E3FD]/20 bg-[#E3E3FD]/10 px-2 py-0.5 rounded-full">CLIENT_INPUT</span>
+                            </div>
+                            <input 
+                                type="text" 
+                                value="SYSTEM_OS v2.4" 
+                                className="w-full bg-[#261E19] border border-white/10 text-white font-montreal text-sm md:text-base px-3 md:px-4 py-2.5 md:py-3 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 placeholder:text-white/20"
+                                readOnly
+                            />
+                            <div className="absolute -right-[3px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full border bg-[#E3E3FD] border-[#E3E3FD] shadow-[0_0_4px_#E3E3FD]"></div>
+                        </div>
+                        <div className="space-y-2 font-mono text-[9px] text-white/40">
+                            <div className="flex justify-between">
+                                <span>Connection Ports:</span>
+                                <code className="text-[#E3E3FD]">Left/right ports (active state)</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Icon Container:</span>
+                                <code className="text-[#E3E3FD]">Edit3 icon in bordered container</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Input Styling:</span>
+                                <code className="text-[#E3E3FD]">bg-[#261E19] border-white/10</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Badge:</span>
+                                <code className="text-[#E3E3FD]">CLIENT_INPUT badge (lavender)</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* ReadOnlyField Component */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">ReadOnlyField</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                        <div className="p-4 md:p-5 border border-white/5 rounded-lg bg-white/[0.01] hover:bg-white/[0.02] transition-colors relative opacity-70 hover:opacity-100 mb-4">
+                            <div className="absolute -left-[3px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full border bg-[#1A1614] border-white/20"></div>
+                            <div className="flex justify-between items-center mb-2.5">
+                                <div className="flex items-center gap-2">
+                                    <div className="p-1 bg-white/5 border border-white/10 rounded-md">
+                                        <Eye size={10} className="text-white/40" />
+                                    </div>
+                                    <span className="font-mono text-[9px] md:text-[10px] text-white/40 uppercase tracking-widest">Subhead - Content</span>
+                                </div>
+                                <span className="font-mono text-[8px] text-white/20 uppercase tracking-widest border border-white/10 bg-white/5 px-2 py-0.5 rounded-full">READ_ONLY</span>
+                            </div>
+                            <div className="font-montreal text-sm md:text-base text-white/60 select-none">
+                                Automated Governance
+                            </div>
+                            <div className="absolute -right-[3px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full border bg-[#1A1614] border-white/20"></div>
+                        </div>
+                        <div className="space-y-2 font-mono text-[9px] text-white/40">
+                            <div className="flex justify-between">
+                                <span>Connection Ports:</span>
+                                <code className="text-[#E3E3FD]">Left/right ports (dimmed)</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Icon:</span>
+                                <code className="text-[#E3E3FD]">Eye icon (read-only indicator)</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Opacity:</span>
+                                <code className="text-[#E3E3FD]">opacity-70 hover:opacity-100</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Badge:</span>
+                                <code className="text-[#E3E3FD]">READ_ONLY badge (dimmed)</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Export Button */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Export Button</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl space-y-4">
+                        <div className="space-y-3">
+                            <button className="w-full h-12 md:h-14 bg-[#E3E3FD] text-[#261E19] font-mono text-[10px] md:text-[11px] uppercase tracking-widest flex items-center justify-center gap-2 rounded-lg hover:bg-white transition-colors">
+                                <Download size={14} className="md:w-[16px] md:h-[16px]" />
+                                <span>EXPORT_PRODUCTION_PNG</span>
+                            </button>
+                            <button className="w-full h-12 md:h-14 bg-[#E3E3FD]/20 border border-[#E3E3FD]/30 text-[#E3E3FD] font-mono text-[10px] md:text-[11px] uppercase tracking-widest flex items-center justify-center gap-2 rounded-lg cursor-default">
+                                <CheckCircle size={14} className="md:w-[16px] md:h-[16px]" />
+                                <span>DOWNLOAD_COMPLETE</span>
+                            </button>
+                            <button className="w-full h-12 md:h-14 bg-red-500/20 border border-red-500/30 text-red-400 font-mono text-[10px] md:text-[11px] uppercase tracking-widest flex items-center justify-center gap-2 rounded-lg">
+                                <AlertTriangle size={14} className="md:w-[16px] md:h-[16px]" />
+                                <span>EXPORT_FAILED</span>
+                            </button>
+                        </div>
+                        <div className="space-y-2 font-mono text-[9px] text-white/40">
+                            <div className="flex justify-between">
+                                <span>States:</span>
+                                <code className="text-[#E3E3FD]">idle, exporting, success, error</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Success State:</span>
+                                <code className="text-[#E3E3FD]">Lavender background, CheckCircle icon</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Error State:</span>
+                                <code className="text-[#E3E3FD]">Red background, AlertTriangle icon</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Empty State */}
+                <div>
+                    <div className="flex items-center gap-4 mb-8">
+                        <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Empty State (No Inputs)</span>
+                        <div className="h-px flex-1 bg-white/10"></div>
+                    </div>
+                    
+                    <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
+                        <div className="p-8 md:p-12 border border-dashed border-white/10 rounded-xl text-center">
+                            <div className="w-1.5 h-1.5 bg-white/20 rounded-full mx-auto mb-3"></div>
+                            <p className="font-mono text-[9px] md:text-xs text-white/40 uppercase tracking-widest mb-2">
+                                NO_INPUTS_AVAILABLE
+                            </p>
+                            <p className="font-montreal text-sm text-white/30">
+                                This tool is strictly locked.
+                            </p>
+                        </div>
+                        <div className="mt-4 space-y-2 font-mono text-[9px] text-white/40">
+                            <div className="flex justify-between">
+                                <span>When Shown:</span>
+                                <code className="text-[#E3E3FD]">All properties are LOCKED</code>
+                            </div>
+                            <div className="flex justify-between">
+                                <span>Style:</span>
+                                <code className="text-[#E3E3FD]">Dashed border, centered text</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
         {/* 03. System Nodes (Visual Storytelling) */}
         <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
             <div className="md:col-span-4 md:sticky md:top-32 h-fit">

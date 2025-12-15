@@ -1,49 +1,70 @@
 // V2 Shared Component: RunnerForm (Client Only)
 // The "Client-Safe" input form. Enforces permissions STRICTLY.
+// Refined for alien ant-colony aesthetic: simplified, constrained, technical precision
 
 import React from 'react';
-import { Eye } from 'lucide-react';
+import { Eye, Edit3 } from 'lucide-react';
 
 const ClientInput = ({ label, value, onChange, type = 'text' }) => {
     return (
-        <div className="group p-4 border border-white/10 rounded-lg bg-[#2E2824] relative">
-            <div className="flex justify-between items-center mb-2">
-                <span className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">{label}</span>
+        <div className="group p-4 md:p-5 border border-white/10 rounded-lg bg-white/[0.02] hover:border-[#E3E3FD]/30 hover:bg-white/[0.04] transition-colors relative">
+            {/* Connection Port - Left */}
+            <div className="absolute -left-[3px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full border bg-[#E3E3FD] border-[#E3E3FD] shadow-[0_0_4px_#E3E3FD]"></div>
+            
+            <div className="flex justify-between items-center mb-2.5">
+                <div className="flex items-center gap-2">
+                    <div className="p-1 bg-[#E3E3FD]/10 border border-[#E3E3FD]/20 rounded-md">
+                        <Edit3 size={10} className="text-[#E3E3FD]" />
+                    </div>
+                    <span className="font-mono text-[9px] md:text-[10px] text-[#E3E3FD] uppercase tracking-widest">{label}</span>
+                </div>
+                <span className="font-mono text-[8px] text-[#E3E3FD]/60 uppercase tracking-widest border border-[#E3E3FD]/20 bg-[#E3E3FD]/10 px-2 py-0.5 rounded-full">CLIENT_INPUT</span>
             </div>
             
             {type === 'long-text' ? (
                  <textarea 
                     value={value} 
                     onChange={(e) => onChange(e.target.value)}
-                    className="w-full bg-[#3A3430] text-white font-montreal text-lg px-3 py-3 rounded-md focus:outline-none focus:border-[#E3E3FD] border border-transparent placeholder:text-white/20 min-h-[100px] resize-none"
-                    placeholder={`Enter ${label}...`}
+                    className="w-full bg-[#261E19] border border-white/10 text-white font-montreal text-sm md:text-base px-3 md:px-4 py-2.5 md:py-3 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 placeholder:text-white/20 min-h-[100px] resize-none transition-colors"
+                    placeholder={`ENTER_${label.toUpperCase().replace(/\s/g, '_')}...`}
                 />
             ) : (
                 <input 
                     type="text" 
                     value={value} 
                     onChange={(e) => onChange(e.target.value)}
-                    className="w-full bg-[#3A3430] text-white font-montreal text-lg px-3 py-3 rounded-md focus:outline-none focus:border-[#E3E3FD] border border-transparent placeholder:text-white/20"
-                    placeholder={`Enter ${label}...`}
+                    className="w-full bg-[#261E19] border border-white/10 text-white font-montreal text-sm md:text-base px-3 md:px-4 py-2.5 md:py-3 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 placeholder:text-white/20 transition-colors"
+                    placeholder={`ENTER_${label.toUpperCase().replace(/\s/g, '_')}...`}
                 />
             )}
+            
+            {/* Connection Port - Right */}
+            <div className="absolute -right-[3px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full border bg-[#E3E3FD] border-[#E3E3FD] shadow-[0_0_4px_#E3E3FD]"></div>
         </div>
     );
 };
 
 const ReadOnlyField = ({ label, value }) => {
     return (
-        <div className="group p-4 border border-white/5 rounded-lg bg-transparent relative opacity-60 hover:opacity-100 transition-opacity">
-            <div className="flex justify-between items-center mb-2">
-                <span className="font-mono text-[10px] text-white/40 uppercase tracking-widest flex items-center gap-2">
-                    <Eye size={12} />
-                    {label}
-                </span>
-                <span className="font-mono text-[8px] text-white/20 uppercase tracking-widest border border-white/10 px-1 rounded">Read Only</span>
+        <div className="group p-4 md:p-5 border border-white/5 rounded-lg bg-white/[0.01] hover:bg-white/[0.02] transition-colors relative opacity-70 hover:opacity-100">
+            {/* Connection Port - Left (dimmed) */}
+            <div className="absolute -left-[3px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full border bg-[#1A1614] border-white/20"></div>
+            
+            <div className="flex justify-between items-center mb-2.5">
+                <div className="flex items-center gap-2">
+                    <div className="p-1 bg-white/5 border border-white/10 rounded-md">
+                        <Eye size={10} className="text-white/40" />
+                    </div>
+                    <span className="font-mono text-[9px] md:text-[10px] text-white/40 uppercase tracking-widest">{label}</span>
+                </div>
+                <span className="font-mono text-[8px] text-white/20 uppercase tracking-widest border border-white/10 bg-white/5 px-2 py-0.5 rounded-full">READ_ONLY</span>
             </div>
-            <div className="font-montreal text-lg text-white/60 select-none">
+            <div className="font-montreal text-sm md:text-base text-white/60 select-none">
                 {value || "—"}
             </div>
+            
+            {/* Connection Port - Right (dimmed) */}
+            <div className="absolute -right-[3px] top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full border bg-[#1A1614] border-white/20"></div>
         </div>
     );
 };
@@ -94,9 +115,13 @@ export default function RunnerForm({ layers, onUpdateLayer }) {
 
     if (activeFields.length === 0) {
         return (
-            <div className="p-8 border border-dashed border-white/10 rounded-xl text-center">
-                <p className="font-mono text-xs text-white/40 uppercase tracking-widest">
-                    No inputs available. <br/> This tool is strictly locked.
+            <div className="p-8 md:p-12 border border-dashed border-white/10 rounded-xl text-center">
+                <div className="w-1.5 h-1.5 bg-white/20 rounded-full mx-auto mb-3"></div>
+                <p className="font-mono text-[9px] md:text-xs text-white/40 uppercase tracking-widest mb-2">
+                    NO_INPUTS_AVAILABLE
+                </p>
+                <p className="font-montreal text-sm text-white/30">
+                    This tool is strictly locked.
                 </p>
             </div>
         )

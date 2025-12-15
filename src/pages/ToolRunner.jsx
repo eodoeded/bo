@@ -93,63 +93,105 @@ export default function ToolRunner() {
     };
 
     return (
-        <div className="h-screen bg-[#261E19] text-white font-montreal flex flex-col md:flex-row overflow-hidden selection:bg-[#E3E3FD] selection:text-[#261E19]">
+        <div className="h-screen bg-[#261E19] text-white font-montreal flex flex-col md:flex-row overflow-hidden selection:bg-[#E3E3FD] selection:text-[#261E19] relative">
+            <div className="fixed inset-0 bg-[#261E19] z-0"></div>
             
             {/* Left Panel: Inputs (Isolated Environment) */}
-            <aside className="w-full md:w-[400px] bg-[#1A1614] border-r border-white/10 flex flex-col z-20 shadow-2xl relative">
+            <aside className="w-full md:w-[400px] lg:w-[420px] bg-[#1A1614] border-r border-white/10 flex flex-col z-20 shadow-2xl relative">
                 
-                <header className="h-16 border-b border-white/10 flex items-center justify-between px-6 shrink-0 bg-[#1A1614]">
-                    <div className="flex items-center gap-3">
-                        <div className="w-2 h-2 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
-                        <span className="font-mono text-[10px] text-[#E3E3FD] uppercase tracking-widest">Tool Runner // {id}</span>
+                {/* Header */}
+                <header className="h-12 md:h-14 border-b border-white/10 flex items-center justify-between px-4 md:px-6 shrink-0 bg-[#1A1614]">
+                    <div className="flex items-center gap-2 md:gap-3">
+                        <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_6px_#E3E3FD]"></div>
+                        <span className="font-mono text-[9px] md:text-[10px] text-[#E3E3FD] uppercase tracking-widest">TOOL_RUNNER</span>
+                        <span className="font-mono text-[9px] text-white/20 hidden sm:inline">|</span>
+                        <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest hidden sm:inline">ID: {id}</span>
                     </div>
                 </header>
                 
-                <div className="flex-1 overflow-y-auto p-6 bg-[#1A1614]">
-                    <div className="mb-8">
-                        <h1 className="font-medium text-2xl mb-2">Asset Configuration</h1>
-                        <p className="text-white/40 text-sm">
-                            Input authorized content below. <br/>
+                {/* Form Content */}
+                <div className="flex-1 overflow-y-auto p-4 md:p-6 bg-[#1A1614]">
+                    <div className="mb-6 md:mb-8">
+                        <div className="flex items-center gap-2 mb-3">
+                            <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_6px_#E3E3FD]"></div>
+                            <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">CLIENT_INPUT_MODE</span>
+                        </div>
+                        <h1 className="font-montreal font-medium text-xl md:text-2xl mb-2 text-white">Asset Configuration</h1>
+                        <p className="font-montreal text-white/40 text-sm leading-relaxed">
+                            Input authorized content below. <br className="hidden sm:inline"/>
                             Layout and styling are governed by Studio rules.
                         </p>
                     </div>
                     <RunnerForm layers={layers} onUpdateLayer={handleUpdateLayer} />
                 </div>
 
-                <div className="p-6 border-t border-white/10 bg-[#1A1614] relative z-20">
+                {/* Export Button */}
+                <div className="p-4 md:p-6 border-t border-white/10 bg-[#1A1614] relative z-20 shrink-0">
                     <button 
                         onClick={handleExport}
-                        disabled={isExporting}
+                        disabled={isExporting || status === 'success'}
                         className={`
-                            w-full h-12 font-mono text-[11px] uppercase tracking-widest 
-                            flex items-center justify-center gap-2 disabled:opacity-50 transition-all duration-300
-                            ${status === 'error' ? 'bg-red-900 text-white' : 'bg-[#E3E3FD] text-[#261E19] hover:bg-white'}
+                            w-full h-12 md:h-14 font-mono text-[10px] md:text-[11px] uppercase tracking-widest 
+                            flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 rounded-lg
+                            ${status === 'error' 
+                                ? 'bg-red-500/20 border border-red-500/30 text-red-400 hover:bg-red-500/30' 
+                                : status === 'success'
+                                ? 'bg-[#E3E3FD]/20 border border-[#E3E3FD]/30 text-[#E3E3FD]'
+                                : 'bg-[#E3E3FD] text-[#261E19] hover:bg-white border border-transparent'
+                            }
                         `}
                     >
-                        {status === 'exporting' && <span>Rendering High-Res...</span>}
-                        {status === 'success' && <span className="flex items-center gap-2"><CheckCircle size={14}/> Download Complete</span>}
-                        {status === 'error' && <span className="flex items-center gap-2"><AlertTriangle size={14}/> Export Failed</span>}
+                        {status === 'exporting' && (
+                            <>
+                                <div className="w-3 h-3 border-2 border-[#261E19]/20 border-t-[#261E19] rounded-full animate-spin"></div>
+                                <span>RENDERING_HIGH_RES...</span>
+                            </>
+                        )}
+                        {status === 'success' && (
+                            <>
+                                <CheckCircle size={14} className="md:w-[16px] md:h-[16px]" />
+                                <span>DOWNLOAD_COMPLETE</span>
+                            </>
+                        )}
+                        {status === 'error' && (
+                            <>
+                                <AlertTriangle size={14} className="md:w-[16px] md:h-[16px]" />
+                                <span>EXPORT_FAILED</span>
+                            </>
+                        )}
                         {status === 'idle' && (
                             <>
-                                <Download size={16} />
-                                Export Production PNG
+                                <Download size={14} className="md:w-[16px] md:h-[16px]" />
+                                <span>EXPORT_PRODUCTION_PNG</span>
                             </>
                         )}
                     </button>
                 </div>
             </aside>
 
-            {/* Right Panel: Live Monitor (Read Only) */}
-            <main className="flex-1 bg-[#050505] relative flex items-center justify-center p-8 overflow-hidden">
-                <div className="absolute top-6 right-6 flex items-center gap-2 z-10">
-                    <div className="px-2 py-1 bg-white/5 border border-white/10 flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"></div>
-                        <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">Live Monitor</span>
+            {/* Right Panel: Live Preview (Read Only) */}
+            <main className="flex-1 bg-[#0A0A0A] relative flex items-center justify-center p-4 md:p-8 overflow-hidden">
+                {/* Background Pattern */}
+                <div className="absolute inset-0 opacity-[0.03]" style={{ 
+                    backgroundImage: 'radial-gradient(#E3E3FD 1px, transparent 1px)', 
+                    backgroundSize: '30px 30px' 
+                }}></div>
+                
+                {/* System Status Indicator */}
+                <div className="absolute top-4 md:top-6 right-4 md:right-6 flex items-center gap-2 z-10">
+                    <div className="px-2 md:px-3 py-1.5 bg-white/[0.02] border border-white/10 rounded-lg flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_6px_#E3E3FD]"></div>
+                        <span className="font-mono text-[8px] md:text-[9px] text-white/40 uppercase tracking-widest">LIVE_PREVIEW</span>
                     </div>
                 </div>
 
+                {/* Canvas Label */}
+                <div className="absolute top-4 md:top-6 left-4 md:left-6 font-mono text-[8px] md:text-[9px] text-white/20 uppercase tracking-widest z-10">
+                    CANVAS: 400x500
+                </div>
+
                 {/* The "Stage" - Cannot be touched */}
-                <div className="relative shadow-2xl pointer-events-none select-none" style={{ width: '400px', height: '500px' }}>
+                <div className="relative shadow-2xl pointer-events-none select-none z-10" style={{ width: '400px', height: '500px', maxWidth: '100%' }}>
                     <div ref={previewRef}>
                         <PreviewCanvas layers={layers} />
                     </div>
