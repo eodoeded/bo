@@ -20,14 +20,14 @@ export default function WaitlistFeatures() {
       <div className="max-w-[1400px] mx-auto">
         
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-10 md:mb-20 border-b border-white/10 pb-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-20 border-b border-white/10 pb-8">
              <div>
                 <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-4">SYSTEM_LOGIC</span>
                 <h2 className="font-montreal font-medium text-white text-3xl md:text-4xl lg:text-5xl tracking-tight leading-[0.9]">
-                    Strict Constraints.<br/>Safe Execution.
+                    Strict Constraints.<br className="hidden sm:inline"/>Safe Execution.
                 </h2>
             </div>
-            <div className="font-mono text-[10px] text-white/30 uppercase tracking-widest mt-8 md:mt-0">
+            <div className="font-mono text-[10px] text-white/30 uppercase tracking-widest mt-6 md:mt-0">
                 SYSTEM_v2.5
             </div>
         </div>
@@ -47,7 +47,7 @@ export default function WaitlistFeatures() {
                             whileInView={{ opacity: 1, x: 0 }}
                             transition={{ delay: i * 0.05 }}
                             viewport={{ once: true }}
-                            className="flex items-center justify-between py-3 border-b border-white/5 group hover:bg-white/[0.02] transition-colors px-2 -mx-2 rounded-lg"
+                            className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 py-3 border-b border-white/5 group hover:bg-white/[0.02] transition-colors px-2 -mx-2 rounded-lg"
                         >
                             <div className="flex items-center gap-4">
                                 <div className="p-1.5 bg-white/5 rounded-md">
