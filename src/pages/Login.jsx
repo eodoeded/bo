@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, AlertCircle } from 'lucide-react';
 import { signIn } from '../services/auth';
 import { isSupabaseConfigured } from '../lib/supabase';
+import UnifiedNav from '../components/UnifiedNav';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -40,8 +41,10 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#261E19] text-white font-montreal flex items-center justify-center p-6 relative">
+    <div className="min-h-screen bg-[#261E19] text-white font-montreal flex flex-col relative">
+      <UnifiedNav />
       <div className="fixed inset-0 bg-[#261E19] z-0"></div>
+      <div className="flex-1 flex items-center justify-center p-6 pt-20 md:pt-24 relative z-10">
       
       {/* Background Pattern */}
       <div className="fixed inset-0 pointer-events-none opacity-[0.03] z-0" style={{ 
@@ -142,6 +145,7 @@ export default function Login() {
             </p>
           </div>
         )}
+      </div>
       </div>
     </div>
   );

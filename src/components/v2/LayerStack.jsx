@@ -4,6 +4,7 @@
 
 import React from 'react';
 import { Layers, Type, Image as ImageIcon, Box, GripVertical, Trash2 } from 'lucide-react';
+import { safeStopPropagation } from '../../utils/eventHelpers';
 
 const LayerItem = ({ layer, isSelected, onSelect, onDelete }) => {
     // Icon based on layer type
@@ -50,7 +51,9 @@ const LayerItem = ({ layer, isSelected, onSelect, onDelete }) => {
             {onDelete && (
                 <button
                     onClick={(e) => {
-                        e.stopPropagation();
+                        if (e && typeof e.stopPropagation === 'function') {
+                            e.stopPropagation();
+                        }
                         if (window.confirm(`Delete layer "${layer.name}"?`)) {
                             onDelete(layer.id);
                         }

@@ -244,6 +244,129 @@
 
 ---
 
+## 16. Navigation System Rules
+
+### Navigation Component Standards
+
+#### UnifiedNav (Primary Navigation)
+- **Height**: `h-12 md:h-14` (48px mobile, 56px desktop)
+- **Background**: `bg-[#261E19]` with `border-b border-white/5`
+- **Backdrop Blur**: `backdrop-blur-md` for glass effect
+- **Position**: `fixed top-0 left-0 w-full z-50`
+- **Container**: `max-w-[1400px] mx-auto px-6 md:px-12` (consistent with page padding)
+
+#### Brand/Logo
+- **Text**: `font-mono text-sm tracking-widest uppercase` `[ BO ]`
+- **Color**: `text-white` with `hover:text-[#E3E3FD]`
+- **Transition**: `transition-colors`
+- **Always clickable**: Links to home (`/`)
+
+#### Context Indicators
+- **Format**: `STUDIO` | `BUILDER` | `BRAND_GUIDELINES`
+- **Font**: `font-mono text-[9px] md:text-[10px] uppercase tracking-widest`
+- **Color**: `text-[#E3E3FD]` (primary context) or `text-white/60` (secondary)
+- **Separator**: `h-4 w-px bg-white/10` between context items
+- **Show when**: On studio pages, builder pages, guidelines pages
+
+#### Navigation Links (Landing Page Only)
+- **Font**: `font-mono text-[11px] uppercase tracking-widest`
+- **Color**: `text-white/60` with `hover:text-white`
+- **Underline**: Hover shows `bg-[#E3E3FD]` underline animation
+- **Spacing**: `gap-12` between links
+- **Position**: Centered absolutely (`absolute left-1/2 -translate-x-1/2`)
+
+#### Action Buttons
+- **Primary (CTA)**: `bg-[#E3E3FD] text-[#261E19] px-4 md:px-5 py-2 md:py-2.5 font-mono font-semibold text-[10px] md:text-[11px] uppercase tracking-widest hover:bg-white transition-colors rounded-lg`
+- **Secondary (Text)**: `font-mono text-[9px] md:text-[10px] text-white/60 hover:text-white uppercase tracking-widest transition-colors`
+- **Icons**: Size `12px md:14px` for small icons
+
+#### Mobile Navigation
+- **Menu Toggle**: Only show on landing page
+- **Icon**: `text-white/60 hover:text-white`, size `20px`
+- **Drawer**: Slide-in from left, `w-[280px]`, `bg-[#1A1614]` with `border-r border-white/10`
+- **Backdrop**: `bg-black/60 backdrop-blur-sm`
+- **Menu Items**: `border border-white/5 rounded-lg` with hover states
+- **Spacing**: `py-4 px-4` for menu items
+- **Close Button**: Top-right in drawer header
+
+#### Navigation Rules by Page Type
+
+**Landing Page (`/`)**
+- Logo | Center nav links | Request Access button
+- Mobile: Hamburger menu
+
+**Brand Guidelines (`/brand-guidelines`)**
+- Logo | BRAND_GUIDELINES context | Back to Home link
+- No mobile menu
+
+**Login/SignUp (`/login`, `/signup`)**
+- Logo | Back to Home link
+- No mobile menu
+
+**Studio Dashboard (`/studio`)**
+- Logo | STUDIO context | Sign Out button
+- No mobile menu
+
+**Tool Builder (`/studio/builder/:id`)**
+- Logo | STUDIO | BUILDER context | Back to Studio (desktop) | Sign Out
+- No mobile menu
+
+**Tool Runner (`/tool/:id`)**
+- Custom client-branded navigation (different component)
+- Follows client's branding settings
+
+### Navigation States
+
+#### Active/Current Page
+- **Current route**: Use context indicators, not link highlighting
+- **No breadcrumbs needed**: Context indicators serve this purpose
+
+#### Hover States
+- **Links**: `hover:text-white` transition
+- **Buttons**: `hover:bg-white` (primary) or `hover:bg-white/10` (secondary)
+- **Always smooth**: `transition-colors` required
+
+#### Focus States
+- **Keyboard navigation**: Visible focus rings (lavender)
+- **Focus ring**: `focus:ring-1 focus:ring-[#E3E3FD] focus:outline-none`
+
+### Navigation Hierarchy
+
+```
+UnifiedNav
+├── Left: Brand/Logo + Context Indicators
+├── Center: Navigation Links (landing only)
+└── Right: Action Buttons + Menu Toggle (landing only)
+```
+
+### Route Structure
+
+**Canonical Routes** (use these):
+- `/` - Landing page
+- `/brand-guidelines` - Brand guidelines (canonical)
+- `/login` - Login page
+- `/signup` - Sign up page
+- `/studio` - Studio dashboard
+- `/studio/builder/:id` - Tool builder
+- `/tool/:id` - Tool runner (public)
+
+**Legacy Routes** (redirect to canonical):
+- `/designsystem` → `/brand-guidelines`
+- `/brandguidelines` → `/brand-guidelines`
+
+### Navigation Best Practices
+
+1. **Consistency**: Always use UnifiedNav component
+2. **Context**: Show context indicators for nested routes
+3. **Back Navigation**: Provide "Back" links for auth pages and guidelines
+4. **Mobile**: Use premium slide-in drawer (not dropdown)
+5. **Accessibility**: Keyboard navigation, focus states, ARIA labels
+6. **Performance**: Defer auth checks, don't block render
+
+**Rule**: Navigation should feel invisible. Users should never think about it—it should just work.
+
+---
+
 ## Summary: The Branded Objects Aesthetic
 
 **Dark, moody, technical, organic.**

@@ -1,12 +1,13 @@
 import React from 'react';
 import { X } from 'lucide-react';
+import { safeStopPropagation } from '../../utils/eventHelpers';
 
 export const ShortcutsHelp = ({ onClose }) => (
-    <div className="fixed inset-0 bg-black/80 z-[100] flex items-center justify-center backdrop-blur-sm" onClick={onClose}>
-        <div className="bg-[#0A0A0A] border border-white/10 p-6 w-[500px] max-w-full" onClick={e => e.stopPropagation()}>
+    <div className="fixed inset-0 bg-black/80 z-[100] flex items-center justify-center backdrop-blur-sm" onClick={(e) => onClose && onClose(e)}>
+        <div className="bg-[#0A0A0A] border border-white/10 p-6 w-[500px] max-w-full" onClick={(e) => safeStopPropagation(e)}>
             <div className="flex justify-between items-center mb-6">
                 <h2 className="font-mono text-xs font-bold text-white uppercase tracking-widest">Keyboard Shortcuts</h2>
-                <button onClick={onClose}><X size={14} className="text-white/40 hover:text-white" /></button>
+                <button onClick={(e) => onClose && onClose(e)}><X size={14} className="text-white/40 hover:text-white" /></button>
             </div>
             
             <div className="grid grid-cols-2 gap-x-8 gap-y-4 font-mono text-[10px]">

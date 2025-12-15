@@ -3,6 +3,7 @@
 // Respects lock states, supports Shift for constrain proportions
 
 import React, { useState, useRef } from 'react';
+import { safeStopPropagation } from '../../utils/eventHelpers';
 
 const HANDLE_POSITIONS = [
     { position: 'nw', cursor: 'nw-resize', x: 0, y: 0 },      // Top-left
@@ -31,6 +32,7 @@ export default function ResizeHandles({ layer, onUpdate, isStudio = false }) {
     }
 
     const handlePointerDown = (e, handlePosition) => {
+        if (!e || typeof e.stopPropagation !== 'function') return;
         e.stopPropagation();
         
         const canvas = e.currentTarget.closest('#preview-canvas');
@@ -76,6 +78,7 @@ export default function ResizeHandles({ layer, onUpdate, isStudio = false }) {
         setResizeHandle(handlePosition);
         
         const handlePointerMove = (moveEvent) => {
+            if (!moveEvent || typeof moveEvent.clientX !== 'number' || typeof moveEvent.clientY !== 'number') return;
             const deltaX = moveEvent.clientX - resizeStartRef.current.x;
             const deltaY = moveEvent.clientY - resizeStartRef.current.y;
             

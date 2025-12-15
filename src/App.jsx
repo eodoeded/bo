@@ -14,6 +14,7 @@ import ToolRunner from './pages/ToolRunner';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import ProtectedRoute from './components/ProtectedRoute';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 // App entry point
 function ScrollToTop() {
@@ -57,22 +58,31 @@ function App() {
   }, [location.pathname]);
 
   return (
-    <>
+    <ErrorBoundary>
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/brand-guidelines" element={<DesignSystem />} />
+        {/* Redirect old routes to canonical route */}
         <Route path="/designsystem" element={<DesignSystem />} />
         <Route path="/brandguidelines" element={<DesignSystem />} />
-        <Route path="/brand-guidelines" element={<DesignSystem />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/studio" element={<StudioDashboard />} />
-          <Route path="/studio/builder/:id" element={<ToolBuilder />} />
+          <Route path="/studio/builder/:id" element={
+            <ErrorBoundary>
+              <ToolBuilder />
+            </ErrorBoundary>
+          } />
         </Route>
-        <Route path="/tool/:id" element={<ToolRunner />} />
+        <Route path="/tool/:id" element={
+          <ErrorBoundary>
+            <ToolRunner />
+          </ErrorBoundary>
+        } />
       </Routes>
-    </>
+    </ErrorBoundary>
   );
 }
 

@@ -63,8 +63,13 @@ export default function StudioDashboard() {
   }, []);
 
   const handleDelete = async (toolId, e) => {
-    e.preventDefault();
-    e.stopPropagation();
+    if (!e) return;
+    if (typeof e.preventDefault === 'function') {
+      e.preventDefault();
+    }
+    if (typeof e.stopPropagation === 'function') {
+      e.stopPropagation();
+    }
     
     if (!confirm('Are you sure you want to delete this tool? This cannot be undone.')) {
       return;

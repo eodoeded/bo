@@ -23,16 +23,24 @@ const ClientInput = ({ label, value, onChange, type = 'text' }) => {
             
             {type === 'long-text' ? (
                  <textarea 
-                    value={value} 
-                    onChange={(e) => onChange(e.target.value)}
+                    value={value || ''} 
+                    onChange={(e) => {
+                        if (e && e.target && onChange) {
+                            onChange(e.target.value);
+                        }
+                    }}
                     className="w-full bg-[#261E19] border border-white/10 text-white font-montreal text-sm md:text-base px-3 md:px-4 py-2.5 md:py-3 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 placeholder:text-white/20 min-h-[100px] resize-none transition-colors"
                     placeholder={`ENTER_${label.toUpperCase().replace(/\s/g, '_')}...`}
                 />
             ) : (
                 <input 
                     type="text" 
-                    value={value} 
-                    onChange={(e) => onChange(e.target.value)}
+                    value={value || ''} 
+                    onChange={(e) => {
+                        if (e && e.target && onChange) {
+                            onChange(e.target.value);
+                        }
+                    }}
                     className="w-full bg-[#261E19] border border-white/10 text-white font-montreal text-sm md:text-base px-3 md:px-4 py-2.5 md:py-3 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 placeholder:text-white/20 transition-colors"
                     placeholder={`ENTER_${label.toUpperCase().replace(/\s/g, '_')}...`}
                 />
@@ -70,14 +78,37 @@ const ReadOnlyField = ({ label, value }) => {
 };
 
 export default function RunnerForm({ layers, onUpdateLayer }) {
+    // Ensure layers and onUpdateLayer are valid
+    if (!layers || !Array.isArray(layers)) {
+        return (
+            <div className="p-8 md:p-12 border border-dashed border-white/10 rounded-xl text-center">
+                <p className="font-mono text-[9px] md:text-xs text-white/40 uppercase tracking-widest mb-2">
+                    INVALID_LAYERS_DATA
+                </p>
+            </div>
+        );
+    }
+    
+    if (typeof onUpdateLayer !== 'function') {
+        console.warn('RunnerForm: onUpdateLayer is not a function');
+        return (
+            <div className="p-8 md:p-12 border border-dashed border-white/10 rounded-xl text-center">
+                <p className="font-mono text-[9px] md:text-xs text-white/40 uppercase tracking-widest mb-2">
+                    UPDATE_HANDLER_MISSING
+                </p>
+            </div>
+        );
+    }
     
     // 1. Audit Layer Config (Isolation Check)
     // We do NOT have access to builder tools here. Only raw layer data.
     
     const renderField = (layer, propKey, lockState) => {
+        if (!layer || !layer.properties) return null;
+        
         const uniqueKey = `${layer.id}-${propKey}`;
-        const label = `${layer.name} - ${propKey.charAt(0).toUpperCase() + propKey.slice(1)}`;
-        const value = layer.properties[propKey];
+        const label = `${layer.name || 'Layer'} - ${propKey.charAt(0).toUpperCase() + propKey.slice(1)}`;
+        const value = layer.properties[propKey] ?? '';
 
         // STRICT ENFORCEMENT:
         // LOCKED -> Render nothing (Hidden)
@@ -116,8 +147,8 @@ export default function RunnerForm({ layers, onUpdateLayer }) {
         return null;
     };
 
-    const fields = layers.flatMap(layer => {
-        if (!layer.locks) return [];
+    const fields = (layers || []).flatMap(layer => {
+        if (!layer || !layer.locks || !layer.properties) return [];
         return Object.entries(layer.locks).map(([propKey, lockState]) => 
             renderField(layer, propKey, lockState)
         );

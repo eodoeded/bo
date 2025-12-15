@@ -5,29 +5,35 @@
 
 import React, { useState, useRef } from 'react';
 import ResizeHandles from './ResizeHandles';
+import { safeStopPropagation } from '../../utils/eventHelpers';
 
 // Layer Components
 const TextLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio = false }) => {
+    if (!layer || !layer.properties) return null;
+    
     const isPositionLocked = layer.locks?.x === 'LOCKED' && layer.locks?.y === 'LOCKED';
     const [isDragging, setIsDragging] = useState(false);
     const dragStartRef = useRef({ x: 0, y: 0, layerX: 0, layerY: 0 });
 
     const handlePointerDown = (e) => {
-        if (!isStudio || isPositionLocked || !onUpdate) return;
+        if (!isStudio || isPositionLocked || !onUpdate || !e) return;
+        if (typeof e.stopPropagation !== 'function') return;
         
         e.stopPropagation();
         if (onSelect) onSelect(layer.id);
         
-        const canvas = e.currentTarget.closest('#preview-canvas');
+        const canvas = e.currentTarget && e.currentTarget.closest ? e.currentTarget.closest('#preview-canvas') : null;
         if (!canvas) return;
         
         const canvasRect = canvas.getBoundingClientRect();
+        if (!canvasRect) return;
+        
         const canvasWidth = canvasRect.width;
         const canvasHeight = canvasRect.height;
         
         dragStartRef.current = {
-            x: e.clientX,
-            y: e.clientY,
+            x: e.clientX || 0,
+            y: e.clientY || 0,
             layerX: layer.properties.x,
             layerY: layer.properties.y,
             canvasWidth,
@@ -38,6 +44,7 @@ const TextLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio = fal
         canvas.style.cursor = 'grabbing';
         
         const handlePointerMove = (moveEvent) => {
+            if (!moveEvent || typeof moveEvent.clientX !== 'number' || typeof moveEvent.clientY !== 'number') return;
             const deltaX = moveEvent.clientX - dragStartRef.current.x;
             const deltaY = moveEvent.clientY - dragStartRef.current.y;
             
@@ -90,7 +97,7 @@ const TextLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio = fal
                 zIndex: layer.zIndex
             }}
             onClick={(e) => {
-                if (isStudio && onSelect && !isDragging) {
+                if (isStudio && onSelect && !isDragging && e && typeof e.stopPropagation === 'function') {
                     e.stopPropagation();
                     onSelect(layer.id);
                 }
@@ -106,26 +113,31 @@ const TextLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio = fal
 };
 
 const ImageLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio = false }) => {
+    if (!layer || !layer.properties) return null;
+    
     const isPositionLocked = layer.locks?.x === 'LOCKED' && layer.locks?.y === 'LOCKED';
     const [isDragging, setIsDragging] = useState(false);
     const dragStartRef = useRef({ x: 0, y: 0, layerX: 0, layerY: 0 });
 
     const handlePointerDown = (e) => {
-        if (!isStudio || isPositionLocked || !onUpdate) return;
+        if (!isStudio || isPositionLocked || !onUpdate || !e) return;
+        if (typeof e.stopPropagation !== 'function') return;
         
         e.stopPropagation();
         if (onSelect) onSelect(layer.id);
         
-        const canvas = e.currentTarget.closest('#preview-canvas');
+        const canvas = e.currentTarget && e.currentTarget.closest ? e.currentTarget.closest('#preview-canvas') : null;
         if (!canvas) return;
         
         const canvasRect = canvas.getBoundingClientRect();
+        if (!canvasRect) return;
+        
         const canvasWidth = canvasRect.width;
         const canvasHeight = canvasRect.height;
         
         dragStartRef.current = {
-            x: e.clientX,
-            y: e.clientY,
+            x: e.clientX || 0,
+            y: e.clientY || 0,
             layerX: layer.properties.x,
             layerY: layer.properties.y,
             canvasWidth,
@@ -136,6 +148,7 @@ const ImageLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio = fa
         canvas.style.cursor = 'grabbing';
         
         const handlePointerMove = (moveEvent) => {
+            if (!moveEvent || typeof moveEvent.clientX !== 'number' || typeof moveEvent.clientY !== 'number') return;
             const deltaX = moveEvent.clientX - dragStartRef.current.x;
             const deltaY = moveEvent.clientY - dragStartRef.current.y;
             
@@ -181,7 +194,7 @@ const ImageLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio = fa
                 zIndex: layer.zIndex
             }}
             onClick={(e) => {
-                if (isStudio && onSelect && !isDragging) {
+                if (isStudio && onSelect && !isDragging && e && typeof e.stopPropagation === 'function') {
                     e.stopPropagation();
                     onSelect(layer.id);
                 }
@@ -207,26 +220,31 @@ const ImageLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio = fa
 };
 
 const RectangleLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio = false }) => {
+    if (!layer || !layer.properties) return null;
+    
     const isPositionLocked = layer.locks?.x === 'LOCKED' && layer.locks?.y === 'LOCKED';
     const [isDragging, setIsDragging] = useState(false);
     const dragStartRef = useRef({ x: 0, y: 0, layerX: 0, layerY: 0 });
 
     const handlePointerDown = (e) => {
-        if (!isStudio || isPositionLocked || !onUpdate) return;
+        if (!isStudio || isPositionLocked || !onUpdate || !e) return;
+        if (typeof e.stopPropagation !== 'function') return;
         
         e.stopPropagation();
         if (onSelect) onSelect(layer.id);
         
-        const canvas = e.currentTarget.closest('#preview-canvas');
+        const canvas = e.currentTarget && e.currentTarget.closest ? e.currentTarget.closest('#preview-canvas') : null;
         if (!canvas) return;
         
         const canvasRect = canvas.getBoundingClientRect();
+        if (!canvasRect) return;
+        
         const canvasWidth = canvasRect.width;
         const canvasHeight = canvasRect.height;
         
         dragStartRef.current = {
-            x: e.clientX,
-            y: e.clientY,
+            x: e.clientX || 0,
+            y: e.clientY || 0,
             layerX: layer.properties.x,
             layerY: layer.properties.y,
             canvasWidth,
@@ -237,6 +255,7 @@ const RectangleLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio 
         canvas.style.cursor = 'grabbing';
         
         const handlePointerMove = (moveEvent) => {
+            if (!moveEvent || typeof moveEvent.clientX !== 'number' || typeof moveEvent.clientY !== 'number') return;
             const deltaX = moveEvent.clientX - dragStartRef.current.x;
             const deltaY = moveEvent.clientY - dragStartRef.current.y;
             
@@ -282,7 +301,7 @@ const RectangleLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio 
                 zIndex: layer.zIndex
             }}
             onClick={(e) => {
-                if (isStudio && onSelect && !isDragging) {
+                if (isStudio && onSelect && !isDragging && e && typeof e.stopPropagation === 'function') {
                     e.stopPropagation();
                     onSelect(layer.id);
                 }
@@ -302,10 +321,10 @@ export default function PreviewCanvas({ layers, selectedLayerId, selectedLayerId
     const [isBoxSelecting, setIsBoxSelecting] = useState(false);
 
     const handleCanvasPointerDown = (e) => {
-        if (!isStudio) return;
+        if (!isStudio || !e || !e.target) return;
         
         // Only start box select if clicking on canvas background (not a layer)
-        if (e.target.id === 'preview-canvas' || e.target.closest('#preview-canvas') === e.currentTarget) {
+        if (e.target.id === 'preview-canvas' || (e.target.closest && e.target.closest('#preview-canvas') === e.currentTarget)) {
             const canvas = e.currentTarget;
             const rect = canvas.getBoundingClientRect();
             const x = e.clientX - rect.left;
@@ -316,6 +335,7 @@ export default function PreviewCanvas({ layers, selectedLayerId, selectedLayerId
             setIsBoxSelecting(true);
             
             const handlePointerMove = (moveEvent) => {
+                if (!moveEvent || typeof moveEvent.clientX !== 'number' || typeof moveEvent.clientY !== 'number') return;
                 const newX = moveEvent.clientX - rect.left;
                 const newY = moveEvent.clientY - rect.top;
                 setBoxSelectEnd({ x: newX, y: newY });
@@ -335,7 +355,8 @@ export default function PreviewCanvas({ layers, selectedLayerId, selectedLayerId
                     const canvasWidth = canvasRect.width;
                     const canvasHeight = canvasRect.height;
                     
-                    const selectedIds = layers.filter(layer => {
+                    const selectedIds = (layers || []).filter(layer => {
+                        if (!layer || !layer.properties) return false;
                         const layerXPercent = layer.properties.x;
                         const layerYPercent = layer.properties.y;
                         const layerXPixels = (layerXPercent / 100) * canvasWidth;
@@ -371,14 +392,14 @@ export default function PreviewCanvas({ layers, selectedLayerId, selectedLayerId
             className={`w-full h-full bg-[#050505] relative overflow-hidden flex flex-col justify-between border border-white/5 shadow-2xl ${isStudio ? 'cursor-default' : ''}`}
             onClick={(e) => {
                 // Click canvas to deselect (only if not box selecting)
-                if (isStudio && onSelectLayer && !isBoxSelecting && e.target.id === 'preview-canvas') {
+                if (isStudio && onSelectLayer && !isBoxSelecting && e && e.target && e.target.id === 'preview-canvas') {
                     onSelectLayer(null);
                 }
             }}
             onPointerDown={handleCanvasPointerDown}
         >
             {/* Background Generative Element (Static for now, could be a layer) */}
-            <div className="absolute inset-0 opacity-10 pointer-events-none">
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none">
                  <div className="absolute inset-0" style={{ 
                         backgroundImage: 'radial-gradient(#E3E3FD 1px, transparent 1px)', 
                         backgroundSize: '40px 40px' 
@@ -399,12 +420,16 @@ export default function PreviewCanvas({ layers, selectedLayerId, selectedLayerId
             )}
 
             {/* Dynamic Layers */}
-            {layers.map(layer => {
+            {(layers || []).map(layer => {
+                if (!layer || !layer.id || !layer.properties) return null;
+                
                 const isSelected = layer.id === selectedLayerId;
-                const isMultiSelected = selectedLayerIds.has(layer.id);
+                const isMultiSelected = selectedLayerIds?.has?.(layer.id) || false;
                 const handleLayerClick = (e) => {
-                    if (!isStudio || !onSelectLayer) return;
-                    e.stopPropagation();
+                    if (!isStudio || !onSelectLayer || !e) return;
+                    if (typeof e.stopPropagation === 'function') {
+                        e.stopPropagation();
+                    }
                     
                     if (e.shiftKey && onSelectLayers) {
                         // Multi-select: add to selection
@@ -430,8 +455,8 @@ export default function PreviewCanvas({ layers, selectedLayerId, selectedLayerId
             })}
 
             {/* Technical Overlay (Static Branding) */}
-            <div className="absolute bottom-3 left-3 font-mono text-[8px] text-white/20 z-[9999] pointer-events-none flex items-center gap-2">
-                <div className="w-1 h-1 bg-[#E3E3FD] rounded-full opacity-40"></div>
+            <div className="absolute bottom-4 left-4 font-mono text-[9px] text-white/20 z-[9999] pointer-events-none flex items-center gap-2">
+                <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full opacity-40"></div>
                 <span>GENERATED_BY_BO_SYSTEM_V2</span>
             </div>
         </div>

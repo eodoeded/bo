@@ -42,7 +42,7 @@ export default function ClientUIPanel({ toolId, clientUI, onUpdateClientUI }) {
 
             {/* Logo */}
             <div className="space-y-3">
-                <h4 className="font-mono text-[9px] text-white/30 uppercase tracking-widest mt-2 md:mt-4 mb-2">LOGO</h4>
+                <h4 className="font-mono text-[9px] text-white/40 uppercase tracking-widest mt-2 md:mt-4 mb-2">LOGO</h4>
                 <div className="p-4 border border-white/10 rounded-lg bg-white/[0.02]">
                     {logoPreview ? (
                         <div className="relative">
@@ -75,7 +75,7 @@ export default function ClientUIPanel({ toolId, clientUI, onUpdateClientUI }) {
 
             {/* Colors */}
             <div className="space-y-3">
-                <h4 className="font-mono text-[9px] text-white/30 uppercase tracking-widest mt-2 md:mt-4 mb-2">COLORS</h4>
+                <h4 className="font-mono text-[9px] text-white/40 uppercase tracking-widest mt-2 md:mt-4 mb-2">COLORS</h4>
                 
                 <div className="space-y-2">
                     <div className="p-3 border border-white/10 rounded-lg bg-white/[0.02]">
@@ -84,14 +84,22 @@ export default function ClientUIPanel({ toolId, clientUI, onUpdateClientUI }) {
                             <input 
                                 type="color"
                                 value={clientUI?.topNavBg || '#1A1614'} 
-                                onChange={(e) => updateColor('topNavBg', e.target.value)}
+                                onChange={(e) => {
+                                    if (e && e.target) {
+                                        updateColor('topNavBg', e.target.value);
+                                    }
+                                }}
                                 className="w-12 h-8 rounded border border-white/10 cursor-pointer"
                             />
                             <input 
                                 type="text"
                                 value={clientUI?.topNavBg || '#1A1614'} 
-                                onChange={(e) => updateColor('topNavBg', e.target.value)}
-                                className="flex-1 bg-[#261E19] border border-white/10 text-white font-mono text-sm px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50"
+                                onChange={(e) => {
+                                    if (e && e.target) {
+                                        updateColor('topNavBg', e.target.value);
+                                    }
+                                }}
+                                className="flex-1 bg-white/5 border border-white/10 text-white font-mono text-sm px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 transition-colors"
                             />
                         </div>
                     </div>
@@ -102,14 +110,22 @@ export default function ClientUIPanel({ toolId, clientUI, onUpdateClientUI }) {
                             <input 
                                 type="color"
                                 value={clientUI?.topNavText || '#FFFFFF'} 
-                                onChange={(e) => updateColor('topNavText', e.target.value)}
+                                onChange={(e) => {
+                                    if (e && e.target) {
+                                        updateColor('topNavText', e.target.value);
+                                    }
+                                }}
                                 className="w-12 h-8 rounded border border-white/10 cursor-pointer"
                             />
                             <input 
                                 type="text"
                                 value={clientUI?.topNavText || '#FFFFFF'} 
-                                onChange={(e) => updateColor('topNavText', e.target.value)}
-                                className="flex-1 bg-[#261E19] border border-white/10 text-white font-mono text-sm px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50"
+                                onChange={(e) => {
+                                    if (e && e.target) {
+                                        updateColor('topNavText', e.target.value);
+                                    }
+                                }}
+                                className="flex-1 bg-white/5 border border-white/10 text-white font-mono text-sm px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 transition-colors"
                             />
                         </div>
                     </div>
@@ -120,14 +136,22 @@ export default function ClientUIPanel({ toolId, clientUI, onUpdateClientUI }) {
                             <input 
                                 type="color"
                                 value={clientUI?.accentColor || '#E3E3FD'} 
-                                onChange={(e) => updateColor('accentColor', e.target.value)}
+                                onChange={(e) => {
+                                    if (e && e.target) {
+                                        updateColor('accentColor', e.target.value);
+                                    }
+                                }}
                                 className="w-12 h-8 rounded border border-white/10 cursor-pointer"
                             />
                             <input 
                                 type="text"
                                 value={clientUI?.accentColor || '#E3E3FD'} 
-                                onChange={(e) => updateColor('accentColor', e.target.value)}
-                                className="flex-1 bg-[#261E19] border border-white/10 text-white font-mono text-sm px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50"
+                                onChange={(e) => {
+                                    if (e && e.target) {
+                                        updateColor('accentColor', e.target.value);
+                                    }
+                                }}
+                                className="flex-1 bg-white/5 border border-white/10 text-white font-mono text-sm px-3 py-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-[#E3E3FD] focus:border-[#E3E3FD]/50 transition-colors"
                             />
                         </div>
                     </div>
@@ -135,8 +159,8 @@ export default function ClientUIPanel({ toolId, clientUI, onUpdateClientUI }) {
             </div>
 
             {/* Preview */}
-            <div className="mt-4 p-3 border border-white/10 rounded-lg bg-white/[0.02]">
-                <p className="font-mono text-[8px] text-white/30 uppercase tracking-widest mb-2">PREVIEW</p>
+            <div className="mt-4 p-4 border border-white/10 rounded-lg bg-white/[0.02]">
+                <p className="font-mono text-[9px] text-white/40 uppercase tracking-widest mb-3">PREVIEW</p>
                 <div 
                     className="p-4 rounded-lg"
                     style={{ 
