@@ -37,7 +37,7 @@ export default function WaitlistFeatures() {
             
             {/* Left: Features List */}
             <div className="bg-[#1A1614] p-8 md:p-12 relative rounded-3xl border border-white/5">
-                <h3 className="font-mono text-sm text-white/40 uppercase tracking-widest mb-8">Capabilities</h3>
+                <h3 className="font-mono text-sm text-white/40 uppercase tracking-widest mb-8">CAPABILITIES</h3>
                 
                 <div className="space-y-6">
                     {specs.map((spec, i) => (
@@ -65,14 +65,14 @@ export default function WaitlistFeatures() {
             <div className="bg-[#1A1614] p-8 md:p-12 relative flex flex-col justify-between rounded-3xl border border-white/5">
                 
                 <div>
-                    <h3 className="font-mono text-sm text-white/40 uppercase tracking-widest mb-8">The Philosophy</h3>
+                    <h3 className="font-mono text-sm text-white/40 uppercase tracking-widest mb-8">PHILOSOPHY</h3>
                     <p className="font-montreal text-lg text-white/60 leading-relaxed mb-8">
                         We don't believe in "magic" buttons. We believe in defined logic. Studios upload the design rules and assets, whilst clients interact only with the safe parameters you define.
                     </p>
                     <div className="p-6 border border-[#E3E3FD]/20 bg-[#E3E3FD]/5 mb-8 rounded-2xl">
                         <div className="flex items-center gap-2 mb-2">
                             <Lock size={12} className="text-[#E3E3FD]" />
-                            <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">AI Safety Lock</span>
+                            <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">AI_SAFETY_LOCK</span>
                         </div>
                         <p className="font-montreal text-sm text-white/80 leading-relaxed">
                             Crucially, you lock the AI prompt structure. The client fills in the subject, but the style, lighting, and composition remain completely under your control.

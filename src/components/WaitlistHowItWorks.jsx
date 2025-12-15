@@ -116,7 +116,7 @@ export default function WaitlistHowItWorks() {
                             </div>
                             <div className="flex flex-col">
                                 <span className="font-mono text-[10px] text-white/60">LOGO_POSITION</span>
-                                <span className="font-mono text-[8px] text-white/20">Top_Right (Fixed)</span>
+                                <span className="font-mono text-[8px] text-white/20">TOP_RIGHT // FIXED</span>
                             </div>
                         </div>
                         <div className="flex items-center gap-2 px-3 py-1.5 bg-[#261E19] border border-white/5 rounded-full">
@@ -134,7 +134,7 @@ export default function WaitlistHowItWorks() {
                             </div>
                             <div className="flex flex-col">
                                 <span className="font-mono text-[10px] text-white">HEADLINE_TEXT</span>
-                                <span className="font-mono text-[8px] text-[#E3E3FD]/60">Client Input Allowed</span>
+                                <span className="font-mono text-[8px] text-[#E3E3FD]/60">CLIENT_INPUT_ALLOWED</span>
                             </div>
                         </div>
                         <div className="flex items-center gap-2 px-3 py-1.5 bg-[#E3E3FD]/10 border border-[#E3E3FD]/20 rounded-full">
