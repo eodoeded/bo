@@ -57,11 +57,7 @@ function App() {
   }, [location.pathname]);
 
   return (
-    <div style={{ minHeight: '100vh', position: 'relative', zIndex: 10, color: 'white' }}>
-      {/* Test: This should always be visible */}
-      <div style={{ position: 'fixed', top: 0, left: 0, padding: '20px', background: 'red', zIndex: 9999, color: 'white' }}>
-        TEST: React is working!
-      </div>
+    <>
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -76,7 +72,7 @@ function App() {
         </Route>
         <Route path="/tool/:id" element={<ToolRunner />} />
       </Routes>
-    </div>
+    </>
   );
 }
 
