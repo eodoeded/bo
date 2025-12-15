@@ -69,9 +69,10 @@ export default function UnifiedNav() {
           {isLanding && (
             <button 
               onClick={focusEmail}
-              className="bg-white text-black px-4 md:px-5 py-2 md:py-2.5 font-mono font-semibold text-[10px] md:text-[11px] uppercase tracking-widest hover:bg-[#E3E3FD] transition-colors border border-transparent rounded-sm"
+              className="bg-white text-black px-4 md:px-5 py-2 md:py-2.5 font-mono font-semibold text-[10px] md:text-[11px] uppercase tracking-widest hover:bg-[#E3E3FD] transition-colors border border-transparent rounded-lg"
             >
-              Request Access
+              <span className="hidden sm:inline">Request Access</span>
+              <span className="sm:hidden">Access</span>
             </button>
           )}
           

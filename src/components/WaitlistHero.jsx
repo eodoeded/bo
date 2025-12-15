@@ -138,7 +138,7 @@ export default function WaitlistHero() {
   };
 
   return (
-    <section className="relative w-full h-screen overflow-hidden bg-[#261E19]">
+    <section className="relative w-full min-h-screen overflow-hidden bg-[#261E19]">
       
       {/* Cleaner Generative Background */}
       <div className="absolute inset-0 pointer-events-none">
@@ -351,7 +351,7 @@ export default function WaitlistHero() {
             </motion.div>
             
             <motion.h1
-                className="font-montreal font-medium text-5xl md:text-8xl leading-[0.9] tracking-tight mb-6 text-white"
+                className="font-montreal font-medium text-4xl sm:text-5xl md:text-6xl lg:text-8xl leading-[0.9] tracking-tight mb-4 md:mb-6 text-white"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
@@ -360,12 +360,12 @@ export default function WaitlistHero() {
             </motion.h1>
 
             <motion.p
-                className="font-montreal text-white/70 text-lg md:text-xl max-w-md mb-8 leading-relaxed"
+                className="font-montreal text-white/70 text-base md:text-lg lg:text-xl max-w-md mb-6 md:mb-8 leading-relaxed"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1, duration: 0.8 }}
             >
-                Automated brand governance for scaling studios. <br/>
+                Automated brand governance for scaling studios. <br className="hidden sm:inline"/>
                 Turn brand guidelines into software, not PDFs.
             </motion.p>
             
@@ -399,12 +399,12 @@ export default function WaitlistHero() {
                     </button>
                 </div>
             </motion.form>
-            <div className="mt-4 flex items-center gap-3">
+            <div className="mt-4 flex flex-wrap items-center gap-2 md:gap-3">
                 <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest flex items-center gap-2">
                     <div className="w-1.5 h-1.5 bg-[#E3E3FD] animate-pulse rounded-full shadow-[0_0_8px_#E3E3FD]"></div>
                     LIMITED_STUDIO_PILOTS
                 </span>
-                <span className="text-white/20 text-[9px] font-mono">|</span>
+                <span className="text-white/20 text-[9px] font-mono hidden sm:inline">|</span>
                 <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">Q1_2025_COHORT</span>
             </div>
 

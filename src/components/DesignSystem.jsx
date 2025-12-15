@@ -85,11 +85,11 @@ export default function DesignSystem() {
       </section>
 
       {/* Main Content */}
-      <div className="max-w-[1400px] mx-auto py-32 px-6 md:px-12 space-y-48 relative z-10 mt-12 md:mt-14">
+      <div className="max-w-[1400px] mx-auto py-16 md:py-32 px-6 md:px-12 space-y-24 md:space-y-48 relative z-10 mt-12 md:mt-14">
         
         {/* 00. Material Philosophy */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
-            <div className="md:col-span-4 sticky top-32 h-fit">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
+            <div className="md:col-span-4 md:sticky md:top-32 h-fit">
                 <SectionHeader title="Material Philosophy" number="00" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
                     The core aesthetic principle. Mono-material restraint creates premium through limitation. Grown, not manufactured.
@@ -185,8 +185,8 @@ export default function DesignSystem() {
         </section>
 
         {/* 00b. Foundation */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
-            <div className="md:col-span-4 sticky top-32 h-fit">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
+            <div className="md:col-span-4 md:sticky md:top-32 h-fit">
                 <SectionHeader title="Foundation" number="00b" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-6">
                     The core building blocks: colors, typography, spacing, and border radius. These are the atoms of the system.
@@ -376,7 +376,7 @@ export default function DesignSystem() {
                                         <p className="font-mono text-[9px] text-white/30 mt-1">{spacing.usage}</p>
         </div>
                                     <div className="text-right">
-                                        <code className="font-mono text-[10px] text-[#E3E3FD] block">{spacing.value}</code>
+                                        <code className="font-mono text-[10px] text-[#E3E3FD] block break-words">{spacing.value}</code>
                                         <span className="font-mono text-[9px] text-white/40">{spacing.pixels}</span>
         </div>
     </div>
@@ -402,7 +402,7 @@ export default function DesignSystem() {
                             <div key={radius.name} className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
                                 <div className={`w-full h-20 mb-4 bg-[#261E19] border border-white/10 ${radius.value}`}></div>
                                 <p className="font-montreal text-white mb-1">{radius.name}</p>
-                                <code className="font-mono text-[10px] text-[#E3E3FD] block mb-1">{radius.value}</code>
+                                <code className="font-mono text-[10px] text-[#E3E3FD] block mb-1 break-words">{radius.value}</code>
                                 <p className="font-mono text-[9px] text-white/40">{radius.pixels} — {radius.usage}</p>
                             </div>
                         ))}
@@ -413,8 +413,8 @@ export default function DesignSystem() {
         </section>
 
         {/* 01. Navigation */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
-            <div className="md:col-span-4 sticky top-32 h-fit">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
+            <div className="md:col-span-4 md:sticky md:top-32 h-fit">
                 <SectionHeader title="Navigation" number="01" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
                     The fixed navigation system. Context-aware, minimal, always present. Like a nervous system—always active, adapting to context.
@@ -544,7 +544,7 @@ export default function DesignSystem() {
                                         <span className="absolute -bottom-1 left-0 w-0 h-px bg-[#E3E3FD] group-hover:w-full transition-all duration-300"></span>
     </button>
                                     <div className="mt-2 p-3 bg-white/[0.02] rounded-lg border border-white/5">
-                                        <code className="font-mono text-[9px] text-white/40">
+                                        <code className="font-mono text-[9px] text-white/40 break-words">
                                             {`hover:text-white + underline animation`}
                                         </code>
                                     </div>
@@ -622,7 +622,7 @@ export default function DesignSystem() {
                         ].map((spec, i) => (
                             <div key={i} className="flex items-center justify-between py-2 border-b border-white/5 last:border-0 group hover:bg-white/[0.02] transition-colors px-2 -mx-2 rounded-lg">
                                 <span className="font-mono text-xs text-white/70 group-hover:text-white transition-colors uppercase tracking-wider">{spec.prop}</span>
-                                <code className="font-mono text-[10px] text-[#E3E3FD]">{spec.value}</code>
+                                <code className="font-mono text-[10px] text-[#E3E3FD] break-words">{spec.value}</code>
                                 </div>
                         ))}
                             </div>
@@ -632,8 +632,8 @@ export default function DesignSystem() {
       </section>
 
         {/* 02. Cards */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
-            <div className="md:col-span-4 sticky top-32 h-fit">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
+            <div className="md:col-span-4 md:sticky md:top-32 h-fit">
                 <SectionHeader title="Cards" number="02" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
                     Modular containers. Like cells in an organism—each self-contained, but part of a larger system. Standard structure, infinite variations.
@@ -684,7 +684,7 @@ export default function DesignSystem() {
                         <div className="space-y-3 font-mono text-[9px] text-white/40">
                             <div className="flex justify-between">
                                 <span>Background:</span>
-                                <code className="text-[#E3E3FD]">bg-[#1A1614]</code>
+                                <code className="text-[#E3E3FD] break-words">bg-[#1A1614]</code>
                             </div>
                             <div className="flex justify-between">
                                 <span>Border:</span>
@@ -743,7 +743,7 @@ export default function DesignSystem() {
                         >
                             <div className="absolute top-6 right-6">
                                 <span className="font-mono text-[9px] uppercase tracking-widest px-2 py-1 border border-[#E3E3FD]/20 bg-[#E3E3FD]/10 text-[#E3E3FD] rounded-lg">Live</span>
-                            </div>
+                        </div>
                             <div className="w-14 h-14 border border-white/10 bg-white/5 flex items-center justify-center mb-8 group-hover:border-[#E3E3FD] transition-colors rounded-2xl">
                                 <Layout size={24} className="text-white/60 group-hover:text-[#E3E3FD] transition-colors" />
                             </div>
@@ -824,8 +824,8 @@ export default function DesignSystem() {
       </section>
 
         {/* 02c. Studio Dashboard Patterns */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
-            <div className="md:col-span-4 sticky top-32 h-fit">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
+            <div className="md:col-span-4 md:sticky md:top-32 h-fit">
                 <SectionHeader title="Studio Dashboard" number="02c" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-6">
                     Mission control interface for brand governance. Technical density, system readouts, and modular tool cells.
@@ -936,17 +936,17 @@ export default function DesignSystem() {
                                     <p className={`font-mono text-3xl mb-1 ${metric.highlight ? 'text-[#E3E3FD]' : 'text-white'}`}>{metric.value}</p>
                                     <p className="font-mono text-[8px] text-white/20 uppercase tracking-widest">{metric.sublabel}</p>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
+                                ))}
+                            </div>
+                         </div>
                 </div>
 
             </div>
         </section>
 
         {/* 02d. Landing Page Patterns */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
-            <div className="md:col-span-4 sticky top-32 h-fit">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
+            <div className="md:col-span-4 md:sticky md:top-32 h-fit">
                 <SectionHeader title="Landing Page Patterns" number="02d" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-6">
                     Marketing surface components. More expressive spacing, visual storytelling through nodes, and conversion-focused copywriting.
@@ -976,7 +976,7 @@ export default function DesignSystem() {
                     
                     <div className="bg-[#1A1614] border border-white/10 p-8 rounded-2xl space-y-6">
                         <div className="space-y-4">
-                            <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3">
                                 <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
                                 <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest border border-[#E3E3FD]/20 bg-[#E3E3FD]/10 px-2 py-1 rounded-full">SYSTEM_OS v2.5</span>
                             </div>
@@ -987,7 +987,7 @@ export default function DesignSystem() {
                                 Automated brand governance for scaling studios. <br/>
                                 Turn brand guidelines into software, not PDFs.
                             </p>
-                        </div>
+                            </div>
                         
                         <div className="mt-6 p-4 bg-white/[0.02] border border-white/5 rounded-lg">
                             <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-3">Structure</p>
@@ -995,7 +995,7 @@ export default function DesignSystem() {
                                 <div className="flex justify-between">
                                     <span>Label Above Hero:</span>
                                     <code className="text-[#E3E3FD]">font-mono text-[9px] uppercase tracking-widest</code>
-                                </div>
+                        </div>
                                 <div className="flex justify-between">
                                     <span>Hero Text:</span>
                                     <code className="text-[#E3E3FD]">font-montreal text-5xl md:text-8xl</code>
@@ -1031,7 +1031,7 @@ export default function DesignSystem() {
                                     <li>• Alien engineering precision</li>
                                     <li>• "Turn X into Y" statements</li>
                                 </ul>
-                            </div>
+                </div>
                             <div className="p-6 bg-red-500/10 border border-red-500/20 rounded-2xl">
                                 <p className="font-mono text-xs text-red-400 uppercase tracking-widest mb-3">❌ Avoid</p>
                                 <ul className="space-y-2 font-montreal text-sm text-white/60">
@@ -1041,7 +1041,7 @@ export default function DesignSystem() {
                                     <li>• Human warmth/empathy</li>
                                     <li>• Corporate jargon</li>
                                 </ul>
-                            </div>
+            </div>
                         </div>
                         
                         <div className="p-6 bg-white/[0.02] border border-white/5 rounded-2xl">
@@ -1172,8 +1172,8 @@ export default function DesignSystem() {
         </section>
 
         {/* 02b. Buttons & Forms */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
-            <div className="md:col-span-4 sticky top-32 h-fit">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
+            <div className="md:col-span-4 md:sticky md:top-32 h-fit">
                 <SectionHeader title="Buttons & Forms" number="02b" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
                     Interactive elements. Primary actions, inputs, and form controls. Every state must be clear and intentional.
@@ -1191,7 +1191,7 @@ export default function DesignSystem() {
                 <div>
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Primary Button</span>
-                        <div className="h-px flex-1 bg-white/10"></div>
+                         <div className="h-px flex-1 bg-white/10"></div>
                     </div>
                     
                     <div className="space-y-6">
@@ -1217,7 +1217,7 @@ export default function DesignSystem() {
                                 >
                                     Disabled
                                 </button>
-                            </div>
+                    </div>
                         </div>
                         
                         <div className="bg-[#261E19] border border-white/10 p-6 rounded-2xl">
@@ -1226,7 +1226,7 @@ export default function DesignSystem() {
                                 <div className="flex justify-between">
                                     <span>Background:</span>
                                     <code className="text-[#E3E3FD]">bg-white</code>
-                                </div>
+                        </div>
                                 <div className="flex justify-between">
                                     <span>Text:</span>
                                     <code className="text-[#E3E3FD]">text-black</code>
@@ -1249,7 +1249,7 @@ export default function DesignSystem() {
                 </div>
 
                 {/* Secondary Button */}
-                <div>
+              <div>
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Secondary Button</span>
                         <div className="h-px flex-1 bg-white/10"></div>
@@ -1340,8 +1340,8 @@ export default function DesignSystem() {
         </section>
 
         {/* 03. System Nodes (Visual Storytelling) */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
-            <div className="md:col-span-4 sticky top-32 h-fit">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
+            <div className="md:col-span-4 md:sticky md:top-32 h-fit">
                 <SectionHeader title="System Nodes" number="03" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-6">
                     Floating nodes represent the system architecture visually. Like cells in an organism or nodes in an ant colony—each connected, each purposeful. Used for illustration and storytelling only, never in production UI.
@@ -1887,7 +1887,7 @@ export default function DesignSystem() {
                             </div>
                          </div>
                             <p className="font-mono text-[9px] text-white/30 mt-4">Simplified version for final outputs</p>
-                        </div>
+        </div>
 
                         {/* Full Node */}
                         <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
@@ -1909,14 +1909,14 @@ export default function DesignSystem() {
                             <p className="font-mono text-[9px] text-white/30 mt-4">Full version with status indicators</p>
                         </div>
                     </div>
-                </div>
+        </div>
 
-            </div>
-      </section>
+                            </div>
+        </section>
 
         {/* 04. System States & Feedback */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
-            <div className="md:col-span-4 sticky top-32 h-fit">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
+            <div className="md:col-span-4 md:sticky md:top-32 h-fit">
                 <SectionHeader title="System States & Feedback" number="04" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
                     The feedback layer. This is where "premium" vs "hacky" is felt. Every state must be intentional, clear, and consistent.
@@ -1926,8 +1926,8 @@ export default function DesignSystem() {
                     <Badge className="bg-white/10 border-white/20 text-white">Empty</Badge>
                     <Badge className="bg-white/10 border-white/20 text-white">Error</Badge>
                     <Badge className="bg-white/10 border-white/20 text-white">Success</Badge>
-                </div>
-            </div>
+                                </div>
+                            </div>
             
             <div className="md:col-span-8 space-y-24">
                 
@@ -1936,7 +1936,7 @@ export default function DesignSystem() {
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Loading States</span>
                          <div className="h-px flex-1 bg-white/10"></div>
-                    </div>
+                        </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* Skeleton Card */}
@@ -1944,11 +1944,11 @@ export default function DesignSystem() {
                             <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-4">Skeleton Screen (Card)</p>
                             <div className="bg-[#261E19] border border-white/10 p-6 rounded-lg space-y-4">
                                 <div className="w-12 h-12 bg-white/5 rounded-2xl animate-pulse"></div>
-                                <div className="space-y-2">
+                        <div className="space-y-2">
                                     <div className="h-4 bg-white/5 rounded w-3/4 animate-pulse"></div>
                                     <div className="h-3 bg-white/5 rounded w-1/2 animate-pulse"></div>
-                    </div>
-                        </div>
+                            </div>
+                            </div>
                             <p className="font-mono text-[9px] text-white/30 mt-4">Used for: Tool list, card grids</p>
                         </div>
 
@@ -1960,10 +1960,10 @@ export default function DesignSystem() {
                                     <div className="w-3 h-3 border-2 border-black/20 border-t-black rounded-full animate-spin"></div>
                                     Rendering...
                                 </button>
-                        </div>
+                            </div>
                             <p className="font-mono text-[9px] text-white/30 mt-4">Used for: Export, save, async actions</p>
-                        </div>
-                    </div>
+                            </div>
+                         </div>
                 </div>
 
                 {/* Empty States */}
@@ -1980,12 +1980,12 @@ export default function DesignSystem() {
                             <div className="border border-dashed border-white/10 p-8 md:p-10 hover:border-[#E3E3FD]/30 hover:bg-[#E3E3FD]/5 transition-colors flex flex-col items-center justify-center gap-4 text-center cursor-pointer min-h-[280px] rounded-3xl group">
                                 <div className="w-14 h-14 border border-white/10 bg-white/5 flex items-center justify-center text-white/40 group-hover:text-[#E3E3FD] group-hover:border-[#E3E3FD]/50 transition-colors rounded-2xl">
                                     <Plus size={24} />
-                    </div>
+                            </div>
                                 <span className="font-mono text-[10px] text-white/40 group-hover:text-[#E3E3FD] uppercase tracking-widest transition-colors">
                                     INITIALIZE_NEW_TOOL
                                 </span>
-                </div>
-            </div>
+                        </div>
+                            </div>
 
                         {/* No Selection */}
                         <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
@@ -1993,9 +1993,9 @@ export default function DesignSystem() {
                             <div className="bg-[#261E19] border border-white/10 p-8 rounded-lg text-center">
                                 <p className="font-mono text-[10px] text-white/20 uppercase tracking-widest mb-2">No Layer Selected</p>
                                 <p className="font-montreal text-xs text-white/40">Select a layer to configure properties</p>
-                            </div>
-                        </div>
-                    </div>
+                </div>
+            </div>
+                </div>
 
                     {/* No Inputs Available */}
                     <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
@@ -2005,14 +2005,14 @@ export default function DesignSystem() {
                                 No inputs available. <br/> This tool is strictly locked.
                             </p>
                         </div>
-                    </div>
+                </div>
             </div>
             
                 {/* Error States */}
                 <div>
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Error States</span>
-                        <div className="h-px flex-1 bg-white/10"></div>
+                         <div className="h-px flex-1 bg-white/10"></div>
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -2023,7 +2023,7 @@ export default function DesignSystem() {
                                 <p className="font-mono text-[9px] text-red-400 mb-1">TEXT_TOO_LONG</p>
                                 <p className="font-montreal text-xs text-white/60">Maximum 200 characters allowed</p>
                     </div>
-                </div>
+                        </div>
 
                         {/* System Error */}
                         <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
@@ -2040,7 +2040,7 @@ export default function DesignSystem() {
                 </div>
 
                 {/* Success States */}
-                <div>
+              <div>
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Success States</span>
                         <div className="h-px flex-1 bg-white/10"></div>
@@ -2054,9 +2054,9 @@ export default function DesignSystem() {
                                 <div className="flex items-center gap-2 mb-2">
                                     <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"></div>
                                     <p className="font-mono text-[9px] text-[#E3E3FD] uppercase">Live</p>
-                        </div>
+                    </div>
                                 <p className="font-montreal text-xs text-white/70">Tool is now live and accessible to clients</p>
-                            </div>
+                </div>
                             </div>
 
                         {/* Export Complete */}
@@ -2077,8 +2077,8 @@ export default function DesignSystem() {
         </section>
 
         {/* 05. Motion & Interaction Principles */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
-            <div className="md:col-span-4 sticky top-32 h-fit">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
+            <div className="md:col-span-4 md:sticky md:top-32 h-fit">
                 <SectionHeader title="Motion & Interaction" number="05" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
                     Formalized motion rules. Prevents random animations. Ensures consistent feel across all surfaces.
@@ -2122,7 +2122,7 @@ export default function DesignSystem() {
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Easing Rules</span>
                         <div className="h-px flex-1 bg-white/10"></div>
-                    </div>
+                        </div>
                     
                     <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
                         <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-6">Allowed Easing</p>
@@ -2130,7 +2130,7 @@ export default function DesignSystem() {
                             <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
                                 <code className="font-mono text-[10px] text-[#E3E3FD] block mb-2">ease-in-out</code>
                                 <p className="font-montreal text-sm text-white/60">Default for most transitions</p>
-                            </div>
+                        </div>
                             <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
                                 <code className="font-mono text-[10px] text-[#E3E3FD] block mb-2">ease-out</code>
                                 <p className="font-montreal text-sm text-white/60">For entrances, reveals</p>
@@ -2152,7 +2152,7 @@ export default function DesignSystem() {
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Allowed Transitions</span>
                         <div className="h-px flex-1 bg-white/10"></div>
-                    </div>
+                            </div>
                     
                     <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl space-y-3">
                         {[
@@ -2165,17 +2165,17 @@ export default function DesignSystem() {
                             <div key={i} className="flex items-center gap-3 p-3 bg-white/[0.02] border border-white/5 rounded-lg">
                                 <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full"></div>
                                 <p className="font-montreal text-sm text-white/70">{transition}</p>
-                            </div>
+                        </div>
                         ))}
-                    </div>
-                </div>
+                            </div>
+                            </div>
 
                 {/* Forbidden Motion */}
                 <div>
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Forbidden Motion Patterns</span>
                         <div className="h-px flex-1 bg-white/10"></div>
-                    </div>
+                        </div>
                     
                     <div className="bg-[#1A1614] border border-red-500/20 p-6 rounded-2xl space-y-3">
                         {[
@@ -2189,17 +2189,17 @@ export default function DesignSystem() {
                             <div key={i} className="flex items-center gap-3 p-3 bg-red-500/5 border border-red-500/10 rounded-lg">
                                 <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
                                 <p className="font-montreal text-sm text-white/70">{pattern}</p>
-                            </div>
-                        ))}
                     </div>
+                        ))}
+                </div>
                 </div>
 
             </div>
         </section>
 
         {/* 06. Role-Based UI Rules */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
-            <div className="md:col-span-4 sticky top-32 h-fit">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
+            <div className="md:col-span-4 md:sticky md:top-32 h-fit">
                 <SectionHeader title="Role Separation" number="06" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-6">
                     Critical for Branded Objects. Studio UI is dense and technical—mission control for brand governance. Client UI is simple and constrained—safe inputs only.
@@ -2219,7 +2219,7 @@ export default function DesignSystem() {
             <div className="md:col-span-8 space-y-24">
                 
                 {/* Studio UI Principles */}
-                <div>
+                            <div>
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Studio UI Principles</span>
                         <div className="h-px flex-1 bg-white/10"></div>
@@ -2235,10 +2235,10 @@ export default function DesignSystem() {
                             <div key={i} className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
                                 <p className="font-mono text-xs text-white/70 uppercase tracking-widest mb-2">{item.principle}</p>
                                 <p className="font-montreal text-sm text-white/60">{item.description}</p>
-                        </div>
+                            </div>
                         ))}
-                        </div>
                     </div>
+                </div>
 
                 {/* Client UI Principles */}
                 <div>
@@ -2267,7 +2267,7 @@ export default function DesignSystem() {
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Forbidden in Client View</span>
                         <div className="h-px flex-1 bg-white/10"></div>
-                    </div>
+            </div>
                     
                     <div className="bg-[#1A1614] border border-red-500/20 p-6 rounded-2xl space-y-3">
                         {[
@@ -2285,14 +2285,14 @@ export default function DesignSystem() {
                             </div>
                         ))}
                     </div>
-                </div>
-
+            </div>
+            
                 {/* Visual Simplification Rules */}
                 <div>
                     <div className="flex items-center gap-4 mb-8">
                         <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase">Tool Runner Simplification</span>
                         <div className="h-px flex-1 bg-white/10"></div>
-                    </div>
+                            </div>
                     
                     <div className="bg-[#1A1614] border border-white/10 p-6 rounded-2xl">
                         <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mb-6">Client View Transformations</p>
@@ -2301,19 +2301,19 @@ export default function DesignSystem() {
                                 <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
                                     <p className="font-mono text-[9px] text-white/40 mb-2">Studio</p>
                                     <p className="font-mono text-xs text-white/60">TEXT_LAYER_01</p>
-                                </div>
+                        </div>
                                 <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
                                     <p className="font-mono text-[9px] text-white/40 mb-2">Client</p>
                                     <p className="font-montreal text-sm text-white/70">Headline</p>
-                                </div>
-                            </div>
+                        </div>
+                    </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
                                     <p className="font-mono text-[9px] text-white/40 mb-2">Studio</p>
                                     <div className="flex items-center gap-2">
                                         <div className="w-3 h-3 border border-[#E3E3FD]/50 rounded"></div>
                                         <span className="font-mono text-[9px] text-white/40">LOCKED</span>
-                                    </div>
+                </div>
                                 </div>
                                 <div className="p-4 bg-white/[0.02] border border-white/5 rounded-lg">
                                     <p className="font-mono text-[9px] text-white/40 mb-2">Client</p>
@@ -2328,8 +2328,8 @@ export default function DesignSystem() {
         </section>
 
         {/* 07. Surface-Specific Themes */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
-            <div className="md:col-span-4 sticky top-32 h-fit">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
+            <div className="md:col-span-4 md:sticky md:top-32 h-fit">
                 <SectionHeader title="Surface Variants" number="07" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
                     Marketing surfaces are more expressive. Product surfaces are dense and functional. Never blur the two.
@@ -2392,8 +2392,8 @@ export default function DesignSystem() {
         </section>
 
         {/* 08. Accessibility & Contrast Rules */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
-            <div className="md:col-span-4 sticky top-32 h-fit">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
+            <div className="md:col-span-4 md:sticky md:top-32 h-fit">
                 <SectionHeader title="Accessibility Baselines" number="08" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
                     Lightweight guardrails. Not WCAG theatre, but essential protection for larger studios and organizations.
@@ -2489,8 +2489,8 @@ export default function DesignSystem() {
         </section>
 
         {/* 09. Deprecation & Forbidden Patterns */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 items-start">
-            <div className="md:col-span-4 sticky top-32 h-fit">
+        <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
+            <div className="md:col-span-4 md:sticky md:top-32 h-fit">
                 <SectionHeader title="Forbidden Patterns" number="09" />
                 <p className="font-montreal text-white/60 text-lg leading-relaxed mb-8">
                     Expanded anti-patterns. These lock the system harder and prevent visual drift.

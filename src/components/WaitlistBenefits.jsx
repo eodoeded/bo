@@ -15,7 +15,7 @@ export default function WaitlistBenefits() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-12 md:mb-24 border-b border-white/10 pb-12">
             <div className="lg:col-span-8">
                 <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-6">FOR_STUDIOS_&_AGENCIES</span>
-                <h2 className="font-montreal font-medium text-white text-4xl md:text-6xl tracking-tight leading-[0.95] mb-6">
+                <h2 className="font-montreal font-medium text-white text-3xl md:text-4xl lg:text-6xl tracking-tight leading-[0.95] mb-6">
                     Stop selling hours.<br/>
                     <span className="text-[#E3E3FD]">Start selling systems.</span>
                 </h2>
@@ -35,7 +35,7 @@ export default function WaitlistBenefits() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="bg-[#1A1614] border border-white/10 p-10 relative group hover:bg-[#2E2824] transition-colors rounded-3xl"
+                className="bg-[#1A1614] border border-white/10 p-8 md:p-10 relative group hover:bg-[#2E2824] transition-colors rounded-3xl"
             >
                 <div className="w-14 h-14 border border-white/10 bg-white/5 flex items-center justify-center mb-8 group-hover:border-[#E3E3FD] transition-colors rounded-2xl">
                     <RefreshCw size={24} className="text-white/60 group-hover:text-[#E3E3FD] transition-colors" />
@@ -54,7 +54,7 @@ export default function WaitlistBenefits() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 }}
-                className="bg-[#1A1614] border border-white/10 p-10 relative group hover:bg-[#2E2824] transition-colors rounded-3xl"
+                className="bg-[#1A1614] border border-white/10 p-8 md:p-10 relative group hover:bg-[#2E2824] transition-colors rounded-3xl"
             >
                 <div className="w-14 h-14 border border-white/10 bg-white/5 flex items-center justify-center mb-8 group-hover:border-[#E3E3FD] transition-colors rounded-2xl">
                     <Shield size={24} className="text-white/60 group-hover:text-[#E3E3FD] transition-colors" />
@@ -73,7 +73,7 @@ export default function WaitlistBenefits() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
-                className="bg-[#1A1614] border border-white/10 p-10 relative group hover:bg-[#2E2824] transition-colors rounded-3xl"
+                className="bg-[#1A1614] border border-white/10 p-8 md:p-10 relative group hover:bg-[#2E2824] transition-colors rounded-3xl"
             >
                 <div className="w-14 h-14 border border-white/10 bg-white/5 flex items-center justify-center mb-8 group-hover:border-[#E3E3FD] transition-colors rounded-2xl">
                     <Zap size={24} className="text-white/60 group-hover:text-[#E3E3FD] transition-colors" />

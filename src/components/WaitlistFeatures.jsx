@@ -23,7 +23,7 @@ export default function WaitlistFeatures() {
         <div className="flex flex-col md:flex-row justify-between items-end mb-10 md:mb-20 border-b border-white/10 pb-8">
              <div>
                 <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-4">SYSTEM_LOGIC</span>
-                <h2 className="font-montreal font-medium text-white text-4xl md:text-5xl tracking-tight leading-[0.9]">
+                <h2 className="font-montreal font-medium text-white text-3xl md:text-4xl lg:text-5xl tracking-tight leading-[0.9]">
                     Strict Constraints.<br/>Safe Execution.
                 </h2>
             </div>
@@ -36,7 +36,7 @@ export default function WaitlistFeatures() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             
             {/* Left: Features List */}
-            <div className="bg-[#1A1614] p-8 md:p-12 relative rounded-3xl border border-white/5">
+            <div className="bg-[#1A1614] p-6 md:p-8 lg:p-12 relative rounded-3xl border border-white/5">
                 <h3 className="font-mono text-sm text-white/40 uppercase tracking-widest mb-8">CAPABILITIES</h3>
                 
                 <div className="space-y-6">

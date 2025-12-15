@@ -23,13 +23,13 @@ export default function StudioDashboard() {
 
       <main className="max-w-[1400px] mx-auto px-6 md:px-12 pt-20 md:pt-24 pb-20 relative z-10">
         {/* System Status Header */}
-        <div className="flex items-center gap-3 mb-8 pb-4 border-b border-white/5">
+        <div className="flex flex-wrap items-center gap-2 md:gap-3 mb-8 pb-4 border-b border-white/5">
           <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
           <span className="font-mono text-[9px] text-[#E3E3FD] uppercase tracking-widest">SYSTEM_OS v2.5</span>
-          <span className="font-mono text-[9px] text-white/20">|</span>
+          <span className="font-mono text-[9px] text-white/20 hidden sm:inline">|</span>
           <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">ALL_MODULES_OPERATIONAL</span>
-          <span className="font-mono text-[9px] text-white/20">|</span>
-          <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">UPTIME: 99.9%</span>
+          <span className="font-mono text-[9px] text-white/20 hidden md:inline">|</span>
+          <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest hidden md:inline">UPTIME: 99.9%</span>
         </div>
 
         {/* Header Section */}
@@ -39,7 +39,12 @@ export default function StudioDashboard() {
             <h1 className="font-montreal font-medium text-4xl md:text-5xl tracking-tight mb-2 text-white leading-[0.9]">
               Studio Dashboard
             </h1>
-            <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mt-2">SYSTEM_OVERVIEW // ACTIVE_TOOLS: {mockTools.length} // REGISTERED_MODULES: {mockTools.length} // STATUS: OPERATIONAL</p>
+            <p className="font-mono text-[9px] md:text-[10px] text-white/40 uppercase tracking-widest mt-2 leading-relaxed">
+              <span className="block sm:inline">SYSTEM_OVERVIEW // </span>
+              <span className="block sm:inline">ACTIVE_TOOLS: {mockTools.length} // </span>
+              <span className="block sm:inline">REGISTERED_MODULES: {mockTools.length} // </span>
+              <span className="block sm:inline">STATUS: OPERATIONAL</span>
+            </p>
           </div>
           <Link 
             to="/studio/builder/new" 

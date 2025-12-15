@@ -44,7 +44,7 @@ export default function WaitlistHowItWorks() {
                 className="mb-12 md:mb-16 border-l border-white/20 pl-6"
             >
                 <span className="font-mono text-[9px] text-[#E3E3FD] tracking-widest uppercase block mb-4">THE_MECHANISM</span>
-                <h2 className="font-montreal font-medium text-white text-4xl md:text-5xl tracking-tight leading-tight">
+                <h2 className="font-montreal font-medium text-white text-3xl md:text-4xl lg:text-5xl tracking-tight leading-tight">
                     Turn brand guidelines<br/>into <span className="text-[#E3E3FD]">software rules.</span>
                 </h2>
             </motion.div>
@@ -78,21 +78,21 @@ export default function WaitlistHowItWorks() {
             className="relative"
         >
             <div className="absolute -inset-1 bg-gradient-to-br from-[#E3E3FD]/10 to-transparent blur-2xl opacity-50 rounded-3xl"></div>
-            <div className="bg-[#1A1614] border border-white/10 p-8 relative rounded-3xl overflow-hidden shadow-2xl">
+            <div className="bg-[#1A1614] border border-white/10 p-6 md:p-8 relative rounded-3xl overflow-hidden shadow-2xl">
                 
-                    <div className="flex justify-between items-center mb-8 pb-4 border-b border-white/5">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6 md:mb-8 pb-4 border-b border-white/5">
                     <div className="flex items-center gap-3">
                         <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_8px_#E3E3FD]"></div>
-                        <span className="font-mono text-[10px] text-white/60 uppercase tracking-widest">ACTIVE_CONFIGURATION</span>
+                        <span className="font-mono text-[9px] md:text-[10px] text-white/60 uppercase tracking-widest">ACTIVE_CONFIGURATION</span>
                     </div>
-                    <div className="px-2 py-1 bg-white/5 rounded-full border border-white/5">
+                    <div className="px-2 py-1 bg-white/5 rounded-full border border-white/5 self-start sm:self-auto">
                         <span className="font-mono text-[9px] text-white/40">ID: 882-AF</span>
                     </div>
                 </div>
 
                 <div className="space-y-4">
                     {/* Locked Param */}
-                    <div className="flex items-center justify-between p-4 bg-white/[0.02] border border-white/5 group hover:border-white/10 transition-colors rounded-2xl">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 p-4 bg-white/[0.02] border border-white/5 group hover:border-white/10 transition-colors rounded-2xl">
                         <div className="flex items-center gap-4">
                             <div className="p-2 bg-white/5 rounded-lg">
                                 <ImageIcon size={16} className="text-white/40"/>
@@ -109,7 +109,7 @@ export default function WaitlistHowItWorks() {
                     </div>
 
                     {/* Locked Param */}
-                    <div className="flex items-center justify-between p-4 bg-white/[0.02] border border-white/5 group hover:border-white/10 transition-colors rounded-2xl">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 p-4 bg-white/[0.02] border border-white/5 group hover:border-white/10 transition-colors rounded-2xl">
                         <div className="flex items-center gap-4">
                             <div className="p-2 bg-white/5 rounded-lg">
                                 <Move size={16} className="text-white/40"/>
@@ -126,7 +126,7 @@ export default function WaitlistHowItWorks() {
                     </div>
 
                     {/* Unlocked Param */}
-                    <div className="flex items-center justify-between p-4 bg-[#E3E3FD]/[0.02] border border-[#E3E3FD]/20 group hover:bg-[#E3E3FD]/5 transition-colors rounded-2xl relative overflow-hidden">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 p-4 bg-[#E3E3FD]/[0.02] border border-[#E3E3FD]/20 group hover:bg-[#E3E3FD]/5 transition-colors rounded-2xl relative overflow-hidden">
                         <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#E3E3FD]"></div>
                         <div className="flex items-center gap-4">
                             <div className="p-2 bg-[#E3E3FD]/10 rounded-lg">
@@ -144,7 +144,7 @@ export default function WaitlistHowItWorks() {
                     </div>
                 </div>
 
-                <div className="mt-8 pt-4 border-t border-white/5 flex justify-between items-center">
+                <div className="mt-8 pt-4 border-t border-white/5 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
                     <span className="font-mono text-[9px] text-white/20 uppercase tracking-widest">LOGIC_VALIDATION_ACTIVE</span>
                     <div className="flex gap-1.5">
                         {[1,2,3,4].map(i => (
