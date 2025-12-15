@@ -38,7 +38,7 @@ try {
         import('./App.jsx').then(AppModule => {
           import('./index.css').catch(() => {}); // CSS is optional
           
-          const { StrictMode } = React;
+          const { StrictMode, createElement } = React;
           const { createRoot } = ReactDOM;
           const { BrowserRouter } = Router;
           const App = AppModule.default;
@@ -46,8 +46,10 @@ try {
           const root = document.getElementById('root');
           if (root) {
             createRoot(root).render(
-              StrictMode.createElement(BrowserRouter, null,
-                StrictMode.createElement(App, null)
+              createElement(StrictMode, null,
+                createElement(BrowserRouter, null,
+                  createElement(App, null)
+                )
               )
             );
             console.log('✅ React app mounted successfully');
