@@ -438,10 +438,10 @@ export default function ToolBuilder() {
                 </div>
             </div>
 
-            <div className="flex-1 flex overflow-hidden">
+            <div className="flex-1 flex overflow-hidden relative">
                 {/* Left: Layers (Collapsible) */}
                 {layersPanelOpen && (
-                    <aside className="w-64 bg-[#1A1614] border-r border-white/10 flex flex-col shrink-0">
+                    <aside className="w-64 bg-[#1A1614] border-r border-white/10 flex flex-col shrink-0 relative z-10">
                         <div className="p-2 border-b border-white/10 flex items-center justify-between">
                             <span className="text-xs text-white/60 font-mono uppercase tracking-widest">Layers</span>
                             <button
@@ -455,7 +455,10 @@ export default function ToolBuilder() {
                             {layers.map(layer => (
                                 <div
                                     key={layer.id}
-                                    onClick={() => setSelectedLayerId(layer.id)}
+                                    onClick={() => {
+                                        setSelectedLayerId(layer.id);
+                                        setSelectedLayerIds(new Set([layer.id]));
+                                    }}
                                     className={`p-2 rounded cursor-pointer text-xs ${
                                         selectedLayerId === layer.id 
                                             ? 'bg-white/10 text-white' 
@@ -490,7 +493,7 @@ export default function ToolBuilder() {
                 )}
 
                 {/* Center: Canvas */}
-                <main className="flex-1 bg-[#0A0A0A] relative flex items-center justify-center overflow-hidden">
+                <main className="flex-1 bg-[#0A0A0A] relative flex items-center justify-center overflow-hidden min-w-0">
                     {!layersPanelOpen && (
                         <button
                             onClick={() => setLayersPanelOpen(true)}
@@ -521,7 +524,7 @@ export default function ToolBuilder() {
                 </main>
 
                 {/* Right: Properties */}
-                <aside className="w-80 bg-[#1A1614] border-l border-white/10 flex flex-col shrink-0">
+                <aside className="w-80 bg-[#1A1614] border-l border-white/10 flex flex-col shrink-0 relative z-10">
                     <div className="p-3 border-b border-white/10">
                         <span className="text-xs text-white/60 font-mono uppercase tracking-widest">Properties</span>
                     </div>
@@ -540,7 +543,7 @@ export default function ToolBuilder() {
                     </div>
                     <div className="p-3 border-t border-white/10">
                         <div className="text-[10px] text-white/40 mb-1">Share</div>
-                        <div className="text-xs text-[#E3E3FD] font-mono">/tool/{id}</div>
+                        <div className="text-xs text-[#E3E3FD] font-mono break-all">/tool/{id}</div>
                     </div>
                 </aside>
             </div>
