@@ -39,14 +39,14 @@ export default function StudioDashboard() {
             <h1 className="font-montreal font-medium text-4xl md:text-5xl tracking-tight mb-2 text-white leading-[0.9]">
               Studio Dashboard
             </h1>
-            <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mt-2">SYSTEM_OVERVIEW // ACTIVE_TOOLS: {mockTools.length}</p>
+            <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest mt-2">SYSTEM_OVERVIEW // ACTIVE_TOOLS: {mockTools.length} // REGISTERED_MODULES: {mockTools.length}</p>
           </div>
           <Link 
             to="/studio/builder/new" 
             className="mt-6 md:mt-0 bg-[#E3E3FD] text-[#261E19] px-5 py-2.5 font-mono font-semibold text-[11px] uppercase tracking-widest hover:bg-white transition-colors flex items-center gap-2 rounded-sm"
           >
             <Plus size={14} />
-            INITIALIZE_NEW
+            INITIALIZE_NEW_TOOL
           </Link>
         </div>
 
@@ -139,6 +139,7 @@ export default function StudioDashboard() {
             </Link>
           </motion.div>
         </div>
+        )}
 
         {/* System Stats Footer */}
         <div className="mt-16 pt-8 border-t border-white/10">

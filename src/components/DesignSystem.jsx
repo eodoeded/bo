@@ -1755,7 +1755,7 @@ export default function DesignSystem() {
                                     <Plus size={24} />
                     </div>
                                 <span className="font-mono text-[10px] text-white/40 group-hover:text-[#E3E3FD] uppercase tracking-widest transition-colors">
-                                    Initialize New Tool
+                                    INITIALIZE_NEW_TOOL
                                 </span>
                 </div>
             </div>
