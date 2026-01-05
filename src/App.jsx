@@ -13,6 +13,7 @@ import ToolBuilder from './pages/ToolBuilder';
 import ToolRunner from './pages/ToolRunner';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
+import DroneMap from './pages/DroneMap';
 import ProtectedRoute from './components/ProtectedRoute';
 import { ErrorBoundary } from './components/ErrorBoundary';
 
@@ -68,6 +69,7 @@ function App() {
         <Route path="/brandguidelines" element={<DesignSystem />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/dronemap" element={<DroneMap />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/studio" element={<StudioDashboard />} />
           <Route path="/studio/builder/:id" element={

@@ -12,83 +12,11 @@ const TextLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio = fal
     if (!layer || !layer.properties) return null;
     
     const isPositionLocked = layer.locks?.x === 'LOCKED' && layer.locks?.y === 'LOCKED';
-    const isTextLocked = layer.locks?.text === 'LOCKED' || layer.locks?.text === 'READ_ONLY';
     const [isDragging, setIsDragging] = useState(false);
-    const [isEditing, setIsEditing] = useState(false);
-    const [editText, setEditText] = useState(layer.properties.text || '');
-    const inputRef = useRef(null);
-    const dragStartRef = useRef({ x: 0, y: 0, layerX: 0, layerY: 0, hasStarted: false });
-    const clickTimeoutRef = useRef(null);
-
-    // Handle double-click to edit
-    const handleDoubleClick = (e) => {
-        if (!isStudio || isTextLocked || !onUpdate || !e) return;
-        if (typeof e.stopPropagation === 'function') {
-            e.stopPropagation();
-        }
-        if (onSelect) onSelect(layer.id);
-        setIsEditing(true);
-        setEditText(layer.properties.text || '');
-    };
-
-    // Handle single click (with delay to detect double-click)
-    const handleClick = (e) => {
-        if (!isStudio || isEditing || !e) return;
-        
-        if (clickTimeoutRef.current) {
-            // Double-click detected
-            clearTimeout(clickTimeoutRef.current);
-            clickTimeoutRef.current = null;
-            handleDoubleClick(e);
-        } else {
-            // Single click - wait to see if double-click comes
-            clickTimeoutRef.current = setTimeout(() => {
-                clickTimeoutRef.current = null;
-                if (onSelect && typeof e.stopPropagation === 'function') {
-                    e.stopPropagation();
-                    onSelect(layer.id);
-                }
-            }, 300); // 300ms delay to detect double-click
-        }
-    };
-
-    // Save text edit
-    const handleTextSave = () => {
-        if (isTextLocked || !onUpdate) return;
-        setIsEditing(false);
-        if (editText !== layer.properties.text) {
-            onUpdate(layer.id, { properties: { ...layer.properties, text: editText } });
-        }
-    };
-
-    // Cancel text edit
-    const handleTextCancel = () => {
-        setIsEditing(false);
-        setEditText(layer.properties.text || '');
-    };
-
-    // Handle keyboard in edit mode
-    const handleKeyDown = (e) => {
-        if (!e) return;
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            handleTextSave();
-        } else if (e.key === 'Escape') {
-            e.preventDefault();
-            handleTextCancel();
-        }
-    };
-
-    // Focus input when editing starts
-    React.useEffect(() => {
-        if (isEditing && inputRef.current) {
-            inputRef.current.focus();
-            inputRef.current.select();
-        }
-    }, [isEditing]);
+    const dragStartRef = useRef({ x: 0, y: 0, layerX: 0, layerY: 0 });
 
     const handlePointerDown = (e) => {
-        if (!isStudio || isPositionLocked || !onUpdate || !e || isEditing) return;
+        if (!isStudio || isPositionLocked || !onUpdate || !e) return;
         if (typeof e.stopPropagation !== 'function') return;
         
         e.stopPropagation();
@@ -109,25 +37,16 @@ const TextLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio = fal
             layerX: layer.properties.x,
             layerY: layer.properties.y,
             canvasWidth,
-            canvasHeight,
-            hasStarted: false
+            canvasHeight
         };
         
-        canvas.style.cursor = 'grab';
+        setIsDragging(true);
+        canvas.style.cursor = 'grabbing';
         
         const handlePointerMove = (moveEvent) => {
             if (!moveEvent || typeof moveEvent.clientX !== 'number' || typeof moveEvent.clientY !== 'number') return;
             const deltaX = moveEvent.clientX - dragStartRef.current.x;
             const deltaY = moveEvent.clientY - dragStartRef.current.y;
-            
-            // Only start dragging after a small threshold (5px) to prevent accidental drags during double-click
-            const dragThreshold = 5;
-            if (!dragStartRef.current.hasStarted) {
-                if (Math.abs(deltaX) < dragThreshold && Math.abs(deltaY) < dragThreshold) return;
-                dragStartRef.current.hasStarted = true;
-                setIsDragging(true);
-                canvas.style.cursor = 'grabbing';
-            }
             
             // Convert pixel delta to percentage
             const percentDeltaX = (deltaX / dragStartRef.current.canvasWidth) * 100;
@@ -163,7 +82,7 @@ const TextLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio = fal
     
     return (
         <div 
-            className={`absolute whitespace-pre-wrap ${isStudio && !isPositionLocked ? (isDragging ? 'cursor-grabbing' : 'cursor-grab') : isStudio ? (isEditing ? 'cursor-text' : 'cursor-pointer') : ''} ${isSelected ? 'ring-2 ring-[#E3E3FD] ring-offset-2 ring-offset-[#050505]' : ''} ${isStudio && !isPositionLocked && !isEditing ? 'hover:ring-1 hover:ring-white/30' : ''}`}
+            className={`absolute whitespace-pre-wrap ${isStudio && !isPositionLocked ? (isDragging ? 'cursor-grabbing' : 'cursor-grab') : isStudio ? 'cursor-pointer' : ''} ${isSelected ? 'ring-2 ring-[#E3E3FD] ring-offset-2 ring-offset-[#050505]' : ''} ${isStudio && !isPositionLocked ? 'hover:ring-1 hover:ring-white/30' : ''}`}
             style={{
                 left: `${layer.properties.x}%`,
                 top: `${layer.properties.y}%`,
@@ -175,35 +94,18 @@ const TextLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio = fal
                 textAlign: layer.properties.textAlign || 'center',
                 width: layer.properties.width ? `${layer.properties.width}px` : 'auto',
                 maxWidth: '100%',
-                zIndex: layer.zIndex,
-                minWidth: isEditing ? '100px' : 'auto'
+                zIndex: layer.zIndex
             }}
-            onClick={handleClick}
+            onClick={(e) => {
+                if (isStudio && onSelect && !isDragging && e && typeof e.stopPropagation === 'function') {
+                    e.stopPropagation();
+                    onSelect(layer.id);
+                }
+            }}
             onPointerDown={handlePointerDown}
         >
-            {isEditing ? (
-                <textarea
-                    ref={inputRef}
-                    value={editText}
-                    onChange={(e) => setEditText(e.target.value || '')}
-                    onBlur={handleTextSave}
-                    onKeyDown={handleKeyDown}
-                    className="bg-white/5 border border-[#E3E3FD]/50 outline-none w-full px-2 py-1 rounded-lg resize-none focus:ring-2 focus:ring-[#E3E3FD]/50"
-                    style={{
-                        fontSize: `${layer.properties.fontSize}px`,
-                        fontFamily: layer.properties.fontFamily || 'PP Neue Montreal',
-                        color: layer.properties.color,
-                        fontWeight: layer.properties.fontWeight || 400,
-                        textAlign: layer.properties.textAlign || 'center',
-                        minWidth: '120px',
-                        minHeight: `${Math.max(layer.properties.fontSize * 1.5, 32)}px`,
-                    }}
-                    rows={Math.max(1, editText.split('\n').length)}
-                />
-            ) : (
-                layer.properties.text
-            )}
-            {isSelected && isStudio && !isEditing && (
+            {layer.properties.text}
+            {isSelected && isStudio && (
                 <ResizeHandles layer={layer} onUpdate={onUpdate} isStudio={isStudio} />
             )}
         </div>
@@ -215,7 +117,7 @@ const ImageLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio = fa
     
     const isPositionLocked = layer.locks?.x === 'LOCKED' && layer.locks?.y === 'LOCKED';
     const [isDragging, setIsDragging] = useState(false);
-    const dragStartRef = useRef({ x: 0, y: 0, layerX: 0, layerY: 0, hasStarted: false });
+    const dragStartRef = useRef({ x: 0, y: 0, layerX: 0, layerY: 0 });
 
     const handlePointerDown = (e) => {
         if (!isStudio || isPositionLocked || !onUpdate || !e) return;
@@ -239,25 +141,16 @@ const ImageLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio = fa
             layerX: layer.properties.x,
             layerY: layer.properties.y,
             canvasWidth,
-            canvasHeight,
-            hasStarted: false
+            canvasHeight
         };
         
-        canvas.style.cursor = 'grab';
+        setIsDragging(true);
+        canvas.style.cursor = 'grabbing';
         
         const handlePointerMove = (moveEvent) => {
             if (!moveEvent || typeof moveEvent.clientX !== 'number' || typeof moveEvent.clientY !== 'number') return;
             const deltaX = moveEvent.clientX - dragStartRef.current.x;
             const deltaY = moveEvent.clientY - dragStartRef.current.y;
-            
-            // Only start dragging after a small threshold (5px) to prevent accidental drags
-            const dragThreshold = 5;
-            if (!dragStartRef.current.hasStarted) {
-                if (Math.abs(deltaX) < dragThreshold && Math.abs(deltaY) < dragThreshold) return;
-                dragStartRef.current.hasStarted = true;
-                setIsDragging(true);
-                canvas.style.cursor = 'grabbing';
-            }
             
             const percentDeltaX = (deltaX / dragStartRef.current.canvasWidth) * 100;
             const percentDeltaY = (deltaY / dragStartRef.current.canvasHeight) * 100;
@@ -279,7 +172,6 @@ const ImageLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio = fa
         
         const handlePointerUp = () => {
             setIsDragging(false);
-            dragStartRef.current.hasStarted = false;
             canvas.style.cursor = '';
             document.removeEventListener('pointermove', handlePointerMove);
             document.removeEventListener('pointerup', handlePointerUp);
@@ -332,7 +224,7 @@ const RectangleLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio 
     
     const isPositionLocked = layer.locks?.x === 'LOCKED' && layer.locks?.y === 'LOCKED';
     const [isDragging, setIsDragging] = useState(false);
-    const dragStartRef = useRef({ x: 0, y: 0, layerX: 0, layerY: 0, hasStarted: false });
+    const dragStartRef = useRef({ x: 0, y: 0, layerX: 0, layerY: 0 });
 
     const handlePointerDown = (e) => {
         if (!isStudio || isPositionLocked || !onUpdate || !e) return;
@@ -356,25 +248,16 @@ const RectangleLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio 
             layerX: layer.properties.x,
             layerY: layer.properties.y,
             canvasWidth,
-            canvasHeight,
-            hasStarted: false
+            canvasHeight
         };
         
-        canvas.style.cursor = 'grab';
+        setIsDragging(true);
+        canvas.style.cursor = 'grabbing';
         
         const handlePointerMove = (moveEvent) => {
             if (!moveEvent || typeof moveEvent.clientX !== 'number' || typeof moveEvent.clientY !== 'number') return;
             const deltaX = moveEvent.clientX - dragStartRef.current.x;
             const deltaY = moveEvent.clientY - dragStartRef.current.y;
-            
-            // Only start dragging after a small threshold (5px) to prevent accidental drags
-            const dragThreshold = 5;
-            if (!dragStartRef.current.hasStarted) {
-                if (Math.abs(deltaX) < dragThreshold && Math.abs(deltaY) < dragThreshold) return;
-                dragStartRef.current.hasStarted = true;
-                setIsDragging(true);
-                canvas.style.cursor = 'grabbing';
-            }
             
             const percentDeltaX = (deltaX / dragStartRef.current.canvasWidth) * 100;
             const percentDeltaY = (deltaY / dragStartRef.current.canvasHeight) * 100;
@@ -396,7 +279,6 @@ const RectangleLayerRender = ({ layer, isSelected, onSelect, onUpdate, isStudio 
         
         const handlePointerUp = () => {
             setIsDragging(false);
-            dragStartRef.current.hasStarted = false;
             canvas.style.cursor = '';
             document.removeEventListener('pointermove', handlePointerMove);
             document.removeEventListener('pointerup', handlePointerUp);

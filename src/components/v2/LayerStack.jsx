@@ -58,7 +58,7 @@ const LayerItem = ({ layer, isSelected, onSelect, onDelete }) => {
                             onDelete(layer.id);
                         }
                     }}
-                    className={`p-1 hover:bg-red-900/20 border border-red-500/20 rounded-lg transition-all duration-300 shrink-0 focus:outline-none focus:ring-2 focus:ring-red-500/50 focus:ring-offset-2 focus:ring-offset-[#1A1614] ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
+                    className={`p-1 hover:bg-red-900/20 border border-red-500/20 rounded transition-all shrink-0 ${isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
                     title="Delete layer (or press Delete key)"
                 >
                     <Trash2 size={10} className="text-red-400" />
@@ -90,21 +90,21 @@ export default function LayerStack({ layers, selectedId, onSelect, onAddLayer, o
                 <div className="flex gap-1">
                      <button 
                         onClick={() => onAddLayer('text')}
-                        className="p-1.5 hover:bg-white/5 rounded-lg border border-transparent hover:border-white/10 text-white/40 hover:text-[#E3E3FD] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#E3E3FD]/50 focus:ring-offset-2 focus:ring-offset-[#1A1614]"
+                        className="p-1.5 hover:bg-white/5 rounded-md border border-transparent hover:border-white/10 text-white/40 hover:text-[#E3E3FD] transition-colors"
                         title="Add Text Layer"
                     >
                         <Type size={12} />
                     </button>
                     <button 
                         onClick={() => onAddLayer('image')}
-                        className="p-1.5 hover:bg-white/5 rounded-lg border border-transparent hover:border-white/10 text-white/40 hover:text-[#E3E3FD] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#E3E3FD]/50 focus:ring-offset-2 focus:ring-offset-[#1A1614]"
+                        className="p-1.5 hover:bg-white/5 rounded-md border border-transparent hover:border-white/10 text-white/40 hover:text-[#E3E3FD] transition-colors"
                         title="Add Image Layer"
                     >
                         <ImageIcon size={12} />
                     </button>
                     <button 
                         onClick={() => onAddLayer('rectangle')}
-                        className="p-1.5 hover:bg-white/5 rounded-lg border border-transparent hover:border-white/10 text-white/40 hover:text-[#E3E3FD] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#E3E3FD]/50 focus:ring-offset-2 focus:ring-offset-[#1A1614]"
+                        className="p-1.5 hover:bg-white/5 rounded-md border border-transparent hover:border-white/10 text-white/40 hover:text-[#E3E3FD] transition-colors"
                         title="Add Rectangle Layer"
                     >
                         <Box size={12} />

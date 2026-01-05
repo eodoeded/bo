@@ -504,7 +504,7 @@ export default function ToolBuilder() {
             <UnifiedNav />
             
             {/* Secondary Toolbar */}
-            <div className="h-12 md:h-14 bg-[#1A1614] border-b border-white/10 flex items-center justify-between px-4 md:px-6 lg:px-12 mt-12 md:mt-14 shrink-0 relative z-10 backdrop-blur-sm">
+            <div className="h-12 md:h-14 bg-[#1A1614] border-b border-white/10 flex items-center justify-between px-4 md:px-6 lg:px-12 mt-12 md:mt-14 shrink-0 relative z-10">
                 <div className="flex items-center gap-3 md:gap-4">
                     <div className="w-1.5 h-1.5 bg-[#E3E3FD] rounded-full animate-pulse shadow-[0_0_6px_#E3E3FD]"></div>
                     <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -540,7 +540,7 @@ export default function ToolBuilder() {
                         <button
                             onClick={handleUndo}
                             disabled={historyIndex <= 0}
-                            className="p-2 text-white/40 hover:text-white disabled:opacity-20 disabled:cursor-not-allowed transition-colors duration-300 rounded-lg hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-[#E3E3FD]/50 focus:ring-offset-2 focus:ring-offset-[#1A1614]"
+                            className="p-2 text-white/40 hover:text-white disabled:opacity-20 disabled:cursor-not-allowed transition-colors rounded-lg hover:bg-white/5"
                             title="Undo (Ctrl+Z)"
                         >
                             <Undo2 size={14} />
@@ -548,7 +548,7 @@ export default function ToolBuilder() {
                         <button
                             onClick={handleRedo}
                             disabled={historyIndex >= history.length - 1}
-                            className="p-2 text-white/40 hover:text-white disabled:opacity-20 disabled:cursor-not-allowed transition-colors duration-300 rounded-lg hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-[#E3E3FD]/50 focus:ring-offset-2 focus:ring-offset-[#1A1614]"
+                            className="p-2 text-white/40 hover:text-white disabled:opacity-20 disabled:cursor-not-allowed transition-colors rounded-lg hover:bg-white/5"
                             title="Redo (Ctrl+Shift+Z)"
                         >
                             <Redo2 size={14} />
@@ -558,10 +558,10 @@ export default function ToolBuilder() {
                     <div className="bg-[#1A1614] p-1 rounded-lg border border-white/10 flex gap-1">
                         <button
                             onClick={() => setPreviewMode('studio')}
-                            className={`px-3 py-1.5 rounded-lg font-mono text-[9px] uppercase tracking-widest transition-colors duration-300 flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-[#E3E3FD]/50 focus:ring-offset-2 focus:ring-offset-[#1A1614] ${
+                            className={`px-3 py-1.5 rounded font-mono text-[9px] uppercase tracking-widest transition-colors flex items-center gap-1.5 ${
                                 previewMode === 'studio'
                                     ? 'bg-[#E3E3FD] text-[#261E19]'
-                                    : 'text-white/40 hover:text-white hover:bg-white/5'
+                                    : 'text-white/40 hover:text-white'
                             }`}
                         >
                             <Code size={11} />
@@ -569,10 +569,10 @@ export default function ToolBuilder() {
                         </button>
                         <button
                             onClick={() => setPreviewMode('client')}
-                            className={`px-3 py-1.5 rounded-lg font-mono text-[9px] uppercase tracking-widest transition-colors duration-300 flex items-center gap-1.5 focus:outline-none focus:ring-2 focus:ring-[#E3E3FD]/50 focus:ring-offset-2 focus:ring-offset-[#1A1614] ${
+                            className={`px-3 py-1.5 rounded font-mono text-[9px] uppercase tracking-widest transition-colors flex items-center gap-1.5 ${
                                 previewMode === 'client'
                                     ? 'bg-[#E3E3FD] text-[#261E19]'
-                                    : 'text-white/40 hover:text-white hover:bg-white/5'
+                                    : 'text-white/40 hover:text-white'
                             }`}
                         >
                             <Eye size={11} />
@@ -581,7 +581,7 @@ export default function ToolBuilder() {
                     </div>
                     <button 
                         onClick={handlePublish}
-                        className="bg-[#E3E3FD] text-[#261E19] px-4 md:px-5 py-2 md:py-2.5 font-mono font-semibold text-[10px] md:text-[11px] uppercase tracking-widest hover:bg-white transition-colors duration-300 flex items-center gap-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#E3E3FD] focus:ring-offset-2 focus:ring-offset-[#1A1614] disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="bg-[#E3E3FD] text-[#261E19] px-4 md:px-5 py-2 md:py-2.5 font-mono font-semibold text-[10px] md:text-[11px] uppercase tracking-widest hover:bg-white transition-colors flex items-center gap-2 rounded-lg"
                         disabled={isSaving || id === 'new'}
                     >
                         <Save size={12} className="md:w-[14px] md:h-[14px]" />
@@ -662,24 +662,24 @@ export default function ToolBuilder() {
                                         );
                                     })}
                                     <div className="pt-2 border-t border-white/10 space-y-1">
-                                            <button
-                                                onClick={() => handleAddLayer('text')}
-                                                className="w-full p-2 text-left text-xs text-white/40 hover:bg-white/5 hover:text-white rounded-lg transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#E3E3FD]/50 focus:ring-offset-2 focus:ring-offset-[#1A1614]"
-                                            >
-                                                + Text
-                                            </button>
-                                            <button
-                                                onClick={() => handleAddLayer('image')}
-                                                className="w-full p-2 text-left text-xs text-white/40 hover:bg-white/5 hover:text-white rounded-lg transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#E3E3FD]/50 focus:ring-offset-2 focus:ring-offset-[#1A1614]"
-                                            >
-                                                + Image
-                                            </button>
-                                            <button
-                                                onClick={() => handleAddLayer('rectangle')}
-                                                className="w-full p-2 text-left text-xs text-white/40 hover:bg-white/5 hover:text-white rounded-lg transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#E3E3FD]/50 focus:ring-offset-2 focus:ring-offset-[#1A1614]"
-                                            >
-                                                + Rectangle
-                                            </button>
+                                        <button
+                                            onClick={() => handleAddLayer('text')}
+                                            className="w-full p-2 text-left text-xs text-white/40 hover:bg-white/5 hover:text-white rounded transition-colors"
+                                        >
+                                            + Text
+                                        </button>
+                                        <button
+                                            onClick={() => handleAddLayer('image')}
+                                            className="w-full p-2 text-left text-xs text-white/40 hover:bg-white/5 hover:text-white rounded transition-colors"
+                                        >
+                                            + Image
+                                        </button>
+                                        <button
+                                            onClick={() => handleAddLayer('rectangle')}
+                                            className="w-full p-2 text-left text-xs text-white/40 hover:bg-white/5 hover:text-white rounded transition-colors"
+                                        >
+                                            + Rectangle
+                                        </button>
                                     </div>
                                 </div>
                             </aside>
@@ -696,7 +696,7 @@ export default function ToolBuilder() {
                             {!layersPanelOpen && (
                                 <button
                                     onClick={() => setLayersPanelOpen(true)}
-                                    className="absolute top-4 left-4 z-20 bg-[#1A1614] border border-white/10 px-3 py-1.5 text-xs text-white/60 hover:text-white hover:border-[#E3E3FD]/30 rounded-lg transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-[#E3E3FD]/50 focus:ring-offset-2 focus:ring-offset-[#0A0A0A]"
+                                    className="absolute top-4 left-4 z-20 bg-[#1A1614] border border-white/10 px-3 py-1.5 text-xs text-white/60 hover:text-white hover:border-[#E3E3FD]/30 rounded-lg transition-colors"
                                 >
                                     Layers
                                 </button>
